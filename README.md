@@ -1,20 +1,14 @@
 # Nightshift City Online
-Independent, mobile-first top-down pixel open-world game. Not affiliated with Nightshift Garage.
+Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current status
-**v0.1 local playable prototype, NOT multiplayer yet.** Open `index.html` in a browser (or serve with `python -m http.server 8080`). It contains a procedurally arranged city district, NPCs, parked cars, enter/exit and driving, shooting, loot, basic shops, wanted heat, keyboard and touchscreen controls. Art is programmer-drawn placeholders. There is no backend or persistence.
+## Current build: v0.3 local prototype
+Walking, touch twin-stick aiming, held fire, driving, building/parked-car collision, safe vehicle exits, NPCs, shops, loot, minimap and validated browser-local saves. Programmer-drawn placeholder art. Multiplayer and property interiors are not implemented. No deployment.
+
+## Run and verify
+Serve with `python3 -m http.server 8080` and open localhost:8080. Run `node tests/smoke.cjs` for simulation checks. No dependencies or build step.
 
 ## Controls
-WASD/arrows or touch joystick: walk/drive; E/USE: interact or enter/exit car; mouse to aim; click/space/FIRE to shoot; Shift/RUN to sprint.
+WASD/arrows: walk; while driving, up/down accelerates/reverses and left/right steers. E/USE: interact or enter/exit a stopped vehicle. Mouse/right touch stick: aim. Hold Space/FIRE: shoot. R/RLD: instant prototype reload. Shift/RUN: sprint.
 
-## Roadmap
-1. Migrate prototype into Vite + TypeScript + Phaser project, preserving controls and behavior.
-2. Modularize scene/world, physics, input, entities, inventory and interactions.
-3. Add collisions, navigation, pathfinding, vision cones, reload and combat AI.
-4. Replace programmer art with consistent licensed pixel sprite sheets.
-5. Implement Colyseus authoritative server with server-validated actions; never trust client economy/combat.
-6. Add persistence, login, garages, inventory and properties; choose hosted database only when needed.
-7. Add districts, careers, safe zones, crew systems and moderated PvP.
-
-## Important
-The initial prototype runs offline in a browser. No deployment or GitHub repository has been created. Avoid representing simulated NPCs as real multiplayer players.
+## Collaboration
+Read AGENTS.md, CLAUDE.md, HANDOFF.md and FILE_OWNERSHIP.md. Codex uses codex branches; Claude uses claude branches. GitHub is the shared source of truth. No credentials or Garage assets belong here.

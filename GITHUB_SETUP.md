@@ -1,13 +1,2 @@
 # GitHub setup
-Create a new GitHub repository named `nightshift-city-online` (private recommended), without initializing a README. Extract the ZIP and run from inside `nightshift-city-online`:
-
-```bash
-git init
-git add .
-git commit -m "Initial Nightshift City v0.2 playable prototype"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/nightshift-city-online.git
-git push -u origin main
-```
-
-For Claude and Codex, give each its own branch (`claude/...` and `codex/...`). Require handoff file updates and tests with every completed task. The repo is separate from Nightshift Garage.
+Repository is th4r6xkgcs-ui/nightshift-city-online. Clone it and fetch all branches. The v0.3 changes are on codex/mobile-controls-v03; review HANDOFF.md before continuing. Claude should create a claude/<task> branch and follow FILE_OWNERSHIP.md. Do not deploy automatically.

@@ -1,5 +1,4 @@
 # Project state
-Design: hybrid GTA-like life/crime simulation, Bullet Echo-inspired top-down 2.5D movement and shooting; persistent multiplayer world with vehicles, properties, stores, jobs, heists, crews and economy. Target browser-first iPhone/PC.
-Current implementation: one HTML file with Canvas 2D, no external dependencies, local simulation only.
-Architecture target: Phaser client; Colyseus authoritative game server; database chosen later; shared schemas and automated tests. Safety/gameplay: safe zones, optional PvP, anti-cheat, anti-griefing and economy controls.
-Art: placeholder geometric pixel art; replace with cohesive sprites at consistent scale. Preserve performant rendering on mobile.
+v0.3 client: dependency-free Canvas HTML local simulation with mobile twin-stick controls, vehicle collision/exit rules, minimap and validated local saves. Tests: Node VM simulation harness.
+Target: Phaser/TypeScript client, Colyseus authoritative multiplayer, persistent profiles/inventory, properties and hybrid legal/crime city activities. No server, database or multiplayer exists yet.
+Art remains geometric placeholders. Mobile Safari visual and touch testing is pending.

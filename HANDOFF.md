@@ -1,20 +1,20 @@
 # HANDOFF — Nightshift City Online
 
-## CURRENT (2026-10-10)
-Independent from Nightshift Garage. v0.2 is a single-file, dependency-free browser sandbox (`index.html`), not deployed and not networked. It supports top-down movement, a simple city, cars, NPCs, shooting, loot, basic heat, shops, touch controls, reload, collision with buildings for players/NPCs/bullets, minimap and browser-local autosave. Features are prototypes, not production systems. No automated browser or device test has been completed.
+## CURRENT — 2026-10-10, v0.3
+Repository: th4r6xkgcs-ui/nightshift-city-online. v0.2 imported as baseline; client improvements on codex/mobile-controls-v03. Independent Canvas single-player sandbox, no multiplayer/backend/deployment.
 
-## Run
-Open `index.html` in a modern browser. For consistent mobile testing, serve with `python3 -m http.server 8080` and access it over local network; use HTTPS when deployed. No build dependencies.
+Completed: separate right touch aiming stick, camera-relative mouse aim, held FIRE/Space with rate limit, touch capture/cancellation and blur reset, frame-rate-adjusted vehicle drag, building and parked-car collision, stopped-car safe exit placement, save numeric bounds preserving zero balances/ammo/health, invalid building spawn recovery.
+Touched: index.html, tests/smoke.cjs, README.md, HANDOFF.md, PROJECT_STATE.md, NEXT_TASKS.md, GITHUB_SETUP.md.
+Validation: node tests/smoke.cjs PASS for save bounds/zeros, fire cadence, safe exits, vehicle building collision and frame execution at 390x844. This uses a mocked Canvas/DOM, not browser visual QA. Real Safari/iPhone testing remains pending.
 
-## Next priority
-1. Run a real desktop and iPhone smoke test; fix issues before adding scope.
-2. Refactor into Phaser + TypeScript/Vite with a test suite while preserving playability.
-3. Add camera-relative right-stick touch aiming, collision-aware vehicle driving, sensible on-foot/car controls, responsive HUD.
-4. Add enterable interiors, NPC interactions, inventory and character creator.
-5. Design server-authoritative Colyseus multiplayer and persistence; never trust client balances, combat or inventory.
+## Next
+1. Browser visual smoke test including dual-touch input, portrait/landscape HUD and exit edges.
+2. Phaser/TypeScript/Vite migration preserving tested behavior; fixed-step simulation and swept bullets.
+3. Character creator, finite ammunition/reload timing, interiors and one repeatable job loop.
+4. Claude can implement server/shared protocol scaffold on a claude branch, with authoritative balances/inventory/combat. No real multiplayer until two-client tests pass.
 
-## Claude/Codex coordination
-Read AGENTS.md, CLAUDE.md, PROJECT_STATE.md, NEXT_TASKS.md and FILE_OWNERSHIP.md. Work on independent branches, record test results, update this file and avoid editing files owned by the other agent. No production deployment without user approval.
+## Known limits
+Buildings are rectangles; collision uses vehicle corners and approximate parked-car circles. Shooting NPCs generates heat but no active police response. Reload supplies unlimited ammo instantly. Shops/interiors mostly placeholders. Saved health of zero has no death recovery yet. No traffic AI, authentication, server persistence, finished art or device QA.
 
-## Repository status
-No GitHub repository was created from this environment. User must create `nightshift-city-online` or use a computer-enabled workflow that can create repositories; upload this package there. Do not assume it is already on GitHub.
+## Handoff workflow
+Fetch newest main and this branch before work. Review FILE_OWNERSHIP.md. Make independent branches, update exact tests and limitations, submit PRs; do not deploy without authorization.
