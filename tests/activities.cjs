@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
+const ctx={};vm.createContext(ctx);vm.runInContext(fs.readFileSync('activities.js','utf8'),ctx);
+const {JOB,advance}=ctx.NightshiftActivities;
+assert.equal(advance('idle',JOB.pickup).stage,'idle');
+assert.equal(advance('pickup',{x:0,y:0}).stage,'pickup');
+assert.equal(advance('pickup',JOB.pickup).stage,'dropoff');
+assert.equal(advance('dropoff',JOB.pickup).stage,'dropoff');
+assert.equal(advance('dropoff',JOB.dropoff).stage,'idle');
+assert.equal(advance('dropoff',JOB.dropoff).reward,225);
+console.log('PASS: courier pickup, dropoff, reward, and distance checks');
