@@ -1,0 +1,11 @@
+# Next tasks (ordered)
+- P0: Smoke-test `index.html` in desktop and mobile Safari; document reproducible bugs.
+- P0: Replace prototype movement with fixed timestep, robust collision and camera-relative mobile twin-stick aim.
+- P0: Move code to Phaser/TypeScript/Vite; add unit tests for movement, collision and inventory rules.
+- P1: Implement accessible character creator and local profile save.
+- P1: Implement vehicle collisions, parking, doors and traffic AI.
+- P1: Add inventory, pickup confirmation, safe-zone and PvP rules.
+- P1: Create one polished district with reusable tiles and enterable interiors.
+- P2: Add server-authoritative multiplayer via Colyseus and persistent player accounts.
+- P2: Implement property, shops, economy and job loops.
+- P3: Crew systems, heists, law enforcement and district expansion.

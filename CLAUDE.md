@@ -1,0 +1,2 @@
+# Claude instructions
+Read README.md, HANDOFF.md, PROJECT_STATE.md, NEXT_TASKS.md, AGENTS.md before editing. Independent project: never import Nightshift Garage code or credentials. Keep mobile-first top-down twin-stick control style. Work in `claude/<task>` branches; Codex uses `codex/<task>` branches. Update handoff after changes. Run checks and report exact results; do not claim deployment or multiplayer exists without verification. Avoid concurrent edits to owned files. Ask before deploying or introducing paid services.

@@ -1,0 +1,2 @@
+# Codex instructions
+Read README.md, HANDOFF.md, PROJECT_STATE.md, NEXT_TASKS.md and CLAUDE.md. Work in `codex/<task>` branch, document touched files and test commands in HANDOFF.md. Coordinate with Claude through GitHub PRs; never push conflicting changes to the same file. Keep repo separate from Nightshift Garage. Prioritize playable, tested increments and iPhone usability. Never put secrets in repo. Do not deploy without authorization.
