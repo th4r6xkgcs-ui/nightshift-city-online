@@ -1,0 +1,15 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const ctx={};vm.createContext(ctx);vm.runInContext(fs.readFileSync('combat.js','utf8'),ctx);
+const c=ctx.NightshiftCombat,s=c.create(35);
+assert.equal(c.begin(s,30,100),false);
+assert.equal(c.begin(s,2,100),true);
+assert.equal(c.canFire(s,2,200),false);
+assert.equal(c.finish(s,2,1399),2);
+assert.equal(c.finish(s,2,1400),30);
+assert.equal(s.reserve,7);
+assert.equal(c.begin(s,0,1500),true);
+assert.equal(c.finish(s,0,2800),7);
+assert.equal(s.reserve,0);
+assert.equal(c.begin(s,0,3000),false);
+assert.equal(c.create(999).reserve,240);
+console.log('PASS: finite ammunition, delayed reload, partial reload and bounds');
