@@ -1,5 +1,9 @@
 # HANDOFF — Nightshift City Online
 
+## CURRENT — v0.6 combat economy (2026-10-10)
+Added combat.js with a 30-round magazine, finite reserve ammunition (90 default, 240 cap), 1.3-second reload, partial reload when reserve runs low, reserve persisted in existing local save, and reserve/reload HUD status. Tests/combat.cjs added; existing Node simulation harnesses updated to load combat.js. IMPORTANT: tests were authored but NOT executed in this session; run `node tests/smoke.cjs && node tests/activities.cjs && node tests/home.cjs && node tests/combat.cjs`. Real Safari and Chromium QA still pending. Current work remains on codex/mobile-controls-v03 PR #1, not merged/deployed. Next: implement shop ammo purchases and player death recovery, then real browser QA. No backend/multiplayer yet.
+
+
 ## CURRENT — v0.5 homes and style (2026-10-10)
 Branch: codex/mobile-controls-v03, PR #1. Local single-player Canvas prototype, independent of Garage. Adds home.js: saved skin/shirt/hair character choices, style dialog, furnished walkable apartment, furniture collision, wardrobe, bed healing, storage save interaction and safe return to exterior. HOME opens owned apartment while on foot. USE interacts near bed/wardrobe/storage/exit. World simulation pauses indoors and during customization; indoor firing/reload is blocked. Mobile action buttons use compact grids with landscape CSS. These layouts are NOT visually verified.
 
