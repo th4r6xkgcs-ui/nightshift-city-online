@@ -1,5 +1,16 @@
 # HANDOFF — Nightshift City Online
 
+## CURRENT — v0.5 homes and style (2026-10-10)
+Branch: codex/mobile-controls-v03, PR #1. Local single-player Canvas prototype, independent of Garage. Adds home.js: saved skin/shirt/hair character choices, style dialog, furnished walkable apartment, furniture collision, wardrobe, bed healing, storage save interaction and safe return to exterior. HOME opens owned apartment while on foot. USE interacts near bed/wardrobe/storage/exit. World simulation pauses indoors and during customization; indoor firing/reload is blocked. Mobile action buttons use compact grids with landscape CSS. These layouts are NOT visually verified.
+
+Tests executed: node tests/smoke.cjs, node tests/activities.cjs, node tests/home.cjs — all PASS. Home integration harness loads all scripts and checks profile validation, apartment price/entry, indoor weapon lock, movement/exit and rest healing. Node DOM/Canvas mocks do not verify real touch or visuals.
+Browser attempt: node tests/browser.cjs blocked because Playwright Chromium executable is absent; browser download failed with truncated archive. Browser smoke source is included for a configured environment (`npm install --no-save playwright`, `npx playwright install chromium`, serve on port 8080). Real Safari/iPhone QA pending.
+
+Touched: index.html, activities.js, home.js, tests/home.cjs, tests/browser.cjs, README.md, HANDOFF.md, PROJECT_STATE.md, NEXT_TASKS.md.
+Known limits: storage only saves progress, no item inventory; rooms are local overlays, no visitors/server; style has color choices rather than full sprite outfit catalog. Zero health still needs death recovery. Infinite instant reload remains. No Phaser migration, real multiplayer, police response, finished art or deployment.
+Next: real mobile layout/twin-touch QA; finite ammo/timed reload and health recovery; modular Phaser migration; Claude backend/protocol foundation on separate branch. No deployment without authorization.
+
+
 ## CURRENT — v0.4 gameplay extension (2026-10-10)
 Added activities.js loaded by index.html: courier pickup/dropoff job with $225 reward, on-screen objective direction/distance, and locally saved apartment purchase for $1200. Added tests/activities.cjs (test source written; execution NOT independently verified). Run `node tests/smoke.cjs && node tests/activities.cjs` before merge. No online multiplayer, server, or actual enterable apartment interior. IMPORTANT: review mobile HUD fit, proximity and script loading in a real browser. Source branch: codex/mobile-controls-v03. Continue preserving independent Claude backend ownership.
 
