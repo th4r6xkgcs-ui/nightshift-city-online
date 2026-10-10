@@ -1,5 +1,9 @@
 # HANDOFF — Nightshift City Online
 
+## CURRENT — v0.4 gameplay extension (2026-10-10)
+Added activities.js loaded by index.html: courier pickup/dropoff job with $225 reward, on-screen objective direction/distance, and locally saved apartment purchase for $1200. Added tests/activities.cjs (test source written; execution NOT independently verified). Run `node tests/smoke.cjs && node tests/activities.cjs` before merge. No online multiplayer, server, or actual enterable apartment interior. IMPORTANT: review mobile HUD fit, proximity and script loading in a real browser. Source branch: codex/mobile-controls-v03. Continue preserving independent Claude backend ownership.
+
+
 ## CURRENT — 2026-10-10, v0.3
 Repository: th4r6xkgcs-ui/nightshift-city-online. v0.2 imported as baseline; client improvements on codex/mobile-controls-v03. Independent Canvas single-player sandbox, no multiplayer/backend/deployment.
 
