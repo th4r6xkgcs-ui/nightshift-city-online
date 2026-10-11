@@ -182,6 +182,19 @@
     if (!p || !g || !state.track) return null;
     try { const pos = PLACES[g.place]?.(p); return pos ? { goal: g, x: pos.x, y: pos.y, dist: Math.hypot(pos.x - p.x, pos.y - p.y) } : null; } catch { return null; }
   }
+  // Pinning a goal also starts Codex's road/walking GPS (NightshiftMap.navigate returns true/false; ids allow clear(id)).
+  function gps(previousPin) {
+    const M = root.NightshiftMap;
+    try {
+      if (previousPin && typeof M?.clear === 'function') M.clear('goal-' + previousPin);
+      if (!state.pin || typeof M?.navigate !== 'function') return false;
+      const t = trackTarget();
+      if (!t || t.goal.id !== state.pin) return false;
+      const ok = M.navigate({ x: t.x, y: t.y, label: ('GOAL · ' + t.goal.title).slice(0, 80), id: 'goal-' + state.pin }) === true;
+      if (ok) toast(`📍 GPS set · ${t.goal.title}`);
+      return ok;
+    } catch { return false; }
+  }
   function drawTracker() {
     const t = trackTarget(), p = G.player;
     if (!t || !p || t.dist < 110 || root.NightshiftRaces?.active?.()?.phase === 'racing') return;
@@ -282,7 +295,7 @@
       body.append(el('div', {}, g.title + (!done && pr.target > 1 ? ` · ${fmt(pr.cur)}/${fmt(pr.target)}` : '')), el('div', { className: 'h' }, g.hint));
       const pinned = tracked(state)?.id === g.id;
       row.append(el('span', { className: 'i' }, done ? '✅' : pinned ? '📍' : cur ? '🎯' : '▫️'), body, el('span', { className: 'r' }, rewardText(g.reward)));
-      if (!done && g.place) { row.style.cursor = 'pointer'; row.onclick = () => { state.pin = state.pin === g.id ? null : g.id; state.track = true; dirty = true; save(); lastKey = ''; render(); }; }
+      if (!done && g.place) { row.style.cursor = 'pointer'; row.onclick = () => { const was = state.pin; state.pin = state.pin === g.id ? null : g.id; state.track = true; dirty = true; save(); lastKey = ''; gps(was); render(); }; }
       panel.append(row);
     }
     panel.scrollTop = scroll;
@@ -298,5 +311,5 @@
   addEventListener('keydown', (e) => { if (e.key === 'g' && !(e.target instanceof HTMLInputElement)) { panel.hidden ? open() : (panel.hidden = true); } });
   render();
 
-  root.NightshiftGoals = Object.freeze({ ...core, open, snapshot, next: () => next(state, snapshot()), track: () => trackTarget(), get state() { return state; } });
+  root.NightshiftGoals = Object.freeze({ ...core, open, snapshot, next: () => next(state, snapshot()), track: () => trackTarget(), gps: () => gps(null), get state() { return state; } });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
