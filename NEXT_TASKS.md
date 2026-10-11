@@ -3,7 +3,7 @@
 - P0: Phaser/TypeScript migration, fixed timestep and swept collision.
 - P1: Expand character outfits beyond color choices; combat feedback, enemy damage and recovery UI polish.
 - P1: Add shop interior and real item storage; expand the existing apartment and courier loop.
-- P1: Traffic, better vehicle collision and camera zoom.
+- P1: Improve current loop traffic: signals, route avoidance, camera zoom and collision tuning.
 - P2: Claude server/protocol scaffold, authoritative inventory/economy/combat, two-client tests.
 - P2: Persistent accounts, properties, garages, safe zones and optional PvP.
 
