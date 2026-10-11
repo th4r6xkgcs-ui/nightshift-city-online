@@ -1,0 +1,30 @@
+name: Live server smoke test
+# After each push of server code, wait for Cloudflare Workers Builds to deploy,
+# then play two bot players against the LIVE server. The URL lives in
+# worker/LIVE_URL; until that file exists this workflow does nothing.
+on:
+  push:
+    paths: ['server/**', 'shared/**', 'worker/**', '.github/workflows/live-smoke.yml']
+permissions:
+  contents: read
+concurrency:
+  group: live-smoke-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Read live URL
+        id: url
+        run: |
+          if [ -s worker/LIVE_URL ]; then echo "url=$(tr -d '[:space:]' < worker/LIVE_URL)" >> "$GITHUB_OUTPUT"; else echo "No worker/LIVE_URL yet; skipping."; fi
+      - name: Wait for this commit to be live
+        if: steps.url.outputs.url != ''
+        run: sleep 150
+      - name: Two bots against the live server
+        if: steps.url.outputs.url != ''
+        run: node server/scripts/smoke-live.cjs "${{ steps.url.outputs.url }}"
