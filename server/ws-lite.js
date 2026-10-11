@@ -12,9 +12,11 @@ const GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
 const CONNECTING = 0, OPEN = 1, CLOSING = 2, CLOSED = 3;
 
 class Socket extends EventEmitter {
-  constructor(sock, maxPayload) {
+  constructor(sock, maxPayload, ip) {
     super();
     this.sock = sock;
+    this.ip = ip;
+    this.lastSeen = Date.now(); // any inbound bytes (messages, pongs) count as alive
     this.maxPayload = maxPayload;
     this.readyState = OPEN;
     this.OPEN = OPEN;
@@ -22,11 +24,15 @@ class Socket extends EventEmitter {
     this.closeCode = 1006;
     sock.setNoDelay(true);
     sock.on('data', (d) => this._data(d));
+    // http.Server sockets allow half-open connections; when the client's side
+    // ends (FIN), finish ours too or the socket and player linger forever.
+    sock.on('end', () => sock.destroy());
     sock.on('close', () => this._finish());
     sock.on('error', (e) => this.emit('error', e));
   }
 
   _data(chunk) {
+    this.lastSeen = Date.now();
     this.buf = this.buf.length ? Buffer.concat([this.buf, chunk]) : chunk;
     while (this.readyState !== CLOSED) {
       const b = this.buf;
@@ -92,6 +98,9 @@ class Socket extends EventEmitter {
     setTimeout(() => this.sock.destroy(), 1000).unref();
   }
 
+  // Browsers answer pings automatically, so a silent socket is a dead one.
+  ping() { if (this.readyState === OPEN) this._frame(0x9, Buffer.alloc(0)); }
+
   terminate() { this.sock.destroy(); this._finish(); }
 
   _fail(code, reason) { this.close(code, reason); }
@@ -104,7 +113,9 @@ class Socket extends EventEmitter {
 }
 
 class WebSocketServer extends EventEmitter {
-  constructor({ port = 0, host = '127.0.0.1', maxPayload = 2048, server, onRequest } = {}) {
+  // allowUpgrade(req) may return null to accept, or [httpStatus, reason] to refuse
+  // before the handshake (origin checks, connection limits).
+  constructor({ port = 0, host = '127.0.0.1', maxPayload = 2048, server, onRequest, allowUpgrade, clientIp } = {}) {
     super();
     this.clients = new Set();
     this.http = server || http.createServer(onRequest || ((req, res) => {
@@ -117,10 +128,15 @@ class WebSocketServer extends EventEmitter {
         sock.end('HTTP/1.1 400 Bad Request\r\n\r\n');
         return;
       }
+      const refusal = allowUpgrade ? allowUpgrade(req) : null;
+      if (refusal) {
+        sock.end(`HTTP/1.1 ${refusal[0]} ${refusal[1]}\r\nConnection: close\r\nContent-Length: 0\r\n\r\n`);
+        return;
+      }
       const accept = crypto.createHash('sha1').update(key + GUID).digest('base64');
       sock.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n'
         + `Sec-WebSocket-Accept: ${accept}\r\n\r\n`);
-      const ws = new Socket(sock, maxPayload);
+      const ws = new Socket(sock, maxPayload, clientIp ? clientIp(req) : req.socket.remoteAddress);
       this.clients.add(ws);
       ws.on('close', () => this.clients.delete(ws));
       this.emit('connection', ws, req);

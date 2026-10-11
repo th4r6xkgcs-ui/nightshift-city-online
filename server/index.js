@@ -37,18 +37,38 @@ function serveStatic(req, res) {
   });
 }
 
-function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world = new World(), store = new MemoryStore(), saveEveryMs = 10000 } = {}) {
+function createServer({
+  port = 2567, host = '127.0.0.1', clock = Date.now, world = new World(), store = new MemoryStore(), saveEveryMs = 10000,
+  maxConnections = 200,       // whole server
+  maxPerIp = 8,               // one household/phone carrier NAT can share an IP
+  allowedOrigins = null,      // e.g. ['https://game.example'] — null allows any (local dev)
+  trustProxy = false,         // true behind a hosting proxy: use X-Forwarded-For
+  pingEveryMs = 10000, idleTimeoutMs = 30000,
+} = {}) {
   const N = RULES.net;
+  const clientIp = (req) => {
+    const fwd = trustProxy && req.headers['x-forwarded-for'];
+    return (fwd ? String(fwd).split(',')[0].trim() : req.socket.remoteAddress) || 'unknown';
+  };
+  const perIp = new Map();
+  const allowUpgrade = (req) => {
+    if (allowedOrigins && !allowedOrigins.includes(req.headers.origin)) return [403, 'Forbidden'];
+    if (wss.clients.size >= maxConnections) return [503, 'Server Full'];
+    if ((perIp.get(clientIp(req)) || 0) >= maxPerIp) return [429, 'Too Many Connections'];
+    return null;
+  };
   const tokens = new Map(); // playerId -> token
   const online = new Map(); // token -> playerId (one session per character)
   const persist = (pid) => { const t = tokens.get(pid); const prof = world.exportProfile(pid); if (t && prof) store.save(t, prof); };
-  const wss = new WebSocketServer({ port, host, maxPayload: N.maxMsgBytes, onRequest: serveStatic });
+  const wss = new WebSocketServer({ port, host, maxPayload: N.maxMsgBytes, onRequest: serveStatic, allowUpgrade, clientIp });
   const conns = new Map(); // playerId -> ws
   let last = clock();
 
   const send = (ws, msg) => { if (ws.readyState === ws.OPEN) ws.send(JSON.stringify(msg)); };
 
   wss.on('connection', (ws) => {
+    perIp.set(ws.ip, (perIp.get(ws.ip) || 0) + 1);
+    ws.on('close', () => { const n = (perIp.get(ws.ip) || 1) - 1; if (n) perIp.set(ws.ip, n); else perIp.delete(ws.ip); });
     let id = null;
     let strikes = 0;
     let bucket = N.maxMsgsPerSec, bucketAt = clock();
@@ -127,6 +147,16 @@ function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world
 
   const saver = setInterval(() => { for (const pid of conns.keys()) persist(pid); }, saveEveryMs);
 
+  // Phones that lose signal often vanish without a close frame. Ping everyone;
+  // drop anyone silent too long so no ghost players stay in the world.
+  const reaper = setInterval(() => {
+    const t = Date.now();
+    for (const ws of wss.clients) {
+      if (t - ws.lastSeen > idleTimeoutMs) ws.terminate();
+      else ws.ping();
+    }
+  }, pingEveryMs);
+
   const timer = setInterval(() => {
     const now = clock();
     world.step(now - last, now);
@@ -147,6 +177,7 @@ function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world
       store.flush();
       clearInterval(timer);
       clearInterval(saver);
+      clearInterval(reaper);
       for (const ws of wss.clients) ws.terminate();
       wss.close(() => resolve());
     }),
@@ -159,7 +190,14 @@ if (require.main === module) {
   const port = Number(process.env.PORT) || 2567;
   const host = process.env.HOST || '0.0.0.0';
   const file = process.env.PROFILES || require('node:path').join(__dirname, 'data', 'profiles.json');
-  const srv = createServer({ port, host, store: new FileStore(file) });
+  const env = process.env;
+  const srv = createServer({
+    port, host, store: new FileStore(file),
+    maxConnections: Number(env.MAX_CONNECTIONS) || 200,
+    maxPerIp: Number(env.MAX_PER_IP) || 8,
+    allowedOrigins: env.ALLOWED_ORIGINS ? env.ALLOWED_ORIGINS.split(',').map((s) => s.trim()).filter(Boolean) : null,
+    trustProxy: env.TRUST_PROXY === '1',
+  });
   srv.ready.then(() => console.log(`Nightshift City Online server on ws://${host}:${srv.port} · test page http://localhost:${srv.port}/`));
   for (const sig of ['SIGINT', 'SIGTERM']) process.on(sig, () => srv.close().then(() => process.exit(0)));
 }
