@@ -36,7 +36,7 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -135,6 +135,7 @@
       tuneLevels: tuneStat('totalLevels'), tuneBestCar: tuneStat('bestCar'),
       homeItems: root.NightshiftHomeUpgrades?.state?.owned?.length || 0,
       respectRank: root.NightshiftRespect?.state?.reached || 0,
+      fishCaught: root.NightshiftFishing?.state?.total || 0, koi: root.NightshiftFishing?.state?.caught?.koi || 0,
       raceMedals: Object.keys(root.NightshiftRaces?.state?.medals || {}).length,
       raceGolds: Object.values(root.NightshiftRaces?.state?.medals || {}).filter((m) => m === 'gold').length,
     });
@@ -176,6 +177,7 @@
     garage: (p) => nearest(root.NightshiftTuning?.sites?.(), p),
     casino: () => root.NightshiftCasino?.door?.() || null,
     gunshop: () => root.NightshiftWeapons?.door?.() || null,
+    fishing: (p) => nearest(root.NightshiftFishingData?.SPOTS, p),
     race: (p) => { const medals = root.NightshiftRaces?.state?.medals || {}; const st = root.NightshiftRaces?.starts?.() || []; return nearest(st.filter((r) => medals[r.id] !== 'gold'), p) || nearest(st, p); },
   };
   function trackTarget() {

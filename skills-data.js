@@ -65,6 +65,12 @@
         { key: 'charisma.shopPrice', label: 'Business buy prices', per: -0.006, min: 0.7 },
         { key: 'charisma.jobPay', label: 'Delivery pay', per: 0.015, max: 1.75 },
       ] },
+    { id: 'fishing', name: 'Fishing', icon: '🎣', desc: 'Faster bites and rarer catches.',
+      earn: 'Land fish at the Docks Pier or West Canal.',
+      perks: [
+        { key: 'fishing.bite', label: 'Bite wait', per: -0.01, min: 0.5 },
+        { key: 'fishing.rare', label: 'Rare catch chance', per: 0.02, max: 2.0 },
+      ] },
   ];
 
   // XP needed to go from `level` to `level + 1`.
@@ -95,6 +101,7 @@
     toughness: 30 * 2,                     // ~30 HP lost and survived per minute of fighting
     stealth: 0.5 * 150,                    // an escape every ~2 minutes
     charisma: 40 + 5 * 4 + 10,             // deliveries + sales + goal rewards
+    fishing: 4 * 18,                       // ~4 landed fish per minute, ~18 XP each (fishing-data.js XP)
   });
 
   const api = Object.freeze({ MAX_LEVEL, TITLES, SKILLS, xpToNext, XP, PACE });
