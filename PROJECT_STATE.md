@@ -1,18 +1,27 @@
 # Project state
-v0.13 client: dependency-free Canvas HTML local simulation with mobile twin-stick controls, vehicle collision/exit rules, minimap and validated local saves. Tests: Node VM simulation harness.
-Target: Phaser/TypeScript client, Colyseus authoritative multiplayer, persistent profiles/inventory, properties and hybrid legal/crime city activities. No server, database or multiplayer exists yet.
-Art remains geometric placeholders. Mobile Safari visual and touch testing is pending.
+Current version: **v0.14**. Canonical GitHub branch `codex/mobile-controls-v03`, PR #1. Existing owner-private Sites preview is recorded in DEPLOYMENT.md.
 
-Local homes/character module: home.js. Courier/property ownership: activities.js. Walkable furnished apartment, rest healing, wardrobe and saved character colors. Integrated Node DOM mock tests pass; actual browser tests blocked by missing Chromium.
+The game is a dependency-free Canvas/localStorage single-player prototype. It does not yet use Phaser, TypeScript, Colyseus, a database or online accounts. Those remain target architecture, not installed functionality.
 
-combat.js: finite ammunition and timed reload. recovery.js: local shop transactions, crash damage and timed hospital recovery. Five simulation test suites pass. No police AI or enemy damage system yet.
+## Client modules
+| Module | Responsibility |
+| --- | --- |
+| game.js | World, input, fixed-step update, collision and procedural drawing |
+| clock.js | 60 Hz simulation, bounded catch-up, pause reset |
+| navigation.js | Clearance grid routes, wall traces, swept projectile queries |
+| combat.js | Finite magazine/reserve and timed reload |
+| recovery.js | Shop economy, damage, delayed clinic recovery/protection |
+| home.js | Character preview/outfits, walkable apartment/shop and furniture |
+| inventory.js | Pocket/stash/glovebox custody, consumables, death bags |
+| activities.js | Persistent courier cargo/stages and property purchase |
+| crime.js | Finite NPC wallets, police pursuit/projectiles, escape/surrender |
+| vehicles.js | Stable car IDs, handling profiles, ownership/theft/services |
+| traffic.js | Eight traffic actors on authored road loops |
+| audio.js | Opt-in synthesized effects/engine |
+| city-map.js | Service map, objective GPS and minimap markers |
+| backups.js | Local backup export/restore/undo with failed-write rollback |
+| interface.js | Secondary action tray and keyboard shortcuts |
 
-Inventory custody now includes carried wallet, ammunition and pistol. Death drops persist locally until expiry; home/glovebox transfers use tap panels. All six simulation suites pass. No server inventory authority or robbery implementation.
+Validation: 15 suites plus root JS syntax pass, including actual HTML script order, fresh-context persistence, walking/driving at 30/60/120 FPS, menu pause, death custody and backup rollback. Canvas rendering can be inspected internally; it does not validate DOM layout or gestures. Real browser/iPhone audio, file picker and dual-touch QA still pending.
 
-crime.js: local NPC robbery, fleeing, delayed police dispatch, building-blocked sight, officer damage, escape heat decay and surrender. Combat script loading order repaired; integration follows HTML order. Seven simulation suites pass. Police pathfinding and browser/device QA pending.
-
-Navigation/projectiles: navigation.js (grid BFS, wall tracing, segment-circle queries). Police use visible traveling bullets. Crime persistence uses stable NPC IDs and localStorage. npm run check passes nine suites plus module syntax; CI configured but not yet confirmed. Touch CSS spacing adjusted without visual verification.
-
-vehicles.js owns local vehicle registry/services/theft/fuel/condition. game.js holds extracted client simulation. interface.js adds secondary-action tray. Courier stage/cargo and ground NPC cash now save. Ten check suites pass.
-
-traffic.js: local moving actors, spacing and impact. audio.js: opt-in Web Audio synth feedback. Pixel drawing enhanced; internal canvas rendering inspected. Spawn-in-building bug fixed. Eleven suites pass. No actual browser QA.
+Remaining limits: placeholder art/audio; traffic lacks signals and vehicle navigation; local menus/interiors pause the world; no authoritative economy, online combat or cross-device cloud saves. Codex continues client work. Claude's backend ownership is unchanged.

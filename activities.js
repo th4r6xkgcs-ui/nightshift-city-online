@@ -24,16 +24,16 @@
   function saveExtras(){try{root.localStorage.setItem('nightshift-city-activities-v1',JSON.stringify({owned,stage}))}catch{}}
   try{const d=JSON.parse(root.localStorage.getItem('nightshift-city-activities-v1')||'{}');owned=d.owned===true;stage=['idle','pickup','dropoff'].includes(d.stage)?d.stage:'idle'}catch{}
   const act=()=>{
-    if(root.NightshiftVehicles?.paused()||root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused()||root.NightshiftInventory?.paused())return;
+    if(root.NightshiftBackups?.paused()||root.NightshiftMap?.paused()||root.NightshiftVehicles?.paused()||root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused()||root.NightshiftInventory?.paused())return;
     if(typeof player==='undefined'||player.car){notify('Exit your vehicle to accept or deliver jobs');return}
-    if(stage==='idle'){stage='pickup';saveExtras();notify('Courier job started: collect parcel at the yellow marker')}
-    else {if(stage==='dropoff'&&!(root.NightshiftInventory.state.pocket.parcel>0)){stage='idle';saveExtras();notify('Parcel lost or stored · job cancelled. Tap JOB to restart.');return}const result=advance(stage,player);if(result.stage===stage){notify('Travel to the objective marker first');return}stage=result.stage;if(result.reward){root.NightshiftInventory.state.pocket.parcel--;if(!root.NightshiftInventory.state.pocket.parcel)delete root.NightshiftInventory.state.pocket.parcel;player.cash+=result.reward;notify('Delivery complete! +$'+result.reward);if(typeof save==='function')save()}else{root.NightshiftInventory.state.pocket.parcel=(root.NightshiftInventory.state.pocket.parcel||0)+1;save();notify('Parcel collected. Deliver it to the drop-off')}saveExtras()}
-  };btn.addEventListener('pointerdown',act);root.NightshiftActivities.act=act;Object.defineProperty(root.NightshiftActivities,'stage',{get:()=>stage});
+    if(stage==='idle'){stage='pickup';saveExtras();root.NightshiftMap?.navigate({...JOB.pickup,label:'COURIER PICKUP'});notify('Courier job started: collect parcel at the yellow marker')}
+    else {if(stage==='dropoff'&&!(root.NightshiftInventory.state.pocket.parcel>0)){stage='idle';saveExtras();notify('Parcel lost or stored · job cancelled. Tap JOB to restart.');return}const result=advance(stage,player);if(result.stage===stage){notify('Travel to the objective marker first');return}stage=result.stage;if(result.reward){root.NightshiftInventory.state.pocket.parcel--;if(!root.NightshiftInventory.state.pocket.parcel)delete root.NightshiftInventory.state.pocket.parcel;player.cash+=result.reward;notify('Delivery complete! +$'+result.reward);if(typeof save==='function')save()}else{root.NightshiftInventory.state.pocket.parcel=(root.NightshiftInventory.state.pocket.parcel||0)+1;save();root.NightshiftMap?.navigate({...JOB.dropoff,label:'COURIER DELIVERY'});notify('Parcel collected. Deliver it to the drop-off')}saveExtras()}
+  };btn.addEventListener('pointerdown',act);root.NightshiftActivities.act=act;Object.defineProperty(root.NightshiftActivities,'stage',{get:()=>stage});root.NightshiftActivities.target=()=>stage==='idle'?null:{...(stage==='pickup'?JOB.pickup:JOB.dropoff),label:stage==='pickup'?'COURIER PICKUP':'COURIER DELIVERY'};
   propertyButton.addEventListener('pointerdown',()=>{
     if(typeof player==='undefined')return;
-    if(root.NightshiftVehicles?.paused()||root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused()||root.NightshiftInventory?.paused())return;
+    if(root.NightshiftBackups?.paused()||root.NightshiftMap?.paused()||root.NightshiftVehicles?.paused()||root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused()||root.NightshiftInventory?.paused())return;
     if(player.car){notify('Exit your vehicle before visiting home');return}
-    if(!near(player,apartment,105)){notify('Apartment is near 880, 680 — follow HOME marker');return}
+    if(!near(player,apartment,105)){root.NightshiftMap?.navigate({...apartment,label:'YOUR APARTMENT'});notify('GPS set to your apartment');return}
     if(owned){root.NightshiftHome?.enter();return}
     if(player.cash<apartment.price){notify('Apartment costs $'+apartment.price);return}
     player.cash-=apartment.price;owned=true;saveExtras();if(typeof save==='function')save();notify('Apartment purchased for $'+apartment.price);

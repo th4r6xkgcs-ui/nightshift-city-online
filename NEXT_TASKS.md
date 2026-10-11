@@ -1,13 +1,11 @@
 # Next tasks
-- P0: Real desktop/browser and iPhone dual-touch smoke test; portrait/landscape HUD.
-- P0: Phaser/TypeScript migration, fixed timestep and swept collision.
-- P1: Expand character outfits beyond color choices; combat feedback, enemy damage and recovery UI polish.
-- P1: Add shop interior and real item storage; expand the existing apartment and courier loop.
-- P1: Improve current loop traffic: signals, route avoidance, camera zoom and collision tuning.
-- P2: Claude server/protocol scaffold, authoritative inventory/economy/combat, two-client tests.
-- P2: Persistent accounts, properties, garages, safe zones and optional PvP.
+- P0: Real desktop and iPhone Safari QA: simultaneous movement/aim/fire, portrait/landscape HUD, brake, map, shop, audio and backup export/import.
+- P0: Modular scene/state architecture before a scoped Phaser/TypeScript migration; retain existing behavioral regressions.
+- P1: Expand furnished interiors, authored city content and interaction feedback; add explicit safe-zone rules.
+- P1: Road-aware vehicle GPS, traffic signals/avoidance, pursuit vehicles and collision tuning.
+- P1: Improve combat effects/animations and create production sprite/audio assets.
+- P1: Formalize loot expiry, car search/impound and globally unique content IDs before multiplayer.
+- P2 (Claude-owned): Authoritative server/protocol scaffold, inventory/economy/combat transactions and two-client tests.
+- P2: Persistent online accounts, properties, garages and optional PvP.
 
-- P1: Tune grid pursuit and projectile effects, persist remaining transient NPC loot; real-browser crime-loop QA.
-
-- P1: Expand current fixed-catalog vehicle IDs for authored content; vehicle search/impound rules; bag lifetime design.
-- P2: Server-authoritative inventory transactions and multiplayer loot ownership.
+Completed v0.14: fixed timestep, frame-rate integration checks, map/GPS/courier routing, walkable shop, medkits/valuables trade, expanded outfit preview, backup restore/undo and improved vehicle handling/braking. No paid infrastructure is required for this local client.

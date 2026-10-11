@@ -1,5 +1,11 @@
 # HANDOFF — Nightshift City Online
 
+## CURRENT — v0.14 gameplay and reliability (2026-10-11)
+Added city-map.js (services/GPS/markers, courier routing), clock.js (60 Hz bounded simulation), backups.js (local export/restore/undo/rollback) and integrated tests/harness.cjs/simulation.cjs. Walkable shop interior trades ammo/pistol/aid/medkits and buys valuables; carried medkits heal through BAG. Character preview now covers pants/shoes/hats/bags. Portrait interiors follow the player. Vehicles have compact/sedan/van handling, health-sensitive acceleration and FIRE/Space braking while driving. Stationary steering fixed. Camera zoom changes with speed. Menu input release and storage-room movement lock fixed; pointer capture loss releases controls and visibility changes clear/reset inputs.
+Validation: npm run check passes 15 suites plus root module syntax. Walking and driving agree at 30/60/120 FPS; backup restore/undo/failed-write rollback preserve unrelated storage. Existing custody, combat, crime, courier and persistent state regressions pass. Canvas-only rendering inspected; actual browser/Safari HUD, gestures, audio and file selection not verified.
+Touched: client JS modules, index.html, package.json, tests and shared docs. Canonical branch/PR preserved; no backend, paid service or multiplayer introduced. Existing private Site will be updated with this version; exact deployed IDs belong in DEPLOYMENT.md. Historical entries below describe earlier snapshots and do not override this current state.
+Next: actual iPhone/browser QA, scene/state modularization, authored content; backend remains Claude-owned.
+
 ## DEPLOYED — v0.13 private preview (2026-10-10)
 https://nightshift-city-online.nzs4gc8qmw.chatgpt.site — native deployment succeeded, owner-private, authorized by user. Read DEPLOYMENT.md for exact identity and update procedure; reuse this site. GitHub remains canonical code, Sites source is a deployment mirror. Eleven suites and GitHub CI pass; real iPhone touch/audio/HUD QA pending. The deployment supersedes historical "no deployment" notes below. Still single-player, no multiplayer server.
 

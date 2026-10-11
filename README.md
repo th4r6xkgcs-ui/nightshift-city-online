@@ -1,28 +1,33 @@
 # Nightshift City Online
 Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current build: v0.13 local prototype
-Walking, touch twin-stick aiming, held fire, driving, building/parked-car collision, safe vehicle exits, NPCs, shops, loot, minimap and validated browser-local saves. Programmer-drawn placeholder art. Character colors persist locally. Owned apartments have walkable furnished interiors, bed healing and wardrobe access. Multiplayer is not implemented. No deployment.
+## Current build: v0.14 local prototype
+[Play the private preview](https://nightshift-city-online.nzs4gc8qmw.chatgpt.site).
+Dependency-free Canvas client with walking, twin-stick aiming, combat, NPC crime, police pursuit, traffic, drivable cars, walkable apartments and shops, courier deliveries and browser-local inventory/progress. Multiplayer is not implemented. Art and synthesized audio remain procedural placeholders.
 
 ## Run and verify
-Serve with `python3 -m http.server 8080` and open localhost:8080. Run `node tests/smoke.cjs`, `node tests/activities.cjs` and `node tests/home.cjs`, `node tests/combat.cjs` and `node tests/recovery.cjs` for simulation checks. No dependencies or build step.
+Use Node 24 or newer. No npm installation or build step is required.
+- `python3 -m http.server 8080` serves the game at localhost:8080.
+- `npm run check` runs 15 suites and syntax-checks every root JavaScript module.
+- `npm run test:browser` is a separate harness for a configured browser environment.
+- `node tests/render.cjs /tmp/city.png` optionally renders Canvas with `@napi-rs/canvas`; this verifies neither HTML layout nor touch/audio.
 
 ## Controls
-WASD/arrows: walk; while driving, up/down accelerates/reverses and left/right steers. E/USE: interact or enter/exit a stopped vehicle. Mouse/right touch stick: aim. Hold Space/FIRE: shoot. R/RLD: 1.3-second reload from finite spare ammo. Shift/RUN: sprint.
+WASD/arrows or left stick moves. In a car, up/down accelerates/reverses, left/right steers. E/USE enters accessible cars, exits stopped cars or interacts with entrances/furniture. Mouse/right stick aims; Space/FIRE shoots on foot and brakes while driving. R/RLD reloads from finite spare ammunition. Shift/RUN sprints.
+MORE opens secondary actions: STYLE, JOB, HOME, BAG, BOX, LOOT, ROB, GIVE UP, CAR, SOUND, MAP and SAVES. Keyboard shortcuts: M map, I bag, G glovebox, X rob, Z surrender.
 
-## Collaboration
-Read AGENTS.md, CLAUDE.md, HANDOFF.md and FILE_OWNERSHIP.md. Codex uses codex branches; Claude uses claude branches. GitHub is the shared source of truth. No credentials or Garage assets belong here.
+## Gameplay
+- STYLE offers skin, shirt, hair, pants, shoes, hat and bag choices with a preview.
+- JOB starts a $225 courier delivery, routes GPS to pickup then destination. Tap JOB at each objective. Parcels are carried items at risk of loss. Stages persist through refresh.
+- HOME routes to the apartment near 880,680. Purchase for $1,200; enter and use the bed, wardrobe or storage. Apartments have collision-aware furniture and an exit at the bottom.
+- USE at a CORNER SHOP entrance opens a walkable shop. USE near the counter trades ammunition, pistols, first aid, medkits and carried valuables. A medkit in BAG heals up to 40 HP when used.
+- BAG shows carried items; BOX accesses a nearby/current vehicle glovebox. Apartment STORAGE opens the home stash. Store/Take uses buttons. Death drops all carried cash, ammunition, weapons and items; stash/gloveboxes survive. LOOT recovers nearby bags, which expire after two minutes.
+- ROB threatens an unrobbed NPC with a carried pistol. Police dispatch after a delay, route around buildings and fire visible projectiles stopped by walls. Lose sight to escape, or GIVE UP to pay up to $150. Heat, NPC wallet/death state and ground cash persist locally.
+- CAR manages vehicles: starter compact is owned, others cost $900 or take three seconds to steal. Garage entrances offer fuel at $0.80/% and repair at $1.50/%. Compact/sedan/van handling differs; damage reduces acceleration. Traffic follows two road loops.
+- MAP chooses destinations and draws walking-clear GPS routes around buildings. Routes are guidance, not car-lane navigation.
+- SAVES exports browser progress, restores backups and can undo the last restore. This is manual file transfer, not cloud sync.
+- SOUND enables optional synthesized feedback after a gesture. Hospital recovery takes three seconds and grants brief damage protection.
 
-STYLE opens customization. JOB starts/completes courier objectives. HOME buys ($1,200) or enters the starter apartment near 880,680. Indoors, USE near furniture or the bottom exit.
-
-USE near CORNER SHOP opens ammo/first aid services. High-speed crashes damage health; at zero health, recover after three seconds at the West End clinic marker with a fee up to $100. This is a local recovery spawn, not an enterable clinic.
-
-BAG shows carried inventory. BOX accesses your current vehicle glovebox; apartment STORAGE opens the home stash. Store/Take uses tap controls. On death, ALL carried items, cash, ammunition and pistols drop; stash/gloveboxes survive. LOOT recovers nearby bags. Bags persist locally through refresh for two minutes. Pistols can be replaced at corner shops for $150. No online looting or robbery yet.
-
-ROB threatens a nearby NPC with a carried pistol, takes their cash and alerts police. Police arrive after a delay, chase visible players and damage them. Break line of sight to lose heat or GIVE UP to pay a fine up to $150. NPC robbery and police are local prototype systems.
-
-Run `npm run check` with Node 24 for all nine simulation suites and JavaScript syntax checks. No npm dependencies are required. GitHub Actions runs this command on pushes/PRs. Police now route around buildings and fire visible projectiles stopped by cover. Player bullets use swept impacts. Heat and NPC robbery/death state persist locally across refresh. Browser testing is separate and still pending.
-
-MORE opens secondary actions. CAR shows nearby/current vehicle: own starter car, buy another ($900) or attempt theft (stay nearby 3 seconds, adds heat). Garage entrances provide repair/refueling. Fuel/condition and vehicle identity save locally. Courier parcels are carried items at risk; job stages persist. Client simulation lives in game.js. npm run check now runs ten suites.
-
-Traffic moves on local road loops and can cause collision damage. SOUND/MUTE in MORE enables optional synthesized effects and engine tone after a gesture. Cars/characters/sidewalks received a procedural pixel-detail pass. Eleven check suites pass; Canvas-only rendering inspected, real browser touch/audio still pending.
+## Limits and collaboration
+Menus/interiors pause this single-player simulation. Real Safari dual-touch, HUD layout and browser audio/file-picker QA remain pending. Save data is trusted local prototype state, not a secure economy. No account server, database or multiplayer exists.
+Read AGENTS.md, CLAUDE.md, HANDOFF.md, FILE_OWNERSHIP.md and DEPLOYMENT.md. GitHub is canonical; Sites hosts a private deployment mirror. Codex owns the client; Claude owns future backend work. No credentials or Garage assets belong here.
