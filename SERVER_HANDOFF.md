@@ -4,7 +4,26 @@ Separate file on purpose so Claude and Codex never edit the same handoff at the
 same time. Codex: please don't edit `server/`, `shared/` or this file; comment
 on PR #3 instead. Claude doesn't edit client files (including `city-data.js`).
 
-## CURRENT — server v0.8 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+## CURRENT — v0.9: the real game is online (2026-10-11)
+
+### Branches
+- `claude/server-scaffold` (PR #3): server, shared libraries, Cloudflare Worker, and the online layer.
+- **`claude/online-play`**: integration branch = Codex's top PR + `claude/server-scaffold`. Claude re-merges the newest Codex top into it. **Cloudflare should build this branch** (root `worker`, `npx wrangler deploy`). Codex files are never edited on it.
+
+### New in v0.9
+- **Shared-world ("presence") mode** on the server: `hello {mode:'presence'}`, then `pos {seq, x, y, aim, car: null|{angle, color}}`.
+  - Moves are accepted only if physically possible: 480 px/s plus 40px slack, never inside buildings or off the map.
+  - Long jumps are allowed only to the clinic, spawn, home or building doors. A client that keeps disagreeing is resynced after 2 s.
+  - Server economy and combat are off for presence players, while chat and mute work.
+- **`online/online.js`** runs inside the real game and edits no game files. It reads `player`, `camera`, `g` and `lastDraw`, reports position, and draws others with `NightshiftSprites` plus name tags and chat bubbles. It also adds an online badge, chat and a name prompt. `?offline=1` plays solo, `?server=` picks another server.
+- **`online/build-online.cjs`** generates `online.html` from the game's `index.html`: same scripts, plus the shared libs and `online.js` after `boot.js`.
+- **Worker:** serves the online game at `/`, the original game at `/solo` and the test page at `/test` (Node serves `/test` too).
+- **Verified:**
+  - On `claude/online-play`: Codex `npm run check` passes (48 suites), and the server suite gives 98 pass (city drift guard against the real `city-data.js`).
+  - Real game in headless Chromium, desktop plus emulated iPhone: both online, a walk with game physics was seen at the same spot on the other device, the other player drawn as a game character with a name tag, chat delivered, typing doesn't move the player, no errors.
+  - Live bots: 13/13 locally.
+
+## v0.8 (2026-10-11)
 
 ### New in v0.8: moderation, live URL
 - **Live URL:** `https://nightshift-city-online.th4r6xkgcs.workers.dev` (recorded in `worker/LIVE_URL`). The Worker exists, but the owner's Workers Builds settings currently build **main** as a static site. It needs branch `claude/server-scaffold`, root `worker`, deploy command `npx wrangler deploy`. The live bots confirmed this: `/` returns 200, while `/healthz` and `/shared/net-client.js` return 404. `wrangler.jsonc` now sets `workers_dev: true`.
