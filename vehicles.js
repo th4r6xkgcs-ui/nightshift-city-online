@@ -12,9 +12,10 @@ function handling(car,thrust,steer,brake,dt=1,powered=true){
  car.angle+=steer*spec.steer*step*Math.min(1,Math.abs(car.speed)/1.2)*(car.speed>=0?1:-1);
  return car;
 }
+function dashboard(car){const fuel=Math.max(0,Math.min(100,Number.isFinite(car?.fuel)?car.fuel:100)),condition=Math.max(0,Math.min(100,Number.isFinite(car?.condition)?car.condition:100)),speed=Number.isFinite(car?.speed)?car.speed:0;return fuel<=0?'NO FUEL · Body '+Math.round(condition)+'%':condition<=0?'REPAIR NEEDED · Fuel '+Math.round(fuel)+'%':(speed<-.1?'Reverse ':'Speed ')+Math.abs(speed*15|0)+' · Fuel '+Math.round(fuel)+'% · Body '+Math.round(condition)+'%'}
 function clean(raw={},fallback={}){return {x:Number.isFinite(raw.x)?Math.max(32,Math.min(2168,raw.x)):fallback.x,y:Number.isFinite(raw.y)?Math.max(32,Math.min(1668,raw.y)):fallback.y,angle:Number.isFinite(raw.angle)?raw.angle:fallback.angle,fuel:Number.isFinite(raw.fuel)?Math.max(0,Math.min(100,raw.fuel)):100,condition:Number.isFinite(raw.condition)?Math.max(0,Math.min(100,raw.condition)):100,owned:raw.owned===true,stolen:raw.stolen===true,color:/^#[0-9a-f]{6}$/i.test(raw.color||'')?raw.color:fallback.color}}
 function service(car,wallet,kind){const cost=kind==='fuel'?Math.ceil((100-car.fuel)*.8):kind==='repair'?Math.ceil((100-car.condition)*1.5):0;if(!['fuel','repair'].includes(kind)||cost<=0)return {ok:false,cost:0};if(wallet.cash<cost)return {ok:false,cost};wallet.cash-=cost;car[kind==='fuel'?'fuel':'condition']=100;return {ok:true,cost}}
-root.NightshiftVehicles={clean,service,MODELS,model,handling};if(!root.document)return;
+root.NightshiftVehicles={clean,service,MODELS,model,handling,dashboard};if(!root.document)return;
 const KEY='nightshift-city-vehicles-v1';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{}
 for(let i=0;i<cars.length;i++){const c=cars[i];c.id='car-'+i;c.model=model(c).name;const defaults={...c};Object.assign(c,clean(saved[c.id]||{owned:i===0},defaults));if(NightshiftVehicleGeometry.blocked(c,buildings,world)){c.x=(i%5)*440+44;c.y=175+Math.floor(i/5)*340;c.angle=Math.PI/2}}
 function persist(){const data={};for(const c of cars)data[c.id]=clean(c,c);try{localStorage.setItem(KEY,JSON.stringify(data))}catch{}}root.NightshiftVehicles.save=persist;
