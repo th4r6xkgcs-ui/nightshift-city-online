@@ -44,6 +44,16 @@
       S.person = function (pos, isPlayer, opts) { if (opts && opts.weapon === false && isPlayer) { roomPos = pos; roomSeen = performance.now(); } return person.apply(this, arguments); };
       S.__home = true;
     }
+    // The memory-foam bed is drawn over Codex's BED furniture sprite (which renders after the room floor).
+    if (S && !S.__homeBed && typeof S.furniture === 'function') {
+      const furniture = S.furniture;
+      S.furniture = function (f) {
+        const r = furniture.apply(this, arguments);
+        if (f?.label === 'BED' && H.has(state, 'bed')) { try { drawDuvet(f); } catch { /* cosmetic */ } }
+        return r;
+      };
+      S.__homeBed = true;
+    }
     if (I && !I.__home && typeof I.draw === 'function') {
       const draw = I.draw;
       I.draw = function (kind, ctx) { const r = draw.apply(this, arguments); if (kind === 'home') { try { drawRoom(ctx); } catch { /* cosmetic */ } } return r; };
@@ -71,7 +81,7 @@
     }
   }
   install();
-  const retry = setInterval(() => { install(); if (root.NightshiftHome?.__home && root.NightshiftInteriors?.__home && root.NightshiftSprites?.__home) clearInterval(retry); }, 1000);
+  const retry = setInterval(() => { install(); if (root.NightshiftHome?.__home && root.NightshiftInteriors?.__home && root.NightshiftSprites?.__home && root.NightshiftSprites?.__homeBed) clearInterval(retry); }, 1000);
 
   function afterRest() {
     const out = H.rest(state, Date.now()), notes = [];
@@ -98,6 +108,19 @@
   setInterval(() => { if (H.growTent(state, Date.now(), mod('farming.growTime'))) persist(); }, 5000);
 
   // ---- drawing (room space) ----
+  function drawDuvet(f) {
+    /* eslint-disable-next-line no-undef */
+    const ctx = (() => { try { return g; } catch { return null; } })();
+    if (!ctx) return;
+    const px = f.x + 6, pw = f.w - 12, top = f.y + 6;
+    ctx.save();
+    ctx.fillStyle = '#f4efff'; ctx.fillRect(px + 2, top, pw / 2 - 6, Math.max(8, f.h * 0.16)); ctx.fillRect(px + pw / 2 + 4, top, pw / 2 - 6, Math.max(8, f.h * 0.16));
+    const dy = top + f.h * 0.24, dh = f.h - (dy - f.y) - 6;
+    ctx.fillStyle = '#6c4fd0'; ctx.fillRect(px, dy, pw, dh);
+    ctx.fillStyle = '#8d74e8'; for (let i = 0; i < 4; i++) ctx.fillRect(px + 4 + i * (pw / 4), dy + 4, pw / 4 - 8, dh - 8);
+    ctx.fillStyle = '#ffd970'; ctx.font = 'bold 8px monospace'; ctx.textAlign = 'center'; ctx.fillText('★ MEMORY FOAM ★', f.x + f.w / 2, f.y + f.h + 10);
+    ctx.restore();
+  }
   function drawRoom(ctx) {
     const t = performance.now() / 1000;
     ctx.save();
@@ -111,7 +134,6 @@
     ctx.fillStyle = '#c8d6e5'; ctx.font = 'bold 8px monospace'; ctx.fillText('LAPTOP', L.x, L.y + 22);
     for (const id of state.owned) {
       const it = H.BY_ID[id];
-      if (id === 'bed') { ctx.fillStyle = '#7b5cd6aa'; ctx.fillRect(it.x - 10, it.y - 36, 150, 62); ctx.fillStyle = '#efe6ff'; ctx.fillRect(it.x - 6, it.y - 32, 40, 18); }
       if (id === 'locker') { ctx.fillStyle = '#3a4250'; ctx.fillRect(it.x - 22, it.y - 26, 44, 46); ctx.fillStyle = '#5c6779'; for (let i = 0; i < 3; i++) ctx.fillRect(it.x - 18 + i * 13, it.y - 22, 10, 38); ctx.fillStyle = '#ffd970'; ctx.fillRect(it.x + 14, it.y - 4, 3, 6); }
       if (id === 'tent') {
         ctx.fillStyle = '#1c2a1e'; ctx.fillRect(it.x - 34, it.y - 30, 68, 50); ctx.strokeStyle = '#7fda9b'; ctx.lineWidth = 2; ctx.strokeRect(it.x - 34, it.y - 30, 68, 50);
@@ -125,7 +147,7 @@
         const cups = ['#ffd970', '#c0c8d0', '#d08a3a'];
         for (let i = 0; i < 3; i++) { ctx.fillStyle = i < medals.length ? cups[['gold', 'silver', 'bronze'].indexOf(medals[i])] || '#ffd970' : '#3b3b3b'; ctx.fillRect(it.x - 28 + i * 22, it.y - 22, 12, 14); ctx.fillRect(it.x - 25 + i * 22, it.y - 8, 6, 3); }
       }
-      ctx.fillStyle = '#ffffffb0'; ctx.font = 'bold 8px monospace'; if (id !== 'bed') ctx.fillText(it.name.toUpperCase(), it.x, it.y + 30);
+      if (id !== 'bed') { ctx.fillStyle = '#ffffffb0'; ctx.font = 'bold 8px monospace'; ctx.fillText(it.name.toUpperCase(), it.x, it.y + 30); }
     }
     ctx.restore();
   }
@@ -179,5 +201,5 @@
   function close() { panel.hidden = true; }
   addEventListener('keydown', (e) => { if (panel.hidden) return; if (e.key === 'Escape') close(); e.stopImmediatePropagation(); }, true);
 
-  root.NightshiftHomeUpgrades = Object.freeze({ open, close, paused: () => !panel.hidden, goalBonus: () => H.goalBonus(state), get state() { return state; } });
+  root.NightshiftHomeUpgrades = Object.freeze({ open, close, paused: () => !panel.hidden, roomPos: () => (inHome() ? roomPos : null), goalBonus: () => H.goalBonus(state), get state() { return state; } });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
