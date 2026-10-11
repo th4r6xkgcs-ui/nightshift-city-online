@@ -49,6 +49,7 @@
   setTimeout(() => { ready = true; tick(); }, 4000);
   setInterval(tick, 3000);
   setInterval(payNext, 3100);
+  setInterval(() => renderBadge(), 500);
 
   // Everything the player has done, gathered from every RPG module (read-only).
   function lifetime() {

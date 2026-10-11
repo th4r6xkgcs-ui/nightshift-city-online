@@ -202,9 +202,16 @@
     chip.textContent = `⭐ SKILLS · ${totalLevel()}` + (left > 0 ? ` · 🔥+${Math.round((boost.mult - 1) * 100)}% ${Math.ceil(left / 60000)}m` : '');
   }
   setInterval(renderChip, 5000);
+  // Sits under the HUD, or under Codex's police status line (#crimeStatus) while it is showing, so it never covers it.
   function placeChip() {
     const hud = document.querySelector('#hud');
-    if (hud) { const r = hud.getBoundingClientRect(); if (r.height) { chip.style.top = Math.round(r.bottom + 6) + 'px'; chip.style.left = Math.round(r.left) + 'px'; } }
+    if (!hud) return;
+    const r = hud.getBoundingClientRect();
+    if (!r.height) return;
+    let bottom = r.bottom;
+    const cs = document.querySelector('#crimeStatus');
+    if (cs && cs.textContent.trim()) { const c = cs.getBoundingClientRect(); if (c.height && c.left < r.right && c.top < r.bottom + 60) bottom = Math.max(bottom, c.bottom); }
+    chip.style.top = Math.round(bottom + 6) + 'px'; chip.style.left = Math.round(r.left) + 'px';
   }
   function renderPanel() {
     renderChip();
@@ -236,7 +243,7 @@
   function open() { panel.hidden = false; renderPanel(); }
   chip.onclick = () => { panel.hidden ? open() : (panel.hidden = true); };
   addEventListener('keydown', (e) => { if (e.key === 'k' && !(e.target instanceof HTMLInputElement)) { panel.hidden ? open() : (panel.hidden = true); } });
-  setInterval(placeChip, 1000); placeChip(); renderChip();
+  setInterval(placeChip, 400); placeChip(); renderChip();
 
   root.NightshiftSkills = Object.freeze({
     ...core,
