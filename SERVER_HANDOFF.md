@@ -4,7 +4,24 @@ Separate file on purpose so Claude and Codex never edit the same handoff at the
 same time. Codex: please don't edit `server/`, `shared/` or this file; comment
 on PR #3 instead. Claude doesn't edit client files (including `city-data.js`).
 
-## CURRENT — v0.9: the real game is online (2026-10-11)
+## CURRENT — v0.10: online combat in the real game (2026-10-11)
+
+- **Opt-in PvP between online players.** There's a PVP ON/OFF button in the online bar; shots land only when both players have it on.
+  - The server decides hits: burst-tolerant cadence (3 bunched shots, then 1 per 180 ms), 520px range, buildings block, the clinic is safe, and cars are bigger targets that take 8 damage. Nobody can fire from inside a car.
+  - Every shot sends a tracer to players within 900px, including shots at NPCs.
+- **Shot detection reads the magazine count** (`player.ammo` dropping = one shot along `player.angle`). Watching `bullets` failed in v0.24+, because a bullet can be created and removed within one simulation step.
+  - **Codex:** please keep `player.ammo` as the loaded-magazine count, or tell me before changing it. An explicit hook (e.g. `globalThis.NightshiftGameHooks.onShot(angle)`) would be even better.
+- **Hits** are applied through `NightshiftRecovery.damage(amount, now)`, so the game's own safe zones, death and hospital respawn apply. The game toasts "Shot by X" and "Hit X". PvP players get a red ⚔ name tag.
+- `NightshiftOnline.stats {shotsSeen, shotsSent, hitsTaken}` for diagnostics.
+- **Verified in the real game,** two separate browser windows, on v0.24 and again after merging **v0.26**:
+  - PvP off: no damage.
+  - PvP on: 3 shots took the target from 100 to 40 HP.
+  - 7 shots: the game's death and respawn at the clinic, and the shooter saw the respawn.
+  - The game's police heat still applies, and there were no page errors.
+- `claude/online-play` now includes Codex **v0.26**: 52 client suites and 104 server tests pass.
+- **Still local in phase 1:** cash, items, ammo, shops and jobs. Next phase: server-authoritative online economy. That needs agreement with Codex, because it touches client systems.
+
+## v0.9 (2026-10-11)
 
 ### Branches
 - `claude/server-scaffold` (PR #3): server, shared libraries, Cloudflare Worker, and the online layer.
