@@ -3,10 +3,28 @@
 const createBuildings=(width=2200,height=1700)=>NightshiftCityData.createBuildings(width,height);
 const hash=(x,y)=>((Math.imul(x|0,73856093)^Math.imul(y|0,19349663))>>>0);
 function rect(ctx,color,x,y,w,h){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
+const palettes=Object.freeze({west:Object.freeze({yard:'#596650',edge:'#8f8974',facade:'#967b63',roof:'#6c7062',accent:'#c1a479'}),midtown:Object.freeze({yard:'#566264',edge:'#9caaa5',facade:'#879698',roof:'#657580',accent:'#b3d2ce'}),south:Object.freeze({yard:'#61584c',edge:'#817565',facade:'#886655',roof:'#655c51',accent:'#b69c70'}),docks:Object.freeze({yard:'#53605d',edge:'#84938b',facade:'#6a7d78',roof:'#536967',accent:'#d0b76b'})});
+function districtStyle(x,y){return y>=1020?(x>=1320?'docks':'south'):(x>=880?'midtown':'west')}
+function furnishings(ctx,x,y){
+ const district=districtStyle(x+100,y+100),p=palettes[district];
+ // Sidewalk fixtures remain beyond the 66px road edge and away from crosswalks.
+ if(district==='west'){
+  for(let k=0;k<3;k++){rect(ctx,'#433f34',x+118+k*18,y+250,13,10);rect(ctx,'#607754',x+119+k*18,y+245,11,9);rect(ctx,'#c29d77',x+122+k*18,y+246,3,3)}
+ }else if(district==='midtown'){
+  rect(ctx,'#263c4366',x+71,y+137,17,51);rect(ctx,'#bac8bf',x+68,y+130,16,49);rect(ctx,'#426573',x+71,y+134,10,40);rect(ctx,'#9db7b755',x+72,y+135,3,35);rect(ctx,p.accent,x+67,y+128,18,4);
+  rect(ctx,'#253e47',x+75,y+191,2,17);rect(ctx,'#c2d0b3',x+71,y+187,10,7);
+ }else if(district==='south'){
+  rect(ctx,'#242b2b66',x+109,y+244,33,18);rect(ctx,'#475b4d',x+105,y+239,32,18);rect(ctx,'#7a8167',x+104,y+237,34,4);rect(ctx,'#283d34',x+109,y+244,25,3);
+  for(let k=0;k<4;k++)rect(ctx,'#716953',x+168+k*8,y+276+(k%2)*5,5,2);
+ }else{
+  // Freight stack sits in the existing rear parking yard, never in a lane.
+  for(let k=0;k<2;k++){const xx=x+112+k*102;rect(ctx,'#192c3166',xx+5,y+279,87,25);rect(ctx,k?'#8b7051':'#497c7c',xx,y+267,87,28);rect(ctx,k?'#b09065':'#76a39a',xx,y+267,87,3);for(let r=0;r<10;r++)rect(ctx,'#192c3133',xx+4+r*8,y+272,2,20);rect(ctx,'#c3bc8d',xx+75,y+273,2,16)}
+ }
+}
 function ground(ctx,width,height){
  rect(ctx,'#39413c',0,0,width,height);
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
-  rect(ctx,'#5a5a50',x+82,y+80,276,180);rect(ctx,'#494e47',x+93,y+91,254,156);
+  const palette=palettes[districtStyle(x+100,y+100)];rect(ctx,palette.edge,x+82,y+80,276,180);rect(ctx,palette.yard,x+93,y+91,254,156);
   for(let i=0;i<38;i++){const n=hash(x+i*37,y+i*19);rect(ctx,i%3?'#52564c':'#63624f',x+92+n%260,y+87+(n>>>9)%160,2,2)}
   if(x===0&&y===340){
    rect(ctx,'#4c6650',x+104,y+91,240,164);rect(ctx,'#917760',x+126,y+106,198,128);rect(ctx,'#637477',x+132,y+112,186,116);
@@ -37,6 +55,7 @@ function ground(ctx,width,height){
   // Trees, planters, benches, bins, bollards: cosmetic and outside road lanes.
   for(const yy of [122,245]){rect(ctx,'#30383088',x+87,y+yy+5,29,25);rect(ctx,'#777160',x+86,y+yy+3,27,24);rect(ctx,'#433e32',x+97,y+yy+10,5,22);rect(ctx,'#263e35',x+81,y+yy-12,37,31);rect(ctx,'#42604a',x+85,y+yy-16,28,26);rect(ctx,'#5f7654',x+88,y+yy-14,15,9);rect(ctx,'#344f3e',x+100,y+yy+1,15,10)}
   rect(ctx,'#242c31',x-78,y+157,10,20);rect(ctx,'#536960',x-77,y+155,9,16);rect(ctx,'#879787',x-78,y+154,11,3);
+  furnishings(ctx,x,y);
   for(let k=0;k<3;k++)rect(ctx,'#9a8060',x-81,y+211+k*4,15,2);rect(ctx,'#303e3e',x-80,y+207,2,18);rect(ctx,'#303e3e',x-68,y+207,2,18);
  }
 }
@@ -49,7 +68,8 @@ function building(b){
  if(typeof camera!=='undefined'&&(b.x+b.w+40<camera.x||b.y+b.h+40<camera.y||b.x>camera.x+W/camera.zoom||b.y>camera.y+H/camera.zoom))return;
  const x=b.x,y=b.y,w=b.w,h=b.h,night=root.NightshiftEnvironment?.darkness(root.NightshiftEnvironment.state?.minute??720)||0;
  const industrial=['WAREHOUSE','GARAGE'].includes(b.name),club=b.name==='CLUB',shop=['CORNER SHOP','CLOTHING','DINER'].includes(b.name);
- const facade=industrial?(b.x>=1320?'#6c7671':'#72695a'):shop?'#897764':club?'#605365':'#837b6c',roof=industrial?'#59615d':club?'#4d5260':'#626763';
+ const district=districtStyle(x,y),palette=palettes[district];
+ const facade=industrial?(b.x>=1320?'#6c7671':'#72695a'):club?'#605365':palette.facade,roof=industrial?palette.roof:club?'#4d5260':palette.roof;
  rect(g,'#0c182355',x+15,y+19,w+5,h+7);rect(g,'#292f33',x-2,y-2,w+4,h+4);
  // A raised roof and a 42px south-facing facade establish one consistent height.
  rect(g,facade,x,y,w,h);for(let yy=y+h-40;yy<y+h;yy+=6){rect(g,'#00000015',x,yy,w,1);for(let xx=x+((yy/6|0)%2)*14;xx<x+w;xx+=28)rect(g,'#00000015',xx,yy,1,6)}
@@ -79,6 +99,19 @@ function building(b){
  }else{
   for(let i=0;i<3;i++){const xx=x+24+i*52;rect(g,'#303d41',xx,y+14,32,22);rect(g,'#86998e',xx+3,y+17,26,15);rect(g,'#c0b99e',xx+6,y+20,10,2)}
  }
+ // Neighborhood architecture occupies the existing roof/facade footprint.
+ if(district==='west'){
+  for(const xx of [x+15,x+w-57]){rect(g,'#303d3b',xx,y+h-92,42,16);rect(g,'#ad9a7c',xx,y+h-94,42,3);for(let k=0;k<7;k++)rect(g,'#8c8b70',xx+k*6,y+h-91,2,11);rect(g,'#48694d',xx+4,y+h-80,34,5)}
+ }else if(district==='midtown'){
+  rect(g,'#c4d1c9',x+8,y+7,w-16,5);rect(g,'#465a64',x+9,y+13,w-18,9);for(let k=0;k<9;k++)rect(g,'#a1c5c8',x+14+k*24,y+15,15,4);
+  rect(g,'#c5d3c8',x+7,y+h-40,4,38);rect(g,'#c5d3c8',x+w-11,y+h-40,4,38);
+ }else if(district==='south'){
+  rect(g,'#343b3a',x+w-29,y+42,18,57);for(let k=0;k<8;k++)rect(g,'#95937a',x+w-27,y+44+k*7,14,2);rect(g,'#aaa183',x+w-29,y+42,2,57);rect(g,'#aaa183',x+w-13,y+42,2,57);
+  for(let k=0;k<5;k++){rect(g,['#b19973','#698c83','#a4776c'][k%3],x+77+k*6,y+h-22+(k%2)*3,4,9);rect(g,'#c1ad8222',x+76+k*6,y+h-24,6,2)}
+ }else{
+  rect(g,'#c4b276',x+12,y+h-40,62,5);for(let k=0;k<8;k++)rect(g,k%2?'#2a3d3e':'#ccb56a',x+12+k*7,y+h-40,7,5);
+  rect(g,'#32484b',x+18,y+69,60,22);rect(g,'#91a394',x+20,y+71,56,3);for(let k=0;k<5;k++)rect(g,'#607b77',x+22+k*10,y+77,5,10);
+ }
  // Vary roof wear in a deterministic pattern, avoiding frame-to-frame flicker.
  for(let i=0;i<12;i++){const n=hash(seed+i*71,i*37);const px=x+12+n%Math.max(1,w-24),py=y+11+(n>>>8)%Math.max(1,h-72);rect(g,'#111d2515',px,py,4+(n%7),2)}
  // Front windows and accessible door stay entirely within the old footprint.
@@ -98,5 +131,5 @@ function building(b){
   rect(g,'#343d3d',x+w/2-24,y+h-1,48,3);rect(g,'#8b8978',x+w/2-23,y+h+2,46,3);rect(g,'#615f52',x+w/2-19,y+h+5,38,3);
   for(let xx=x+9;xx<x+w-9;xx+=14)rect(g,(xx-x)%28<14?'#b89873':'#d3c4a0',xx,y+h-38,14,7);rect(g,'#30363366',x+10,y+h-31,w-20,4)}
 }
-root.NightshiftWorld={createBuildings,road,building,ground,hash};
+root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle};
 })(globalThis);
