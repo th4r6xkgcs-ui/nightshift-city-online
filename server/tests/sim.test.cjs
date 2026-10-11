@@ -6,7 +6,7 @@ const R = require('../../shared/rules.js');
 
 // Open road on the y=340 street, away from the clinic safe zone.
 const ROAD = { x: 700, y: 340 };
-const SHOP = { x: 1080, y: 1287 }; // corner shop door from shared/city.js
+const SHOP = { x: 1080, y: 1277 }; // corner shop entrance from the city layout
 const at = (p, pos) => { p.x = pos.x; p.y = pos.y; };
 
 function two(opts) {

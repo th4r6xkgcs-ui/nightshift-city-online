@@ -25,7 +25,7 @@ class World {
     this.nextBag = 1;
     this.outbox = []; // [{to: playerId, msg}]
     this.pvpDefault = opts.pvpDefault === true; // PvP is opt-in by default
-    this.city = opts.city || createCity(RULES.world.w, RULES.world.h);
+    this.city = opts.city || createCity();
   }
 
   // ---------- lifecycle ----------

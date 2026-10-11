@@ -104,13 +104,13 @@ class Socket extends EventEmitter {
 }
 
 class WebSocketServer extends EventEmitter {
-  constructor({ port = 0, host = '127.0.0.1', maxPayload = 2048, server } = {}) {
+  constructor({ port = 0, host = '127.0.0.1', maxPayload = 2048, server, onRequest } = {}) {
     super();
     this.clients = new Set();
-    this.http = server || http.createServer((req, res) => {
+    this.http = server || http.createServer(onRequest || ((req, res) => {
       res.writeHead(426, { 'content-type': 'text/plain' });
       res.end('Nightshift City Online game server: connect with WebSocket.\n');
-    });
+    }));
     this.http.on('upgrade', (req, sock) => {
       const key = req.headers['sec-websocket-key'];
       if (req.headers.upgrade?.toLowerCase() !== 'websocket' || !key || req.headers['sec-websocket-version'] !== '13') {

@@ -11,13 +11,36 @@ const RULES = require('../shared/rules.js');
 const { VERSION, C, S, validate } = require('../shared/protocol.js');
 const { World } = require('./sim.js');
 const { MemoryStore, FileStore, newToken, isToken } = require('./store.js');
+const fs = require('node:fs');
+const path = require('node:path');
+
+// Static files the server will serve: a fixed allowlist, nothing else.
+const STATIC = {
+  '/': ['public/play.html', 'text/html; charset=utf-8'],
+  '/play': ['public/play.html', 'text/html; charset=utf-8'],
+  '/shared/rules.js': ['../shared/rules.js', 'text/javascript; charset=utf-8'],
+  '/shared/protocol.js': ['../shared/protocol.js', 'text/javascript; charset=utf-8'],
+  '/shared/city.js': ['../shared/city.js', 'text/javascript; charset=utf-8'],
+};
+function serveStatic(req, res) {
+  const url = (req.url || '/').split('?')[0];
+  const hit = req.method === 'GET' || req.method === 'HEAD' ? STATIC[url] : null;
+  const headers = { 'x-content-type-options': 'nosniff', 'cache-control': 'no-cache' };
+  if (url === '/healthz') { res.writeHead(200, { ...headers, 'content-type': 'text/plain' }); return res.end('ok\n'); }
+  if (!hit) { res.writeHead(404, { ...headers, 'content-type': 'text/plain' }); return res.end('not found\n'); }
+  fs.readFile(path.join(__dirname, hit[0]), (err, body) => {
+    if (err) { res.writeHead(500, headers); return res.end(); }
+    res.writeHead(200, { ...headers, 'content-type': hit[1], 'content-length': body.length });
+    res.end(req.method === 'HEAD' ? undefined : body);
+  });
+}
 
 function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world = new World(), store = new MemoryStore(), saveEveryMs = 10000 } = {}) {
   const N = RULES.net;
   const tokens = new Map(); // playerId -> token
   const online = new Map(); // token -> playerId (one session per character)
   const persist = (pid) => { const t = tokens.get(pid); const prof = world.exportProfile(pid); if (t && prof) store.save(t, prof); };
-  const wss = new WebSocketServer({ port, host, maxPayload: N.maxMsgBytes });
+  const wss = new WebSocketServer({ port, host, maxPayload: N.maxMsgBytes, onRequest: serveStatic });
   const conns = new Map(); // playerId -> ws
   let last = clock();
 
@@ -134,6 +157,6 @@ if (require.main === module) {
   const host = process.env.HOST || '0.0.0.0';
   const file = process.env.PROFILES || require('node:path').join(__dirname, 'data', 'profiles.json');
   const srv = createServer({ port, host, store: new FileStore(file) });
-  srv.ready.then(() => console.log(`Nightshift City Online server on ws://${host}:${srv.port}`));
+  srv.ready.then(() => console.log(`Nightshift City Online server on ws://${host}:${srv.port} · test page http://localhost:${srv.port}/`));
   for (const sig of ['SIGINT', 'SIGTERM']) process.on(sig, () => srv.close().then(() => process.exit(0)));
 }

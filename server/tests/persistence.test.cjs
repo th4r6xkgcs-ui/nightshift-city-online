@@ -95,7 +95,7 @@ test('reconnect with token restores the same character', async (t) => {
   assert.equal(a.welcome.resumed, false);
   const token = a.welcome.token;
   const p = srv.world.players.get(a.welcome.id);
-  p.x = 1080; p.y = 1287; // walk to the shop (placed directly for the test)
+  p.x = 1080; p.y = 1277; // walk to the shop (placed directly for the test)
   a.send({ t: 'buy', item: 'pistol', tx: 'p1' });
   assert.equal((await a.wait((m) => m.t === 'result')).ok, true);
   a.ws.close();
@@ -109,7 +109,7 @@ test('reconnect with token restores the same character', async (t) => {
   assert.equal(a2.welcome.you.name, 'Ana', 'saved name kept');
   assert.equal(a2.welcome.you.cash, R.player.startCash - R.shop.pistol);
   assert.equal(a2.welcome.you.pocket.pistol, 2);
-  assert.deepEqual([a2.welcome.you.x, a2.welcome.you.y], [1080, 1287]);
+  assert.deepEqual([a2.welcome.you.x, a2.welcome.you.y], [1080, 1277]);
 });
 
 test('unknown token starts fresh; same token twice kicks the older session', async (t) => {
