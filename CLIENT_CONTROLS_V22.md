@@ -12,4 +12,4 @@ Touched: interactions.js, controls-ui.css, game.js, guidance.js, interface.js, t
 
 Validation: npm run check — 44 suites and all root JavaScript syntax pass. git diff --check passes. New checks cover automatic/manual aim, deadzone, mouse zoom/cadence/right click, independent pointer releases, finite automatic reload, outer-stick sprint, tray pause, contextual visibility, salvage/business/cars/bags/courier interactions and interior context. Build packages source-identical assets. Internal canvas review is not browser DOM QA. Real iPhone/Safari layout, dual-touch, audio and file-picker QA remains pending; no such verification is claimed.
 
-Release: prepared for a new draft PR and update to the existing owner-private preview. No server integration, multiplayer authority, PR merge or audience change.
+Release: draft PR #7 published; existing owner-private preview updated successfully to v0.22. GitHub Client simulation checks passed on implementation eea49ced2e42542e8727a4c0e2f776d17b9d834a. Forty-three playable assets were packaged and byte-checked against source before publication. No server integration, multiplayer authority, PR merge or audience change.
