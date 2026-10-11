@@ -38,6 +38,26 @@ function palmActors(view){
  }
  return entries;
 }
+function treeCrown(ctx,x,y){
+ // Same fixed street tree canopy as the ground cache; foreground redraw
+ // hides walkers passing north of the tree without altering navigation.
+ rect(ctx,'#244c49',x-5,y-16,37,31);
+ rect(ctx,'#3f7565',x-1,y-20,28,26);
+ rect(ctx,'#83a67b',x+2,y-18,15,9);
+ rect(ctx,'#344f3e',x+14,y-3,15,10);
+}
+function treeActors(view){
+ const entries=[],margin=65;
+ if(!view||!Number.isFinite(view.x)||!Number.isFinite(view.y)||!Number.isFinite(view.zoom)||view.zoom<=0||!Number.isFinite(view.width)||!Number.isFinite(view.height))return entries;
+ const right=view.x+view.width/view.zoom+margin,bottom=view.y+view.height/view.zoom+margin;
+ for(let x=0;x<world.w;x+=440)for(let y=0;y<world.h;y+=340){
+  for(const yy of [122,245]){
+   const px=x+86,py=y+yy+12;
+   if(px>=view.x-margin&&px<=right&&py>=view.y-margin&&py<=bottom)entries.push({kind:'tree-crown',entity:{x:px,y:py}});
+  }
+ }
+ return entries;
+}
 function furnishings(ctx,x,y){
  const district=districtStyle(x+100,y+100),p=palettes[district];
  // Sidewalk fixtures remain beyond the 66px road edge and away from crosswalks.
@@ -194,5 +214,5 @@ function building(b){
  rect(g,'#1a334066',x+3,y+h-1,w-6,5);rect(g,trim,x+w/2-23,y+h+1,46,3);rect(g,'#677f82',x+w/2-19,y+h+4,38,3);
  storefrontLight(b,night);g.restore();
 }
-root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y)};
+root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12)};
 })(globalThis);
