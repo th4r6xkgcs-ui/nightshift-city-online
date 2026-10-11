@@ -35,12 +35,13 @@
     if (!Number.isFinite(seconds) || seconds <= 0) return null;
     return MEDALS.find((m) => seconds <= par(race) * m.mult) || null;
   }
-  // Payout: full medal value the first time a medal tier is beaten, 50% on repeats (still worth grinding).
+  // Payout: full medal value the first time a medal tier is beaten, 30% on repeats (balanced against deliveries:
+  // repeat golds earn ~$350/min on the Grand Tour, similar to courier work).
   function payout(race, m, bestBefore) {
     if (!m) return 0;
     const prev = medal(race, bestBefore);
     const improved = !prev || MEDALS.indexOf(m) < MEDALS.indexOf(prev);
-    return Math.round(Math.round(race.reward * m.pay) * (improved ? 1 : 0.5)); // round the medal value first (no float drift)
+    return Math.round(Math.round(race.reward * m.pay) * (improved ? 1 : 0.3)); // round the medal value first (no float drift)
   }
   function clean(raw) {
     const s = { version: 1, best: {}, medals: {}, runs: 0 };

@@ -63,3 +63,12 @@ for (const sk of D.SKILLS) {
 }
 for (const want of ['shooting', 'athletics', 'luck', 'farming', 'dealing', 'driving']) assert.ok(ids.has(want), `owner asked for ${want}`);
 console.log('PASS: skills catalog is complete and consistent');
+
+// Pacing: every skill reaches level 10 in a sane amount of focused play (owner wants a grind, not a wall).
+for (const sk of D.SKILLS) {
+  const perMin = D.PACE[sk.id];
+  assert.ok(perMin > 0, 'pace defined for ' + sk.id);
+  const minutes = S.totalFor(10) / perMin;
+  assert.ok(minutes >= 12 && minutes <= 90, `${sk.id} reaches level 10 in ${minutes.toFixed(0)} min of focused play`);
+}
+console.log('PASS: every skill reaches level 10 in 12-90 minutes of focused play');
