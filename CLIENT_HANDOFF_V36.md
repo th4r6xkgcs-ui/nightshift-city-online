@@ -10,4 +10,4 @@ Touched camera.js, environment.js, sprite-renderer.js, vehicles.js (pure dashboa
 
 Validation: all 61 suites and root module syntax checks passed. New checks cover continuous zoom, forward/reverse lookahead equivalence at simulated 30/60/120 FPS, invalid angles/state, bounded beams, parked headlight suppression, actual mouse brake colors, render immutability and live HUD integration. Existing movement/handling, collisions, pause and persistence checks pass. Night driving portrait and reverse/braking landscape Canvas scenes inspected. Real browser/iPhone layout, touch/audio and measured frame-rate QA remains pending.
 
-Release: draft PR based on codex/interior-art-v35; private preview publication pending. No merge or server/shared/worker/online/workflow changes.
+Release: draft PR based on codex/interior-art-v35; private preview publication succeeded. Draft PR #21 is open; GitHub Client simulation checks passed for final code commit 9cf9f832d70d0cabef17135893c51af0143acae9. The release archive contains all 49 playable assets matching the tested source. No merge or server/shared/worker/online/workflow changes.
