@@ -30,5 +30,8 @@ function canTravel(from,to,buildings,others=[],world){
  for(let i=1;i<=steps;i++){const t=i/steps,car={x:from.x+(to.x-from.x)*t,y:from.y+(to.y-from.y)*t,angle:from.angle+delta*t};if(blocked(car,buildings,world)||others.some(other=>carOverlap(car,other)))return false}
  return true;
 }
-root.NightshiftVehicleGeometry={rectangle,overlaps,carOverlap,corners,blocked,circleOverlap,canTravel};
+// Swept segment against the oriented body; zero-length and inside starts are valid.
+function segmentHit(start,end,car){if(!car)return null;const r=rectangle(car);if(![start?.x,start?.y,end?.x,end?.y,r.x,r.y,r.angle,r.halfLength,r.halfWidth].every(Number.isFinite)||r.halfLength<=0||r.halfWidth<=0)return null;const [u,v]=axes(r.angle),local=p=>[(p.x-r.x)*u.x+(p.y-r.y)*u.y,(p.x-r.x)*v.x+(p.y-r.y)*v.y],a=local(start),b=local(end);let enter=0,exit=1;for(const [axis,extent] of [[0,r.halfLength],[1,r.halfWidth]]){const d=b[axis]-a[axis];if(Math.abs(d)<1e-10){if(Math.abs(a[axis])>extent)return null;continue}let lo=(-extent-a[axis])/d,hi=(extent-a[axis])/d;if(lo>hi)[lo,hi]=[hi,lo];enter=Math.max(enter,lo);exit=Math.min(exit,hi);if(enter>exit)return null}return enter>=0&&enter<=1?enter:null}
+function traceCover(start,end,cars,blocked,ignore=null){if(![start?.x,start?.y,end?.x,end?.y].every(Number.isFinite))return null;let impact=root.NightshiftNavigation.trace(start,end,blocked);for(const car of cars){if(car===ignore)continue;const t=segmentHit(start,end,car);if(t!==null&&(!impact||t<impact.t))impact={t,x:start.x+(end.x-start.x)*t,y:start.y+(end.y-start.y)*t,kind:'car',car}}return impact}
+root.NightshiftVehicleGeometry={segmentHit,traceCover,rectangle,overlaps,carOverlap,corners,blocked,circleOverlap,canTravel};
 })(globalThis);
