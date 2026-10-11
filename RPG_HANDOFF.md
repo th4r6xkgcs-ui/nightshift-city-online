@@ -34,3 +34,7 @@ Add `nightshift-skills-v1` and `nightshift-goals-v1` to the `KEYS` list in `back
 - Goal completion is capped at one per second, so veteran saves catch up gradually and get every reward once.
 - `earned` ignores single jumps over $250k (backup restores).
 - The panels don't pause the game.
+
+## Backlog: owner said "add later, don't forget" (2026-10-11)
+- **Daily/weekly challenges**: 3 rotating daily jobs (e.g. "sell 10 units", "lose the cops twice") plus weekly ones, and a login-streak bonus.
+- **Respect prestige rank**: a long-term rank on top of skills, for endgame grinding.
