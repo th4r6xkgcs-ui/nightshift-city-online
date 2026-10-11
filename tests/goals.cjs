@@ -32,7 +32,7 @@ assert.equal(G.step(st, { ...ctx, salvage: 3 }, 5).id, 'salvage1');
 assert.equal(G.next(st, ctx).goal.id, 'delivery1', 'NEXT stays on the first unfinished goal');
 // A veteran save catches up one goal at a time without double-paying.
 const vet = G.clean({}), big = { walked: 1e6, shots: 1e4, inCar: 1, delivery: 30, salvage: 20, home: 1, batches: 9, sold: 80,
-  earned: 2e6, carsOwned: 4, maxSkill: 50, totalLevel: 300, escapes: 9, properties: 3, casinoWins: 5, casinoWagered: 30000, weaponsOwned: 6 };
+  earned: 2e6, carsOwned: 4, maxSkill: 50, totalLevel: 300, escapes: 9, properties: 3, casinoWins: 5, casinoWagered: 30000, weaponsOwned: 6, tuneLevels: 12, tuneBestCar: 9 };
 const order = []; let g; while ((g = G.step(vet, big))) order.push(g.id);
 assert.deepEqual(order, D.GOALS.map((x) => x.id), 'every goal completes exactly once, in order');
 assert.equal(G.next(vet, big), null);
