@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');const storage=new Map(),run=boot(storage);
+const actions=run.nodes.get('#actions'),controls=actions.children.find(b=>b.id==='controls');
+run('firing=true;run=true;keys.w=true');controls.events.click();assert.equal(run('firing||run||keys.w'),false);
+const panel=run.nodes.get('body').children.find(p=>p.id==='controlSettings');assert.equal(panel.hidden,false);
+run('NightshiftTouchLayout.set({hand:"left",size:"compact",hints:false})');assert.deepEqual(JSON.parse(storage.get('nightshift-city-controls-v1')),{hand:'left',size:'compact',hints:false});
+const again=boot(storage);assert.equal(again('NightshiftTouchLayout.state.hand'),'left');assert.equal(again('NightshiftTouchLayout.state.size'),'compact');assert.equal(again('NightshiftTouchLayout.state.hints'),false);
+run('NightshiftTouchLayout.set({hand:"unknown",size:"huge",hints:true})');assert.equal(run('NightshiftTouchLayout.state.hand'),'right');assert.equal(run('NightshiftTouchLayout.state.size'),'standard');
+run('NightshiftTouchLayout.close();NightshiftCraft.open()');controls.events.click();assert.equal(panel.hidden,true);
+assert.equal(run('NightshiftCraft.paused()'),true);
+console.log('PASS: layout changes release inputs, preferences persist/validate, live state updates and paused menus reject settings overlap');

@@ -1,0 +1,25 @@
+/* Safe-area placement and mirrored controls. Core layout is retained on desktop. */
+:root{--control-edge-left:max(14px,env(safe-area-inset-left));--control-edge-right:max(14px,env(safe-area-inset-right));--control-bottom:max(20px,env(safe-area-inset-bottom))}
+#actions{right:var(--control-edge-right);bottom:var(--control-bottom)}
+#pad{left:calc(var(--control-edge-left) + 12px);bottom:calc(var(--control-bottom) + 18px)}
+#aimPad{right:calc(var(--control-edge-right) + 80px);bottom:calc(var(--control-bottom) + 95px)}
+#hud{top:max(12px,env(safe-area-inset-top));left:var(--control-edge-left)}
+#map{top:max(12px,env(safe-area-inset-top));right:var(--control-edge-right)}
+body[data-control-hand="left"] #actions{right:auto;left:var(--control-edge-left)}
+body[data-control-hand="left"] #pad{left:auto;right:calc(var(--control-edge-right) + 12px)}
+body[data-control-hand="left"] #aimPad{right:auto;left:calc(var(--control-edge-left) + 80px)}
+body[data-control-size="compact"] #pad{width:108px;height:108px}
+body[data-control-size="compact"] #aimPad{width:100px;height:100px}
+body[data-control-size="compact"] #aimNub{left:29px;top:29px}
+body[data-control-size="compact"] #actions:not(.expanded)>button{width:48px;height:48px}
+body[data-control-hints="false"] #help{display:none}
+#controlSettings{position:fixed;z-index:40;top:max(12px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(320px,calc(100vw - 28px));max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:auto;padding:14px;border:1px solid #82b9f2;border-radius:12px;background:#101e30f5;color:white;font-size:13px;box-shadow:0 8px 32px #0008}
+#controlSettings[hidden]{display:none}
+#controlSettings button{display:block;width:100%;min-height:44px;height:auto;padding:10px;border-radius:8px;margin-top:7px;touch-action:manipulation}
+@media(max-height:500px){#hud{font-size:11px;padding:6px}#aimPad{bottom:calc(var(--control-bottom) + 45px)}#pad{bottom:calc(var(--control-bottom) + 4px)}}
+
+#shoot[data-held="true"],#run[data-held="true"]{background:#4d74a6;border-color:#c1e9ff;box-shadow:0 0 12px #78baf088}
+#pad::after,#aimPad::after{position:absolute;top:8px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:1px;opacity:.75;pointer-events:none}
+#pad::after{content:"MOVE"}#aimPad::after{content:"AIM"}
+
+@media(max-width:360px){#pad{width:108px;height:108px}#aimPad{width:100px;height:100px}#aimNub{left:29px;top:29px}}
