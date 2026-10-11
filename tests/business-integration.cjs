@@ -1,0 +1,35 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');const storage=new Map(),NOW=1000000,run=boot(storage,{now:NOW});
+run('player.x=640;player.y=597;player.cash=2500;player.heat=0;NightshiftBusinesses.open()');assert.equal(run('NightshiftBusinesses.paused()'),true);
+assert.equal(run('NightshiftBusinesses.perform({action:"purchase",id:"farm"}).ok'),true);assert.equal(run('player.cash'),700);assert.equal(run('NightshiftBusinesses.perform({action:"start",id:"farm"}).ok'),true);assert.equal(run('player.cash'),640);
+run('keys.d=true;frame(100);NightshiftMap.open();NightshiftInventory.inspect();NightshiftCraft.open();NightshiftProgress.open();NightshiftActivities.act();NightshiftCrime.attempt();fire();reload()');
+for(const name of ['Map','Inventory','Craft','Progress'])assert.equal(run(`Nightshift${name}.paused()`),false);
+assert.equal(run('NightshiftActivities.stage'),'idle');run('player.x=680;player.y=620');assert.equal(run('NightshiftSalvage.begin()'),false);run('player.x=640;player.y=597');assert.equal(run('player.x'),640);assert.equal(run('combatState.until'),0);
+run('testNow+=120000;frame(200)');assert.equal(run('NightshiftBusinesses.state.properties.farm.stock'),3);assert.equal(run('NightshiftBusinesses.state.ledger.batches'),1);
+assert.equal(run('NightshiftBusinesses.perform({action:"collect",id:"farm",count:3}).ok'),true);assert.equal(run('NightshiftInventory.state.pocket.weed'),3);
+run('NightshiftBusinesses.close();NightshiftInventory.transfer("pocket","stash","weed",1);NightshiftInventory.state.pocket.coke=2;NightshiftInventory.state.pocket.parts=3;NightshiftInventory.loseOnDeath(player.x,player.y);save()');
+assert.equal(run('NightshiftInventory.state.stash.weed'),1);assert.equal(run('NightshiftInventory.drops.at(-1).items.weed'),2);assert.equal(run('NightshiftInventory.drops.at(-1).items.coke'),2);assert.equal(run('NightshiftInventory.drops.at(-1).items.parts'),3);
+const again=boot(storage,{now:NOW+120001});assert.equal(again('NightshiftBusinesses.state.properties.farm.owned'),true);assert.equal(again('NightshiftBusinesses.state.properties.farm.stock'),0);assert.equal(again('NightshiftBusinesses.state.ledger.batches'),1);assert.equal(again('NightshiftInventory.state.stash.weed'),1);assert.equal(again('NightshiftInventory.drops.at(-1).items.parts'),3);
+assert.equal(run('NightshiftBackups.KEYS.includes("nightshift-city-businesses-v1")'),true);
+run('NightshiftBusinesses.state.properties.workshop.owned=true;NightshiftBusinesses.state.properties.workshop.stock=2;player.hp=100;player.cash=0;player.x=1080;player.y=1617;player.heat=4;NightshiftBusinesses.open()');assert.equal(run('NightshiftBusinesses.perform({action:"collect",id:"workshop",count:2}).ok'),true);assert.equal(run('NightshiftInventory.state.pocket.parts'),2);
+run('NightshiftBusinesses.close()');assert.equal(run('NightshiftRecovery.sell(player,NightshiftInventory.state.pocket,"parts")'),90);assert.equal(run('player.cash'),90);
+run('player.heat=0;player.x=640;player.y=597;NightshiftBusinesses.open();keys.d=true;testNow-=10000;NightshiftBusinesses.tick(testNow)');assert.equal(run('Number.isFinite(NightshiftBusinesses.state.properties.farm.stock)'),true);
+run('NightshiftBusinesses.close();player.x=440;player.y=1020;NightshiftBusinesses.open();NightshiftBusinesses.perform({action:"accept-order"})');assert.equal(run('NightshiftBusinesses.paused()'),false);assert.equal(run('NightshiftBusinesses.state.orders.active.index'),0);
+run('NightshiftBusinesses.open();NightshiftBusinesses.perform({action:"cancel-order"})');assert.equal(run('NightshiftMap.clear("business-rush-order")'),false);
+for(const location of JSON.parse(run('JSON.stringify(NightshiftBusinesses.locations())')))assert.equal(run(`blocked(${location.x},${location.y})`),false);
+console.log('PASS: live business menu isolates gameplay, timers finish while paused, new goods follow death/stash/reload custody, legal parts sell and orders route/clear GPS');
+
+// Restore and undo the complete economy snapshot, then verify one overdue batch across reloads.
+const backupRun=boot(new Map(),{now:NOW});
+backupRun('player.cash=5000;player.x=640;player.y=597;NightshiftBusinesses.open();NightshiftBusinesses.perform({action:"purchase",id:"farm"});NightshiftBusinesses.perform({action:"start",id:"farm"});NightshiftBusinesses.close();NightshiftInventory.state.pocket.coke=2;save();globalThis.businessBackup={format:"nightshift-city-backup",version:1,saves:Object.fromEntries(Object.entries(NightshiftBackups.snapshot(localStorage)).filter(([key,value])=>typeof value==="string"))};NightshiftBusinesses.state.markets.west.bought.weed=6;NightshiftBusinesses.save();NightshiftInventory.state.pocket.coke=0;save();NightshiftBackups.restore(localStorage,businessBackup)');
+assert.equal(backupRun('JSON.parse(localStorage.getItem("nightshift-city-businesses-v1")).markets.west.bought.weed'),0);
+assert.equal(backupRun('JSON.parse(localStorage.getItem("nightshift-city-inventory-v1")).pocket.coke'),2);
+backupRun('NightshiftBackups.undo(localStorage)');
+assert.equal(backupRun('JSON.parse(localStorage.getItem("nightshift-city-businesses-v1")).markets.west.bought.weed'),6);
+assert.equal(backupRun('JSON.parse(localStorage.getItem("nightshift-city-inventory-v1")).pocket.coke'),0);
+const overdueStorage=new Map();const before=boot(overdueStorage,{now:NOW});
+before('player.cash=3000;player.x=640;player.y=597;NightshiftBusinesses.open();NightshiftBusinesses.perform({action:"purchase",id:"farm"});NightshiftBusinesses.perform({action:"start",id:"farm"});NightshiftBusinesses.close();save()');
+const overdue=boot(overdueStorage,{now:NOW+999999});assert.equal(overdue('NightshiftBusinesses.state.properties.farm.stock'),3);assert.equal(overdue('NightshiftBusinesses.state.ledger.batches'),1);
+const twice=boot(overdueStorage,{now:NOW+1999999});assert.equal(twice('NightshiftBusinesses.state.properties.farm.stock'),3);assert.equal(twice('NightshiftBusinesses.state.ledger.batches'),1);
+console.log('PASS: business backup restore/undo preserves market counters and new cargo; overdue production pays once across repeated reloads');
+
+const hints=boot(new Map(),{now:NOW});hints('player.x=640;player.y=650;cars.length=0;NightshiftGuidance.render()');assert.equal(hints.nodes.get('#use').textContent,'BIZ');hints('interact()');assert.equal(hints('NightshiftBusinesses.paused()'),true);console.log('PASS: overlapping salvage/business hint matches actual USE priority');

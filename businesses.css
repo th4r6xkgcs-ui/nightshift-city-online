@@ -1,0 +1,10 @@
+#businessPanel{position:fixed;z-index:36;inset:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));overflow:auto;padding:18px;background:#101e30;border:1px solid #8bc8af;border-radius:14px;color:#eaf2f5;font:14px system-ui;overscroll-behavior:contain;touch-action:pan-y}
+#businessPanel[hidden]{display:none}
+#businessPanel h2{font-size:19px;margin:0 0 12px}#businessPanel h3{font-size:15px;margin:0 0 8px}#businessPanel p{line-height:1.5}
+.businessCard{padding:14px;margin:12px 0;border:1px solid #466379;border-radius:10px;background:#16283b}
+#businessPanel button{min-height:44px;height:auto;width:auto;max-width:100%;padding:10px 14px;margin:4px;border-radius:8px;touch-action:manipulation;vertical-align:middle}
+#businessPanel button:disabled{opacity:.4;cursor:not-allowed}#businessPanel button[hidden]{display:none}
+.businessTrade{border-top:1px solid #466379;margin-top:12px;padding-top:8px}.businessClose{width:calc(100% - 8px)!important;background:#345575}
+@media(min-width:800px){#businessPanel{max-width:960px;margin:auto}.businessCard{display:inline-block;width:calc(50% - 16px);vertical-align:top;margin:8px}}
+
+.businessPressure{padding:10px;border:1px solid #e2a66d;border-radius:8px;background:#5b342733;color:#ffd599}.businessPressure[hidden]{display:none}

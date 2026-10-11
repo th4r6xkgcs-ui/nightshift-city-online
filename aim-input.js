@@ -1,0 +1,2 @@
+/* Shared pure input math for touch aim and future accessibility settings. */
+(function(root){'use strict';function vector(x,y,deadzone=12){const distance=Math.hypot(x,y);if(!Number.isFinite(distance)||distance<=deadzone)return null;return {angle:Math.atan2(y,x),strength:Math.min(1,(distance-deadzone)/40)}}function screenToWorld(x,y,camera){const z=Math.max(.01,camera.zoom||1);return {x:x/z+camera.x,y:y/z+camera.y}}root.NightshiftAim={vector,screenToWorld};})(globalThis);

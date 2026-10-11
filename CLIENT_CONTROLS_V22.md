@@ -1,0 +1,2 @@
+# Controls and aiming v0.22
+Client-only follow-up on v0.21. Added pure aim math and zoom-correct desktop click-to-fire aim, 12px touch deadzone, visible crosshair projected from player heading, and independent aim-pointer reset. No server/shared changes. Test with iPhone Safari before shipping; update test runner to include tests/aim-input.cjs. Review overlapping action hints and hold-to-fire timing next.
