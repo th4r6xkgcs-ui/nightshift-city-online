@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');
+const run=boot();
+run('globalThis.view={x:0,y:0,width:2200,height:1700,zoom:1};globalThis.signs=NightshiftWorld.signActors(buildings,view)');
+assert.ok(run('signs.length')>0);
+assert.ok(run('signs.every(e=>e.kind==="sign"&&Number.isFinite(e.entity.y))'));
+assert.equal(run('NightshiftWorld.signActors(buildings,{...view,zoom:0}).length'),0);
+assert.equal(run('NightshiftWorld.signActors([],view).length'),0);
+run('globalThis.s=signs[0];globalThis.behind={entity:{x:s.entity.x,y:s.entity.y-1},kind:"ped"};globalThis.front={entity:{x:s.entity.x,y:s.entity.y+1},kind:"ped"}');
+assert.equal(run('NightshiftScene.order([s,behind,front],view).map(e=>e.kind).join(",")'),'ped,sign,ped');
+run('globalThis.snapshot=JSON.stringify({player,cars,peds,buildings});NightshiftWorld.signTop(s.entity)');
+assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);
+console.log('PASS: sign foreground ordering, view validation, and no simulation writes');

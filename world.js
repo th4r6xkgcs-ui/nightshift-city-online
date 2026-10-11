@@ -58,6 +58,29 @@ function treeActors(view){
  }
  return entries;
 }
+function signActors(buildings,view){
+ const entries=[];
+ if(!Array.isArray(buildings)||!view||![view.x,view.y,view.width,view.height,view.zoom].every(Number.isFinite)||view.zoom<=0)return entries;
+ const right=view.x+view.width/view.zoom+65,bottom=view.y+view.height/view.zoom+65;
+ for(const b of buildings){
+  if(!b||!['CLUB','CORNER SHOP','DINER','GARAGE','CLOTHING','BANK'].includes(b.name))continue;
+  const x=b.x+b.w/2,y=b.y+b.h-58;
+  if(![x,y,b.w].every(Number.isFinite)||b.w<50||x+b.w/2<view.x-65||x-b.w/2>right||y<view.y-65||y>bottom)continue;
+  entries.push({kind:'sign',entity:{x,y,w:b.w,name:b.name}});
+ }
+ return entries;
+}
+function signTop(p){
+ const x=p.x,y=p.y,w=p.w,name=p.name;
+ const night=root.NightshiftEnvironment?.darkness(root.NightshiftEnvironment.state?.minute??720)||0;
+ const color=night>.2?neonColor(name):'#d6c6ac';
+ // Suspended sign fascia: shadow, metal lip and restrained luminous strip.
+ rect(g,'#0e1d2a77',x-w/2+11,y-1,w-22,18);
+ rect(g,'#263b49',x-w/2+13,y-3,w-26,15);
+ rect(g,color,x-w/2+15,y-3,w-30,2);
+ rect(g,'#ffffff22',x-w/2+17,y+1,w-34,1);
+ g.save();g.fillStyle=color;g.font='bold 11px monospace';g.textAlign='center';g.fillText(name,x,y+9);g.restore();
+}
 function awningActors(buildings,view){
  const entries=[];
  if(!Array.isArray(buildings)||!view||![view.x,view.y,view.width,view.height,view.zoom].every(Number.isFinite)||view.zoom<=0)return entries;
@@ -233,5 +256,5 @@ function building(b){
  rect(g,'#1a334066',x+3,y+h-1,w-6,5);rect(g,trim,x+w/2-23,y+h+1,46,3);rect(g,'#677f82',x+w/2-19,y+h+4,38,3);
  storefrontLight(b,night);g.restore();
 }
-root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop};
+root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop,signActors,signTop};
 })(globalThis);

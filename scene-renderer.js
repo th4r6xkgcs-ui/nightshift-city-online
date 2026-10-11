@@ -7,6 +7,6 @@ function order(entries,view){
  for(let i=0;i<entries.length;i++){const entry=entries[i];if(visible(entry.entity,view))result.push({...entry,index:i})}
  return result.sort((a,b)=>a.entity.y-b.entity.y||a.index-b.index);
 }
-function draw(entries,view){for(const entry of order(entries,view)){if(entry.kind==='awning')root.NightshiftWorld?.awningTop(entry.entity);else if(entry.kind==='tree-crown')root.NightshiftWorld?.treeCrown(entry.entity);else if(entry.kind==='palm-crown')root.NightshiftWorld?.palmCrown(entry.entity);else if(entry.kind==='car')root.NightshiftSprites.car(entry.entity);else{root.NightshiftSprites.person(entry.entity,entry.kind==='player');if(entry.kind==='officer'){g.fillStyle='#b3cdf9';g.fillRect(entry.entity.x-6,entry.entity.y-22,12,4)}}}}
+function draw(entries,view){for(const entry of order(entries,view)){if(entry.kind==='sign')root.NightshiftWorld?.signTop(entry.entity);else if(entry.kind==='awning')root.NightshiftWorld?.awningTop(entry.entity);else if(entry.kind==='tree-crown')root.NightshiftWorld?.treeCrown(entry.entity);else if(entry.kind==='palm-crown')root.NightshiftWorld?.palmCrown(entry.entity);else if(entry.kind==='car')root.NightshiftSprites.car(entry.entity);else{root.NightshiftSprites.person(entry.entity,entry.kind==='player');if(entry.kind==='officer'){g.fillStyle='#b3cdf9';g.fillRect(entry.entity.x-6,entry.entity.y-22,12,4)}}}}
 root.NightshiftScene={visible,order,draw};
 })(globalThis);
