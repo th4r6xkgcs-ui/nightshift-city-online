@@ -1,0 +1,3 @@
+const fs=require('node:fs'),assert=require('node:assert/strict'),{assets,build}=require('../scripts/build-static.cjs');
+assert.throws(()=>assets('<script src="../private.js"></script>'),/local root/);assert.throws(()=>assets('<script src="https://example.com/a.js"></script>'),/local root/);assert.throws(()=>assets('<script src="game.js"></script><script src="game.js"></script>'),/Duplicate/);
+const files=build();assert.deepEqual(fs.readdirSync('dist').sort(),files.slice().sort());for(const file of files)assert.ok(fs.readFileSync(file).equals(fs.readFileSync('dist/'+file)));assert.ok(!fs.existsSync('dist/HANDOFF.md'));assert.ok(!fs.existsSync('dist/tests'));console.log('PASS: packaged assets match source, unsafe/duplicate references rejected, docs/tests excluded');

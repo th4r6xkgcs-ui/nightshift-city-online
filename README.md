@@ -6,9 +6,9 @@ Independent mobile-first top-down pixel city game, separate from Nightshift Gara
 Dependency-free Canvas client with walking, twin-stick aiming, combat, NPC crime, police pursuit, traffic, drivable cars, walkable apartments and shops, courier deliveries and browser-local inventory/progress. Multiplayer is not implemented. Art and synthesized audio remain procedural placeholders.
 
 ## Run and verify
-Use Node 24 or newer. No npm installation or build step is required.
+Use Node 24 or newer. No npm installation is required. `npm run build` creates a static dist bundle for hosting.
 - `python3 -m http.server 8080` serves the game at localhost:8080.
-- `npm run check` runs 18 suites and syntax-checks every root JavaScript module.
+- `npm run check` runs 19 suites and syntax-checks every root JavaScript module.
 - `npm run test:browser` is a separate harness for a configured browser environment.
 - `node tests/render.cjs /tmp/city.png` optionally renders Canvas with `@napi-rs/canvas`; this verifies neither HTML layout nor touch/audio.
 
