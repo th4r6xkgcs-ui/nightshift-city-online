@@ -13,7 +13,7 @@
   /* eslint-disable no-undef */
   const P = () => { try { return player; } catch { return null; } };
   /* eslint-enable no-undef */
-  const gameSave = () => { try { const f = Function('return typeof save==="function"?save:null')(); if (f) f(); } catch { /* not ready */ } };
+  const gameSave = () => { try { const f = (typeof save === 'function' ? save : null); if (f) f(); } catch { /* not ready */ } };
   const say = (t) => { try { root.say?.(t); } catch { /* no toast */ } };
   const money = (n) => '$' + Math.round(n).toLocaleString();
 
@@ -21,7 +21,8 @@
     const s = root.NightshiftGoals?.snapshot?.();
     if (!s) return null;
     return { delivery: s.delivery, salvage: s.salvage, sold: s.sold, batches: s.batches, escapes: s.escapes, drove: s.drove, walked: s.walked,
-      shots: s.shots, earned: s.earned, casinoSpins: root.NightshiftCasino?.state?.spins || 0, raceRuns: root.NightshiftRaces?.state?.runs || 0 };
+      shots: s.shots, earned: s.earned, casinoSpins: root.NightshiftCasino?.state?.spins || 0, raceRuns: root.NightshiftRaces?.state?.runs || 0,
+      fishCaught: root.NightshiftFishing?.state?.total || 0, jobsDone: root.NightshiftJobs?.state?.done || 0 };
   }
 
   const queue = []; // pays one reward at a time so toasts stay readable

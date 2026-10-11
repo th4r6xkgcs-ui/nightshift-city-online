@@ -1,0 +1,36 @@
+// Fishing (Claude-owned): bite timing, catch odds, reel minigame, cooler, rods, save.
+const assert = require('node:assert/strict');
+const F = require('../fishing-data.js');
+const seq = (...v) => { let i = 0; return () => v[i++ % v.length]; };
+assert.ok(F.biteTime('basic', 1, false, seq(0)) >= 2.4 && F.biteTime('basic', 1, false, seq(0.999)) <= 7.1);
+assert.ok(F.biteTime('pro', 0.5, true, seq(0.5)) < F.biteTime('basic', 1, false, seq(0.5)) / 3, 'pro rod + skill + rain bite much faster');
+assert.ok(F.biteTime('pro', 0.1, true, seq(0)) >= 1, 'never instant');
+console.log('PASS: bite timing scales with rod, skill and rain');
+const count = (opts, n = 40000) => { const c = {}; let s = 1; const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; }; for (let i = 0; i < n; i++) { const f = F.rollFish(opts, rnd); c[f.id] = (c[f.id] || 0) + 1; } return c; };
+const basic = count({ rod: 'basic' }), pro = count({ rod: 'pro', skillRare: 2, luck: 1.4 });
+assert.ok((basic.sardine || 0) > (basic.tuna || 0) * 5, 'commons dominate with a basic rod');
+assert.ok((pro.tuna || 0) > (basic.tuna || 0) * 2, 'pro rod + skill catch more tuna');
+assert.ok((pro.boot || 0) < (basic.boot || 0), 'less junk with better gear');
+assert.ok((basic.koi || 0) < 150 && (pro.koi || 0) > (basic.koi || 0), 'koi stays legendary-rare but gear helps');
+const night = count({ rod: 'basic', night: true });
+assert.ok((night.eel || 0) > (basic.eel || 0) * 2, 'eels bite at night');
+console.log('PASS: catch odds (commons, rares, junk, night bonus)');
+const z = F.zoneFor(F.BY_ID.sardine, 'basic', seq(0.5));
+assert.ok(z.from >= 0 && z.to <= 1 && z.to - z.from > 0.3);
+assert.ok(F.zoneFor(F.BY_ID.koi, 'basic', seq(0.5)).to - F.zoneFor(F.BY_ID.koi, 'basic', seq(0.5)).from < z.to - z.from, 'hard fish = smaller zone');
+assert.ok(F.zoneFor(F.BY_ID.koi, 'pro', seq(0.5)).to - F.zoneFor(F.BY_ID.koi, 'pro', seq(0.5)).from > F.zoneFor(F.BY_ID.koi, 'basic', seq(0.5)).to - F.zoneFor(F.BY_ID.koi, 'basic', seq(0.5)).from, 'better rod = bigger zone');
+for (let t = 0; t < 10; t += 0.13) { const p = F.needle(t, 1.3); assert.ok(p >= 0 && p <= 1); }
+assert.equal(F.hit(0.5, { from: 0.4, to: 0.6 }), true); assert.equal(F.hit(0.7, { from: 0.4, to: 0.6 }), false);
+console.log('PASS: reel zone sizing and needle bounds');
+const s = F.clean({});
+assert.deepEqual(F.land(s, F.BY_ID.bass), { stored: true, cash: 0, full: false });
+assert.equal(F.land(s, F.BY_ID.boot).stored, false);
+const w = F.land(s, F.BY_ID.wallet, seq(0.5)); assert.equal(w.cash, 100);
+for (let i = 0; i < 25; i++) F.land(s, F.BY_ID.sardine);
+assert.equal(F.coolerCount(s), F.COOLER, 'cooler caps'); assert.equal(F.land(s, F.BY_ID.tuna).full, true);
+assert.equal(F.eat(s, 'bass'), 12); assert.equal(F.eat(s, 'bass'), 0);
+const sold = F.sellAll(s, 1.5); assert.equal(sold.n, 19); assert.equal(sold.cash, 19 * 12); assert.equal(F.coolerCount(s), 0);
+const wal = { cash: 2000 }; assert.equal(F.buyRod(s, wal, 'pro').reason, 'Not enough cash'); assert.equal(F.buyRod(s, wal, 'carbon').ok, true); assert.equal(wal.cash, 500); assert.equal(s.rod, 'carbon');
+const d = F.clean({ rod: 'pro', rods: ['carbon', 'x'], cooler: { tuna: 50, boot: 3, bogus: 1 }, total: -1 });
+assert.equal(d.rod, 'basic'); assert.deepEqual(d.rods, ['basic', 'carbon']); assert.deepEqual(d.cooler, { tuna: F.COOLER }); assert.equal(d.total, 0);
+console.log('PASS: cooler, eating, selling with Dealing bonus, rods and save cleaning');
