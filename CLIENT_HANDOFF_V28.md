@@ -1,0 +1,15 @@
+# Encounter verification and crew street requests — v0.28
+
+Branch codex/encounter-quality-v28, stacked on v0.27 codex/street-encounters-v27 (draft PR #12). Reserved scope on Claude PR #3; reviewed server v0.9 and latest 4fb84bb online shot-detection change. Online/server/shared/worker/workflows remain Claude-owned and untouched. Keep client stack unmerged; Claude integrates client branches through claude/online-play.
+
+The incoming v0.27 failed its first test: lost wallet (520,1120) and street tip (1850,780) were inside BANK footprints. Moved them to clear, routable positions (640,1300 and 1960,960), with regression checks for every encounter and its destination. Fixed stale v0.26 HTML/package labels to v0.28. Prior undeployed v0.27 is included in this release.
+
+Street tip is now a two-stage investigation: accept at the purple marker, follow GPS to 1740,680 within five minutes, and use CHECK to receive $50 once. The active lead survives refresh/backup, has a bounded deadline, and can be tracked again at the source without resetting the deadline or paying early. Expiry clears its GPS; completed checks cannot pay again. Acceptance keeps the source's two-minute cooldown. Wallet remains +$100/+0.3 heat and reports the incident to police; supply cache remains one carried medkit.
+
+Two noncombat crew street NPC requests: Southside aid at 760,1360 consumes one carried medkit; Harbor repair at 1740,1020 consumes two carried scrap. Each earns +8 local crew trust and retains a saved two-minute cooldown, allowing hostile trust to recover through useful work. Missing supplies, heat >=2, capacity/currency bounds and invalid life/state fail before rewards/cooldowns. All opportunities use shared contextual USE/hints/outline and appear in MAP with their costs/rewards; no new permanent controls or modal. Aid/cache supplies use existing pocket death custody. No gang combat, territory capture or new interiors claimed.
+
+Touched: street-encounters.js, city-map.js, game.js, index.html, package.json, tests/street-encounters.cjs, tests/encounter-quality.cjs and tests/run.cjs. This separate handoff preserves shared docs during concurrent work.
+
+Validation: npm run check passes 54 suites plus root syntax; git diff --check passes. New checks cover collision-clear/routable sites, live contextual acceptance/completion, refresh, deadline/payment once, expiry, crew supplies/trust recovery, cooldown persistence, invalid state/full wallet/full pockets, LOS/death/vehicle/menu locks and backup restore/undo. Existing combat/AI/economy/physics/control/custody suites retained. Internal 390x844 Canvas render reviewed; real browser/iPhone DOM/touch/audio QA remains pending for this increment. Build emits 47 playable assets.
+
+Release pending: draft PR and existing private preview update.
