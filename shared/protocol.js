@@ -21,6 +21,7 @@
     PVP: 'pvp',           // {on}
     HOME: 'home',         // {tx}  buy the starter apartment (stand at it)
     STASH: 'stash',       // {dir: in|out, item: cash|ammo|<item>, count, tx}
+    JOB: 'job',           // {action: start|pickup|deliver|cancel, tx}
     PING: 'ping',         // {at}
   });
 
@@ -75,6 +76,8 @@
         if (msg.dir !== 'in' && msg.dir !== 'out') return 'bad stash';
         if (!isItem(msg.item) || !isTx(msg.tx)) return 'bad stash';
         return Number.isSafeInteger(msg.count) && msg.count > 0 && msg.count <= 100000000 ? null : 'bad stash';
+      case C.JOB:
+        return ['start', 'pickup', 'deliver', 'cancel'].includes(msg.action) && isTx(msg.tx) ? null : 'bad job';
       case C.PING:
         return isNum(msg.at) ? null : 'bad ping';
       default:

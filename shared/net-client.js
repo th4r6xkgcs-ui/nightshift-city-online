@@ -196,6 +196,8 @@
       give(to, cash) { const x = tx(); return send({ t: C.GIVE, to, cash, tx: x }) ? x : null; },
       buyHome() { const x = tx(); return send({ t: C.HOME, tx: x }) ? x : null; },
       stash(dir, item, count) { const x = tx(); return send({ t: C.STASH, dir, item, count, tx: x }) ? x : null; },
+      // Online delivery jobs: 'start' | 'pickup' | 'deliver' | 'cancel'.
+      job(action) { const x = tx(); return send({ t: C.JOB, action, tx: x }) ? x : null; },
       // Resend a money action after a disconnect with the SAME tx: never double-charges.
       retry: (msg) => send(msg),
 

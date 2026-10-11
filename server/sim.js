@@ -27,6 +27,7 @@ class World {
     this.outbox = []; // [{to: playerId, msg}]
     this.pvpDefault = opts.pvpDefault === true; // PvP is opt-in by default
     this.city = opts.city || createCity();
+    this.random = opts.random || Math.random;
   }
 
   // ---------- lifecycle ----------
@@ -42,6 +43,9 @@ class World {
       reserve: R.combat.startReserve,
       pocket: { ...R.player.startPocket },
       home: { owned: false, stash: {} },
+      job: null,          // {pickup, drop, reward, stage: 'pickup'|'deliver', expiresAt}
+      jobReadyAt: 0,      // cooldown before the next job
+      stats: { deliveries: 0, earned: 0 },
       input: { mx: 0, my: 0, sprint: false, seq: 0 },
       lastSeq: -1,
       nextShotAt: 0,
@@ -78,6 +82,11 @@ class World {
       for (const item of R.items) { const n = int(st[item], 0, H.stashItemCap, 0); if (n) stash[item] = n; }
       p.home = { owned: true, stash };
     }
+    if (s.stats && typeof s.stats === 'object') {
+      p.stats = { deliveries: int(s.stats.deliveries, 0, 1e9, 0), earned: int(s.stats.earned, 0, R.cashCap, 0) };
+    }
+    p.job = this._restoreJob(s.job);
+    if (p.job && p.job.stage === 'deliver' && !(p.pocket.parcel > 0)) p.job = null; // parcel lost: job void
     if (Number.isFinite(s.x) && Number.isFinite(s.y)) {
       const x = clamp(s.x, R.player.radius, R.world.w - R.player.radius);
       const y = clamp(s.y, R.player.radius, R.world.h - R.player.radius);
@@ -93,6 +102,7 @@ class World {
       name: p.name, cash: p.cash, hp: dead ? RULES.player.maxHp : p.hp,
       mag: p.mag, reserve: p.reserve, pocket: { ...p.pocket }, pvp: p.pvp,
       home: { owned: p.home.owned, stash: { ...p.home.stash } },
+      job: p.job && !dead ? structuredClone(p.job) : null, stats: { ...p.stats },
       x: Math.round(dead ? RULES.hospital.x : p.x), y: Math.round(dead ? RULES.hospital.y : p.y),
     };
   }
@@ -120,6 +130,7 @@ class World {
       case C.PVP: return this._setPvp(p, msg.on);
       case C.HOME: return this._tx(p, msg.tx, () => this._buyHome(p));
       case C.STASH: return this._tx(p, msg.tx, () => this._stash(p, msg.dir, msg.item, msg.count));
+      case C.JOB: return this._tx(p, msg.tx, () => this._job(p, msg.action, now));
       default: return { ok: false, reason: 'not handled here' };
     }
   }
@@ -138,6 +149,12 @@ class World {
       p.x = moved.x; p.y = moved.y;
     }
     for (const [id, b] of this.bags) if (now >= b.expires) this.bags.delete(id);
+    for (const p of this.players.values()) {
+      if (p.job && now >= p.job.expiresAt) {
+        this._endJob(p, now, RULES.jobs.cancelCooldownMs);
+        this._send(p.id, { t: S.EVENT, kind: 'job', status: 'expired' });
+      }
+    }
   }
 
   // ---------- handlers ----------
@@ -358,6 +375,71 @@ class World {
     return { ok: true, dir, item, count };
   }
 
+  // ---------- online delivery jobs ----------
+  _restoreJob(j) {
+    if (!j || typeof j !== 'object') return null;
+    const pt = (q) => q && Number.isFinite(q.x) && Number.isFinite(q.y) && typeof q.label === 'string'
+      ? { x: q.x, y: q.y, label: q.label.slice(0, 30) } : null;
+    const pickup = pt(j.pickup), drop = pt(j.drop);
+    if (!pickup || !drop || !['pickup', 'deliver'].includes(j.stage) || !Number.isFinite(j.expiresAt)) return null;
+    // Re-derive pay from the route, so a damaged save can't raise it.
+    return { pickup, drop, stage: j.stage, expiresAt: j.expiresAt, reward: this._pay(pickup, drop) };
+  }
+
+  _pay(a, b) {
+    const J = RULES.jobs;
+    return Math.min(J.maxPay, Math.round(J.basePay + Math.hypot(a.x - b.x, a.y - b.y) * J.payPerPx));
+  }
+
+  _endJob(p, now, cooldownMs) {
+    if (p.job && p.job.stage === 'deliver' && p.pocket.parcel > 0) {
+      if (--p.pocket.parcel === 0) delete p.pocket.parcel;
+    }
+    p.job = null;
+    p.jobReadyAt = now + cooldownMs;
+  }
+
+  _job(p, action, now) {
+    const J = RULES.jobs;
+    if (p.deadUntil) return { ok: false, reason: 'dead' };
+    const near = (pt) => Math.hypot(p.x - pt.x, p.y - pt.y) <= J.rangePx;
+
+    if (action === 'start') {
+      if (p.job) return { ok: false, reason: 'already on a job' };
+      if (now < p.jobReadyAt) return { ok: false, reason: 'next job soon', waitMs: p.jobReadyAt - now };
+      const doors = this.city.buildings.map((b) => ({ x: b.entrance.x, y: b.entrance.y, label: b.name }));
+      const pickup = doors[Math.floor(this.random() * doors.length)];
+      const far = doors.filter((d) => Math.hypot(d.x - pickup.x, d.y - pickup.y) >= J.minDistancePx);
+      const drop = far[Math.floor(this.random() * far.length)];
+      p.job = { pickup, drop, stage: 'pickup', expiresAt: now + J.timeLimitMs, reward: this._pay(pickup, drop) };
+      return { ok: true, job: structuredClone(p.job) };
+    }
+    if (!p.job) return { ok: false, reason: 'no job' };
+    if (action === 'cancel') {
+      this._endJob(p, now, J.cancelCooldownMs);
+      return { ok: true, cancelled: true };
+    }
+    if (action === 'pickup') {
+      if (p.job.stage !== 'pickup') return { ok: false, reason: 'already picked up' };
+      if (!near(p.job.pickup)) return { ok: false, reason: 'not at pickup' };
+      if ((p.pocket.parcel || 0) >= RULES.itemCap) return { ok: false, reason: 'pockets full' };
+      p.pocket.parcel = (p.pocket.parcel || 0) + 1;
+      p.job.stage = 'deliver';
+      return { ok: true, job: structuredClone(p.job) };
+    }
+    // deliver
+    if (p.job.stage !== 'deliver') return { ok: false, reason: 'pick up the parcel first' };
+    if (!near(p.job.drop)) return { ok: false, reason: 'not at dropoff' };
+    if (!(p.pocket.parcel > 0)) return { ok: false, reason: 'parcel lost' };
+    const reward = Math.min(p.job.reward, RULES.cashCap - p.cash);
+    if (--p.pocket.parcel === 0) delete p.pocket.parcel;
+    p.cash += reward;
+    p.stats.deliveries++; p.stats.earned += reward;
+    p.job = null;
+    p.jobReadyAt = now + J.cooldownMs;
+    return { ok: true, reward, deliveries: p.stats.deliveries };
+  }
+
   _setPvp(p, on) {
     p.pvp = on;
     return { ok: true, pvp: on };
@@ -365,6 +447,10 @@ class World {
 
   // ---------- death / respawn ----------
   _kill(victim, killer, now) {
+    if (victim.job) { // a dead courier's job and parcel are void
+      this._endJob(victim, now, RULES.jobs.cancelCooldownMs);
+      this._send(victim.id, { t: S.EVENT, kind: 'job', status: 'failed' });
+    }
     const id = 'bag' + this.nextBag++;
     this.bags.set(id, {
       id, x: victim.x, y: victim.y,
@@ -398,6 +484,7 @@ class World {
       hp: p.hp, cash: p.cash, mag: p.mag, reserve: p.reserve, pocket: { ...p.pocket },
       reloading: !!p.reloadUntil, dead: !!p.deadUntil, pvp: p.pvp, ack: p.lastSeq,
       home: { owned: p.home.owned, stash: { ...p.home.stash } },
+      job: p.job ? structuredClone(p.job) : null, stats: { ...p.stats },
     };
   }
 

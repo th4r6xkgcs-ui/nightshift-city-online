@@ -44,6 +44,7 @@
   <button id="bKit">BUY KIT</button>
   <button id="bHome">BUY HOME</button>
   <button id="bStash">STASH $</button>
+  <button id="bJob">JOB</button>
 </div>
 <div id="join"><form id="joinForm">
   <h2 style="margin:0">Nightshift Online · test</h2>
@@ -89,12 +90,14 @@ function onResult(m) {
   else if (m.req === 'home') toast('Apartment bought · -$' + m.cost);
   else if (m.req === 'stash') toast((m.dir === 'in' ? 'Stored ' : 'Took ') + (m.item === 'cash' ? '$' + m.count : m.count + ' ' + m.item));
   else if (m.req === 'reload') toast('Reloading…');
+  else if (m.req === 'job') toast(m.reward ? 'Delivered! +$' + m.reward : m.cancelled ? 'Job cancelled' : m.job.stage === 'pickup' ? 'Job: go to the yellow marker' : 'Parcel collected: deliver to the green marker');
 }
 function onEvent(m) {
   if (m.kind === 'hit') toast('You were hit · ' + m.hp + ' HP', true);
   else if (m.kind === 'death') toast(m.victim === myId ? 'You died · bag dropped' : 'Player down', m.victim === myId);
   else if (m.kind === 'respawn') toast('Back at the clinic');
   else if (m.kind === 'received') toast('Received $' + m.cash);
+  else if (m.kind === 'job') toast(m.status === 'expired' ? 'Job ran out of time' : 'Job failed', true);
 }
 const STATUS = { connecting: ['connecting…', 'var(--dim)'], online: ['online', 'var(--ok)'], offline: ['offline · retrying', 'var(--bad)'],
   replaced: ['signed in elsewhere', 'var(--bad)'], rejected: ['server refused', 'var(--bad)'], closed: ['closed', 'var(--dim)'] };
@@ -162,6 +165,12 @@ $('bMed').onclick = () => net?.use('medkit');
 $('bAmmo').onclick = () => net?.buy('ammo');
 $('bKit').onclick = () => net?.buy('medkit');
 $('bHome').onclick = () => net?.buyHome();
+// JOB: start a delivery, then collect / deliver at the markers.
+$('bJob').onclick = () => {
+  if (!me) return;
+  if (!me.job) net.job('start');
+  else net.job(me.job.stage === 'pickup' ? 'pickup' : 'deliver');
+};
 // STASH $: store all carried cash; with empty pockets, take it all back.
 $('bStash').onclick = () => {
   if (!me) return;
@@ -231,6 +240,16 @@ function frame(now) {
     g.strokeStyle = '#e8d07888'; g.setLineDash([6, 6]); g.beginPath(); g.arc(s.x, s.y, NightshiftCity.SHOP_RANGE, 0, 7); g.stroke(); g.setLineDash([]);
     g.fillStyle = '#e8d078'; g.fillText('SHOP · trade here', s.x, s.y + 4);
   }
+  if (me && me.job) {
+    const target = me.job.stage === 'pickup' ? me.job.pickup : me.job.drop;
+    const col = me.job.stage === 'pickup' ? '#e8d078' : '#7cdeb5';
+    g.strokeStyle = col; g.lineWidth = 3; g.beginPath(); g.arc(target.x, target.y, R.jobs.rangePx, 0, 7); g.stroke();
+    g.fillStyle = col; g.fillText((me.job.stage === 'pickup' ? 'PICKUP · ' : 'DELIVER · $' + me.job.reward + ' · ') + target.label, target.x, target.y - R.jobs.rangePx - 6);
+    // Arrow from the player toward the target.
+    const ang = Math.atan2(target.y - draw.y, target.x - draw.x);
+    g.save(); g.translate(draw.x + Math.cos(ang) * 34, draw.y + Math.sin(ang) * 34); g.rotate(ang);
+    g.beginPath(); g.moveTo(10, 0); g.lineTo(-6, -7); g.lineTo(-6, 7); g.closePath(); g.fill(); g.restore();
+  }
   for (const b of bags) { g.fillStyle = '#c99a4a'; g.fillRect(b.x - 8, b.y - 8, 16, 16); g.fillStyle = '#fff'; g.fillText('BAG', b.x, b.y - 12); }
   for (const o of others.values()) person(o.x, o.y, o.aim, o.pvp ? '#e46b6b' : '#7ba7e0', o.name, o.hp, o.dead);
   if (me) person(draw.x, draw.y, aim, '#e8d078', me.name + ' (you)', me.hp, me.dead);
@@ -239,6 +258,7 @@ function frame(now) {
     $('hp').textContent = me.hp + ' HP';
     $('ammo').textContent = (me.pocket.pistol ? '' : 'no pistol · ') + me.mag + '/' + R.combat.magSize + ' +' + me.reserve + (me.reloading ? ' ⏳' : '');
     $('bHome').hidden = me.home.owned;
+    $('bJob').textContent = !me.job ? 'JOB' : me.job.stage === 'pickup' ? 'COLLECT' : 'DELIVER';
     $('cash').textContent = '$' + me.cash + (me.home.owned ? ' · stash $' + (me.home.stash.cash || 0) : '');
     $('pvp').textContent = 'PvP ' + (me.pvp ? 'ON' : 'off'); $('pvp').style.color = me.pvp ? 'var(--bad)' : 'var(--ink)';
   }

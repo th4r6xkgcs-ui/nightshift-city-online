@@ -49,6 +49,11 @@
     // Starter apartment (location/radius come from the city layout).
     home: Object.freeze({ price: 1200, stashCashCap: 100000000, stashAmmoCap: 270, stashItemCap: 999 }),
     transfer: Object.freeze({ rangePx: 60, maxPerTransfer: 10000 }),
+    // Online delivery jobs between building entrances (server-chosen).
+    jobs: Object.freeze({
+      basePay: 150, payPerPx: 0.15, maxPay: 450, minDistancePx: 500,
+      rangePx: 60, timeLimitMs: 300000, cooldownMs: 15000, cancelCooldownMs: 5000,
+    }),
 
     net: Object.freeze({
       tickHz: 20,
