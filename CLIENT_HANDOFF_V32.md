@@ -12,4 +12,4 @@ Touched: scene-renderer.js, environment.js, sprite-renderer.js, game.js, citizen
 
 Validation: npm run check passes 57 suites plus root syntax; git diff --check passes. New checks verify stable visible depth/culling, invalid camera rejection, rain bounds/fade, rendering state preservation, actual movement-facing and indoor walking animation clock. Existing physics/AI/cover/controls/custody/economy/save tests retained. Internal 390x844 Canvas evening render inspected; browser/iPhone DOM/touch/performance/audio QA remains pending. Build emits 48 playable assets with no dependencies, collision/economy/save rules changed.
 
-Release pending: draft PR and existing private preview publication.
+Release: draft PR #17 published; existing owner-private preview updated successfully to v0.32. GitHub Client simulation checks passed on 701de5ebfffd4eaa3baf78b515527976f3d4f0ec. All 48 playable assets packaged; index/script/style bytes verified against canonical source before publication. Claude notified through PR #3; no PR merges or audience changes.
