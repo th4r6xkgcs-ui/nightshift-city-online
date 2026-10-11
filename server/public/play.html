@@ -9,7 +9,7 @@
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:14px/1.3 ui-monospace,Menlo,monospace; overflow:hidden; touch-action:none; user-select:none; -webkit-user-select:none; }
   canvas { position:fixed; inset:0; width:100vw; height:100dvh; display:block; }
-  #hud { position:fixed; top:max(8px,env(safe-area-inset-top)); left:12px; right:12px; display:flex; gap:10px; flex-wrap:wrap; pointer-events:none; text-shadow:0 1px 2px #000; }
+  #hud { position:fixed; top:max(8px,env(safe-area-inset-top)); left:12px; right:64px; display:flex; gap:10px; flex-wrap:wrap; pointer-events:none; text-shadow:0 1px 2px #000; }
   #hud span { background:#0009; padding:3px 7px; border-radius:6px; }
   #toast { position:fixed; top:24%; left:50%; transform:translate(-50%,-50%); background:#000b; padding:8px 14px; border-radius:8px; opacity:0; transition:opacity .2s; pointer-events:none; max-width:80vw; text-align:center; }
   #toast.on { opacity:1; }
@@ -21,6 +21,22 @@
   #btns { position:fixed; left:160px; right:160px; bottom:max(18px,env(safe-area-inset-bottom)); display:flex; flex-wrap:wrap-reverse; justify-content:center; align-content:flex-start; gap:6px; }
   #btns button { min-width:86px; min-height:40px; border-radius:8px; border:1px solid var(--line); background:var(--btn); color:var(--ink); font:inherit; font-weight:bold; }
   #btns button:active { background:#30486e; }
+  /* Portrait phones: too narrow between the sticks, so buttons go in rows above them. */
+  @media (max-width: 520px) {
+    #btns { left:10px; right:10px; bottom:calc(max(18px,env(safe-area-inset-bottom)) + 140px); gap:5px; }
+    #btns button { min-width:0; flex:1 1 22%; min-height:38px; font-size:12px; padding:0 4px; }
+    #right::after { display:none; }
+  }
+  /* Chat button lives in the top-right corner, never over the play area. */
+  #bChat { position:fixed; top:max(6px,env(safe-area-inset-top)); right:12px; width:44px; height:36px; border-radius:8px; border:1px solid var(--line); background:var(--btn); font-size:18px; z-index:3; }
+  #chatlog { position:fixed; left:12px; top:calc(max(8px,env(safe-area-inset-top)) + 34px); max-width:min(46vw,360px); pointer-events:none; display:grid; gap:3px; }
+  #chatlog div { background:#0009; padding:3px 7px; border-radius:6px; font-size:12px; overflow-wrap:anywhere; animation:fade 9s forwards; }
+  #chatlog b { color:var(--accent); } #chatlog .city b { color:#a9c6ff; }
+  @keyframes fade { 0%,80% { opacity:1 } 100% { opacity:0 } }
+  #chatbar { position:fixed; left:12px; right:12px; top:calc(max(8px,env(safe-area-inset-top)) + 34px); display:flex; gap:6px; z-index:4; }
+  #chatbar[hidden] { display:none; }
+  #chatbar input { flex:1; min-width:0; font:inherit; font-size:16px; padding:10px; border-radius:8px; border:1px solid var(--line); background:#15233a; color:var(--ink); }
+  #chatbar button { font:inherit; font-weight:bold; border-radius:8px; border:1px solid var(--line); background:var(--btn); color:var(--ink); padding:0 12px; }
   #join { position:fixed; inset:0; display:grid; place-items:center; background:#0e1622ee; z-index:5; }
   #join[hidden] { display:none; }
   #join form { display:grid; gap:10px; width:min(320px,86vw); }
@@ -32,7 +48,10 @@
 <body>
 <canvas id="c"></canvas>
 <div id="hud"><span id="conn">connecting…</span><span id="hp"></span><span id="cash"></span><span id="ammo"></span><span id="pvp"></span><span id="who"></span></div>
+<button id="bChat" aria-label="Chat">💬</button>
 <div id="toast"></div>
+<div id="chatlog" aria-live="polite"></div>
+<form id="chatbar" hidden><button type="button" id="chCh">NEAR</button><input id="chatText" maxlength="120" placeholder="Say something…" autocomplete="off" enterkeyhint="send"><button>SEND</button></form>
 <div id="left" class="stick"><i></i></div>
 <div id="right" class="stick"><i></i></div>
 <div id="btns">
@@ -108,7 +127,7 @@ function connect(name) {
     name, token: tabStore.get('nsco-token'), city,
     onWelcome: (w) => { myId = w.id; tabStore.set('nsco-token', w.token); toast(w.resumed ? 'Welcome back, ' + w.you.name : 'Joined as ' + w.you.name); },
     onStatus: (s) => { const [t, c] = STATUS[s] || [s, 'var(--dim)']; $('conn').textContent = t; $('conn').style.color = c; },
-    onResult, onEvent, onError: (m) => toast(m.reason, true),
+    onResult, onEvent, onChat, onError: (m) => toast(m.reason, true),
   });
 }
 
@@ -121,6 +140,29 @@ $('joinForm').onsubmit = (e) => {
   connect(name);
 };
 $('name').value = store.get('nsco-name') || '';
+
+// ---- chat ----
+const bubbles = new Map(); // playerId -> {text, until}
+let chatCh = 'near';
+function onChat(m) {
+  const line = document.createElement('div');
+  line.className = m.ch;
+  const who = document.createElement('b'); who.textContent = (m.ch === 'city' ? '[city] ' : '') + m.name + ': ';
+  line.append(who, document.createTextNode(m.text)); // textContent only: chat can never inject HTML
+  const log = $('chatlog'); log.append(line);
+  while (log.children.length > 6) log.firstChild.remove();
+  setTimeout(() => line.remove(), 9000);
+  if (m.ch === 'near') bubbles.set(m.from, { text: m.text, until: performance.now() + 5000 });
+}
+$('bChat').onclick = () => { $('chatbar').hidden = false; $('chatText').focus(); };
+$('chCh').onclick = () => { chatCh = chatCh === 'near' ? 'city' : 'near'; $('chCh').textContent = chatCh.toUpperCase(); };
+$('chatbar').onsubmit = (e) => {
+  e.preventDefault();
+  const t = $('chatText').value.trim();
+  if (t && net) net.chat(chatCh, t);
+  $('chatText').value = ''; $('chatbar').hidden = true; $('chatText').blur();
+};
+$('chatText').addEventListener('keydown', (e) => { if (e.key === 'Escape') { $('chatbar').hidden = true; e.target.blur(); } });
 
 // ---- twin sticks (pointer events, one pointer per stick) ----
 function stick(el, onMove, onEnd) {
@@ -142,6 +184,8 @@ stick($('right'), (x, y) => { if (Math.hypot(x, y) > 0.25) { aim = Math.atan2(y,
 
 // ---- keyboard + mouse ----
 addEventListener('keydown', (e) => {
+  if (e.target instanceof HTMLInputElement) return; // typing in chat never moves the player
+  if (e.key === 'Enter' || e.key === 't') { e.preventDefault(); $('bChat').click(); return; }
   keys[e.key.toLowerCase()] = true;
   if (e.key === 'r') net?.reload();
   if (e.key === 'e') loot();
@@ -252,6 +296,16 @@ function frame(now) {
   }
   for (const b of bags) { g.fillStyle = '#c99a4a'; g.fillRect(b.x - 8, b.y - 8, 16, 16); g.fillStyle = '#fff'; g.fillText('BAG', b.x, b.y - 12); }
   for (const o of others.values()) person(o.x, o.y, o.aim, o.pvp ? '#e46b6b' : '#7ba7e0', o.name, o.hp, o.dead);
+  const tNow = performance.now();
+  for (const [pid, bub] of bubbles) {
+    if (tNow > bub.until) { bubbles.delete(pid); continue; }
+    const at = pid === myId ? (me && { x: draw.x, y: draw.y }) : others.get(pid);
+    if (!at) continue;
+    const text = bub.text.length > 40 ? bub.text.slice(0, 39) + '…' : bub.text;
+    g.font = '11px monospace'; const wTxt = g.measureText(text).width + 12;
+    g.fillStyle = '#f2f5f9ee'; g.fillRect(at.x - wTxt / 2, at.y - 56, wTxt, 18);
+    g.fillStyle = '#111'; g.textAlign = 'center'; g.fillText(text, at.x, at.y - 43);
+  }
   if (me) person(draw.x, draw.y, aim, '#e8d078', me.name + ' (you)', me.hp, me.dead);
   g.restore();
   if (me) {

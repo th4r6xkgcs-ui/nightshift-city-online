@@ -49,6 +49,8 @@
     // Starter apartment (location/radius come from the city layout).
     home: Object.freeze({ price: 1200, stashCashCap: 100000000, stashAmmoCap: 270, stashItemCap: 999 }),
     transfer: Object.freeze({ rangePx: 60, maxPerTransfer: 10000 }),
+    // Text chat. "near" reaches players within nearRangePx, "city" everyone.
+    chat: Object.freeze({ maxLen: 120, nearRangePx: 600, burst: 3, perSec: 1 }),
     // Online delivery jobs between building entrances (server-chosen).
     jobs: Object.freeze({
       basePay: 150, payPerPx: 0.15, maxPay: 450, minDistancePx: 500,

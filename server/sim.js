@@ -46,6 +46,8 @@ class World {
       job: null,          // {pickup, drop, reward, stage: 'pickup'|'deliver', expiresAt}
       jobReadyAt: 0,      // cooldown before the next job
       stats: { deliveries: 0, earned: 0 },
+      chatBucket: R.chat.burst, chatAt: now,
+      muted: new Set(),   // player ids whose chat this player hides (session only)
       input: { mx: 0, my: 0, sprint: false, seq: 0 },
       lastSeq: -1,
       nextShotAt: 0,
@@ -131,6 +133,8 @@ class World {
       case C.HOME: return this._tx(p, msg.tx, () => this._buyHome(p));
       case C.STASH: return this._tx(p, msg.tx, () => this._stash(p, msg.dir, msg.item, msg.count));
       case C.JOB: return this._tx(p, msg.tx, () => this._job(p, msg.action, now));
+      case C.CHAT: return this._chat(p, msg.ch, msg.text, now);
+      case C.MUTE: return this._mute(p, msg.id, msg.on);
       default: return { ok: false, reason: 'not handled here' };
     }
   }
@@ -373,6 +377,38 @@ class World {
       return { ok: false, reason: 'cannot store that' };
     }
     return { ok: true, dir, item, count };
+  }
+
+  // ---------- chat ----------
+  // Cleans text: no control characters, collapsed whitespace, no links
+  // (stops scam/phishing spam), length-capped.
+  static cleanChat(text) {
+    let t = String(text).normalize('NFKC').replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, ' ');
+    t = t.replace(/\b(?:https?:\/\/|www\.)\S+/gi, '[link]').replace(/\b[a-z0-9-]+\.(?:com|net|org|gg|io|xyz|ru|ly|me|co)\b\S*/gi, '[link]');
+    return t.replace(/\s+/g, ' ').trim().slice(0, RULES.chat.maxLen);
+  }
+
+  _chat(p, ch, raw, now) {
+    const CH = RULES.chat;
+    p.chatBucket = Math.min(CH.burst, p.chatBucket + ((now - p.chatAt) / 1000) * CH.perSec);
+    p.chatAt = now;
+    if (p.chatBucket < 1) return { ok: false, reason: 'slow down' };
+    const text = World.cleanChat(raw);
+    if (!text) return { ok: false, reason: 'empty message' };
+    p.chatBucket -= 1;
+    const msg = { t: S.CHAT, from: p.id, name: p.name, ch, text };
+    for (const q of this.players.values()) {
+      if (q.muted.has(p.id)) continue;
+      if (ch === 'near' && q !== p && dist(p, q) > CH.nearRangePx) continue;
+      this._send(q.id, msg);
+    }
+    return { ok: true, quiet: true };
+  }
+
+  _mute(p, id, on) {
+    if (id === p.id || !this.players.has(id)) return { ok: false, reason: 'no such player' };
+    if (on) p.muted.add(id); else p.muted.delete(id);
+    return { ok: true, id, muted: on };
   }
 
   // ---------- online delivery jobs ----------

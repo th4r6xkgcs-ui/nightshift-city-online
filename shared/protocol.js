@@ -22,6 +22,8 @@
     HOME: 'home',         // {tx}  buy the starter apartment (stand at it)
     STASH: 'stash',       // {dir: in|out, item: cash|ammo|<item>, count, tx}
     JOB: 'job',           // {action: start|pickup|deliver|cancel, tx}
+    CHAT: 'chat',         // {ch: near|city, text}
+    MUTE: 'mute',         // {id, on}  hide one player's chat from you
     PING: 'ping',         // {at}
   });
 
@@ -33,6 +35,7 @@
     EVENT: 'event',       // {kind, ...}
     ERROR: 'error',       // {reason}
     PONG: 'pong',         // {at, now}
+    CHAT: 'chat',         // {from, name, ch, text}
   });
 
   const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
@@ -78,6 +81,11 @@
         return Number.isSafeInteger(msg.count) && msg.count > 0 && msg.count <= 100000000 ? null : 'bad stash';
       case C.JOB:
         return ['start', 'pickup', 'deliver', 'cancel'].includes(msg.action) && isTx(msg.tx) ? null : 'bad job';
+      case C.CHAT:
+        if (msg.ch !== 'near' && msg.ch !== 'city') return 'bad chat';
+        return typeof msg.text === 'string' && msg.text.length <= 400 ? null : 'bad chat';
+      case C.MUTE:
+        return isId(msg.id) && typeof msg.on === 'boolean' ? null : 'bad mute';
       case C.PING:
         return isNum(msg.at) ? null : 'bad ping';
       default:
