@@ -1,0 +1,34 @@
+# v0.15 device acceptance checks
+This is a checklist for an actual browser/device, not a claim that these checks ran. Node suites and Canvas rendering do not exercise native touch, audio or file dialogs. Use the owning account for the private preview; avoid importing a valuable save while testing with disposable progress.
+
+| Area | Steps | Expected result |
+| --- | --- | --- |
+| Touch | Hold movement with one finger, aim with another, press FIRE with a third; release each independently | Movement/aim stay independent; releasing FIRE stops shooting; cancellation leaves no held input |
+| Orientation | Rotate between portrait and landscape, open MORE, MAP and BAG | Controls remain reachable; menus scroll; map taps select the intended nearby service |
+| Focus | Hold movement, switch apps, then return | No stuck walking/firing and no long movement catch-up |
+| Driving | Find starter car with MAP or minimap; ENTER; accelerate/steer/reverse; hold BRAKE then EXIT | Cars differ in handling, stop before exit, and do not rotate when stationary |
+| Shop | MAP → nearest corner shop; approach entrance, SHOP; walk to counter, USE | Walkable shop and trade menu open; ammo/medkit/pistol purchases charge once; valuables sales deplete carried stock |
+| Health | Lose some health, BAG → medkit USE; try again at full health | Heals at most 40, capped at 100; full health does not consume another kit |
+| Courier | JOB, travel GPS to pickup, JOB; travel GPS to delivery, JOB | Parcel appears then is consumed; cash increases $225 exactly once; refresh preserves an active job |
+| Apartment | Earn $1,200, HOME, buy then enter; approach bed, wardrobe, storage | Bed heals, STYLE previews/saves outfit, stash accepts transfers; storage pauses room movement |
+| Custody | Put cash/items in stash or glovebox, carry others, die; return to bag within two minutes | Carried goods drop, protected goods remain, LOOT recovers only available bag contents |
+| Police | ROB an unrobbed NPC while carrying pistol; move behind buildings or GIVE UP | No repeated NPC payment; police dispatch, visible shots stop at walls; surrender charges up to $150 |
+| Audio | MORE → SOUND, shoot/reload/drive; mute and switch apps | Sound starts only after gesture; mute/focus loss stops engine tone; no console errors |
+| Backups | SAVES → download; change progress; restore downloaded file; undo restore | Original progress returns after reload; undo restores pre-import progress; malformed file leaves current data intact |
+
+## Automated checks
+`npm run check` covers static bundle integrity, mock touch pointer ownership, menu isolation, clock/physics consistency, delayed reloads, inventory custody, economy bounds and fresh-context persistence. Browser harness is separate; it now opens MORE before accessing STYLE. Existing test scripts are not a substitute for the native checks above.
+
+## Additional v0.15 checks
+- MAP → salvage crate: remain still for 2.5 seconds, then sell finds. Repeat attempts during refill must not award items; moving or taking damage cancels the search.
+- Complete three courier routes across refresh: rewards are $225, $275 and $300; STATS records counts/XP, level bonus occurs once.
+- Hold RUN: stamina falls, exhaustion slows movement, releasing/resting restores stamina. No center-stick drift.
+- Driving GPS follows roads and changes to walking routing after EXIT. Traffic waits before red/amber signals and clears occupied junctions.
+- Neutral clinic ring blocks damage/crime/gunfire. Repeat while wanted: protection must not apply.
+- World clock persists through refresh; night windows/headlights remain legible. Outfits also appear indoors and idle feet stop animating.
+
+## Release acceptance details
+- BOX beside an owned or stolen parked vehicle must open that exact vehicle's glovebox. Locked cars, moving cars and indoor access must be rejected.
+- On a throttled connection, the page shows loading text, scripts download in parallel, and simulation starts only after the last ordered module.
+- Expected courier cycle cash before other purchases/earnings: first route +$225, second +$275, third +$300 and one level bonus +$50 (total $850). Refresh after each delivery must not repeat payment.
+- An old save owning the apartment keeps HOMEOWNER in STATS without receiving extra XP/cash from migration.

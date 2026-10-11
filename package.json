@@ -1,0 +1,15 @@
+{
+  "name": "nightshift-city-online",
+  "version": "0.17.0",
+  "private": true,
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "check": "node tests/run.cjs",
+    "test": "node tests/run.cjs",
+    "serve": "python3 -m http.server 8080",
+    "test:browser": "node tests/browser.cjs",
+    "build": "node scripts/build-static.cjs"
+  }
+}

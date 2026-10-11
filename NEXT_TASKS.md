@@ -1,11 +1,13 @@
-# Next tasks (ordered)
-- P0: Smoke-test `index.html` in desktop and mobile Safari; document reproducible bugs.
-- P0: Replace prototype movement with fixed timestep, robust collision and camera-relative mobile twin-stick aim.
-- P0: Move code to Phaser/TypeScript/Vite; add unit tests for movement, collision and inventory rules.
-- P1: Implement accessible character creator and local profile save.
-- P1: Implement vehicle collisions, parking, doors and traffic AI.
-- P1: Add inventory, pickup confirmation, safe-zone and PvP rules.
-- P1: Create one polished district with reusable tiles and enterable interiors.
-- P2: Add server-authoritative multiplayer via Colyseus and persistent player accounts.
-- P2: Implement property, shops, economy and job loops.
-- P3: Crew systems, heists, law enforcement and district expansion.
+# Next tasks
+- P0: Real desktop and iPhone Safari QA: simultaneous movement/aim/fire, portrait/landscape HUD, brake, map, shop, audio and backup export/import.
+- P0: Modular scene/state architecture before a scoped Phaser/TypeScript migration; retain existing behavioral regressions.
+- P1: Expand furnished interiors, authored city content and interaction feedback; add explicit safe-zone rules.
+- P1: Traffic avoidance and lane routing, pursuit vehicles and collision tuning. Road-center GPS and timed signals now exist.
+- P1: Improve combat effects/animations and create production sprite/audio assets.
+- P1: Formalize loot expiry, car search/impound and globally unique content IDs before multiplayer.
+- P2 (Claude-owned): Authoritative server/protocol scaffold, inventory/economy/combat transactions and two-client tests.
+- P2: Persistent online accounts, properties, garages and optional PvP.
+
+Completed v0.14: fixed timestep, frame-rate integration checks, map/GPS/courier routing, walkable shop, medkits/valuables trade, expanded outfit preview, backup restore/undo and improved vehicle handling/braking. No paid infrastructure is required for this local client.
+
+Completed v0.15: salvage, reputation/milestones, three courier routes, stamina, world lighting/districts, neutral clinic protection, road GPS, signals, bounded feedback, time-based camera, shared renderer and stylesheet packaging.
