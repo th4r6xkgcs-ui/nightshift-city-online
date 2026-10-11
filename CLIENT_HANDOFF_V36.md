@@ -1,6 +1,6 @@
 # Client v0.36 — Driving presentation
 
-Camera zoom now varies continuously with speed, replacing the abrupt speed-three target switch. A bounded 84px directional lookahead eases using elapsed time, reverses with backward travel, fades back when stopping/exiting and remains clamped to the world. Vehicle handling constants, simulation integration and collisions are unchanged.
+Camera zoom now varies continuously with speed, replacing the abrupt speed-three target switch. A bounded 84px directional lookahead eases using elapsed time, reverses with backward travel, fades back when stopping/exiting and remains clamped to the world. Vehicle handling constants, simulation integration and collisions are unchanged. Successful low-speed exits now clear vehicle speed so a parked car does not retain wheel animation or headlight beams.
 
 Headlights use twin stepped beams, fade with darkness and stay off for inactive parked cars. Active player/traffic cars keep lamps lit when stopped. Mouse/button/keyboard braking lights the rear lamps; stopped traffic displays brakes. Reverse lamps and small brake/reverse spill appear at the rear, and player front wheels reflect steering input. Beams stay within the existing scene culling allowance.
 
