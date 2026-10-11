@@ -33,6 +33,16 @@ into the real game client.** The real game is still single-player.
   - Controls don't overlap in landscape (844×390), portrait (390×844) or desktop.
 - Bugs found and fixed by those runs: the join overlay blocked touches after joining, and the button column covered the aim stick in landscape.
 
+### Load test (local, one process running the server plus all bots)
+Bots walk randomly and fire 3×/s for 8 seconds.
+
+| Bots | CPU | Snapshot interval p50 / p99 (target 50 ms) | Largest snapshot | Memory |
+| --- | --- | --- | --- | --- |
+| 30 | 12% of one core | 50 / 55 ms | 3.4 KB | 82 MB |
+| 100 | 48% of one core | 50 / 60 ms | 10.9 KB | 130 MB |
+
+A single small instance is plenty for early testing. Watch-out: when everyone crowds into one spot, each player receives about 220 KB/s at 100 players. Delta or binary snapshots would fix that if we ever get there.
+
 ## File map
 | Path | What |
 | --- | --- |
