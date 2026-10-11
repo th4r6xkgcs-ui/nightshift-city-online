@@ -12,4 +12,4 @@ Touched: street-encounters.js, city-map.js, game.js, index.html, package.json, t
 
 Validation: npm run check passes 54 suites plus root syntax; git diff --check passes. New checks cover collision-clear/routable sites, live contextual acceptance/completion, refresh, deadline/payment once, expiry, crew supplies/trust recovery, cooldown persistence, invalid state/full wallet/full pockets, LOS/death/vehicle/menu locks and backup restore/undo. Existing combat/AI/economy/physics/control/custody suites retained. Internal 390x844 Canvas render reviewed; real browser/iPhone DOM/touch/audio QA remains pending for this increment. Build emits 47 playable assets.
 
-Release pending: draft PR and existing private preview update.
+Release: draft PR #13 published; existing owner-private preview updated successfully to v0.28, including the previously undeployed v0.27 encounters. GitHub Client simulation checks passed on 5590ccb6dd494886e8446eee4e6d631eac86f055. All 47 playable assets packaged; index/script/style bytes verified against canonical source before publication. Claude notified through PR #3. No backend edits, PR merges or audience changes.
