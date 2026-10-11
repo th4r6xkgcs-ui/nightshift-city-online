@@ -73,9 +73,9 @@ test('stale reports are ignored', () => {
   assert.equal(a.x, 700);
 });
 
-test('server economy and combat are off in shared-world mode; chat works', () => {
+test('server economy is off in shared-world mode; chat works', () => {
   const { w } = setup();
-  for (const m of [{ t: 'buy', item: 'ammo', tx: 'x' }, { t: 'fire', aim: 0 }, { t: 'job', action: 'start', tx: 'y' }, { t: 'give', to: 'b', cash: 5, tx: 'z' }]) {
+  for (const m of [{ t: 'buy', item: 'ammo', tx: 'x' }, { t: 'job', action: 'start', tx: 'y' }, { t: 'give', to: 'b', cash: 5, tx: 'z' }]) {
     assert.equal(w.handle('a', m, 0).reason, 'not available in shared-world mode', m.t);
   }
   assert.equal(w.handle('a', { t: 'chat', ch: 'city', text: 'hi' }, 0).ok, true);
@@ -97,4 +97,70 @@ test('malformed pos messages are strikes', () => {
     { t: 'pos', seq: 3, x: 1, y: 1, aim: 0, car: { angle: 1, color: 'red;}' } }]) {
     assert.equal(w.handle('a', m, 0).strike, true, JSON.stringify(m));
   }
+});
+
+// ---------- shared-world combat ----------
+function duel() {
+  const w = new World();
+  const a = w.addPlayer('a', 'Ana', 0, null, { presence: true });
+  const b = w.addPlayer('b', 'Ben', 0, null, { presence: true });
+  a.x = 700; a.y = 340; b.x = 800; b.y = 340;
+  return { w, a, b };
+}
+const events = (w, kind) => w.drain().filter((e) => e.msg.kind === kind);
+
+test('shared-world PvP: hits only when both opted in; victim and shooter told', () => {
+  const { w, a, b } = duel();
+  assert.equal(w.handle('a', { t: 'fire', aim: 0 }, 0).blocked, 'pvp off');
+  w.drain();
+  w.handle('a', { t: 'pvp', on: true }, 0); w.handle('b', { t: 'pvp', on: true }, 0);
+  assert.equal(w.handle('a', { t: 'fire', aim: 0 }, 200).hit, 'b');
+  const out = w.drain();
+  const hit = out.find((e) => e.msg.kind === 'shot-hit');
+  assert.deepEqual([hit.to, hit.msg.by, hit.msg.byName, hit.msg.damage], ['b', 'a', 'Ana', R.combat.damage]);
+  assert.ok(out.some((e) => e.to === 'a' && e.msg.kind === 'hit-confirm' && e.msg.target === 'b'));
+  assert.equal(b.hp, 100, 'the game, not the server, owns shared-world health');
+});
+
+test('shared-world shots: walls, clinic and misses', () => {
+  const { w, a, b } = duel();
+  a.pvp = b.pvp = true;
+  assert.equal(w.handle('a', { t: 'fire', aim: Math.PI }, 0).hit, null, 'aimed away');
+  const bld = w.city.buildings.find((q) => q.y > 340 && q.x < 700 && q.x + q.w > 700);
+  a.x = bld.x - 40; a.y = bld.y + 80; b.x = bld.x + bld.w + 40; b.y = bld.y + 80;
+  assert.equal(w.handle('a', { t: 'fire', aim: 0 }, 1000).blocked, 'wall');
+  const c = w.city.clinic;
+  a.x = c.x + 150; a.y = c.y; b.x = c.x; b.y = c.y;
+  assert.equal(w.handle('a', { t: 'fire', aim: Math.PI }, 2000).blocked, 'safe zone');
+});
+
+test('shared-world shots: cars soften hits; you cannot shoot from inside a car', () => {
+  const { w, a, b } = duel();
+  a.pvp = b.pvp = true;
+  b.car = { angle: 0 }; b.y = 355; // a car is a bigger target than a person
+  w.handle('a', { t: 'fire', aim: 0 }, 0);
+  assert.equal(events(w, 'shot-hit')[0].msg.damage, R.presence.carDamage);
+  a.car = { angle: 0 };
+  assert.equal(w.handle('a', { t: 'fire', aim: 0 }, 1000).reason, 'in a car');
+});
+
+test('shared-world shots: burst-tolerant cadence stops rapid-fire cheats', () => {
+  const { w } = duel();
+  const r = [0, 0, 0, 0].map(() => w.handle('a', { t: 'fire', aim: 0 }, 1000).ok);
+  assert.deepEqual(r, [true, true, true, false], 'network bunching of 3 allowed, a 4th instant shot is not');
+  assert.equal(w.handle('a', { t: 'fire', aim: 0 }, 1000 + R.combat.fireIntervalMs).ok, true);
+  let ok = 0;
+  for (let t = 2000; t < 4000; t += 20) if (w.handle('a', { t: 'fire', aim: 0 }, t).ok) ok++;
+  assert.ok(ok <= Math.ceil(2000 / R.combat.fireIntervalMs) + R.presence.shotBurst, `sustained rate capped (${ok} in 2s)`);
+});
+
+test('shot tracers reach nearby players (also for NPC shots), not far ones', () => {
+  const { w } = duel();
+  const far = w.addPlayer('f', 'Far', 0, null, { presence: true });
+  far.x = 2100; far.y = 1600;
+  w.handle('a', { t: 'fire', aim: 1.2 }, 0);
+  const tr = events(w, 'shot');
+  assert.deepEqual(tr.map((e) => e.to), ['b']);
+  assert.equal(tr[0].msg.from, 'a');
+  assert.ok(tr[0].msg.len > 0 && tr[0].msg.len <= R.combat.rangePx);
 });

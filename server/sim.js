@@ -58,7 +58,7 @@ class World {
       joinedAt: now,
     };
     if (saved) this._restore(p, saved);
-    if (presence) Object.assign(p, { presence: true, posSeq: -1, posAt: now, posRejectSince: 0, car: null, posRejects: 0 });
+    if (presence) Object.assign(p, { presence: true, posSeq: -1, posAt: now, posRejectSince: 0, car: null, posRejects: 0, shotBucket: R.presence.shotBurst, shotAt: now });
     this.players.set(id, p);
     return p;
   }
@@ -125,6 +125,8 @@ class World {
     if (p.presence) {
       // Shared-world mode: the real game keeps its own economy/combat for now.
       if (msg.t === C.POS) return this._pos(p, msg, now);
+      if (msg.t === C.FIRE) return this._presenceFire(p, msg.aim, now);
+      if (msg.t === C.PVP) return this._setPvp(p, msg.on);
       if (msg.t !== C.CHAT && msg.t !== C.MUTE) return { ok: false, reason: 'not available in shared-world mode', quiet: msg.t === C.INPUT };
     } else if (msg.t === C.POS) {
       return { ok: false, reason: 'pos is for shared-world mode', quiet: true };
@@ -540,6 +542,47 @@ class World {
     };
     if (p.presence) { v.presence = true; v.car = p.car; }
     return v;
+  }
+
+  // ---------- shared-world combat ----------
+  // The game owns ammo and its own hit effects; the server decides hits
+  // between online players: cadence, range, walls, safe zone, both opted in.
+  _presenceFire(p, aim, now) {
+    const PR = RULES.presence, CB = RULES.combat;
+    const refill = (now - p.shotAt) / CB.fireIntervalMs;
+    p.shotBucket = Math.min(PR.shotBurst, p.shotBucket + refill);
+    p.shotAt = now;
+    if (p.shotBucket < 1) return { ok: false, reason: 'too fast', quiet: true };
+    p.shotBucket -= 1;
+    if (p.car) return { ok: false, reason: 'in a car', quiet: true };
+    p.aim = aim;
+    const dx = Math.cos(aim), dy = Math.sin(aim);
+    let best = null, bestT = Infinity;
+    for (const q of this.players.values()) {
+      if (q === p || !q.presence) continue;
+      const ox = q.x - p.x, oy = q.y - p.y, t = ox * dx + oy * dy;
+      if (t <= 0 || t > CB.rangePx) continue;
+      const r = q.car ? PR.carRadius : RULES.player.radius;
+      if (Math.abs(ox * dy - oy * dx) <= r && t < bestT) { best = q; bestT = t; }
+    }
+    const wallT = this.city.rayHit(p.x, p.y, dx, dy, Math.min(bestT, CB.rangePx));
+    let hit = null, blocked = null;
+    if (best && wallT < bestT) blocked = 'wall';
+    else if (best && !(p.pvp && best.pvp)) blocked = 'pvp off';
+    else if (best && (this.city.inClinic(best) || this.city.inClinic(p))) blocked = 'safe zone';
+    else if (best) hit = best;
+    const len = Math.min(hit ? bestT : CB.rangePx, wallT);
+    // Tracer for everyone nearby (they see you shooting, even at NPCs).
+    for (const q of this.players.values()) {
+      if (q === p || Math.hypot(q.x - p.x, q.y - p.y) > PR.tracerRangePx) continue;
+      this._send(q.id, { t: S.EVENT, kind: 'shot', from: p.id, x: Math.round(p.x), y: Math.round(p.y), aim, len: Math.round(len) });
+    }
+    if (hit) {
+      const damage = hit.car ? PR.carDamage : CB.damage;
+      this._send(hit.id, { t: S.EVENT, kind: 'shot-hit', by: p.id, byName: p.name, damage });
+      this._send(p.id, { t: S.EVENT, kind: 'hit-confirm', target: hit.id, targetName: hit.name, damage });
+    }
+    return { ok: true, quiet: true, hit: hit ? hit.id : null, blocked };
   }
 
   // ---------- shared-world position reports ----------

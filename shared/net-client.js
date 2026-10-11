@@ -212,7 +212,9 @@
         const t = o.now();
         if (t < nextFireAt) return false;
         if (!send({ t: C.FIRE, aim })) return false;
-        nextFireAt = t + RULES.combat.fireIntervalMs;
+        // 80% of the interval: frame timing jitter must not swallow a real shot;
+        // the server's burst-tolerant cadence is the real limit.
+        nextFireAt = t + RULES.combat.fireIntervalMs * 0.8;
         return true;
       },
       reload: () => send({ t: C.RELOAD }),

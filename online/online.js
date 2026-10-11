@@ -17,6 +17,8 @@
     get camera() { return typeof camera !== 'undefined' ? camera : null; }, // eslint-disable-line no-undef
     get ctx() { return typeof g !== 'undefined' ? g : null; }, // eslint-disable-line no-undef
     get lastDraw() { return typeof lastDraw !== 'undefined' ? lastDraw : null; }, // eslint-disable-line no-undef
+    get bullets() { return typeof bullets !== 'undefined' ? bullets : null; }, // eslint-disable-line no-undef
+    say(text) { try { say(text); } catch { /* game toast unavailable */ } }, // eslint-disable-line no-undef
   };
   const store = {
     get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
@@ -29,7 +31,8 @@
   css.textContent = `
   #nsOnline{position:fixed;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:6px;align-items:center;font:12px/1.2 ui-monospace,Menlo,monospace;color:#e8eff7}
   #nsOnline .badge{background:#101728d9;border:1px solid #5e7793;border-radius:999px;padding:5px 10px;white-space:nowrap}
-  #nsOnline button{font:inherit;font-size:15px;background:#101728d9;border:1px solid #5e7793;border-radius:999px;color:#e8eff7;width:34px;height:28px}
+  #nsOnline button{font:inherit;font-size:15px;background:#101728d9;border:1px solid #5e7793;border-radius:999px;color:#e8eff7;min-width:34px;height:28px}
+  #nsOnline .pvp{font-size:11px;font-weight:bold;padding:0 9px} #nsOnline .pvp.on{background:#7a1f2bdd;border-color:#ff7d7d}
   #nsChatLog{position:fixed;top:calc(max(10px,env(safe-area-inset-top)) + 34px);left:50%;transform:translateX(-50%);z-index:30;width:min(92vw,420px);display:grid;gap:3px;pointer-events:none;font:12px ui-monospace,Menlo,monospace;color:#e8eff7}
   #nsChatLog div{background:#000a;padding:3px 8px;border-radius:6px;overflow-wrap:anywhere;animation:nsfade 9s forwards}
   #nsChatLog b{color:#ffe99b} #nsChatLog .city b{color:#a9c6ff} #nsChatLog .server b{color:#7cdeb5}
@@ -46,7 +49,8 @@
   const bar = el('div', { id: 'nsOnline' });
   const badge = el('span', { className: 'badge' }, 'connecting…');
   const chatBtn = el('button', { type: 'button', ariaLabel: 'Chat' }, '💬');
-  bar.append(badge, chatBtn);
+  const pvpBtn = el('button', { type: 'button', className: 'pvp', title: 'Player-vs-player: only players who both switch it on can hurt each other' }, 'PVP OFF');
+  bar.append(badge, chatBtn, pvpBtn);
   const log = el('div', { id: 'nsChatLog' });
   log.setAttribute('aria-live', 'polite');
   const chatBar = el('form', { id: 'nsChatBar', hidden: true });
@@ -61,6 +65,19 @@
   }
 
   let net = null, me = null, myId = null, others = [], chatCh = 'near';
+  const tracers = [];
+  const seenBullets = new WeakSet();
+  pvpBtn.addEventListener('click', () => { if (net && me) net.setPvp(!me.pvp); });
+  function onEvent(e) {
+    if (e.kind === 'shot') tracers.push({ x: e.x, y: e.y, aim: e.aim, len: e.len, until: performance.now() + 120 });
+    else if (e.kind === 'shot-hit') {
+      // Apply through the game's own damage path (safe zones, death, respawn).
+      const R = globalThis.NightshiftRecovery, p = G.player;
+      if (R && typeof R.damage === 'function') R.damage(e.damage, performance.now());
+      else if (p) p.hp = Math.max(0, p.hp - e.damage);
+      G.say('Shot by ' + e.byName);
+    } else if (e.kind === 'hit-confirm') G.say('Hit ' + e.targetName);
+  }
   const bubbles = new Map();
 
   function addChat(m) {
@@ -97,6 +114,8 @@
       url: server, name, mode: 'presence', token: store.get('nsco-online-token'),
       onWelcome: (w) => { myId = w.id; store.set('nsco-online-token', w.token); addChat({ from: 'server', name: 'ONLINE', ch: 'city', text: (w.resumed ? 'Welcome back, ' : 'Welcome, ') + w.you.name + ' — you share this city with other players.' }); },
       onChat: addChat,
+      onEvent,
+      onResult: (r) => { if (r.req === 'pvp' && r.ok) G.say(r.pvp ? 'PvP ON · only other PvP players can hurt you' : 'PvP OFF'); },
       onStatus: refreshBadge,
     });
   }
@@ -132,9 +151,19 @@
     const p = G.player;
     if (net && p) {
       net.setPosition({ x: p.x, y: p.y, aim: p.angle || 0, car: p.car ? { angle: p.car.angle || 0, color: p.car.color } : null });
+      // Report the game's own new shots (the player's bullets start at the player).
+      for (const b of G.bullets || []) {
+        if (seenBullets.has(b)) continue;
+        seenBullets.add(b);
+        if (b.origin && Math.hypot(b.origin.x - p.x, b.origin.y - p.y) < 40 && Number.isFinite(b.vx) && Number.isFinite(b.vy)) net.fire(Math.atan2(b.vy, b.vx));
+      }
       const view = net.update(dt);
       me = view.me; others = view.others;
-      if (now - lastBadge > 500) { refreshBadge(); lastBadge = now; }
+      if (now - lastBadge > 500) {
+        refreshBadge(); lastBadge = now;
+        pvpBtn.textContent = me && me.pvp ? 'PVP ON' : 'PVP OFF';
+        pvpBtn.classList.toggle('on', !!(me && me.pvp));
+      }
       // Only draw when the game drew this frame (menus pause the game's drawing).
       if (G.lastDraw === now && !globalThis.NightshiftHome?.paused?.()) draw(now);
     }
@@ -147,6 +176,13 @@
     ctx.save();
     ctx.scale(cam.zoom, cam.zoom);
     ctx.translate(-cam.x, -cam.y);
+    ctx.lineWidth = 2;
+    for (let i = tracers.length - 1; i >= 0; i--) {
+      const t = tracers[i];
+      if (now > t.until) { tracers.splice(i, 1); continue; }
+      ctx.strokeStyle = '#ffe99bcc';
+      ctx.beginPath(); ctx.moveTo(t.x, t.y); ctx.lineTo(t.x + Math.cos(t.aim) * t.len, t.y + Math.sin(t.aim) * t.len); ctx.stroke();
+    }
     for (const o of others) {
       const color = colorFor(o.id);
       try {
@@ -157,7 +193,7 @@
       }
       ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center';
       ctx.fillStyle = '#000a'; ctx.fillText(o.name, o.x + 1, o.y - 33);
-      ctx.fillStyle = color; ctx.fillText(o.name, o.x, o.y - 34);
+      ctx.fillStyle = o.pvp ? '#ff7d7d' : color; ctx.fillText((o.pvp ? '⚔ ' : '') + o.name, o.x, o.y - 34);
     }
     for (const [pid, b] of bubbles) {
       if (now > b.until) { bubbles.delete(pid); continue; }
