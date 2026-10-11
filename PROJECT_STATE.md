@@ -1,4 +1,18 @@
-## Current client: v0.17
+# Current project state — v0.51
+
+Canonical combined client: `codex/street-customers-v51`, based on v0.50.1. Dependency-free Canvas/localStorage, mobile-first, separate from Nightshift Garage. Private static preview includes exact Claude RPG rpg-core 472505c modules; no multiplayer backend is deployed in this preview.
+
+Current gameplay includes gang membership/custom founding, local corner influence, bounded recruits and passive physical followers, loyalty/escort jobs, noncombat rival pressure, premium street customers, existing production/dealer economy and RPG progression. Ordinary walking/driving/combat/police/courier/interiors continue to work.
+
+Checks: 83 suites plus root syntax; 74 static assets. Ten simulated minute crew soak and physical escort completion pass. Customer transactions share existing inventory, market demand and sales ledger. Atlas overflow avoids repeated canvas rebuilding at the eight-atlas cap.
+
+Limits: physical iPhone, real DOM/audio and extended balance QA pending; companions/rival envoys are passive, no vehicle seating; authored customers are static; claims represent local corners, not whole district capture. Claude owns RPG/backend work. New phases should start from this combined top and reserve files through PR #3.
+
+Read CLIENT_HANDOFF_V51.md / CLIENT_HANDOFF_V50_1.md / CLIENT_HANDOFF_V50.md. Detailed older state is preserved below as history.
+
+## Historical state (superseded)
+
+## Historical client: v0.17
 Saved crafting levels, upgraded apartment bench, six abstract recipes, finite-ammo transaction guards and crafting modal isolation. 34 automated suites pass. Browser/device QA pending; local single-player only.
 
 # Project state

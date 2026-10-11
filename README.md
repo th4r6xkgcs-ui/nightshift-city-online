@@ -1,14 +1,16 @@
 # Nightshift City Online
 Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current build: v0.17 local prototype
+## Current build: v0.51 combined local client
 Private preview hosted separately.
-Dependency-free Canvas client with walking, twin-stick aiming, combat, NPC crime, police pursuit, traffic, drivable cars, walkable apartments and shops, courier deliveries and browser-local inventory/progress. Multiplayer is not implemented. Art and synthesized audio remain procedural placeholders.
+Dependency-free Canvas client with walking, combat, police pursuit, traffic, vehicles, apartments/shops, production businesses, RPG skills/weapons/goals/dailies and browser-local inventory/progress. Join an NPC gang or found a custom gang, recruit passive followers, build loyalty, escort members, claim local corners and respond to noncombat rival pressure. Street customers request carried stock using shared dealer demand, prices, heat and sales ledgers. This private static preview is single-player; Claude’s separate backend work is not deployed here. Art/audio are procedural. Real iPhone and DOM/audio QA remain pending.
+
+Canonical combined branch: `codex/street-customers-v51`, based on v0.50.1. Start at **MORE → STREET**, track a contact, then press **TALK**. Detailed contracts and validation: [CLIENT_HANDOFF_V51.md](CLIENT_HANDOFF_V51.md), [CLIENT_HANDOFF_V50_1.md](CLIENT_HANDOFF_V50_1.md), [CLIENT_HANDOFF_V50.md](CLIENT_HANDOFF_V50.md). Historical gameplay notes below describe older foundations.
 
 ## Run and verify
 Use Node 24 or newer. No npm installation is required. `npm run build` creates a static dist bundle for hosting.
 - `python3 -m http.server 8080` serves the game at localhost:8080.
-- `npm run check` runs 34 suites and syntax-checks every root JavaScript module.
+- `npm run check` runs 83 suites and syntax-checks every root JavaScript module.
 - `npm run test:browser` is a separate harness for a configured browser environment.
 - `node tests/render.cjs /tmp/city.png` optionally renders Canvas with `@napi-rs/canvas`; this verifies neither HTML layout nor touch/audio.
 

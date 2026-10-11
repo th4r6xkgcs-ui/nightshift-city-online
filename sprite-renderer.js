@@ -66,6 +66,8 @@ const atlasCache=new Map(),MAX_ATLASES=8,CELL_W=48,CELL_H=52;
 function atlasFor(p,isPlayer){
  const profile=isPlayer?root.NightshiftHome?.profile:null,key=JSON.stringify([isPlayer,profile?.shirt||p.color||'#799f98',profile?.skin,profile?.hair,profile?.pants,profile?.shoes,profile?.hat,profile?.bag]);
  if(atlasCache.has(key)){const value=atlasCache.get(key);atlasCache.delete(key);atlasCache.set(key,value);return value}
+ // Overflow NPC styles draw directly instead of evicting/rebuilding 64-frame atlases every frame.
+ if(atlasCache.size>=MAX_ATLASES&&!isPlayer)return null;
  const canvas=root.document?.createElement?.('canvas'),ctx=canvas?.getContext?.('2d');if(!ctx)return null;
  canvas.width=CELL_W*8;canvas.height=CELL_H*8;ctx.imageSmoothingEnabled=false;
  for(let facing=0;facing<8;facing++)for(let frame=0;frame<8;frame++)drawPersonDirect({x:frame*CELL_W+24,y:facing*CELL_H+28,color:p.color,hp:40},isPlayer,{context:ctx,profile,weapon:false,hideHealth:true,pose:{facing,stride:[0,2,3,2,0,-2,-3,-2][frame]}});

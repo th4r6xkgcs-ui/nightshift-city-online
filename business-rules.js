@@ -15,6 +15,7 @@ const ORDERS=[
  {id:'repair-run',name:'Clinic Repair Order',item:'parts',count:3,reward:300,duration:75000,x:440,y:340,illegal:false},
  {id:'night-run',name:'Midtown Night Order',item:'coke',count:2,reward:400,duration:60000,x:1320,y:340,illegal:true}
 ];
+const CUSTOMERS=[{id:'west-regular',name:'Eli',label:'WEST END REGULAR',market:'west',x:360,y:605,item:'weed',count:2,premium:1.25,color:'#b3c99b'},{id:'dock-worker',name:'Tess',label:'DOCKS SHIFT CUSTOMER',market:'docks',x:1400,y:1285,item:'weed',count:2,premium:1.25,color:'#c9ac88'},{id:'night-client',name:'Lux',label:'MIDTOWN NIGHT CUSTOMER',market:'docks',x:1400,y:605,item:'coke',count:1,premium:1.15,color:'#b9a4d1'}];
 const STOCK={weed:6,coke:3},DEMAND={weed:8,coke:4};
 const integer=(value,max,otherwise=0)=>Number.isSafeInteger(value)&&value>=0?Math.min(max,value):otherwise;
 const property=id=>PROPERTIES.find(p=>p.id===id),market=id=>MARKETS.find(m=>m.id===id);
@@ -60,8 +61,9 @@ function transact(state,wallet,pocket,cmd,now=Date.now(),dry=false){
   if(!dry){pocket[order.item]-=order.count;if(!pocket[order.item])delete pocket[order.item];wallet.cash+=order.reward;if(order.illegal)wallet.heat=Math.min(5,Math.max(0,wallet.heat||0)+(order.item==='coke'?.4:.2)*order.count);orders.active=null;orders.index=(order.id===ORDERS[0].id?1:order.id===ORDERS[1].id?2:0);orders.completed=Math.min(1000000,orders.completed+1);state.ledger.sold=Math.min(1000000,state.ledger.sold+order.count);state.ledger.earned=Math.min(CASH_LIMIT,state.ledger.earned+order.reward)}
   return {ok:true,message:'Rush order complete · +$'+order.reward};
  }
+ const buyer=cmd.customer?CUSTOMERS.find(c=>c.id===cmd.customer):null;if(cmd.customer&&(!buyer||cmd.action!=='sell'||buyer.market!==cmd.id||buyer.item!==cmd.item||buyer.count!==cmd.count))return fail('Invalid customer request');
  const spec=property(cmd.id)||market(cmd.id);if(!spec)return fail('Unknown business');
- if(!Number.isFinite(wallet.x)||!Number.isFinite(wallet.y)||Math.hypot(wallet.x-spec.x,wallet.y-spec.y)>75)return fail('Travel to this location first');
+ if(!Number.isFinite(wallet.x)||!Number.isFinite(wallet.y)||Math.hypot(wallet.x-(buyer?.x??spec.x),wallet.y-(buyer?.y??spec.y))>75)return fail('Travel to this location first');
  if((spec.illegal||spec.buy)&&wallet.heat>=2)return fail('Police pressure · leave and lose heat first');
  if(property(cmd.id)){
   const p=state.properties[spec.id];
@@ -95,11 +97,11 @@ function transact(state,wallet,pocket,cmd,now=Date.now(),dry=false){
   if(!dry){wallet.cash-=cost;pocket[item]=carried+n;m.bought[item]+=n;wallet.heat=Math.min(5,Math.max(0,wallet.heat||0)+(item==='coke'?.1:.05)*n)}return {ok:true,message:'Bought '+n+' '+item+' · -$'+cost};
  }
  if(cmd.action==='sell'){
-  if(n>carried)return fail('Not enough carried stock');if(n>DEMAND[item]-m.sold[item])return fail('Buyer demand exhausted · wait for refill');const revenue=spec.sell[item]*n;
+  if(n>carried)return fail('Not enough carried stock');if(n>DEMAND[item]-m.sold[item])return fail('Buyer demand exhausted · wait for refill');const revenue=Math.round(spec.sell[item]*(buyer?.premium??1))*n;
   if(wallet.cash+revenue>CASH_LIMIT)return fail('Wallet full');
   if(!dry){wallet.cash+=revenue;pocket[item]-=n;if(!pocket[item])delete pocket[item];m.sold[item]+=n;wallet.heat=Math.min(5,Math.max(0,wallet.heat||0)+(item==='coke'?.4:.2)*n);state.ledger.sold=Math.min(1000000,state.ledger.sold+n);state.ledger.earned=Math.min(CASH_LIMIT,state.ledger.earned+revenue)}return {ok:true,message:'Sold '+n+' '+item+' · +$'+revenue+' · heat increased'};
  }
  return fail('Unknown dealer action');
 }
-root.NightshiftBusinessRules={PROPERTIES,MARKETS,ORDERS,STOCK,DEMAND,REFILL,ITEM_LIMIT,CASH_LIMIT,property,market,capacity,output,clean,advance,transact};
+root.NightshiftBusinessRules={PROPERTIES,MARKETS,ORDERS,CUSTOMERS,STOCK,DEMAND,REFILL,ITEM_LIMIT,CASH_LIMIT,property,market,capacity,output,clean,advance,transact};
 })(globalThis);
