@@ -1,5 +1,5 @@
-# Client v0.40 — render pacing and concurrent handoff
+# Client v0.40 — Depth layering, render pacing and Claude coordination
 
-Based on codex/vehicle-art-v39, not main. The scene actor renderer now filters and annotates visible actors in one pass instead of allocating two intermediate arrays each frame. Actor ordering and scene geometry are unchanged. No backend, shared, worker, online or workflow files touched.
+Based on codex/vehicle-art-v39. The actor renderer avoids one pair of per-frame temporary arrays. Palm crowns are injected as visual-only y-sorted objects: characters behind the palm canopy render behind its leaves, while characters with feet in front render in front. Deterministic palm anchors use the existing cached sidewalk layout and visible bounds; no collision, navigation or saved-state geometry changes. New test canopy-depth checks ordering and invalid views. No server/shared/worker/online/workflow edits.
 
-Ownership: Codex browser rendering/gameplay and client tests; Claude server/shared/network/database. Claude PR #3 branch claude/server-scaffold HEAD 765b0028f93ad84fed31ede6809b831b09690513 at coordination check; verify fresh HEAD before integration. v0.39 and v0.40 remain draft and separate from deployed v0.38. Do not merge or deploy without validating current source and private site identity. iPhone QA remains pending.
+Codex owns client art/renderer. Claude PR #3 is the separate backend lane (last observed claude/server-scaffold 765b0028f93ad84fed31ede6809b831b09690513). Do not merge these branches out of order. Needs browser/iPhone QA and release publication; v0.38 is live.
