@@ -18,17 +18,18 @@ function validate(raw){
 }
 function snapshot(storage){const out={};for(const key of KEYS)out[key]=storage.getItem(key);return out}
 function write(storage,data){for(const key of KEYS){if(typeof data[key]==='string')storage.setItem(key,data[key]);else storage.removeItem(key)}}
+function rollback(storage,data){for(const key of KEYS)storage.removeItem(key);write(storage,data)}
 function restore(storage,raw){
  const data=validate(raw),old=snapshot(storage);
  storage.setItem(RECOVERY_KEY,JSON.stringify(old));
- try{write(storage,data)}catch(error){write(storage,old);throw error}
+ try{write(storage,data)}catch(error){rollback(storage,old);throw error}
  return old;
 }
 function undo(storage){
  const old=JSON.parse(storage.getItem(RECOVERY_KEY)||'null');
  if(!old||typeof old!=='object'||Array.isArray(old))throw Error('No previous save available');
  const current=snapshot(storage);
- try{write(storage,old)}catch(error){write(storage,current);throw error}
+ try{write(storage,old)}catch(error){rollback(storage,current);throw error}
  storage.removeItem(RECOVERY_KEY);
 }
 root.NightshiftBackups={validate,KEYS,restore,undo,snapshot};if(!root.document)return;
