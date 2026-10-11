@@ -26,8 +26,10 @@
     }
     return n;
   }
-  // Seconds; tuned so a stock car driven well earns silver and an upgraded, skilled driver can gold.
-  const par = (race) => Math.round((length(race) / 340 + turns(race) * 1.1) * 10) / 10;
+  // Seconds. Calibrated with an autopilot on real game physics (no traffic): a stock car driven near-perfectly
+  // runs Loop 6.0s / Docks 6.7s / Tour 18.7s (= silver); a maxed car + Driving 50 runs Loop 4.5s / Docks 4.6s.
+  // So gold needs upgrades, skill or a great line; bronze stays friendly to touch controls and traffic.
+  const par = (race) => Math.round((length(race) / 420 + turns(race) * 0.63) * 10) / 10;
   const limit = (race) => par(race) * MEDALS[2].mult * 1.5;
   function medal(race, seconds) {
     if (!Number.isFinite(seconds) || seconds <= 0) return null;
