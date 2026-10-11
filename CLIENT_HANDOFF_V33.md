@@ -6,4 +6,4 @@ Touched world.js, package.json, tests/neighborhood-art.cjs, tests/run.cjs and th
 
 Validation: npm run check passed all 58 suites and root JavaScript syntax checks. Canvas-only daylight Midtown and Docks scenes inspected. New checks cover exact district boundaries, deterministic distinct architecture, finite drawing coordinates and unchanged gameplay state. Actual browser/iPhone touch, audio and frame-rate QA remains pending.
 
-Release: separate draft PR based on codex/atmosphere-v32; private preview publication in progress. No merge or server/shared/worker/workflow edits.
+Release: separate draft PR based on codex/atmosphere-v32; private preview publication succeeded. GitHub Client simulation checks passed for code commit 8c0ad0198e84cfddc398a639264528e16969d85d; draft PR #18 is open. No merge or server/shared/worker/workflow edits.
