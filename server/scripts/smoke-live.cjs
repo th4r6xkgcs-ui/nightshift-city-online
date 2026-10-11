@@ -41,8 +41,16 @@ async function until(fn, ms = 8000) { const t0 = Date.now(); while (Date.now() -
   try {
     const h = await fetch(base + '/healthz', { signal: AbortSignal.timeout(10000) });
     check('health endpoint', h.ok && (await h.text()).trim() === 'ok', `HTTP ${h.status}`);
-    const page = await fetch(base + '/', { signal: AbortSignal.timeout(10000) });
+    const page = await fetch(base + '/test', { signal: AbortSignal.timeout(10000) });
     check('test page served', page.ok && /Nightshift Online/.test(await page.text()), `HTTP ${page.status}`);
+    const home = await fetch(base + '/', { signal: AbortSignal.timeout(10000) });
+    const homeHtml = await home.text();
+    const isGame = /src="online\.js"/.test(homeHtml);
+    check('main page served', home.ok && (isGame || /Nightshift Online/.test(homeHtml)), isGame ? 'online game' : 'test page');
+    if (isGame) {
+      const ol = await fetch(base + '/online.js', { signal: AbortSignal.timeout(10000) });
+      check('online layer served', ol.ok, `HTTP ${ol.status}`);
+    }
     const lib = await fetch(base + '/shared/net-client.js', { signal: AbortSignal.timeout(10000) });
     check('client library served', lib.ok, `HTTP ${lib.status}`);
   } catch (e) { check('HTTP reachable', false, e.message); }
