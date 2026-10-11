@@ -28,7 +28,7 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -125,14 +125,18 @@
       casinoWins: root.NightshiftCasino?.state?.wins, casinoWagered: root.NightshiftCasino?.state?.wagered,
       weaponsOwned: root.NightshiftWeapons?.state?.owned?.length || 1,
       tuneLevels: tuneStat('totalLevels'), tuneBestCar: tuneStat('bestCar'),
+      homeItems: root.NightshiftHomeUpgrades?.state?.owned?.length || 0,
       raceMedals: Object.keys(root.NightshiftRaces?.state?.medals || {}).length,
       raceGolds: Object.values(root.NightshiftRaces?.state?.medals || {}).filter((m) => m === 'gold').length,
     });
   }
 
+  // Trophy shelf (home-upgrades.js) adds +10% to goal cash.
+  const cashBonus = () => { try { const b = root.NightshiftHomeUpgrades?.goalBonus?.(); return Number.isFinite(b) && b >= 1 && b <= 2 ? b : 1; } catch { return 1; } };
   function pay(goal) {
     const p = G.player, r = goal.reward || {};
-    if (p && r.cash > 0 && Number.isFinite(p.cash)) { p.cash = Math.min(100000000, p.cash + r.cash); paying += r.cash; if (last) last.cash = p.cash; }
+    const cash = Math.round((r.cash || 0) * cashBonus());
+    if (p && cash > 0 && Number.isFinite(p.cash)) { p.cash = Math.min(100000000, p.cash + cash); paying += cash; if (last) last.cash = p.cash; }
     for (const [sk, xp] of Object.entries(r.xp || {})) root.NightshiftSkills?.gain(sk, xp, 'goal:' + goal.id);
     if (gameSave) { try { gameSave(); } catch { /* ignore */ } }
   }
@@ -142,7 +146,8 @@
     if (g) {
       dirty = true; save(); pay(g);
       const r = g.reward || {};
-      toast(`🎯 GOAL COMPLETE · ${g.title}${r.cash ? ` · +$${r.cash.toLocaleString()}` : ''}`);
+      const paid = Math.round((r.cash || 0) * cashBonus());
+      toast(`🎯 GOAL COMPLETE · ${g.title}${paid ? ` · +$${paid.toLocaleString()}` : ''}`);
       banner(g);
     }
     render();
@@ -181,7 +186,8 @@
     flashEl.textContent = '';
     const r = g.reward || {};
     const xp = Object.entries(r.xp || {}).map(([k, v]) => `+${v} ${skillName(k)} XP`).join(' · ');
-    flashEl.append(el('b', {}, `🎯 ${g.title}`), el('span', {}, [r.cash ? `+$${r.cash.toLocaleString()}` : '', xp].filter(Boolean).join(' · ')));
+    const paid = Math.round((r.cash || 0) * cashBonus());
+    flashEl.append(el('b', {}, `🎯 ${g.title}`), el('span', {}, [paid ? `+$${paid.toLocaleString()}${paid > (r.cash || 0) ? ' 🏆' : ''}` : '', xp].filter(Boolean).join(' · ')));
     flashEl.classList.add('on');
     clearTimeout(flashTimer); flashTimer = setTimeout(() => flashEl.classList.remove('on'), 2200);
   }
