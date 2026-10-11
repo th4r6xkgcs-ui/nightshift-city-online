@@ -60,7 +60,8 @@
   function install() {
     patchBullets();
     const F = root.NightshiftFeedback;
-    if (F && typeof F.shot === 'function' && !F.shot.__ns) {
+    if (F && typeof F.shot === 'function' && !F.__nsWeaponsShot) {
+      F.__nsWeaponsShot = true;
       const shot = F.shot;
       F.shot = function () {
         firing = true; shotAt = performance.now();
@@ -85,13 +86,15 @@
       C.__nsWeapons = true;
     }
     const CR = root.NightshiftCrime;
-    if (CR && typeof CR.report === 'function' && !CR.report.__nsWeapons) {
+    if (CR && typeof CR.report === 'function' && !CR.__nsWeaponsReport) {
+      CR.__nsWeaponsReport = true;
       const report = CR.report;
       CR.report = function (point, now, kind) { if (kind === 'gunshot' && current().suppressed && Math.random() < 0.8) return false; return report.apply(this, arguments); };
       CR.report.__nsWeapons = true;
     }
     const REC = root.NightshiftRecovery;
-    if (REC && typeof REC.damage === 'function' && !REC.damage.__nsArmor) {
+    if (REC && typeof REC.damage === 'function' && !REC.__nsArmor) {
+      REC.__nsArmor = true;
       const damage = REC.damage;
       // Body armor soaks part of each hit; refunded if the game ignored the hit (safe zone, immunity).
       REC.damage = function (amount, now) {
@@ -106,7 +109,8 @@
       REC.damage.__nsArmor = true;
     }
     const CI = root.NightshiftCitizens;
-    if (CI && typeof CI.alert === 'function' && !CI.alert.__nsWeapons) {
+    if (CI && typeof CI.alert === 'function' && !CI.__nsWeaponsAlert) {
+      CI.__nsWeaponsAlert = true;
       const alertFn = CI.alert;
       // A suppressed gunshot is only noticed by people right next to you (70px instead of 260px).
       CI.alert = function (source, now, opts) { if (!opts && current().suppressed && source === P()) return alertFn.call(this, source, now, { kind: 'gunshot', radius: 70 }); return alertFn.apply(this, arguments); };
