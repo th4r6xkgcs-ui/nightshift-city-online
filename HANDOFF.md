@@ -1,5 +1,8 @@
 # HANDOFF — Nightshift City Online
 
+## DEPLOYED — v0.13 private preview (2026-10-10)
+https://nightshift-city-online.nzs4gc8qmw.chatgpt.site — native deployment succeeded, owner-private, authorized by user. Read DEPLOYMENT.md for exact identity and update procedure; reuse this site. GitHub remains canonical code, Sites source is a deployment mirror. Eleven suites and GitHub CI pass; real iPhone touch/audio/HUD QA pending. The deployment supersedes historical "no deployment" notes below. Still single-player, no multiplayer server.
+
 ## CURRENT — v0.13 traffic, audio and visual pass (2026-10-10)
 Added traffic.js with eight nonoverlapping cars on two authored rectangular road loops, forward spacing/parked-car checks and collision damage for players/vehicles. Hospital recovery now has 2.5 seconds damage protection. Audio.js adds opt-in synthesized gun/reload/impact/pickup effects and speed-based engine tone; SOUND/MUTE starts AudioContext only on user gesture, focus loss silences engine. Actual browser audio unverified.
 Cars/characters gain procedural pixel details and roads have sidewalk/curb borders. Internal Canvas-only render inspection using @napi-rs/canvas caught parked vehicles inside buildings; vehicle bootstrap now moves obstructed car footprints to clear road positions and regression checks validate no car center is blocked. Canvas render test source included but its optional library is not a project dependency and it is not CI-run. No HTML/touch layout verification from this renderer.
