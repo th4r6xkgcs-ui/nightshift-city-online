@@ -3,27 +3,31 @@
 const createBuildings=(width=2200,height=1700)=>NightshiftCityData.createBuildings(width,height);
 const hash=(x,y)=>((Math.imul(x|0,73856093)^Math.imul(y|0,19349663))>>>0);
 function rect(ctx,color,x,y,w,h){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
+
+function wash(ctx,color,x,y,w,h,top='#ffffff12',bottom='#081c3055'){
+ rect(ctx,color,x,y,w,h);const shade=ctx.createLinearGradient?.(x,y,x,y+h);
+ if(shade?.addColorStop){shade.addColorStop(0,top);shade.addColorStop(1,bottom);ctx.fillStyle=shade;ctx.fillRect(x,y,w,h)}
+}
+function oval(ctx,color,x,y,rx,ry){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill()}
 const palettes=Object.freeze({west:Object.freeze({yard:'#596650',edge:'#8f8974',facade:'#967b63',roof:'#6c7062',accent:'#c1a479'}),midtown:Object.freeze({yard:'#566264',edge:'#9caaa5',facade:'#879698',roof:'#657580',accent:'#b3d2ce'}),south:Object.freeze({yard:'#61584c',edge:'#817565',facade:'#886655',roof:'#655c51',accent:'#b69c70'}),docks:Object.freeze({yard:'#53605d',edge:'#84938b',facade:'#6a7d78',roof:'#536967',accent:'#d0b76b'})});
 function districtStyle(x,y){return y>=1020?(x>=1320?'docks':'south'):(x>=880?'midtown':'west')}
 function palm(ctx,x,y){
  // Cutout fronds, a bent trunk and a consistent cast shadow; cached with paving.
  rect(ctx,'#101c2d44',x+3,y+5,32,8);rect(ctx,'#283d3766',x+20,y-10,16,23);
  for(let k=0;k<7;k++){rect(ctx,k%2?'#8f7857':'#b29768',x-2+(k>3?1:0),y-k*4,5,5);rect(ctx,'#554e3f',x+2,y-k*4,2,4)}
- const cy=y-28;
- for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1]])for(let k=0;k<5;k++){
-  rect(ctx,k<2?'#669278':'#356e65',x+dx*(3+k*4)-3,cy+dy*(k*2)-3,8-k,5);
-  rect(ctx,'#244b4f',x+dx*(5+k*4)-2,cy+dy*(k*2)+2,5,2);
- }
- rect(ctx,'#9bb080',x-3,cy-4,7,5);rect(ctx,'#244b48',x-1,cy+1,5,4);
+ palmCrown(ctx,x,y);
 }
 function palmCrown(ctx,x,y){
  const cy=y-28;
- for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1]])for(let k=0;k<5;k++){
-  rect(ctx,k<2?'#669278':'#356e65',x+dx*(3+k*4)-3,cy+dy*(k*2)-3,8-k,5);
-  rect(ctx,'#244b4f',x+dx*(5+k*4)-2,cy+dy*(k*2)+2,5,2);
+ // Continuous tapered leaf silhouettes replace the staircase of square flecks.
+ for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1],[-1,0],[1,0]]){
+  ctx.fillStyle=dy<0?'#538575':'#2d635b';ctx.beginPath();ctx.moveTo(x,cy);
+  ctx.quadraticCurveTo(x+dx*12,cy+dy*12-8,x+dx*25,cy+dy*10+8);
+  ctx.quadraticCurveTo(x+dx*14,cy+dy*3+1,x,cy+3);ctx.closePath();ctx.fill();
  }
- rect(ctx,'#9bb080',x-3,cy-4,7,5);rect(ctx,'#244b48',x-1,cy+1,5,4);
+ oval(ctx,'#89a77d',x,cy,4,3);
 }
+
 function palmActors(view){
  const entries=[],margin=70;
  if(!view||!Number.isFinite(view.x)||!Number.isFinite(view.y)||!Number.isFinite(view.zoom)||view.zoom<=0)return entries;
@@ -39,12 +43,12 @@ function palmActors(view){
  return entries;
 }
 function treeCrown(ctx,x,y){
- // Same fixed street tree canopy as the ground cache; foreground redraw
- // hides walkers passing north of the tree without altering navigation.
- rect(ctx,'#244c49',x-5,y-16,37,31);
- rect(ctx,'#3f7565',x-1,y-20,28,26);
- rect(ctx,'#83a67b',x+2,y-18,15,9);
- rect(ctx,'#344f3e',x+14,y-3,15,10);
+ // Large leaf masses carry volume without checkerboard texture.
+ oval(ctx,'#193e3e',x+13,y-2,20,15);
+ oval(ctx,'#2d6657',x+9,y-10,18,14);
+ oval(ctx,'#3c7a60',x+17,y-12,13,11);
+ oval(ctx,'#60936f',x+5,y-16,11,7);
+ oval(ctx,'#8daa7a44',x+3,y-19,6,3);
 }
 function treeActors(view){
  const entries=[],margin=65;
@@ -146,7 +150,7 @@ function ground(ctx,width,height){
  rect(ctx,'#344d4b',0,0,width,height);
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
   const palette=palettes[districtStyle(x+100,y+100)];rect(ctx,palette.edge,x+82,y+80,276,180);rect(ctx,palette.yard,x+93,y+91,254,156);
-  for(let i=0;i<38;i++){const n=hash(x+i*37,y+i*19);rect(ctx,i%3?'#52564c':'#63624f',x+92+n%260,y+87+(n>>>9)%160,2,2)}
+
   if(x===0&&y===340){
    rect(ctx,'#4c6650',x+104,y+91,240,164);rect(ctx,'#917760',x+126,y+106,198,128);rect(ctx,'#637477',x+132,y+112,186,116);
    rect(ctx,'#c6c4a1',x+139,y+119,172,2);rect(ctx,'#c6c4a1',x+139,y+218,172,2);rect(ctx,'#c6c4a1',x+139,y+119,2,101);rect(ctx,'#c6c4a1',x+309,y+119,2,101);rect(ctx,'#c6c4a1',x+224,y+119,2,101);
@@ -161,8 +165,9 @@ function ground(ctx,width,height){
  }
  for(let x=0;x<width;x+=440){rect(ctx,'#9ba49c',x-85,0,170,height);rect(ctx,'#707f82',x-81,0,162,height);for(let y=0;y<height;y+=16){rect(ctx,'#90a09f',x-80,y,14,1);rect(ctx,'#90a09f',x+66,y,14,1)}rect(ctx,'#a2a08b',x-66,0,3,height);rect(ctx,'#242e3b',x-63,0,126,height);rect(ctx,'#b4aa7f',x+63,0,3,height);}
  for(let y=0;y<height;y+=340){rect(ctx,'#9ba49c',0,y-83,width,166);rect(ctx,'#707f82',0,y-79,width,158);for(let x=0;x<width;x+=16){rect(ctx,'#90a09f',x,y-78,1,13);rect(ctx,'#90a09f',x,y+65,1,13)}rect(ctx,'#a2a08b',0,y-65,width,3);rect(ctx,'#242e3b',0,y-62,width,124);rect(ctx,'#b4aa7f',0,y+62,width,3);}
- // Deterministic asphalt grain, patched seams and oil stains, generated once.
- for(let x=0;x<width;x+=13)for(let y=0;y<height;y+=13){const dx=Math.min(x%440,440-x%440),dy=Math.min(y%340,340-y%340),n=hash(x,y);if(dx<61||dy<61)rect(ctx,n%3?'#2b3542':'#1f2935',x+n%5,y+(n>>>4)%5,n%4===0?4:2,1)}
+ // Smooth asphalt fields; sparse longitudinal patches describe material, not noise.
+ for(let x=0;x<width;x+=440)wash(ctx,'#273443',x-57,0,114,height,'#ffffff03','#0c1c3018');
+ for(let y=0;y<height;y+=340)wash(ctx,'#273443',0,y-56,width,112,'#ffffff03','#0c1c3022');
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
   rect(ctx,'#242e3b',x-63,y-63,126,126);
   for(let k=-49;k<50;k+=14){rect(ctx,'#d6d7b8',x+k,y-79,8,13);rect(ctx,'#d6d7b8',x+k,y+67,8,13);rect(ctx,'#d6d7b8',x-79,y+k,13,8);rect(ctx,'#d6d7b8',x+67,y+k,13,8)}
@@ -178,7 +183,7 @@ function ground(ctx,width,height){
   rect(ctx,'#263238',x+24,y+165,20,20);rect(ctx,'#53616a',x+26,y+167,16,16);for(let k=0;k<4;k++)rect(ctx,'#36434a',x+28+k*3,y+169,1,12);
   rect(ctx,'#263139',x-37,y+236,46,14);rect(ctx,'#41494a',x-35,y+238,40,10);rect(ctx,'#222b31',x-29,y+240,29,5);
   // Trees, planters, benches, bins, bollards: cosmetic and outside road lanes.
-  if(['west','south'].includes(districtStyle(x+374,y+100)))for(const yy of [122,245]){rect(ctx,'#30383088',x+361,y+yy+5,29,25);rect(ctx,'#777160',x+360,y+yy+3,27,24);rect(ctx,'#433e32',x+371,y+yy+10,5,22);rect(ctx,'#244c49',x+355,y+yy-12,37,31);rect(ctx,'#3f7565',x+359,y+yy-16,28,26);rect(ctx,'#83a67b',x+362,y+yy-14,15,9);rect(ctx,'#344f3e',x+374,y+yy+1,15,10)}
+  if(['west','south'].includes(districtStyle(x+100,y+100)))for(const yy of [122,245]){rect(ctx,'#30383088',x+361,y+yy+5,29,25);rect(ctx,'#777160',x+360,y+yy+3,27,24);rect(ctx,'#433e32',x+371,y+yy+10,5,22);treeCrown(ctx,x+360,y+yy)}
   rect(ctx,'#242c31',x-78,y+157,10,20);rect(ctx,'#536960',x-77,y+155,9,16);rect(ctx,'#879787',x-78,y+154,11,3);
   furnishings(ctx,x,y);
   if(x>0&&y>0&&(districtStyle(x+100,y+100)==='midtown'||districtStyle(x+100,y+100)==='docks')){palm(ctx,x+360,y+147);palm(ctx,x+360,y+246)}
@@ -199,12 +204,10 @@ function building(b){
  g.save();
  // One light direction, deeper south facade, and a restrained dark outline.
  g.fillStyle='#101b2c55';g.beginPath();g.moveTo(x+12,y+15);g.lineTo(x+w+28,y+27);g.lineTo(x+w+28,y+h+24);g.lineTo(x+19,y+h+24);g.closePath();g.fill();
- rect(g,'#172735',x-2,y-2,w+4,h+4);rect(g,face,x,y,w,h);rect(g,roof,x+5,y+5,w-10,h-68);
+ rect(g,'#172735',x-2,y-2,w+4,h+4);wash(g,face,x,y,w,h,'#ffffff12','#13263855');wash(g,roof,x+5,y+5,w-10,h-68,'#ffffff0d','#0e243a66');
  rect(g,'#ffffff18',x+6,y+6,w-12,3);rect(g,'#10253677',x+w-11,y+9,6,h-71);rect(g,trim,x,y,w,5);rect(g,'#d6d5bf44',x,y+5,5,h-66);
- // Roof grain is quiet; highlights belong to the street-facing shopfront.
- for(let k=0;k<22;k++){const n=hash(x+k*29,y+k*17);rect(g,'#ccd5cc0d',x+13+n%(w-27),y+15+(n>>>8)%(h-90),3+n%10,1)}
  if(industrial){
-  for(let yy=y+10;yy<front-5;yy+=8){rect(g,'#a6bbb222',x+10,yy,w-20,1);rect(g,'#10273444',x+10,yy+3,w-20,1)}
+  for(let yy=y+10;yy<front-5;yy+=16){rect(g,'#a6bbb222',x+10,yy,w-20,1);rect(g,'#10273444',x+10,yy+3,w-20,1)}
   for(let k=0;k<3;k++){const xx=x+20+k*70;rect(g,'#172c3b',xx+4,y+26,47,27);rect(g,'#87aaa8',xx,y+20,47,27);rect(g,'#375b6b',xx+3,y+24,41,19);rect(g,'#b9d4c055',xx+5,y+25,12,16);rect(g,'#adc4b6',xx+20,y+23,2,20)}
  }else if(residential){
   // A rooftop terrace breaks the generic AC-box silhouette.
@@ -222,8 +225,8 @@ function building(b){
  }
  // Cornice and masonry establish a facade instead of a flat roof with a label.
  rect(g,'#162c3b',x,front-7,w,7);rect(g,trim,x-1,front-8,w+2,3);rect(g,'#ffffff24',x+1,front-5,w-2,1);
- for(let yy=front+3;yy<y+h-2;yy+=7){rect(g,'#16263828',x+4,yy,w-8,1);for(let xx=x+5+((yy/7|0)%2)*12;xx<x+w-4;xx+=25)rect(g,'#14283822',xx,yy,1,7)}
- const window=(xx,yy,ww,hh)=>{rect(g,'#19323f',xx-2,yy-2,ww+4,hh+5);rect(g,night>.2?(club?'#bf5da6':'#e4b877'):'#487888',xx,yy,ww,hh);rect(g,night>.2?'#ffdc9644':'#b6d8cd44',xx+3,yy+2,ww-6,3);rect(g,'#254759',xx+ww/2-1,yy,2,hh);rect(g,trim,xx-3,yy+hh+1,ww+6,2)};
+ for(let yy=front+3;yy<y+h-2;yy+=14){rect(g,'#16263812',x+4,yy,w-8,1);for(let xx=x+5+((yy/7|0)%2)*12;xx<x+w-4;xx+=25)rect(g,'#1428380b',xx,yy,1,7)}
+ const window=(xx,yy,ww,hh)=>{rect(g,'#19323f',xx-2,yy-2,ww+4,hh+5);wash(g,night>.2?(club?'#bf5da6':'#e4b877'):'#487888',xx,yy,ww,hh,'#ffffff22','#13304766');rect(g,night>.2?'#ffdc9644':'#b6d8cd44',xx+3,yy+2,ww-6,3);rect(g,'#254759',xx+ww/2-1,yy,2,hh);rect(g,trim,xx-3,yy+hh+1,ww+6,2)};
  if(residential){for(let k=0;k<5;k++)window(x+13+k*44,front+8,30,17);for(const xx of [x+14,x+w-53])window(xx,y+h-26,36,19)}
  else{window(x+13,y+h-34,62,26);window(x+w-75,y+h-34,62,26)}
  if(industrial){rect(g,'#1a3441',x+w/2-40,y+h-39,80,39);for(let r=0;r<8;r++)rect(g,r%2?'#78989a':'#57777f',x+w/2-36,y+h-36+r*4,72,3);for(let k=0;k<10;k++)rect(g,k%2?'#ddba77':'#243b46',x+w/2-42,y+h-44+k%2,8,4)}
