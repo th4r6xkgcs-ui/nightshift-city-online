@@ -4,7 +4,7 @@ const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 function react(npc,source,now,kind='gunshot'){
  if(npc.hp<=0||![source?.x,source?.y,now].every(Number.isFinite))return false;
  const moved=!npc.threat||distance(npc.threat,source)>24;
- npc.threat={x:source.x,y:source.y};npc.fleeUntil=Math.max(npc.fleeUntil||0,now+(kind==='robbery'?10000:kind==='crash'?4000:6000));
+ npc.disturbedUntil=Math.max(npc.disturbedUntil||0,now+20000);npc.socialUntil=0;npc.threat={x:source.x,y:source.y};npc.fleeUntil=Math.max(npc.fleeUntil||0,now+(kind==='robbery'?10000:kind==='crash'?4000:6000));
  if(moved){npc.nextRoute=0;npc.path=[];npc.cover=null}npc.mode='flee';npc.routineInterrupted=true;return true;
 }
 function occupied(point,cars){return cars.some(car=>root.NightshiftVehicleGeometry.circleOverlap(point,car,9))}

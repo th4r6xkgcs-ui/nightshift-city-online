@@ -105,6 +105,12 @@ function awningTop(p){
  for(let xx=x;xx<x+w;xx+=13)rect(g,Math.floor((xx-x)/13)%2?color:'#e1d2a7',xx,y,Math.min(13,x+w-xx),7);
  rect(g,'#ffffff22',x,y,w,1);
 }
+function cafeActors(buildings,view){return buildings.filter(b=>['DINER','CORNER SHOP'].includes(b.name)).flatMap(b=>[0,1].map(i=>({kind:'cafe-canopy',entity:{x:b.x+b.w+30,y:b.y+88+i*52,color:b.name==='DINER'?'#b86b57':'#5d8d85'}}))).filter(e=>root.NightshiftScene?.visible(e.entity,view,65))}
+function cafeCanopy(p){
+ const x=p.x,y=p.y;g.save();oval(g,'#10273955',x+9,y+6,18,9);rect(g,'#b9ab8d',x-1,y-22,2,25);
+ g.fillStyle=p.color;g.beginPath();g.moveTo(x,y-39);g.quadraticCurveTo(x+18,y-34,x+19,y-23);g.quadraticCurveTo(x+9,y-18,x,y-23);g.quadraticCurveTo(x-10,y-17,x-19,y-23);g.quadraticCurveTo(x-17,y-34,x,y-39);g.fill();
+ g.strokeStyle='#edd7b455';g.lineWidth=1;g.beginPath();g.moveTo(x,y-39);g.lineTo(x,y-23);g.moveTo(x,y-39);g.lineTo(x-10,y-21);g.moveTo(x,y-39);g.lineTo(x+10,y-21);g.stroke();oval(g,'#e7cda6',x,y-38,2,1);g.restore();
+}
 function furnishings(ctx,x,y){
  const district=districtStyle(x+100,y+100),p=palettes[district];
  // Sidewalk fixtures remain beyond the 66px road edge and away from crosswalks.
@@ -147,7 +153,7 @@ function storefrontLight(b,night){
  g.restore();
 }
 function ground(ctx,width,height){
- rect(ctx,'#344d4b',0,0,width,height);
+ rect(ctx,'#344d4b',0,0,width,height);const cafes=new Set(createBuildings(width,height).filter(b=>['DINER','CORNER SHOP'].includes(b.name)).map(b=>(b.x-80)+':'+(b.y-75)));
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
   const palette=palettes[districtStyle(x+100,y+100)];rect(ctx,palette.edge,x+82,y+80,276,180);rect(ctx,palette.yard,x+93,y+91,254,156);
 
@@ -186,6 +192,8 @@ function ground(ctx,width,height){
   if(['west','south'].includes(districtStyle(x+100,y+100)))for(const yy of [122,245]){rect(ctx,'#30383088',x+361,y+yy+5,29,25);rect(ctx,'#777160',x+360,y+yy+3,27,24);rect(ctx,'#433e32',x+371,y+yy+10,5,22);treeCrown(ctx,x+360,y+yy)}
   rect(ctx,'#242c31',x-78,y+157,10,20);rect(ctx,'#536960',x-77,y+155,9,16);rect(ctx,'#879787',x-78,y+154,11,3);
   furnishings(ctx,x,y);
+  const cafe=cafes.has(x+':'+y);
+  if(cafe)for(let i=0;i<2;i++){const tx=x+350,ty=y+163+i*52;oval(ctx,'#15253655',tx+6,ty+5,16,8);oval(ctx,'#29434a',tx,ty,13,8);oval(ctx,'#b99f79',tx,ty-2,12,7);rect(ctx,'#e7d3a6',tx-1,ty-6,3,3);for(const side of [-1,1]){rect(ctx,'#253940',tx+side*17-3,ty-5,6,10);rect(ctx,'#8d7760',tx+side*17-3,ty-7,6,3)}}
   if(x>0&&y>0&&(districtStyle(x+100,y+100)==='midtown'||districtStyle(x+100,y+100)==='docks')){palm(ctx,x+360,y+147);palm(ctx,x+360,y+246)}
   for(let k=0;k<3;k++)rect(ctx,'#9a8060',x-81,y+211+k*4,15,2);rect(ctx,'#303e3e',x-80,y+207,2,18);rect(ctx,'#303e3e',x-68,y+207,2,18);
  }
@@ -260,5 +268,5 @@ function building(b){
  rect(g,'#1a334066',x+3,y+h-1,w-6,5);rect(g,trim,x+w/2-23,y+h+1,46,3);rect(g,'#677f82',x+w/2-19,y+h+4,38,3);
  storefrontLight(b,night);g.restore();
 }
-root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop,signActors,signTop};
+root.NightshiftWorld={createBuildings,road,building,ground,cafeActors,cafeCanopy,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop,signActors,signTop};
 })(globalThis);

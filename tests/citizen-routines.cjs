@@ -6,7 +6,7 @@ run('for(let i=0;i<600;i++)NightshiftCitizens.step(routineNpc,i*17,1,routineCont
 run('NightshiftCitizens.react(routineNpc,{x:100,y:270},11000);NightshiftCitizens.step(routineNpc,11001,1,routineContext)');assert.equal(run('routineNpc.mode'),'flee');
 run('NightshiftCitizens.step(routineNpc,18000,1,routineContext)');assert.equal(run('routineNpc.mode'),'routine');assert.equal(run('routineNpc.routineInterrupted'),false);
 run('routineContext.cars=[{x:routineNpc.x+30,y:routineNpc.y,angle:0}];globalThis.before={x:routineNpc.x,y:routineNpc.y};NightshiftCitizens.step(routineNpc,18017,1,routineContext)');assert.equal(run('routineNpc.x'),run('before.x'));
-run('routineContext.cars=[];routineContext.minute=60;NightshiftCitizens.step(routineNpc,20000,1,routineContext)');assert.equal(run('routineNpc.activity'),'home');
+run('routineContext.cars=[];routineContext.minute=60;NightshiftCitizens.step(routineNpc,32000,1,routineContext)');assert.equal(run('routineNpc.activity'),'home');
 const vm=require('node:vm'),fs=require('node:fs'),ctx={};vm.createContext(ctx);vm.runInContext(fs.readFileSync('traffic.js','utf8'),ctx);
 const car={x:1,y:0,angle:0,route:[{x:0,y:0},{x:2,y:0},{x:2,y:2}],next:1,velocity:100};
 assert.equal(ctx.NightshiftTraffic.moveSafely(car,.04,()=>true),false);assert.equal(car.next,1);assert.equal(car.x,1);assert.equal(car.angle,0);assert.equal(car.velocity,0);
