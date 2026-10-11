@@ -22,6 +22,14 @@ function drawCar(v){
   rect(color,compact?-8:-5,-11,compact?14:10,22);rect('#ffffff22',-4,-10,8,2);rect('#00000022',-4,7,8,3);
   rect('#ffffff28',compact?18:16,-9,compact?3:5,18);if(!compact){rect('#ffffff18',16,-6,6,1);rect('#00000022',16,5,6,1)}rect('#00000022',-23,-8,4,16);rect('#111f2a',compact?-20:-24,-9,2,18);
  }
+ // Model-specific paint, glass, and body details, rendered in local vehicle coordinates.
+ rect('#10263166',-21,-13,3,26);rect('#ffffff24',-20,-13,32,1);
+ rect('#e2ece344',-19,-15,6,2);rect('#d6e4dc44',13,-15,7,2);
+ for(const yy of [-19,15]){rect('#192e38',-8,yy,6,4);rect('#8eaaa7',-7,yy+1,4,1)}
+ if(van){for(let k=0;k<4;k++){rect('#d9e0d51e',-19+k*6,-13,2,26);rect('#1a303a22',-17+k*6,-12,1,24)}rect('#d6d7c033',-24,-13,2,26)}
+ else{rect('#142a34',7,-10,1,20);rect('#d8e6dd55',8,-8,1,11);rect('#203743',-13,-9,3,18);rect('#91b2b733',-11,-7,2,11);rect('#0f263155',-6,-10,2,20);if(!compact){rect('#e4e9d522',-26,-8,6,1);rect('#e4e9d522',-26,7,6,1)}}
+ rect('#f0e8c83b',19,-13,4,2);rect('#e0e6dc3b',19,12,4,2);
+ rect('#111f2b',-22,-17,8,2);rect('#111f2b',-22,15,8,2);
  rect('#14232c',25,-5,3,10);rect('#596569',27,-4,1,8);rect(lights.on?'#e7e2ac':'#87938b',23,-11,3,6);rect(lights.on?'#e7e2ac':'#87938b',23,5,3,6);if(lights.on){rect('#ffffff',24,-10,2,2);rect('#ffffff',24,6,2,2)}
 
  rect(braking?'#ff6d55':'#aa4644',van?-27:compact?-24:-28,-11,3,6);rect(braking?'#ff6d55':'#aa4644',van?-27:compact?-24:-28,5,3,6);rect(lights.reverse?'#fcf4d6':'#86928a',van?-27:compact?-24:-28,-3,2,6);if(lights.braking){rect('#ff6d5533',-39,-13,8,8);rect('#ff6d5533',-39,5,8,8)}if(lights.reverse){rect('#faf0c522',-40,-5,10,10)}
