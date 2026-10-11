@@ -47,7 +47,7 @@ function storefrontLight(b,night){
  g.restore();
 }
 function ground(ctx,width,height){
- rect(ctx,'#39413c',0,0,width,height);
+ rect(ctx,'#344d4b',0,0,width,height);
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
   const palette=palettes[districtStyle(x+100,y+100)];rect(ctx,palette.edge,x+82,y+80,276,180);rect(ctx,palette.yard,x+93,y+91,254,156);
   for(let i=0;i<38;i++){const n=hash(x+i*37,y+i*19);rect(ctx,i%3?'#52564c':'#63624f',x+92+n%260,y+87+(n>>>9)%160,2,2)}
@@ -63,13 +63,13 @@ function ground(ctx,width,height){
   }
   rect(ctx,'#666863',x+100,y+265,240,42);for(let k=0;k<7;k++){rect(ctx,'#a5a390',x+103+k*34,y+272,2,28);rect(ctx,'#a5a390',x+103+k*34,y+298,27,2)}
  }
- for(let x=0;x<width;x+=440){rect(ctx,'#8b8b7b',x-85,0,170,height);rect(ctx,'#676e69',x-81,0,162,height);for(let y=0;y<height;y+=16){rect(ctx,'#83877c',x-80,y,14,1);rect(ctx,'#83877c',x+66,y,14,1)}rect(ctx,'#a2a08b',x-66,0,3,height);rect(ctx,'#313b41',x-63,0,126,height);rect(ctx,'#b4aa7f',x+63,0,3,height);}
- for(let y=0;y<height;y+=340){rect(ctx,'#8b8b7b',0,y-83,width,166);rect(ctx,'#676e69',0,y-79,width,158);for(let x=0;x<width;x+=16){rect(ctx,'#83877c',x,y-78,1,13);rect(ctx,'#83877c',x,y+65,1,13)}rect(ctx,'#a2a08b',0,y-65,width,3);rect(ctx,'#313b41',0,y-62,width,124);rect(ctx,'#b4aa7f',0,y+62,width,3);}
+ for(let x=0;x<width;x+=440){rect(ctx,'#9ba49c',x-85,0,170,height);rect(ctx,'#707f82',x-81,0,162,height);for(let y=0;y<height;y+=16){rect(ctx,'#90a09f',x-80,y,14,1);rect(ctx,'#90a09f',x+66,y,14,1)}rect(ctx,'#a2a08b',x-66,0,3,height);rect(ctx,'#242e3b',x-63,0,126,height);rect(ctx,'#b4aa7f',x+63,0,3,height);}
+ for(let y=0;y<height;y+=340){rect(ctx,'#9ba49c',0,y-83,width,166);rect(ctx,'#707f82',0,y-79,width,158);for(let x=0;x<width;x+=16){rect(ctx,'#90a09f',x,y-78,1,13);rect(ctx,'#90a09f',x,y+65,1,13)}rect(ctx,'#a2a08b',0,y-65,width,3);rect(ctx,'#242e3b',0,y-62,width,124);rect(ctx,'#b4aa7f',0,y+62,width,3);}
  // Deterministic asphalt grain, patched seams and oil stains, generated once.
- for(let x=0;x<width;x+=13)for(let y=0;y<height;y+=13){const dx=Math.min(x%440,440-x%440),dy=Math.min(y%340,340-y%340),n=hash(x,y);if(dx<61||dy<61)rect(ctx,n%3?'#364047':'#29333a',x+n%5,y+(n>>>4)%5,n%4===0?4:2,1)}
+ for(let x=0;x<width;x+=13)for(let y=0;y<height;y+=13){const dx=Math.min(x%440,440-x%440),dy=Math.min(y%340,340-y%340),n=hash(x,y);if(dx<61||dy<61)rect(ctx,n%3?'#2b3542':'#1f2935',x+n%5,y+(n>>>4)%5,n%4===0?4:2,1)}
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
-  rect(ctx,'#313b41',x-63,y-63,126,126);
-  for(let k=-49;k<50;k+=14){rect(ctx,'#c9c7af',x+k,y-79,8,13);rect(ctx,'#c9c7af',x+k,y+67,8,13);rect(ctx,'#c9c7af',x-79,y+k,13,8);rect(ctx,'#c9c7af',x+67,y+k,13,8)}
+  rect(ctx,'#242e3b',x-63,y-63,126,126);
+  for(let k=-49;k<50;k+=14){rect(ctx,'#d6d7b8',x+k,y-79,8,13);rect(ctx,'#d6d7b8',x+k,y+67,8,13);rect(ctx,'#d6d7b8',x-79,y+k,13,8);rect(ctx,'#d6d7b8',x+67,y+k,13,8)}
   rect(ctx,'#b8b8a2',x-53,y-101,106,3);rect(ctx,'#b8b8a2',x-53,y+98,106,3);
   rect(ctx,'#c8b674',x-2,y+112,2,90);rect(ctx,'#c8b674',x+2,y+112,2,90);
   for(let k=114;k<335;k+=48){rect(ctx,'#c8b674',x+k,y-2,26,2);rect(ctx,'#c8b674',x+k,y+2,26,2)}
@@ -82,7 +82,7 @@ function ground(ctx,width,height){
   rect(ctx,'#263238',x+24,y+165,20,20);rect(ctx,'#53616a',x+26,y+167,16,16);for(let k=0;k<4;k++)rect(ctx,'#36434a',x+28+k*3,y+169,1,12);
   rect(ctx,'#263139',x-37,y+236,46,14);rect(ctx,'#41494a',x-35,y+238,40,10);rect(ctx,'#222b31',x-29,y+240,29,5);
   // Trees, planters, benches, bins, bollards: cosmetic and outside road lanes.
-  for(const yy of [122,245]){rect(ctx,'#30383088',x+87,y+yy+5,29,25);rect(ctx,'#777160',x+86,y+yy+3,27,24);rect(ctx,'#433e32',x+97,y+yy+10,5,22);rect(ctx,'#263e35',x+81,y+yy-12,37,31);rect(ctx,'#42604a',x+85,y+yy-16,28,26);rect(ctx,'#5f7654',x+88,y+yy-14,15,9);rect(ctx,'#344f3e',x+100,y+yy+1,15,10)}
+  for(const yy of [122,245]){rect(ctx,'#30383088',x+87,y+yy+5,29,25);rect(ctx,'#777160',x+86,y+yy+3,27,24);rect(ctx,'#433e32',x+97,y+yy+10,5,22);rect(ctx,'#244c49',x+81,y+yy-12,37,31);rect(ctx,'#3f7565',x+85,y+yy-16,28,26);rect(ctx,'#83a67b',x+88,y+yy-14,15,9);rect(ctx,'#344f3e',x+100,y+yy+1,15,10)}
   rect(ctx,'#242c31',x-78,y+157,10,20);rect(ctx,'#536960',x-77,y+155,9,16);rect(ctx,'#879787',x-78,y+154,11,3);
   furnishings(ctx,x,y);
   for(let k=0;k<3;k++)rect(ctx,'#9a8060',x-81,y+211+k*4,15,2);rect(ctx,'#303e3e',x-80,y+207,2,18);rect(ctx,'#303e3e',x-68,y+207,2,18);
@@ -94,72 +94,52 @@ function road(){
  if(groundCache)g.drawImage(groundCache,0,0);else ground(g,world.w,world.h);
 }
 function building(b){
- if(typeof camera!=='undefined'&&(b.x+b.w+40<camera.x||b.y+b.h+40<camera.y||b.x>camera.x+W/camera.zoom||b.y>camera.y+H/camera.zoom))return;
- const x=b.x,y=b.y,w=b.w,h=b.h,night=root.NightshiftEnvironment?.darkness(root.NightshiftEnvironment.state?.minute??720)||0;
- const industrial=['WAREHOUSE','GARAGE'].includes(b.name),club=b.name==='CLUB',shop=['CORNER SHOP','CLOTHING','DINER'].includes(b.name);
- const district=districtStyle(x,y),palette=palettes[district];
- const facade=industrial?(b.x>=1320?'#6c7671':'#72695a'):club?'#605365':palette.facade,roof=industrial?palette.roof:club?'#4d5260':palette.roof;
- rect(g,'#0c182355',x+15,y+19,w+5,h+7);rect(g,'#292f33',x-2,y-2,w+4,h+4);
- // A raised roof and a 42px south-facing facade establish one consistent height.
- rect(g,facade,x,y,w,h);for(let yy=y+h-40;yy<y+h;yy+=6){rect(g,'#00000015',x,yy,w,1);for(let xx=x+((yy/6|0)%2)*14;xx<x+w;xx+=28)rect(g,'#00000015',xx,yy,1,6)}
- rect(g,roof,x+4,y+4,w-8,h-48);rect(g,'#a4a08a',x,y,w,4);rect(g,'#949384',x,y,4,h-43);rect(g,'#303e40',x+w-5,y+5,5,h-46);rect(g,'#b0ab92',x,y+h-45,w,4);rect(g,'#303a3b',x,y+h-41,w,5);
- for(let yy=y+12;yy<y+h-49;yy+=13)rect(g,'#ffffff07',x+8,yy,w-16,1);
+ if(typeof camera!=='undefined'&&(b.x+b.w+48<camera.x||b.y+b.h+48<camera.y||b.x>camera.x+W/camera.zoom||b.y>camera.y+H/camera.zoom))return;
+ const {x,y,w,h,name}=b,night=root.NightshiftEnvironment?.darkness(root.NightshiftEnvironment.state?.minute??720)||0,district=districtStyle(x,y);
+ const industrial=['WAREHOUSE','GARAGE'].includes(name),residential=name==='APARTMENTS',club=name==='CLUB',diner=name==='DINER',bank=name==='BANK',shop=['CORNER SHOP','CLOTHING','DINER'].includes(name);
+ const materials={west:['#b98563','#465965','#d5b68c'],midtown:['#b8c7c6','#304957','#e3d2b2'],south:['#99624d','#393e4b','#c69871'],docks:['#779b99','#2c4654','#c8b89a']}[district];
+ const face=club?'#62416c':diner?'#bd7459':industrial?'#54747a':materials[0],roof=club?'#302d4a':diner?'#667e83':materials[1],trim=materials[2],front=y+h-62;
+ g.save();
+ // One light direction, deeper south facade, and a restrained dark outline.
+ g.fillStyle='#101b2c55';g.beginPath();g.moveTo(x+12,y+15);g.lineTo(x+w+28,y+27);g.lineTo(x+w+28,y+h+24);g.lineTo(x+19,y+h+24);g.closePath();g.fill();
+ rect(g,'#172735',x-2,y-2,w+4,h+4);rect(g,face,x,y,w,h);rect(g,roof,x+5,y+5,w-10,h-68);
+ rect(g,'#ffffff18',x+6,y+6,w-12,3);rect(g,'#10253677',x+w-11,y+9,6,h-71);rect(g,trim,x,y,w,5);rect(g,'#d6d5bf44',x,y+5,5,h-66);
+ // Roof grain is quiet; highlights belong to the street-facing shopfront.
+ for(let k=0;k<22;k++){const n=hash(x+k*29,y+k*17);rect(g,'#ccd5cc0d',x+13+n%(w-27),y+15+(n>>>8)%(h-90),3+n%10,1)}
  if(industrial){
-  for(let yy=y+10;yy<y+h-48;yy+=9)rect(g,'#b3b4a622',x+9,yy,w-18,2);
-  for(let i=0;i<3;i++){const xx=x+20+i*72;rect(g,'#35464a',xx+4,y+25,48,32);rect(g,'#bcc0ab',xx,y+21,48,31);rect(g,'#628089',xx+3,y+24,42,24);rect(g,'#b1c4bb',xx+7,y+27,13,18);rect(g,'#435f66',xx+23,y+24,3,24)}
+  for(let yy=y+10;yy<front-5;yy+=8){rect(g,'#a6bbb222',x+10,yy,w-20,1);rect(g,'#10273444',x+10,yy+3,w-20,1)}
+  for(let k=0;k<3;k++){const xx=x+20+k*70;rect(g,'#172c3b',xx+4,y+26,47,27);rect(g,'#87aaa8',xx,y+20,47,27);rect(g,'#375b6b',xx+3,y+24,41,19);rect(g,'#b9d4c055',xx+5,y+25,12,16);rect(g,'#adc4b6',xx+20,y+23,2,20)}
+ }else if(residential){
+  // A rooftop terrace breaks the generic AC-box silhouette.
+  rect(g,'#1c3442',x+18,y+18,121,58);rect(g,'#647b7c',x+21,y+21,115,52);
+  for(let k=0;k<7;k++)rect(g,'#8fa2a055',x+25+k*16,y+25,1,43);
+  for(const xx of [x+22,x+112]){rect(g,'#ad8d68',xx,y+27,18,28);rect(g,'#527b62',xx+2,y+26,14,16);rect(g,'#8ba375',xx+4,y+26,7,5)}
+  for(let k=0;k<10;k++)rect(g,trim,x+19+k*13,y+74,2,11);rect(g,trim,x+18,y+73,122,2);
+  rect(g,'#192d39',x+w-65,y+26,42,37);rect(g,'#9a8270',x+w-70,y+19,42,36);rect(g,'#cfb18b',x+w-67,y+21,36,3);for(let k=0;k<5;k++)rect(g,'#523e39',x+w-66,y+27+k*5,34,1);
  }else{
-  const xx=x+(hash(x,y)%2?25:145);rect(g,'#323e40',xx+4,y+23,49,35);rect(g,'#9a9b8d',xx,y+18,49,35);rect(g,'#5f716e',xx+4,y+22,41,25);for(let k=0;k<5;k++)rect(g,'#3d5151',xx+7,y+25+k*4,35,2);
-  rect(g,'#404947',x+98,y+56,52,45);rect(g,'#95988b',x+93,y+51,52,45);rect(g,'#666e65',x+98,y+56,42,35);rect(g,'#b5b2a0',x+98,y+56,42,3);
-  if(b.name==='APARTMENTS'){g.fillStyle='#333d3b';g.beginPath();g.ellipse(x+w-36,y+32,21,14,0,0,Math.PI*2);g.fill();g.fillStyle='#928c73';g.beginPath();g.ellipse(x+w-38,y+26,19,13,0,0,Math.PI*2);g.fill();rect(g,'#675f4e',x+w-55,y+26,34,11);rect(g,'#b1a58b',x+w-50,y+21,23,3)}
-  else{rect(g,'#353e40',x+w-39,y+70,20,25);rect(g,'#afb2a1',x+w-42,y+67,20,25);rect(g,'#657270',x+w-39,y+70,14,18)}
+  // Smaller grouped utilities leave broad intentional roof shapes.
+  for(let k=0;k<2;k++){const xx=x+31+k*52;rect(g,'#142b3866',xx+5,y+31,34,25);rect(g,'#7f9c9a',xx,y+24,34,25);rect(g,'#3b5966',xx+4,y+28,26,17);for(let r=0;r<4;r++)rect(g,'#a4b6ac',xx+7,y+30+r*4,20,1)}
+  if(diner){rect(g,'#e2bc90',x+12,y+13,w-24,8);for(let k=0;k<12;k++)rect(g,k%2?'#b66155':'#ead5a7',x+15+k*18,y+13,15,5)}
+  if(club){rect(g,'#1e263f',x+133,y+24,77,47);rect(g,'#8d649f',x+139,y+28,65,3);for(let k=0;k<4;k++)rect(g,'#5e4777',x+141+k*16,y+39,9,21)}
+  if(bank){rect(g,'#97a8a4',x+141,y+21,68,50);rect(g,'#cfccb4',x+145,y+25,60,5);rect(g,'#496473',x+145,y+32,60,34)}
  }
- // Distinct roof silhouettes and readable landmark props without changing collision.
- const seed=hash(x+17,y+31),style=b.name==='DINER'?'diner':b.name==='CLUB'?'club':industrial?'industrial':b.name==='APARTMENTS'?'residential':'retail';
- if(style==='diner'){
-  rect(g,'#b58a64',x+18,y+17,w-36,11);for(let i=0;i<Math.floor((w-40)/18);i++)rect(g,i%2?'#e8d1a2':'#a95c4d',x+20+i*18,y+17,15,7);
-  rect(g,'#415f66',x+26,y+40,42,24);rect(g,'#c9c3a2',x+30,y+43,34,3);
- }else if(style==='club'){
-  rect(g,'#292c42',x+22,y+18,w-44,12);rect(g,'#aa75a3',x+26,y+20,w-52,3);
-  for(let i=0;i<6;i++)rect(g,i%2?'#d5a6b7':'#596282',x+30+i*16,y+29,10,5);
- }else if(style==='industrial'){
-  for(let i=0;i<3;i++){const xx=x+18+i*67;rect(g,'#252f36',xx,y+h-82,42,5);rect(g,'#879b9a',xx+3,y+h-81,36,2)}
- }else if(style==='residential'){
-  for(let i=0;i<4;i++){const xx=x+22+i*42;rect(g,'#394a4b',xx,y+14,28,22);rect(g,'#a0ada0',xx+2,y+16,24,3);rect(g,'#647f76',xx+4,y+22,20,10)}
- }else{
-  for(let i=0;i<3;i++){const xx=x+24+i*52;rect(g,'#303d41',xx,y+14,32,22);rect(g,'#86998e',xx+3,y+17,26,15);rect(g,'#c0b99e',xx+6,y+20,10,2)}
- }
- // Neighborhood architecture occupies the existing roof/facade footprint.
- if(district==='west'){
-  for(const xx of [x+15,x+w-57]){rect(g,'#303d3b',xx,y+h-92,42,16);rect(g,'#ad9a7c',xx,y+h-94,42,3);for(let k=0;k<7;k++)rect(g,'#8c8b70',xx+k*6,y+h-91,2,11);rect(g,'#48694d',xx+4,y+h-80,34,5)}
- }else if(district==='midtown'){
-  rect(g,'#c4d1c9',x+8,y+7,w-16,5);rect(g,'#465a64',x+9,y+13,w-18,9);for(let k=0;k<9;k++)rect(g,'#a1c5c8',x+14+k*24,y+15,15,4);
-  rect(g,'#c5d3c8',x+7,y+h-40,4,38);rect(g,'#c5d3c8',x+w-11,y+h-40,4,38);
- }else if(district==='south'){
-  rect(g,'#343b3a',x+w-29,y+42,18,57);for(let k=0;k<8;k++)rect(g,'#95937a',x+w-27,y+44+k*7,14,2);rect(g,'#aaa183',x+w-29,y+42,2,57);rect(g,'#aaa183',x+w-13,y+42,2,57);
-  for(let k=0;k<5;k++){rect(g,['#b19973','#698c83','#a4776c'][k%3],x+77+k*6,y+h-22+(k%2)*3,4,9);rect(g,'#c1ad8222',x+76+k*6,y+h-24,6,2)}
- }else{
-  rect(g,'#c4b276',x+12,y+h-40,62,5);for(let k=0;k<8;k++)rect(g,k%2?'#2a3d3e':'#ccb56a',x+12+k*7,y+h-40,7,5);
-  rect(g,'#32484b',x+18,y+69,60,22);rect(g,'#91a394',x+20,y+71,56,3);for(let k=0;k<5;k++)rect(g,'#607b77',x+22+k*10,y+77,5,10);
- }
- // Vary roof wear in a deterministic pattern, avoiding frame-to-frame flicker.
- for(let i=0;i<12;i++){const n=hash(seed+i*71,i*37);const px=x+12+n%Math.max(1,w-24),py=y+11+(n>>>8)%Math.max(1,h-72);rect(g,'#111d2515',px,py,4+(n%7),2)}
- // Front windows and accessible door stay entirely within the old footprint.
- for(const xx of [x+14,x+w-68]){if(night>.2)rect(g,'#e3bc6922',xx-4,y+h-35,62,33);rect(g,'#283a43',xx,y+h-31,54,25);rect(g,night>.2?'#bca46c':'#637e87',xx+3,y+h-28,48,19);rect(g,'#2d4247',xx+26,y+h-30,3,22);rect(g,'#a8a394',xx-2,y+h-5,58,4)}
- if(industrial){rect(g,'#343e43',x+w/2-37,y+h-31,74,31);for(let yy=0;yy<26;yy+=4)rect(g,'#7b827b',x+w/2-34,y+h-29+yy,68,2)}
- else{rect(g,'#243840',x+w/2-17,y+h-29,34,29);rect(g,'#63808a',x+w/2-13,y+h-26,25,19);rect(g,'#dcc89e',x+w/2+8,y+h-15,2,5)}
- const sign=night>.2?neonColor(b.name):club?'#d291b8':b.name==='DINER'?'#d7ae70':b.name==='CLOTHING'?'#9fb5a3':'#c1c0a6';
- rect(g,'#1b3038',x+12,y+h-64,w-24,19);rect(g,sign,x+14,y+h-64,w-28,2);g.fillStyle=sign;g.font='bold 11px monospace';g.textAlign='center';g.fillText(b.name,x+w/2,y+h-50);
- if(shop){
-  for(const xx of [x+14,x+w-68]){
-   rect(g,'#182a2f88',xx+3,y+h-27,48,19);
-   if(b.name==='CLOTHING'){for(let k=0;k<2;k++){const sx=xx+13+k*24;rect(g,'#b6b5a2',sx,y+h-24,3,15);rect(g,k?'#c09885':'#8ba49c',sx-4,y+h-22,11,8);rect(g,'#485960',sx-2,y+h-14,7,5)}}
-   else if(b.name==='DINER'){rect(g,'#8d5b50',xx+6,y+h-17,13,7);rect(g,'#8d5b50',xx+31,y+h-17,13,7);rect(g,'#d6bf93',xx+19,y+h-22,11,3);rect(g,'#66706a',xx+24,y+h-19,2,9)}
-   else{for(let shelf=0;shelf<2;shelf++){for(let item=0;item<6;item++)rect(g,['#ccaa6c','#ad7370','#90aa87'][item%3],xx+7+item*7,y+h-24+shelf*9,4,5);rect(g,'#c7bea3',xx+5,y+h-18+shelf*9,44,2)}}
-   rect(g,'#bbcbb133',xx+5,y+h-27,2,18);
-  }
-  rect(g,'#343d3d',x+w/2-24,y+h-1,48,3);rect(g,'#8b8978',x+w/2-23,y+h+2,46,3);rect(g,'#615f52',x+w/2-19,y+h+5,38,3);
-  for(let xx=x+9;xx<x+w-9;xx+=14)rect(g,(xx-x)%28<14?'#b89873':'#d3c4a0',xx,y+h-38,14,7);rect(g,'#30363366',x+10,y+h-31,w-20,4)}
- storefrontLight(b,night);
+ // Cornice and masonry establish a facade instead of a flat roof with a label.
+ rect(g,'#162c3b',x,front-7,w,7);rect(g,trim,x-1,front-8,w+2,3);rect(g,'#ffffff24',x+1,front-5,w-2,1);
+ for(let yy=front+3;yy<y+h-2;yy+=7){rect(g,'#16263828',x+4,yy,w-8,1);for(let xx=x+5+((yy/7|0)%2)*12;xx<x+w-4;xx+=25)rect(g,'#14283822',xx,yy,1,7)}
+ const window=(xx,yy,ww,hh)=>{rect(g,'#19323f',xx-2,yy-2,ww+4,hh+5);rect(g,night>.2?'#e4b877':'#487888',xx,yy,ww,hh);rect(g,night>.2?'#ffdc9644':'#b6d8cd44',xx+3,yy+2,ww-6,3);rect(g,'#254759',xx+ww/2-1,yy,2,hh);rect(g,trim,xx-3,yy+hh+1,ww+6,2)};
+ if(residential){for(let k=0;k<5;k++)window(x+13+k*44,front+8,30,17);for(const xx of [x+14,x+w-53])window(xx,y+h-26,36,19)}
+ else{window(x+13,y+h-34,62,26);window(x+w-75,y+h-34,62,26)}
+ if(industrial){rect(g,'#1a3441',x+w/2-40,y+h-39,80,39);for(let r=0;r<8;r++)rect(g,r%2?'#78989a':'#57777f',x+w/2-36,y+h-36+r*4,72,3);for(let k=0;k<10;k++)rect(g,k%2?'#ddba77':'#243b46',x+w/2-42,y+h-44+k%2,8,4)}
+ else{rect(g,'#1b3441',x+w/2-17,y+h-32,34,32);rect(g,'#548292',x+w/2-13,y+h-28,26,24);rect(g,'#b9dbcd55',x+w/2-10,y+h-26,3,17);rect(g,'#f1ce8b',x+w/2+9,y+h-17,2,5)}
+ // Individual signs and awnings replace the repeated full-width dark box.
+ const sign=night>.2?neonColor(name):club?'#d5acd9':trim,signY=residential?front+2:front+4;
+ if(!residential){rect(g,club?'#292940':'#233e4c',x+13,signY,w-26,17);rect(g,sign,x+15,signY,w-30,2);g.fillStyle=sign;g.font='bold 11px monospace';g.textAlign='center';g.fillText(name,x+w/2,signY+12)}
+ else{g.fillStyle=trim;g.font='bold 8px monospace';g.textAlign='center';g.fillText('APARTMENTS',x+w/2,y+h-6)}
+ if(shop){const awning=diner?'#b95650':name==='CLOTHING'?'#518b84':'#5c91a7';rect(g,'#152f4066',x+7,y+h-39,w-14,9);for(let xx=x+8;xx<x+w-8;xx+=13)rect(g,(xx-x)%26<13?awning:'#e1d2a7',xx,y+h-40,13,6);
+  for(const xx of [x+13,x+w-75])for(let k=0;k<5;k++){rect(g,['#d5ae71','#78b5a7','#c97d83'][k%3],xx+5+k*10,y+h-19,6,9);rect(g,'#d9d6ac',xx+3,y+h-10,54,2)}}
+ if(district==='south'){rect(g,'#263e49',x+w-23,y+48,13,39);for(let k=0;k<6;k++)rect(g,'#a6a995',x+w-22,y+49+k*6,11,1)}
+ rect(g,'#1a334066',x+3,y+h-1,w-6,5);rect(g,trim,x+w/2-23,y+h+1,46,3);rect(g,'#677f82',x+w/2-19,y+h+4,38,3);
+ storefrontLight(b,night);g.restore();
 }
 root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor};
 })(globalThis);
