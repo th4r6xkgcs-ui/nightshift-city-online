@@ -1,7 +1,7 @@
 /* User-controlled browser save backups. These do not provide cloud sync. */
 (function(root){
 'use strict';
-const KEYS=['nightshift-city-crews-v1','nightshift-city-businesses-v1','nightshift-city-crafting-v1','nightshift-city-save-v2','nightshift-city-inventory-v1','nightshift-city-activities-v1','nightshift-city-crime-v1','nightshift-city-profile-v1','nightshift-city-vehicles-v1','nightshift-city-salvage-v1','nightshift-city-progress-v1','nightshift-city-world-v1'];
+const KEYS=['nightshift-city-encounters-v1','nightshift-city-crews-v1','nightshift-city-businesses-v1','nightshift-city-crafting-v1','nightshift-city-save-v2','nightshift-city-inventory-v1','nightshift-city-activities-v1','nightshift-city-crime-v1','nightshift-city-profile-v1','nightshift-city-vehicles-v1','nightshift-city-salvage-v1','nightshift-city-progress-v1','nightshift-city-world-v1'];
 const RECOVERY_KEY='nightshift-city-before-restore';
 function validate(raw){
  if(raw?.format!=='nightshift-city-backup'||raw.version!==1||!raw.saves||typeof raw.saves!=='object'||Array.isArray(raw.saves))throw Error('Unsupported backup file');
