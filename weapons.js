@@ -16,7 +16,8 @@
   let state = W.clean({});
   try { state = W.clean(JSON.parse(localStorage.getItem(KEY) || '{}')); } catch { /* fresh */ }
   const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode */ } };
-  const current = () => W.BY_ID[state.equipped] || W.BY_ID.pistol;
+  // Equipped gun with its mods applied (mag/spread/range/suppressed). See weapons-data.js effective().
+  const current = () => W.effective(W.BY_ID[state.equipped] || W.BY_ID.pistol, state.mods?.[state.equipped] || []);
 
   /* eslint-disable no-undef */
   const P = () => { try { return player; } catch { return null; } };
@@ -64,7 +65,10 @@
       F.shot = function () {
         firing = true; shotAt = performance.now();
         const w = current();
-        queueMicrotask(() => { firing = false; setNextShot(shotAt + w.rate); });
+        queueMicrotask(() => {
+          firing = false; setNextShot(shotAt + w.rate);
+          const p = P(); if (w.suppressed && p && Number.isFinite(p.heat)) p.heat = Math.max(0, p.heat - 0.08 * 0.7); // game adds +0.08 per shot
+        });
         return shot.apply(this, arguments);
       };
       F.shot.__ns = true;
@@ -79,6 +83,19 @@
         return ammo;
       };
       C.__nsWeapons = true;
+    }
+    const CR = root.NightshiftCrime;
+    if (CR && typeof CR.report === 'function' && !CR.report.__nsWeapons) {
+      const report = CR.report;
+      CR.report = function (point, now, kind) { if (kind === 'gunshot' && current().suppressed && Math.random() < 0.8) return false; return report.apply(this, arguments); };
+      CR.report.__nsWeapons = true;
+    }
+    const CI = root.NightshiftCitizens;
+    if (CI && typeof CI.alert === 'function' && !CI.alert.__nsWeapons) {
+      const alertFn = CI.alert;
+      // A suppressed gunshot is only noticed by people right next to you (70px instead of 260px).
+      CI.alert = function (source, now, opts) { if (!opts && current().suppressed && source === P()) return alertFn.call(this, source, now, { kind: 'gunshot', radius: 70 }); return alertFn.apply(this, arguments); };
+      CI.alert.__nsWeapons = true;
     }
   }
   install();
@@ -121,6 +138,7 @@
   #gsPanel .act{margin-top:7px;display:flex;justify-content:space-between;align-items:center;gap:6px}
   #gsPanel .buy{padding:7px 12px;background:linear-gradient(#ffd27a,#d08a3a);color:#2a1600} #gsPanel .buy[disabled]{opacity:.4;pointer-events:none}
   #gsPanel .eqb{padding:7px 12px;background:#2c3a4c;border:1px solid #6f8db3;color:#fff} #gsPanel .on{color:#7cdeb5;font-weight:700}
+  #gsPanel .mods{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px} #gsPanel .mod{padding:4px 7px;font-size:10.5px;background:#2a3038;border:1px solid #4a5462} #gsPanel .mod.fit{border-color:#7cdeb5;color:#7cdeb5} #gsPanel .mod[disabled]{opacity:.55;pointer-events:none} #gsPanel .mod.fit[disabled]{opacity:1}
   #gsPanel .ammo{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#1f252d;border:1px dashed #6b5a44;border-radius:10px;padding:8px 10px;margin-bottom:8px}
   @media (max-height:430px){#wpPill{top:58px}}`;
   document.head.appendChild(css);
@@ -131,7 +149,7 @@
   function renderPill() {
     const w = current();
     pill.textContent = '';
-    pill.append(document.createTextNode(`${w.icon} ${w.name.toUpperCase()} `), el('small', {}, state.owned.length > 1 ? `⟳ ${state.owned.length}` : ''));
+    pill.append(document.createTextNode(`${w.icon} ${w.suppressed ? "🔇 " : ""}${w.name.toUpperCase()} `), el('small', {}, state.owned.length > 1 ? `⟳ ${state.owned.length}` : ''));
   }
   function placePill() {
     const m = document.querySelector('#map');
@@ -232,6 +250,18 @@
           renderShop();
         };
         act.append(el('span', { className: locked ? '' : 'sub' }, locked ? `🔒 Shooting Lv ${w.level}` : why === 'Not enough cash' ? 'Need more cash' : ''), b);
+      }
+      if (owned) { // attachments for this gun
+        const mods = el('div', { className: 'mods' }), have = state.mods?.[w.id] || [];
+        for (const m of W.MODS) {
+          const fitted = have.includes(m.id), lockedM = lv < m.level;
+          const b = el('button', { className: 'mod' + (fitted ? ' fit' : ''), type: 'button', title: m.desc, disabled: fitted || lockedM || cash < m.price },
+            fitted ? `${m.icon} ${m.name} ✓` : lockedM ? `${m.icon} Lv ${m.level}` : `${m.icon} ${m.name} ${money(m.price)}`);
+          b.onclick = () => { const pl = P(); if (!pl) return; const r = W.buyMod(state, pl, w.id, m.id, shootingLevel()); if (!r.ok) { say(r.reason); return; } persist(); gameSave(); say(`${m.icon} ${m.name} fitted to ${w.name} · -${money(r.price)}`); renderPill(); renderShop(); };
+          mods.append(b);
+        }
+        card.append(mods);
+        if (have.length) card.append(el('div', { className: 'd' }, have.map((id) => W.MOD[id].desc).join(' · ')));
       }
       card.append(act); grid.append(card);
     }

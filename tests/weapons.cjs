@@ -18,7 +18,7 @@ assert.equal(W.dps(W.BY_ID.ar), Math.max(...W.WEAPONS.map(W.dps)), 'the top-tier
 console.log('PASS: weapons catalog and progression ladder');
 
 const st = W.clean({});
-assert.deepEqual(st, { version: 1, owned: ['pistol'], equipped: 'pistol' });
+assert.deepEqual(st, { version: 1, owned: ['pistol'], equipped: 'pistol', mods: {} });
 const wallet = { cash: 1000 };
 assert.equal(W.buy(st, wallet, 'smg', 3).reason, 'Needs Shooting level 4');
 assert.equal(W.buy(st, wallet, 'smg', 4).reason, 'Not enough cash');
@@ -40,3 +40,17 @@ const shot = W.pelletAngles(1, W.BY_ID.shotgun, () => 1);
 assert.equal(shot.length, 6); assert.ok(shot.every((a) => Math.abs(a - 1 - 0.28) < 1e-9), 'spread bounded by weapon spread');
 assert.deepEqual(W.pelletAngles(1, p, Math.random), [1], 'pistol has no spread');
 console.log('PASS: weapon save cleaning, magazine fit and pellet spread');
+
+// Mods: per gun, gated, stats applied by effective(); save keeps only mods on owned guns.
+const ms = W.clean({ owned: ['smg'] }), mw = { cash: 5000 };
+assert.equal(W.buyMod(ms, mw, 'rifle', 'scope', 10).reason, 'Buy the gun first');
+assert.equal(W.buyMod(ms, mw, 'smg', 'scope', 4).reason, 'Needs Shooting level 5');
+assert.equal(W.buyMod(ms, mw, 'smg', 'extmag', 4).ok, true); assert.equal(W.buyMod(ms, mw, 'smg', 'extmag', 4).reason, 'Already fitted');
+W.buyMod(ms, mw, 'smg', 'grip', 4); W.buyMod(ms, mw, 'smg', 'scope', 9); W.buyMod(ms, mw, 'smg', 'suppressor', 9);
+assert.equal(mw.cash, 5000 - 900 - 700 - 800 - 1200);
+const e = W.effective(W.BY_ID.smg, ms.mods.smg);
+assert.equal(e.mag, 30, 'extended mag respects the 30-round save cap'); assert.equal(W.effective(W.BY_ID.shotgun, ['extmag']).mag, 9);
+assert.ok(Math.abs(e.spread - 0.09 * 0.5 * 0.6) < 1e-9); assert.equal(e.range, Math.round(380 * 1.35)); assert.equal(e.suppressed, true);
+assert.deepEqual(W.effective(W.BY_ID.pistol, []).mag, 30); assert.equal(W.effective(W.BY_ID.pistol).suppressed, false);
+assert.deepEqual(W.clean({ owned: ['smg'], mods: { smg: ['scope', 'scope', 'Bad!'], ar: ['scope'] } }).mods, { smg: ['scope'] });
+console.log('PASS: weapon mods (gating, stacking stats, mag cap, save cleaning)');

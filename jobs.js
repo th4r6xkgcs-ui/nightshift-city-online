@@ -208,7 +208,29 @@
       go.onclick = () => { accept(o); lastPanel = ''; };
       row.append(b, go); panel.append(row);
     }
+    panel.append(el('h2', { style: 'margin-top:14px;font-size:14px' }, '📍 CITY GUIDE'), el('div', { className: 'sub' }, 'Tap GPS to route there (gold road line + arrow).'));
+    for (const pl of places()) {
+      const row = el('div', { className: 'o' }), go = el('button', { className: 'go', type: 'button' }, 'GPS');
+      go.onclick = () => { const ok = root.NightshiftMap?.navigate?.({ x: pl.x, y: pl.y, label: pl.label.slice(0, 80), id: 'guide-' + pl.key }); say(ok ? `📍 GPS set · ${pl.label}` : 'GPS unavailable here'); if (ok) panel.hidden = true; };
+      const p = P(), d = p ? Math.round(dist(p, pl) / 10) : 0;
+      row.append(el('div', { className: 'b' }, `${pl.label} · ${d}m`), go); panel.append(row);
+    }
     panel.scrollTop = scroll;
+  }
+  // Everything worth visiting, nearest first of each kind (casino, guns, tuning, fishing, labs, races, home, dealers).
+  function places() {
+    const p = P() || { x: 0, y: 0 }, out = [], near = (list) => (list || []).filter(Boolean).sort((a, b) => dist(a, p) - dist(b, p))[0];
+    const add = (key, label, pos) => { if (pos && Number.isFinite(pos.x) && Number.isFinite(pos.y)) out.push({ key, label, x: pos.x, y: pos.y }); };
+    add('casino', '🎰 Lucky 7 Casino', root.NightshiftCasino?.door?.());
+    add('guns', '⌖ Gun shop', root.NightshiftWeapons?.door?.());
+    add('tune', '🔧 Tuning garage', near(root.NightshiftTuning?.sites?.()));
+    for (const s of root.NightshiftFishingData?.SPOTS || []) add('fish-' + s.id, '🎣 ' + s.name, s);
+    for (const l of root.NightshiftLab?.sites?.() || []) add(l.id, l.label, l);
+    for (const r of root.NightshiftRaces?.starts?.() || []) add('race-' + r.id, '🏁 ' + (root.NightshiftRacesData?.BY_ID?.[r.id]?.name || 'Race'), r);
+    add('home', '🏠 Your apartment', { x: 880, y: 680 });
+    for (const m of root.NightshiftBusinessRules?.MARKETS || []) add('m-' + m.id, '💰 ' + m.name, m);
+    for (const pr of root.NightshiftBusinessRules?.PROPERTIES || []) add('p-' + pr.id, '🏚️ ' + pr.name, pr);
+    return out;
   }
   setInterval(render, 250);
   addEventListener('keydown', (e) => { if (!panel.hidden && e.key === 'Escape') panel.hidden = true; });
