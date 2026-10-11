@@ -31,3 +31,5 @@ before('player.cash=3000;player.x=640;player.y=597;NightshiftBusinesses.open();N
 const overdue=boot(overdueStorage,{now:NOW+999999});assert.equal(overdue('NightshiftBusinesses.state.properties.farm.stock'),3);assert.equal(overdue('NightshiftBusinesses.state.ledger.batches'),1);
 const twice=boot(overdueStorage,{now:NOW+1999999});assert.equal(twice('NightshiftBusinesses.state.properties.farm.stock'),3);assert.equal(twice('NightshiftBusinesses.state.ledger.batches'),1);
 console.log('PASS: business backup restore/undo preserves market counters and new cargo; overdue production pays once across repeated reloads');
+
+const hints=boot(new Map(),{now:NOW});hints('player.x=640;player.y=650;cars.length=0;NightshiftGuidance.render()');assert.equal(hints.nodes.get('#use').textContent,'BIZ');hints('interact()');assert.equal(hints('NightshiftBusinesses.paused()'),true);console.log('PASS: overlapping salvage/business hint matches actual USE priority');

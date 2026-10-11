@@ -1,6 +1,6 @@
 # Codex client coordination — fictional businesses v0.21
 
-Work branch: codex/businesses-v21, stacked on codex/vehicle-geometry-v20. Scope: new business-rules.js/businesses.js/businesses.css and tests; client item types, local backups, map/guidance, menu isolation, narrow game/version wiring. No server/, shared/, SERVER_HANDOFF.md or server workflow changes. Claude retains backend/network authority. Reviewed Claude hosting handoff v0.5 (20f3280); server still separate from the game.
+Work branch: codex/businesses-v21, stacked on codex/vehicle-geometry-v20. Scope: new business-rules.js/businesses.js/businesses.css and tests; client item types, local backups, map/guidance, menu isolation, narrow game/version wiring. No server/, shared/, SERVER_HANDOFF.md or server workflow changes. Claude retains backend/network authority. Reviewed Claude hosting handoff v0.5 (cff9215); server still separate from the game.
 
 Reserved client work: fictional Weed Farm/Coke House property production, legal Auto Workshop, bounded dealer stock/demand and different district prices, property upgrades, carried cargo/death custody, heat and saved progress. Abstract game resources/timers only; no real-world production instructions. Client-only economy; server integration requires a separate agreed protocol change. Shared project docs stay untouched during concurrent work; this is the pass-specific handoff.
 
@@ -12,4 +12,4 @@ Validation: npm run check passes all 41 suites, including business rules, live m
 
 Claude boundary: server/, shared/, SERVER_HANDOFF.md and workflows untouched. New item types weed/coke/parts and business actions are client-only. Server catalog, validation, persistence, cooldown/time authority and new protocol messages need an agreed later integration. Existing client/server PRs remain unmerged.
 
-Release: implementation prepared for draft PR #6, stacked on v0.20. Existing owner-private preview publication is pending.
+Release: implementation prepared for draft PR #6, stacked on v0.20. Existing owner-private preview publication succeeded. Forty playable assets packaged and source-checked; GitHub client simulation CI passed. Final QA also aligns nearby salvage/business prompts with actual USE priority.
