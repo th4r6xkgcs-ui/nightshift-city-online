@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');const run=boot();
+run('globalThis.rects=0;globalThis.blits=[];g.fillRect=()=>rects++;g.drawImage=(...args)=>blits.push(args.slice(1));globalThis.actor={x:100,y:100,color:"#123456",hp:40,moving:true,walkTicks:0,angle:0};NightshiftSprites.person(actor);globalThis.firstRects=rects;actor.walkTicks=2.5;NightshiftSprites.person(actor)');
+assert.ok(run('firstRects')>100);assert.equal(run('rects'),run('firstRects'));assert.equal(run('blits.length'),2);assert.equal(run('blits[0][0]'),0);assert.equal(run('blits[1][0]'),48);
+for(let frame=0;frame<8;frame++)assert.equal(run(`NightshiftSprites.pose({moving:true,walkTicks:${frame}*2.5,angle:0}).frame`),frame);
+assert.equal(run('NightshiftSprites.pose({moving:true,walkTicks:NaN,angle:NaN}).frame'),0);
+assert.equal(run('NightshiftSprites.pose({moving:true,walkTicks:-10,angle:0}).frame'),0);
+run('actor.moving=false;actor.walkTicks=500;NightshiftSprites.person(actor)');assert.equal(run('blits.at(-1)[0]'),0);
+run('actor.angle=Math.PI;NightshiftSprites.person(actor)');assert.equal(run('blits.at(-1)[1]'),4*52);
+run('for(let i=0;i<20;i++)NightshiftSprites.person({...actor,color:"#"+i.toString(16).padStart(6,"0")})');assert.equal(run('NightshiftSprites.atlasStats().count'),8);
+run('NightshiftSprites.person(player,true,{weapon:false});globalThis.cached=NightshiftSprites.atlasStats().count;NightshiftHome.profile.shirt="#012345";NightshiftSprites.person(player,true,{weapon:false})');assert.equal(run('NightshiftSprites.atlasStats().count'),8);
+run('globalThis.before=JSON.stringify({player,cars,peds,buildings});NightshiftSprites.person(player,true);NightshiftSprites.person({...actor,hp:20});NightshiftWorld.building(buildings[0])');assert.equal(run('JSON.stringify({player,cars,peds,buildings})===before'),true);
+console.log('PASS: actual atlas blits/reuse, all eight animation frames, stationary pose, invalid frame normalization, directional rows, bounded LRU/profile changes and no gameplay mutations');
