@@ -12,4 +12,4 @@ Touched: aim-input.js, interactions.js, game.js, feedback.js, guidance.js, contr
 
 Validation: npm run check passes 46 suites and all root JavaScript syntax checks; git diff --check passes. New tests cover stable target retention/switches, wall obstruction, exact range actions, courier/home priority, fire-zone scaling/hysteresis, capture/malformed input, actual projectile-hit feedback, effect expiry, reload/blocked reticle colors and clinic toast suppression. Internal Canvas rendering reviewed at 390x844. Real browser/iPhone DOM layout, dual-touch, audio and file-picker QA remains pending; no such verification is claimed.
 
-Release: prepared for draft PR and existing owner-private preview update. No PR merge, audience change, backend edits or multiplayer wiring.
+Release: draft PR #8 published; existing owner-private preview updated successfully to v0.23. GitHub Client simulation checks passed on ac567debae1963a3a42011e0c3e82548d7d6b58b. All 43 playable assets were packaged and source-byte-checked before publication. No PR merge, audience change, backend edits or multiplayer wiring.
