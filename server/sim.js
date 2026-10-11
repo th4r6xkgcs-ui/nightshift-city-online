@@ -29,7 +29,7 @@ class World {
   }
 
   // ---------- lifecycle ----------
-  addPlayer(id, name, now) {
+  addPlayer(id, name, now, saved = null) {
     if (this.players.has(id)) throw new Error('duplicate player id');
     const R = RULES;
     const p = {
@@ -49,8 +49,42 @@ class World {
       tx: new Map(), // tx id -> result (bounded)
       joinedAt: now,
     };
+    if (saved) this._restore(p, saved);
     this.players.set(id, p);
     return p;
+  }
+
+  // Server-side profile restore. Values are re-clamped even though the
+  // store is server-owned, so a damaged save can't break game rules.
+  _restore(p, s) {
+    const R = RULES, CB = R.combat;
+    const int = (v, lo, hi, d) => (Number.isSafeInteger(v) ? clamp(v, lo, hi) : d);
+    if (typeof s.name === 'string' && /^[\w .-]{1,20}$/.test(s.name)) p.name = s.name;
+    p.cash = int(s.cash, 0, R.cashCap, p.cash);
+    p.hp = int(s.hp, 1, R.player.maxHp, p.hp);
+    p.reserve = int(s.reserve, 0, CB.maxReserve, p.reserve);
+    p.mag = int(s.mag, 0, Math.min(CB.magSize, CB.maxCarriedRounds - p.reserve), p.mag);
+    p.pocket = {};
+    if (s.pocket && typeof s.pocket === 'object') {
+      for (const item of R.items) { const n = int(s.pocket[item], 0, R.itemCap, 0); if (n) p.pocket[item] = n; }
+    }
+    p.pvp = s.pvp === true;
+    if (Number.isFinite(s.x) && Number.isFinite(s.y)) {
+      const x = clamp(s.x, R.player.radius, R.world.w - R.player.radius);
+      const y = clamp(s.y, R.player.radius, R.world.h - R.player.radius);
+      if (!this.city.blocked(x, y)) { p.x = x; p.y = y; }
+    }
+  }
+
+  exportProfile(id) {
+    const p = this.players.get(id);
+    if (!p) return null;
+    const dead = !!p.deadUntil; // dying already dropped the bag; wake at hospital
+    return {
+      name: p.name, cash: p.cash, hp: dead ? RULES.player.maxHp : p.hp,
+      mag: p.mag, reserve: p.reserve, pocket: { ...p.pocket }, pvp: p.pvp,
+      x: Math.round(dead ? RULES.hospital.x : p.x), y: Math.round(dead ? RULES.hospital.y : p.y),
+    };
   }
 
   removePlayer(id) {

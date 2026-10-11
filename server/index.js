@@ -10,9 +10,13 @@ const { randomUUID } = require('node:crypto');
 const RULES = require('../shared/rules.js');
 const { VERSION, C, S, validate } = require('../shared/protocol.js');
 const { World } = require('./sim.js');
+const { MemoryStore, FileStore, newToken, isToken } = require('./store.js');
 
-function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world = new World() } = {}) {
+function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world = new World(), store = new MemoryStore(), saveEveryMs = 10000 } = {}) {
   const N = RULES.net;
+  const tokens = new Map(); // playerId -> token
+  const online = new Map(); // token -> playerId (one session per character)
+  const persist = (pid) => { const t = tokens.get(pid); const prof = world.exportProfile(pid); if (t && prof) store.save(t, prof); };
   const wss = new WebSocketServer({ port, host, maxPayload: N.maxMsgBytes });
   const conns = new Map(); // playerId -> ws
   let last = clock();
@@ -45,11 +49,24 @@ function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world
         if (msg?.t !== C.HELLO) return strike('say hello first');
         const bad = validate(msg);
         if (bad) { send(ws, { t: S.ERROR, reason: bad }); return ws.close(4002, bad); }
+        let token = isToken(msg.token) ? msg.token : null;
+        const saved = token ? store.load(token) : null;
+        if (!saved) token = newToken();
+        const prior = online.get(token);
+        if (prior) { // same character signed in again: newest session wins
+          persist(prior);
+          const old = conns.get(prior);
+          world.removePlayer(prior); conns.delete(prior); tokens.delete(prior);
+          if (old) old.close(4004, 'signed in elsewhere');
+        }
         id = randomUUID().slice(0, 8);
         clearTimeout(helloTimer);
-        const p = world.addPlayer(id, msg.name, now);
+        const p = world.addPlayer(id, msg.name, now, saved);
         conns.set(id, ws);
-        send(ws, { t: S.WELCOME, id, v: VERSION, rules: RULES, you: world.privateView(p) });
+        tokens.set(id, token);
+        online.set(token, id);
+        persist(id);
+        send(ws, { t: S.WELCOME, id, v: VERSION, rules: RULES, you: world.privateView(p), token, resumed: !!saved });
         return;
       }
 
@@ -66,7 +83,12 @@ function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world
 
     ws.on('close', () => {
       clearTimeout(helloTimer);
-      if (id) { world.removePlayer(id); conns.delete(id); }
+      if (id && conns.get(id) === ws) {
+        persist(id);
+        const t = tokens.get(id);
+        if (online.get(t) === id) online.delete(t);
+        world.removePlayer(id); conns.delete(id); tokens.delete(id);
+      }
     });
     ws.on('error', () => {});
   });
@@ -77,6 +99,8 @@ function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world
       if (ws) send(ws, msg);
     }
   }
+
+  const saver = setInterval(() => { for (const pid of conns.keys()) persist(pid); }, saveEveryMs);
 
   const timer = setInterval(() => {
     const now = clock();
@@ -91,8 +115,12 @@ function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world
     world,
     ready,
     get port() { return wss.address().port; },
+    store,
     close: () => new Promise((resolve) => {
+      for (const pid of conns.keys()) persist(pid);
+      store.flush();
       clearInterval(timer);
+      clearInterval(saver);
       for (const ws of wss.clients) ws.terminate();
       wss.close(() => resolve());
     }),
@@ -104,7 +132,8 @@ module.exports = { createServer };
 if (require.main === module) {
   const port = Number(process.env.PORT) || 2567;
   const host = process.env.HOST || '0.0.0.0';
-  const srv = createServer({ port, host });
+  const file = process.env.PROFILES || require('node:path').join(__dirname, 'data', 'profiles.json');
+  const srv = createServer({ port, host, store: new FileStore(file) });
   srv.ready.then(() => console.log(`Nightshift City Online server on ws://${host}:${srv.port}`));
-  process.on('SIGINT', () => srv.close().then(() => process.exit(0)));
+  for (const sig of ['SIGINT', 'SIGTERM']) process.on(sig, () => srv.close().then(() => process.exit(0)));
 }

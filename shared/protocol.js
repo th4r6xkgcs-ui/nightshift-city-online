@@ -9,7 +9,7 @@
 
   // Client -> server
   const C = Object.freeze({
-    HELLO: 'hello',       // {name, v}
+    HELLO: 'hello',       // {name, v, token?}
     INPUT: 'input',       // {seq, mx, my, aim, sprint}
     FIRE: 'fire',         // {aim}
     RELOAD: 'reload',     // {}
@@ -24,7 +24,7 @@
 
   // Server -> client
   const S = Object.freeze({
-    WELCOME: 'welcome',   // {id, v, rules, you}
+    WELCOME: 'welcome',   // {id, v, rules, you, token, resumed}
     STATE: 'state',       // {tick, you, others, bags}
     RESULT: 'result',     // {tx?, ok, reason?, ...}
     EVENT: 'event',       // {kind, ...}
@@ -44,6 +44,7 @@
       case C.HELLO:
         if (typeof msg.name !== 'string' || !/^[\w .-]{1,20}$/.test(msg.name)) return 'bad name';
         if (msg.v !== VERSION) return 'protocol version mismatch';
+        if (msg.token !== undefined && (typeof msg.token !== 'string' || !/^[a-f0-9]{32}$/.test(msg.token))) return 'bad token';
         return null;
       case C.INPUT:
         if (!Number.isSafeInteger(msg.seq) || msg.seq < 0) return 'bad seq';
