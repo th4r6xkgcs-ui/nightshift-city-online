@@ -164,3 +164,27 @@ Hooks (no game files edited):
 Verified in browser: laptop USE, buying all 5 items, the "Penthouse vibes" goal paying +$5,500 (trophy bonus), harvesting 6 weed, and a REST that gives HP 100, heat 0, +60 rounds and the 25% boost (100 XP → 125). No page errors. Tests: tests/home-upgrades.cjs, 4 PASS. Save: `nightshift-home-v1`. Goals: "Make it yours" and "Penthouse vibes".
 
 v0.42 (awnings) merged into `claude/rpg-play`; all hooks re-verified, and every browser regression passed.
+
+## Balance pass (economy + pacing)
+**Income per minute of focused play** (measured from the game rules):
+
+| Source | Income |
+|---|---|
+| Deliveries | about $300–450 (pay $225–300 per run) |
+| Weed farm | about $75, passive |
+| Salvage | small, but it feeds Luck |
+| Casino | negative expected value (89.6–97.3% return) |
+| Races, first medal | full reward |
+| Races, repeats | now **30%** (was 50%); Grand Tour repeat gold ≈ $350/min, on par with deliveries |
+
+**Money sinks:** guns $19.2k total; full tuning of one car $19.4k; home upgrades $12.5k; properties and upgrades. That's about 2–3 hours of grinding to own everything, before skills.
+
+**Skill XP retuned:**
+- batch farming 45 → 120
+- dealing per unit 6 → 20
+- charisma: delivery 25 → 40, per sale 2 → 4
+- salvage luck 30 → 40
+- toughness per HP 1.2 → 2
+- stealth escape 60 → 150
+
+New `PACE` table in skills-data.js and a test guarding that every skill reaches Lv 10 in 12–90 min of focused play. Current times: Speed 15, Driving 22, Shooting 23, Farming 34, Luck 40, Dealing 49, Stealth 65, Charisma 70, Toughness 81 minutes.
