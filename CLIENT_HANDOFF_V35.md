@@ -8,4 +8,4 @@ Touched interior-art.js, home.js, index.html, game.js (version label only), pack
 
 Validation: npm run check passed all 60 suites and all root JavaScript syntax checks. Portrait and landscape apartment/shop Canvas renders reviewed. New checks cover surface reuse/bounds, distinct finite canvas-less art, balanced clipping, unchanged gameplay objects and correct district exit. Existing movement, furniture collision, indoor weapon lock, store/rest/style/shop and modal suites pass. No actual browser/iPhone touch, DOM layout, audio or frame-rate QA claim.
 
-Release: draft PR based on codex/night-art-v34; private preview publication pending. No merge and no server/shared/worker/online/workflow changes.
+Release: draft PR based on codex/night-art-v34; private preview publication succeeded. Draft PR #20 is open; GitHub Client simulation checks passed for code commit 9587ebf1cf8983178ee4c0309be46ddb6629a135. Deployment archive contains 49 playable assets matching the tested source. No merge and no server/shared/worker/online/workflow changes.
