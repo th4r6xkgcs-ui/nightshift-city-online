@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs'),run=boot();
+const fire=run.nodes.get('#shoot'),sprint=run.nodes.get('#run');
+const e=pointerId=>({pointerId,button:0,currentTarget:fire});
+fire.onpointerdown(e(10));assert.equal(run('firing'),true);
+fire.onpointerdown(e(11));fire.events.pointerup(e(11));assert.equal(run('firing'),true);
+sprint.onpointerdown(e(12));assert.equal(run('run'),true);fire.events.pointercancel(e(10));assert.equal(run('firing'),false);assert.equal(run('run'),true);
+sprint.events.lostpointercapture(e(13));assert.equal(run('run'),true);sprint.events.lostpointercapture(e(12));assert.equal(run('run'),false);
+fire.onpointerdown(e(14));sprint.onpointerdown(e(15));run('releaseControls()');assert.equal(run('firing||run'),false);fire.onpointerdown(e(16));assert.equal(run('firing'),true);fire.events.pointerup(e(14));assert.equal(run('firing'),true);fire.events.pointerup(e(16));assert.equal(run('firing'),false);
+fire.onpointerdown({...e(17),button:2});assert.equal(run('firing'),false);
+sprint.disabled=true;sprint.onpointerdown(e(18));assert.equal(run('run'),false);
+console.log('PASS: FIRE/RUN have independent pointer owners, reject extra releases, reset/reacquire and ignore disabled/right-click actions');
