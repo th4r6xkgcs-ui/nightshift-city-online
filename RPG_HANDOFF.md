@@ -194,3 +194,28 @@ New `PACE` table in skills-data.js and a test guarding that every skill reaches 
 - Race starts are now listed in `NightshiftEncounters.locations()` (type `race`), so they appear as dots on Codex's city map. USE on foot explains how to start a race.
 - Midtown Loop now starts mid-block at (1100,680), because the old start, (880,680), was the apartment door and on-foot USE picked HOME. It now finishes at (880,680): par 5.1 s, 1,340 px.
 - Tests: tests/goals.cjs adds a tracker case (5 PASS). Browser: the pin points to the casino door (1960,1277), the card shows the distance, and the arrow is visible in a screenshot. No page errors.
+
+## Session 3 (owner: "overdrive", playable today)
+
+### Play now
+A private playable artifact of `claude/rpg-play` (= Codex **v0.51** + all RPG systems) is published for the owner on claude.ai. It's a solo build; saves live in that browser. The Cloudflare Worker (workers.dev) was last deployed at 04:17 UTC on 10-11 and is stale until its build branch is changed.
+
+### New Claude-owned modules
+All live under `claude/rpg-core`, merged into `claude/rpg-play`.
+
+| Module | What |
+|---|---|
+| `dailies*.js` | 3 daily challenges (deterministic per local day, 13 types) + 1 weekly, with a 🔥 streak (+10%/day up to +50%, plus a bonus). UI: a 📅 DAILY chip under the goal card. Save: `nightshift-dailies-v1` |
+| `respect*.js` | Respect meta rank (Nobody → Legend, 8 ranks) built from skills, goals, medals, guns, home, tuning, streak and money; each new rank pays rank×$1,000 once. Badge sits beside the ⭐ SKILLS chip. Save: `nightshift-respect-v1` |
+| `fishing*.js` | **Fishing skill (10th skill)**. Two spots, Docks Pier (1760,1655: docks road end) and West Canal (60,520), drawn as small water/pier decals. Cast → bite → reel timing minigame. 11 catches incl. junk, wallets, night fish (eel, catfish), rain (tuna) and the legendary Golden koi. Rods: Carbon $1.5k, Pro $5k. Cooler of 20: sell at the pier (Dealing bonus) or eat to heal. Save: `nightshift-fishing-v1` |
+| `lab*.js` | Drug lab: a ⚗️ LAB USE point beside an owned Weed Farm/Coke House (property x+70). Timed batches from carried weed/coke + supply cash: pre-rolls, gummies, street bags, party packs. Farming speeds cooking and adds yield; product stash of 60; fence at 60%. Save: `nightshift-lab-v1` |
+| `jobs*.js` | 📱 HUSTLE phone: 4 offers rotating every 5 min. **Taxi** (pickup → dropoff, +30% under par), **Hit contract** (marked pedestrian, reticle, +1 heat), **Repo** (steal a marked car, park it at a TUNING garage), **VIP drop** (deliver lab product, pays 1.6× value). Pink guide arrow and timer bar; +5% pay per Respect rank. Save: `nightshift-jobs-v1` (stats only; the active job is session-only) |
+
+Also:
+- Pinning a goal now calls `NightshiftMap.navigate({x, y, label, id: 'goal-<id>'})` and `clear(id)`.
+- New `NightshiftGoals.notePayout(n)`, so reward payouts aren't counted as "earned".
+- All modules reach game `save()` by lexical lookup, so there's no `Function()` or eval anywhere (CSP-safe).
+- Job and race HUD bars sit bottom-centre in landscape and under the left chips in portrait, so they never cover chips or joysticks.
+- New goals: fishing ×3, jobs ×2, lab, Respect. Goals total: 45.
+
+Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,weapons,tuning,races,home-upgrades,dailies,respect,fishing,jobs-lab}.cjs`). Every browser flow (skills, guns, casino, home, tuning, fishing autoplay, taxi/hit/lab/drop) passes on v0.51 with no page errors.
