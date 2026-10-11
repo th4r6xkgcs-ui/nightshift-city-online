@@ -20,3 +20,5 @@ body[data-control-size="compact"] #pad,body[data-control-size="compact"] #aimPad
 body[data-control-size="compact"] #nub{width:44px;height:44px}
 @media(max-width:360px){#pad,#aimPad{width:100px;height:100px}#actions>button{width:44px;height:44px}#actions{gap:5px}#hud{font-size:11px}}
 @media(max-height:500px){#map{display:none}#hud{max-width:220px;font-size:10px}#actions{bottom:calc(var(--control-bottom) + 117px)}#pad,#aimPad{width:100px;height:100px}#actions.expanded{inset:12px 130px 12px;max-height:none;max-width:360px}body[data-control-hand="left"] #actions.expanded{inset:12px 130px 12px}#jobPanel{top:90px!important}body[data-wanted="true"] #crimeStatus{top:63px!important}body[data-control-hints="true"] #help{display:none}}
+
+#aimPad[data-firing="true"]{border-color:#f0c18b99;background:#66513b55}#aimPad[data-firing="true"] #aimNub{background:#efc591aa}
