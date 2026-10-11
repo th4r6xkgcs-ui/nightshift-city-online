@@ -20,8 +20,9 @@ The game is a dependency-free Canvas/localStorage single-player prototype. It do
 | audio.js | Opt-in synthesized effects/engine |
 | city-map.js | Service map, objective GPS and minimap markers |
 | backups.js | Local backup export/restore/undo with failed-write rollback |
+| guidance.js | Nearby interaction hints and context-sensitive controls |
 | interface.js | Secondary action tray and keyboard shortcuts |
 
-Validation: 16 suites plus root JS syntax pass, including actual HTML script order, fresh-context persistence, walking/driving at 30/60/120 FPS, menu pause, death custody and backup rollback. Canvas rendering can be inspected internally; it does not validate DOM layout or gestures. Real browser/iPhone audio, file picker and dual-touch QA still pending.
+Validation: 18 suites plus root JS syntax pass, including actual HTML script order, fresh-context persistence, walking/driving at 30/60/120 FPS, menu pause, death custody and backup rollback. Canvas rendering can be inspected internally; it does not validate DOM layout or gestures. Real browser/iPhone audio, file picker and dual-touch QA still pending.
 
 Remaining limits: placeholder art/audio; traffic lacks signals and vehicle navigation; local menus/interiors pause the world; no authoritative economy, online combat or cross-device cloud saves. Codex continues client work. Claude's backend ownership is unchanged.
