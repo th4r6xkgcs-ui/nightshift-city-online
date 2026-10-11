@@ -84,9 +84,8 @@
     dirty = true;
     if (r.leveled) {
       const sk = BY_ID[skill];
-      const perk = sk.perks[0];
-      const pct = Math.round((mod(state, perk.key) - 1) * 100);
-      toast(`${sk.icon} ${sk.name.toUpperCase()} LEVEL ${r.level} · ${perk.label} ${pct >= 0 ? '+' : ''}${pct}%`);
+      const perk = sk.perks[0], m = mod(state, perk.key), pct = Math.round((m - 1) * 100);
+      toast(`${sk.icon} ${sk.name.toUpperCase()} LEVEL ${r.level} · ${perk.label} ${perk.show ? perk.show(m) : `${pct >= 0 ? '+' : ''}${pct}%`}`);
       flash(sk, r.level);
       for (const fn of listeners) { try { fn({ skill, level: r.level, reason }); } catch { /* listener error */ } }
       save();
@@ -214,8 +213,8 @@
       bar.append(fill);
       card.append(top, bar, el('div', { className: 'perk' }, sk.desc));
       for (const pk of sk.perks) {
-        const pct = Math.round((mod(state, pk.key) - 1) * 100);
-        card.append(el('div', { className: 'perk' }, `• ${pk.label}: ${pct >= 0 ? '+' : ''}${pct}%`));
+        const m = mod(state, pk.key), pct = Math.round((m - 1) * 100);
+        card.append(el('div', { className: 'perk' }, `• ${pk.label}: ${pk.show ? pk.show(m) : `${pct >= 0 ? '+' : ''}${pct}%`}`));
       }
       card.append(el('div', { className: 'earn' }, `Earn XP: ${sk.earn}` + (info.need ? ` · ${info.into}/${info.need}` : ' · MAX')));
       grid.append(card);
