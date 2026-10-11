@@ -10,4 +10,5 @@ run('globalThis.models=[];g.fillRect=(...args)=>models.push([g.fillStyle,...args
 assert.notEqual(run('compact'),run('van'));assert.notEqual(run('van'),run('sedan'));assert.notEqual(run('compact'),run('sedan'));
 run('NightshiftSprites.person(player,true,{weapon:false});NightshiftSprites.person({x:100,y:100,angle:Math.PI,hp:20,moving:true,walkTicks:12});NightshiftWorld.building(buildings[0]);NightshiftEnvironment.lights()');assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);
 assert.equal(run('NightshiftWorld.hash(100,200)'),run('NightshiftWorld.hash(100,200)'));assert.notEqual(run('NightshiftWorld.hash(100,200)'),run('NightshiftWorld.hash(101,200)'));
+const original=JSON.stringify({player,cars,peds,buildings});for(const name of ['DINER','CLUB','WAREHOUSE','APARTMENTS','CORNER SHOP']){run(`NightshiftWorld.building({x:500,y:600,w:240,h:170,name:${JSON.stringify(name)}})`)}assert.equal(run('JSON.stringify({player,cars,peds,buildings})'),original);
 console.log('PASS: cached street reuse, deterministic texture, eight directional poses/idle gait, distinct model detail and rendering preserves gameplay geometry/state');

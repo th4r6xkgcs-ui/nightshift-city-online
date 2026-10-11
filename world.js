@@ -64,6 +64,23 @@ function building(b){
   if(b.name==='APARTMENTS'){g.fillStyle='#333d3b';g.beginPath();g.ellipse(x+w-36,y+32,21,14,0,0,Math.PI*2);g.fill();g.fillStyle='#928c73';g.beginPath();g.ellipse(x+w-38,y+26,19,13,0,0,Math.PI*2);g.fill();rect(g,'#675f4e',x+w-55,y+26,34,11);rect(g,'#b1a58b',x+w-50,y+21,23,3)}
   else{rect(g,'#353e40',x+w-39,y+70,20,25);rect(g,'#afb2a1',x+w-42,y+67,20,25);rect(g,'#657270',x+w-39,y+70,14,18)}
  }
+ // Distinct roof silhouettes and readable landmark props without changing collision.
+ const seed=hash(x+17,y+31),style=b.name==='DINER'?'diner':b.name==='CLUB'?'club':industrial?'industrial':b.name==='APARTMENTS'?'residential':'retail';
+ if(style==='diner'){
+  rect(g,'#b58a64',x+18,y+17,w-36,11);for(let i=0;i<Math.floor((w-40)/18);i++)rect(g,i%2?'#e8d1a2':'#a95c4d',x+20+i*18,y+17,15,7);
+  rect(g,'#415f66',x+26,y+40,42,24);rect(g,'#c9c3a2',x+30,y+43,34,3);
+ }else if(style==='club'){
+  rect(g,'#292c42',x+22,y+18,w-44,12);rect(g,'#aa75a3',x+26,y+20,w-52,3);
+  for(let i=0;i<6;i++)rect(g,i%2?'#d5a6b7':'#596282',x+30+i*16,y+29,10,5);
+ }else if(style==='industrial'){
+  for(let i=0;i<3;i++){const xx=x+18+i*67;rect(g,'#252f36',xx,y+h-82,42,5);rect(g,'#879b9a',xx+3,y+h-81,36,2)}
+ }else if(style==='residential'){
+  for(let i=0;i<4;i++){const xx=x+22+i*42;rect(g,'#394a4b',xx,y+14,28,22);rect(g,'#a0ada0',xx+2,y+16,24,3);rect(g,'#647f76',xx+4,y+22,20,10)}
+ }else{
+  for(let i=0;i<3;i++){const xx=x+24+i*52;rect(g,'#303d41',xx,y+14,32,22);rect(g,'#86998e',xx+3,y+17,26,15);rect(g,'#c0b99e',xx+6,y+20,10,2)}
+ }
+ // Vary roof wear in a deterministic pattern, avoiding frame-to-frame flicker.
+ for(let i=0;i<12;i++){const n=hash(seed+i*71,i*37);const px=x+12+n%Math.max(1,w-24),py=y+11+(n>>>8)%Math.max(1,h-72);rect(g,'#111d2515',px,py,4+(n%7),2)}
  // Front windows and accessible door stay entirely within the old footprint.
  for(const xx of [x+14,x+w-68]){if(night>.2)rect(g,'#e3bc6922',xx-4,y+h-35,62,33);rect(g,'#283a43',xx,y+h-31,54,25);rect(g,night>.2?'#bca46c':'#637e87',xx+3,y+h-28,48,19);rect(g,'#2d4247',xx+26,y+h-30,3,22);rect(g,'#a8a394',xx-2,y+h-5,58,4)}
  if(industrial){rect(g,'#343e43',x+w/2-37,y+h-31,74,31);for(let yy=0;yy<26;yy+=4)rect(g,'#7b827b',x+w/2-34,y+h-29+yy,68,2)}
