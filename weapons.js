@@ -116,7 +116,8 @@
   #gsPanel .w{background:#1f252d;border:1px solid #3d4652;border-radius:10px;padding:8px 10px} #gsPanel .w.eq{border-color:#ffb347;box-shadow:0 0 0 1px #ffb34755 inset}
   #gsPanel .w.lock{opacity:.6} #gsPanel .nm{font-weight:700} #gsPanel .d{font-size:11px;color:#bfae98;margin:2px 0 6px}
   #gsPanel .st{display:grid;grid-template-columns:70px 1fr;gap:2px 6px;align-items:center;font-size:10.5px;color:#d6cbbb}
-  #gsPanel .bar{height:5px;background:#0b0e12;border-radius:3px;overflow:hidden} #gsPanel .bar i{display:block;height:100%;background:linear-gradient(90deg,#d08a3a,#ffd27a)}
+  #gsPanel .st>div{display:flex;align-items:center;gap:6px} #gsPanel .st>div span{min-width:58px;text-align:right}
+  #gsPanel .bar{flex:1;height:5px;background:#0b0e12;border-radius:3px;overflow:hidden} #gsPanel .bar i{display:block;height:100%;background:linear-gradient(90deg,#d08a3a,#ffd27a)}
   #gsPanel .act{margin-top:7px;display:flex;justify-content:space-between;align-items:center;gap:6px}
   #gsPanel .buy{padding:7px 12px;background:linear-gradient(#ffd27a,#d08a3a);color:#2a1600} #gsPanel .buy[disabled]{opacity:.4;pointer-events:none}
   #gsPanel .eqb{padding:7px 12px;background:#2c3a4c;border:1px solid #6f8db3;color:#fff} #gsPanel .on{color:#7cdeb5;font-weight:700}
