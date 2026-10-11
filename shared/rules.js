@@ -12,6 +12,7 @@
     player: Object.freeze({
       maxHp: 100,
       startCash: 750,
+      startPocket: Object.freeze({ scrap: 2, watch: 1, pistol: 1 }), // client fresh save
       radius: 14,
       walkPxPerSec: 180, // client: 3 px per 60fps tick
       runPxPerSec: 300,  // client: 5 px per 60fps tick
@@ -45,6 +46,8 @@
     cashCap: 100000000,
 
     bags: Object.freeze({ lifetimeMs: 120000, pickupRangePx: 48 }),
+    // Starter apartment (location/radius come from the city layout).
+    home: Object.freeze({ price: 1200, stashCashCap: 100000000, stashAmmoCap: 270, stashItemCap: 999 }),
     transfer: Object.freeze({ rangePx: 60, maxPerTransfer: 10000 }),
 
     net: Object.freeze({

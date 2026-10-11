@@ -187,6 +187,7 @@ test('insufficient funds leaves state untouched', () => {
 test('selling only what you carry; medkit use only when hurt', () => {
   const { w, a } = two();
   at(a, SHOP);
+  a.pocket = { pistol: 1 };
   assert.equal(w.handle('a', { t: 'sell', item: 'watch', tx: 's1' }, 0).reason, 'none carried');
   a.pocket.watch = 1;
   assert.equal(w.handle('a', { t: 'sell', item: 'watch', tx: 's2' }, 0).price, 85);

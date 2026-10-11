@@ -19,6 +19,8 @@
     PICKUP: 'pickup',     // {bag}
     GIVE: 'give',         // {to, cash, tx}
     PVP: 'pvp',           // {on}
+    HOME: 'home',         // {tx}  buy the starter apartment (stand at it)
+    STASH: 'stash',       // {dir: in|out, item: cash|ammo|<item>, count, tx}
     PING: 'ping',         // {at}
   });
 
@@ -67,6 +69,12 @@
           ? null : 'bad give';
       case C.PVP:
         return typeof msg.on === 'boolean' ? null : 'bad pvp';
+      case C.HOME:
+        return isTx(msg.tx) ? null : 'bad home';
+      case C.STASH:
+        if (msg.dir !== 'in' && msg.dir !== 'out') return 'bad stash';
+        if (!isItem(msg.item) || !isTx(msg.tx)) return 'bad stash';
+        return Number.isSafeInteger(msg.count) && msg.count > 0 && msg.count <= 100000000 ? null : 'bad stash';
       case C.PING:
         return isNum(msg.at) ? null : 'bad ping';
       default:

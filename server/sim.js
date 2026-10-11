@@ -39,7 +39,8 @@ class World {
       cash: R.player.startCash,
       mag: R.combat.startMagazine,
       reserve: R.combat.startReserve,
-      pocket: { pistol: 1 },
+      pocket: { ...R.player.startPocket },
+      home: { owned: false, stash: {} },
       input: { mx: 0, my: 0, sprint: false, seq: 0 },
       lastSeq: -1,
       nextShotAt: 0,
@@ -69,6 +70,13 @@ class World {
       for (const item of R.items) { const n = int(s.pocket[item], 0, R.itemCap, 0); if (n) p.pocket[item] = n; }
     }
     p.pvp = s.pvp === true;
+    if (s.home && typeof s.home === 'object' && s.home.owned === true) {
+      const H = R.home, st = s.home.stash || {}, stash = {};
+      const cash = int(st.cash, 0, H.stashCashCap, 0); if (cash) stash.cash = cash;
+      const ammo = int(st.ammo, 0, H.stashAmmoCap, 0); if (ammo) stash.ammo = ammo;
+      for (const item of R.items) { const n = int(st[item], 0, H.stashItemCap, 0); if (n) stash[item] = n; }
+      p.home = { owned: true, stash };
+    }
     if (Number.isFinite(s.x) && Number.isFinite(s.y)) {
       const x = clamp(s.x, R.player.radius, R.world.w - R.player.radius);
       const y = clamp(s.y, R.player.radius, R.world.h - R.player.radius);
@@ -83,6 +91,7 @@ class World {
     return {
       name: p.name, cash: p.cash, hp: dead ? RULES.player.maxHp : p.hp,
       mag: p.mag, reserve: p.reserve, pocket: { ...p.pocket }, pvp: p.pvp,
+      home: { owned: p.home.owned, stash: { ...p.home.stash } },
       x: Math.round(dead ? RULES.hospital.x : p.x), y: Math.round(dead ? RULES.hospital.y : p.y),
     };
   }
@@ -108,6 +117,8 @@ class World {
       case C.PICKUP: return this._pickup(p, msg.bag);
       case C.GIVE: return this._tx(p, msg.tx, () => this._give(p, msg.to, msg.cash));
       case C.PVP: return this._setPvp(p, msg.on);
+      case C.HOME: return this._tx(p, msg.tx, () => this._buyHome(p));
+      case C.STASH: return this._tx(p, msg.tx, () => this._stash(p, msg.dir, msg.item, msg.count));
       default: return { ok: false, reason: 'not handled here' };
     }
   }
@@ -290,6 +301,72 @@ class World {
     return { ok: true, got };
   }
 
+  // ---------- apartment + home stash ----------
+  _atHome(p) {
+    const a = this.city.apartment;
+    return Math.hypot(p.x - a.x, p.y - a.y) <= a.radius;
+  }
+
+  _buyHome(p) {
+    if (p.deadUntil) return { ok: false, reason: 'dead' };
+    if (p.home.owned) return { ok: false, reason: 'already owned' };
+    if (!this._atHome(p)) return { ok: false, reason: 'not at the apartment' };
+    const price = RULES.home.price;
+    if (p.cash < price) return { ok: false, reason: 'not enough cash' };
+    p.cash -= price;
+    p.home.owned = true;
+    return { ok: true, cost: price };
+  }
+
+  // Moves `count` of one thing between pockets and the home stash.
+  // All checks happen before anything changes, so a refusal changes nothing.
+  _stash(p, dir, item, count) {
+    const H = RULES.home, CB = RULES.combat;
+    if (p.deadUntil) return { ok: false, reason: 'dead' };
+    if (!p.home.owned) return { ok: false, reason: 'no apartment' };
+    if (!this._atHome(p)) return { ok: false, reason: 'not at home' };
+    const st = p.home.stash, had = st[item] || 0;
+    const put = (n) => { if (n) st[item] = n; else delete st[item]; };
+
+    if (item === 'cash') {
+      if (dir === 'in') {
+        if (p.cash < count) return { ok: false, reason: 'not enough cash' };
+        if (had + count > H.stashCashCap) return { ok: false, reason: 'stash full' };
+        p.cash -= count; put(had + count);
+      } else {
+        if (had < count) return { ok: false, reason: 'not in stash' };
+        if (p.cash + count > RULES.cashCap) return { ok: false, reason: 'cash cap' };
+        put(had - count); p.cash += count;
+      }
+    } else if (item === 'ammo') {
+      if (p.reloadUntil) return { ok: false, reason: 'reloading' };
+      if (dir === 'in') { // spare rounds only; the loaded magazine stays in the gun
+        if (p.reserve < count) return { ok: false, reason: 'not enough spare ammo' };
+        if (had + count > H.stashAmmoCap) return { ok: false, reason: 'stash full' };
+        p.reserve -= count; put(had + count);
+      } else {
+        if (had < count) return { ok: false, reason: 'not in stash' };
+        if (p.reserve + count > CB.maxReserve || p.mag + p.reserve + count > CB.maxCarriedRounds) return { ok: false, reason: 'carrying max ammo' };
+        put(had - count); p.reserve += count;
+      }
+    } else if (RULES.items.includes(item)) {
+      const inPocket = p.pocket[item] || 0;
+      if (dir === 'in') {
+        if (inPocket < count) return { ok: false, reason: 'none carried' };
+        if (had + count > H.stashItemCap) return { ok: false, reason: 'stash full' };
+        if (inPocket === count) delete p.pocket[item]; else p.pocket[item] = inPocket - count;
+        put(had + count);
+      } else {
+        if (had < count) return { ok: false, reason: 'not in stash' };
+        if (inPocket + count > RULES.itemCap) return { ok: false, reason: 'pockets full' };
+        put(had - count); p.pocket[item] = inPocket + count;
+      }
+    } else {
+      return { ok: false, reason: 'cannot store that' };
+    }
+    return { ok: true, dir, item, count };
+  }
+
   _setPvp(p, on) {
     p.pvp = on;
     return { ok: true, pvp: on };
@@ -329,6 +406,7 @@ class World {
       id: p.id, name: p.name, x: Math.round(p.x), y: Math.round(p.y), aim: p.aim,
       hp: p.hp, cash: p.cash, mag: p.mag, reserve: p.reserve, pocket: { ...p.pocket },
       reloading: !!p.reloadUntil, dead: !!p.deadUntil, pvp: p.pvp, ack: p.lastSeq,
+      home: { owned: p.home.owned, stash: { ...p.home.stash } },
     };
   }
 
@@ -353,11 +431,11 @@ class World {
   _send(to, msg) { this.outbox.push({ to, msg }); }
   drain() { const o = this.outbox; this.outbox = []; return o; }
 
-  // Total money in the world (players + bags). Used by tests to prove
-  // transfers/looting never create or destroy cash.
+  // Total money in the world (players, home stashes, bags). Used by tests to
+  // prove transfers/looting/stashing never create or destroy cash.
   totalCash() {
     let n = 0;
-    for (const p of this.players.values()) n += p.cash;
+    for (const p of this.players.values()) n += p.cash + (p.home.stash.cash || 0);
     for (const b of this.bags.values()) n += b.cash;
     return n;
   }
