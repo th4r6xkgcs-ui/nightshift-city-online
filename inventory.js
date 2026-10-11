@@ -38,6 +38,8 @@ root.NightshiftInventory.open=(place)=>{
  const to=from==='pocket'?target:'pocket';
  if(typeof say==='function')say(transfer(from,to,type)?'Item transferred safely':'Item unavailable or storage full');
 };
+const lootButton=document.createElement('button');lootButton.id='loot';lootButton.textContent='LOOT';lootButton.addEventListener('click',()=>{if(root.NightshiftRecovery?.paused()||root.NightshiftHome?.paused())return;const n=takeDrop(player.x,player.y);if(typeof say==='function')say(n?'Recovered '+n+' items from a dropped bag':'No dropped bag nearby')});document.querySelector('#actions').appendChild(lootButton);
+const gloveButton=document.createElement('button');gloveButton.id='glove';gloveButton.textContent='BOX';gloveButton.addEventListener('click',()=>root.NightshiftInventory.open('glove'));document.querySelector('#actions').appendChild(gloveButton);
 root.NightshiftInventory.inspect=()=>{if(typeof say==='function')say('Pockets: '+(total(state.pocket)||'empty')+' items · Home stash: '+total(state.stash)+' · Car glovebox: '+total(bag('glove')||{}))};
 const button=document.createElement('button');button.id='inventory';button.textContent='BAG';button.setAttribute('aria-label','Inspect carried items');button.addEventListener('click',root.NightshiftInventory.inspect);document.querySelector('#actions').appendChild(button);
 root.addEventListener?.('pagehide',saveItems);
