@@ -157,7 +157,7 @@
   #glCard .h{display:block;font-weight:400;color:#b9c8da;font-size:10.5px} #glCard .bar{display:block;height:4px;background:#0a1222;border-radius:3px;margin-top:4px;overflow:hidden}
   #glCard .bar i{display:block;height:100%;background:linear-gradient(90deg,#ffd970,#7cdeb5)}
   #glCard.min .h,#glCard.min .bar{display:none}
-  #glFlash{position:fixed;left:50%;top:22%;transform:translate(-50%,-50%) scale(.9);z-index:45;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;
+  #glFlash{position:fixed;left:50%;top:68%;transform:translate(-50%,-50%) scale(.9);z-index:45;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;
     background:linear-gradient(180deg,#2a2410f2,#16120af2);border:1px solid #ffd970;border-radius:14px;padding:10px 18px;text-align:center;color:#fff7dd;font:600 13px ui-monospace,Menlo,monospace}
   #glFlash.on{opacity:1;transform:translate(-50%,-50%) scale(1)} #glFlash b{display:block;font-size:18px;color:#ffd970}
   #glPanel{position:fixed;inset:6% 6%;z-index:46;overflow:auto;background:#0f1830f5;border:1px solid #6f8db3;border-radius:14px;padding:14px 16px;color:#e8eff7;font:13px ui-monospace,Menlo,monospace}
