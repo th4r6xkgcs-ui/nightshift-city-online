@@ -4,8 +4,8 @@ const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 function react(npc,source,now,kind='gunshot'){
  if(npc.hp<=0||![source?.x,source?.y,now].every(Number.isFinite))return false;
  const moved=!npc.threat||distance(npc.threat,source)>24;
- npc.threat={x:source.x,y:source.y};npc.fleeUntil=Math.max(npc.fleeUntil||0,now+(kind==='robbery'?10000:kind==='crash'?4000:6000));
- if(moved){npc.nextRoute=0;npc.path=[];npc.cover=null}npc.mode='flee';return true;
+ npc.disturbedUntil=Math.max(npc.disturbedUntil||0,now+20000);npc.socialUntil=0;npc.threat={x:source.x,y:source.y};npc.fleeUntil=Math.max(npc.fleeUntil||0,now+(kind==='robbery'?10000:kind==='crash'?4000:6000));
+ if(moved){npc.nextRoute=0;npc.path=[];npc.cover=null}npc.mode='flee';npc.routineInterrupted=true;return true;
 }
 function occupied(point,cars){return cars.some(car=>root.NightshiftVehicleGeometry.circleOverlap(point,car,9))}
 function canStep(from,to,blocked,cars){return !blocked(to.x,to.y)&&cars.every(car=>!root.NightshiftVehicleGeometry.circleOverlap(to,car,9)||(root.NightshiftVehicleGeometry.circleOverlap(from,car,9)&&distance(to,car)>distance(from,car)))}
@@ -31,7 +31,8 @@ function step(npc,now,dt,context){
   while(npc.path?.length&&distance(npc,npc.path[0])<8)npc.path.shift();
   const goal=npc.mode==='cover'?null:npc.path?.[0];if(goal){const d=distance(npc,goal),speed=Math.min(d,1.2*dt);const to={x:npc.x+(goal.x-npc.x)/d*speed,y:npc.y+(goal.y-npc.y)/d*speed};if(canStep(npc,to,blocked,cars)){npc.x=to.x;npc.y=to.y}else npc.nextRoute=0;}
  }else{
-  if(npc.threat){npc.threat=null;npc.cover=null;npc.path=[];npc.dx=0;npc.dy=0;npc.t=0}npc.mode='routine';npc.t-=dt;
+  if(npc.threat){npc.threat=null;npc.cover=null;npc.path=[];npc.dx=0;npc.dy=0;npc.t=0}npc.mode='routine';if(npc.routine&&npc.routineInterrupted){npc.routine.nextRoute=0;npc.routine.path=[];npc.routineInterrupted=false}npc.t-=dt;
+  if(root.NightshiftCitizenRoutines?.step(npc,now,dt,context)){npc.moving=distance(npc,before)>.01;if(npc.moving){npc.walkTicks=(npc.walkTicks||0)+dt;npc.moveAngle=Math.atan2(npc.y-before.y,npc.x-before.x)}return}
   if(npc.t<=0){npc.dx=Math.random()*2-1;npc.dy=Math.random()*2-1;npc.t=30+Math.random()*80}
   const to={x:Math.max(10,Math.min(world.w-10,npc.x+npc.dx*.38*dt)),y:Math.max(10,Math.min(world.h-10,npc.y+npc.dy*.38*dt))};
   if(canStep(npc,{x:to.x,y:npc.y},blocked,cars))npc.x=to.x;else npc.dx*=-1;
