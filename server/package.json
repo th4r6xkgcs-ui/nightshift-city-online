@@ -1,0 +1,14 @@
+{
+  "name": "nightshift-city-online-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Authoritative multiplayer server for Nightshift City Online (local dev only, not deployed).",
+  "main": "index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --test tests/*.test.cjs"
+  }
+}
