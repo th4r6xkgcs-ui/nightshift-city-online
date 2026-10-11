@@ -5,7 +5,7 @@
 (function (root) {
   'use strict';
   const SPOTS = [
-    { id: 'pier', name: 'Docks Pier', x: 2150, y: 1650 },
+    { id: 'pier', name: 'Docks Pier', x: 1760, y: 1655 }, // end of the docks road, bottom-centre on phones (corners sit under the joysticks)
     { id: 'canal', name: 'West Canal', x: 60, y: 520 },
   ];
   // weight = base odds; night/rain multiply some; value = market price; hp = healing when eaten.
