@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');
+const run=boot();
+const view={x:790,y:360,width:470,height:520,zoom:1};
+const crowns=run('NightshiftWorld.palmActors('+JSON.stringify(view)+')');
+assert.ok(Array.isArray(crowns)&&crowns.length>0,'visible palms in Midtown');
+assert.ok(crowns.every(x=>x.kind==='palm-crown'));
+assert.equal(run('NightshiftWorld.palmActors({x:0,y:0,width:400,height:400,zoom:0}).length'),0);
+run('globalThis.renderEvents=[];NightshiftSprites.person=(p)=>renderEvents.push("person:"+p.id);NightshiftWorld.palmCrown=(p)=>renderEvents.push("crown");');
+const crown=crowns[0].entity;
+run('NightshiftScene.draw([{kind:"ped",entity:{id:"behind",x:'+crown.x+',y:'+(crown.y-8)+'}},{kind:"palm-crown",entity:{x:'+crown.x+',y:'+crown.y+'}},{kind:"ped",entity:{id:"front",x:'+crown.x+',y:'+(crown.y+8)+'}}],'+JSON.stringify(view)+')');
+assert.equal(run('renderEvents.join(",")'),'person:behind,crown,person:front');
+console.log('PASS: palm foreground y-sort, bounded view list, no invalid zoom');

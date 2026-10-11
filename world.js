@@ -16,6 +16,28 @@ function palm(ctx,x,y){
  }
  rect(ctx,'#9bb080',x-3,cy-4,7,5);rect(ctx,'#244b48',x-1,cy+1,5,4);
 }
+function palmCrown(ctx,x,y){
+ const cy=y-28;
+ for(const [dx,dy] of [[-1,-1],[1,-1],[-1,1],[1,1]])for(let k=0;k<5;k++){
+  rect(ctx,k<2?'#669278':'#356e65',x+dx*(3+k*4)-3,cy+dy*(k*2)-3,8-k,5);
+  rect(ctx,'#244b4f',x+dx*(5+k*4)-2,cy+dy*(k*2)+2,5,2);
+ }
+ rect(ctx,'#9bb080',x-3,cy-4,7,5);rect(ctx,'#244b48',x-1,cy+1,5,4);
+}
+function palmActors(view){
+ const entries=[],margin=70;
+ if(!view||!Number.isFinite(view.x)||!Number.isFinite(view.y)||!Number.isFinite(view.zoom)||view.zoom<=0)return entries;
+ const right=view.x+view.width/view.zoom+margin,bottom=view.y+view.height/view.zoom+margin;
+ for(let x=440;x<world.w;x+=440)for(let y=340;y<world.h;y+=340){
+  const district=districtStyle(x+100,y+100);
+  if(district!=='midtown'&&district!=='docks')continue;
+  for(const yy of [147,246]){
+   const px=x+360,py=y+yy;
+   if(px>=view.x-margin&&px<=right&&py>=view.y-margin&&py<=bottom)entries.push({kind:'palm-crown',entity:{x:px,y:py}});
+  }
+ }
+ return entries;
+}
 function furnishings(ctx,x,y){
  const district=districtStyle(x+100,y+100),p=palettes[district];
  // Sidewalk fixtures remain beyond the 66px road edge and away from crosswalks.
@@ -172,5 +194,5 @@ function building(b){
  rect(g,'#1a334066',x+3,y+h-1,w-6,5);rect(g,trim,x+w/2-23,y+h+1,46,3);rect(g,'#677f82',x+w/2-19,y+h+4,38,3);
  storefrontLight(b,night);g.restore();
 }
-root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor};
+root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y)};
 })(globalThis);
