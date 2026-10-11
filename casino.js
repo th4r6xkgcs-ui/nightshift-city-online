@@ -87,6 +87,9 @@
   #csPanel .ch{padding:8px 4px;background:#2a1530;border:1px solid #6d3a78} #csPanel .ch.on{outline:2px solid #ffd970;background:#4a2152}
   #csPanel .nums{display:grid;grid-template-columns:repeat(13,1fr);gap:3px} #csPanel .num{padding:5px 0;font-size:11px;border:1px solid #0006}
   #csPanel .num.red{background:#b3233b} #csPanel .num.black{background:#16161c} #csPanel .num.green{background:#1e6b3e} #csPanel .num.on{outline:2px solid #ffd970}
+  #csPanel .bj{display:flex;flex-direction:column;gap:6px;align-items:center;margin:6px 0} #csPanel .hand{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  #csPanel .card{min-width:44px;padding:10px 6px;text-align:center;background:#fff8ec;color:#16161c;border-radius:8px;font:700 18px ui-monospace,Menlo,monospace;border:2px solid #ffd970} #csPanel .card.red{color:#b3233b} #csPanel .card.back{background:#4a2152;color:#ffd970}
+  #csPanel .bjrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap} #csPanel .bjrow .spin{margin:6px 0;max-width:200px;flex:1}
   #csPanel .hist{display:flex;gap:4px;justify-content:center;margin-top:6px;flex-wrap:wrap} #csPanel .hist span{padding:2px 6px;border-radius:5px;font-size:11px}
   @media (max-height:430px){#csPanel{inset:3% 3%}#csPanel .reel{width:56px;height:56px;font-size:32px}#csPanel .wheel{width:64px;height:64px;font-size:22px}}`;
   document.head.appendChild(css);
@@ -116,6 +119,7 @@
   }
 
   function spin() {
+    if (ui.game === 'blackjack') { if (ui.bj && !ui.bj.done) bjHit(); else bjDeal(); return; }
     const p = P(), why = canPlay();
     if (ui.spinning) return;
     if (why) { ui.msg = why; ui.msgClass = 'lose'; return render(); }
@@ -149,9 +153,9 @@
     const x = el('button', { className: 'x', type: 'button' }, 'LEAVE'); x.onclick = close;
     top.append(el('h2', {}, '🎰 LUCKY 7 CASINO'), x);
     const tabs = el('div', { className: 'tabs' });
-    for (const [id, name] of [['slots', '🎰 SLOTS'], ['roulette', '🎡 ROULETTE']]) {
+    for (const [id, name] of [['slots', '🎰 SLOTS'], ['roulette', '🎡 ROULETTE'], ['blackjack', '🃏 BLACKJACK']]) {
       const b = el('button', { className: 'tab' + (ui.game === id ? ' on' : ''), type: 'button' }, name);
-      b.onclick = () => { if (!ui.spinning) { ui.game = id; ui.msg = ''; render(); } };
+      b.onclick = () => { if (!ui.spinning && !(ui.bj && !ui.bj.done)) { ui.game = id; ui.msg = ''; render(); } };
       tabs.append(b);
     }
     const info = el('div', { className: 'sub' });
@@ -167,6 +171,10 @@
       const reels = el('div', { className: 'reels' });
       for (const r of ui.reels) reels.append(el('div', { className: 'reel' }, r));
       panel.append(reels);
+    } else if (ui.game === 'blackjack') {
+      renderBlackjack(cash);
+      panel.scrollTop = scroll;
+      return;
     } else {
       const w = ui.wheel;
       panel.append(el('div', { className: 'wheel ' + (w && w.color !== 'spin' ? w.color : '') }, w ? String(w.n) : '–'));
@@ -203,6 +211,50 @@
     panel.scrollTop = scroll;
   }
 
+  // ---- blackjack: stake is settled once, when the hand ends (closing mid-hand stands) ----
+  const SUITS = ['♠', '♥', '♦', '♣'];
+  const cardEl = (c, i, hidden) => { const red = (c + i) % 2 === 1; return el('span', { className: 'card' + (hidden ? ' back' : red ? ' red' : '') }, hidden ? '🂠' : R.cardLabel(c) + SUITS[(c + i) % 4]); };
+  function bjDeal() {
+    const why = canPlay(), p = P();
+    if (why) { ui.msg = why; ui.msgClass = 'lose'; return render(); }
+    if (!p || p.cash < ui.bet) { ui.msg = 'Not enough cash for that bet'; ui.msgClass = 'lose'; return render(); }
+    ui.bj = { ...R.dealHand(), bet: ui.bet, doubled: false, done: false }; ui.msg = ''; ui.msgClass = '';
+    if (R.isBlackjack(ui.bj.player) || R.isBlackjack(ui.bj.dealer)) return bjFinish();
+    render();
+  }
+  function bjHit() { const h = ui.bj; if (!h || h.done) return; h.player.push(R.draw()); if (R.handValue(h.player).total >= 21) return bjFinish(); render(); }
+  function bjDouble() { const h = ui.bj, p = P(); if (!h || h.done || h.player.length !== 2 || !p || p.cash < h.bet * 2) return; h.doubled = true; h.player.push(R.draw()); bjFinish(); }
+  function bjFinish() {
+    const h = ui.bj; if (!h || h.done) return;
+    if (R.handValue(h.player).total <= 21) R.dealerPlay(h.dealer);
+    const stake = h.bet * (h.doubled ? 2 : 1), mult = R.bjResult(h.player, h.dealer), pay = Math.round(stake * mult);
+    settle(stake, pay); h.done = true;
+    const pt = R.handValue(h.player).total, dt = R.handValue(h.dealer).total;
+    ui.msg = mult === 2.5 ? `BLACKJACK! +${money(pay - stake)}` : mult === 2 ? `You win ${money(pay - stake)} (${pt} vs ${dt > 21 ? 'bust' : dt})` : mult === 1 ? 'Push · stake returned' : pt > 21 ? `Bust · lost ${money(stake)}` : `Dealer wins (${dt} vs ${pt}) · lost ${money(stake)}`;
+    ui.msgClass = mult > 1 ? 'win' : mult === 1 ? '' : 'lose';
+    render();
+  }
+  function renderBlackjack(cash) {
+    const h = ui.bj, live = h && !h.done;
+    const table = el('div', { className: 'bj' });
+    if (h) {
+      const dv = live ? null : R.handValue(h.dealer).total;
+      const dRow = el('div', { className: 'hand' }); h.dealer.forEach((c, i) => dRow.append(cardEl(c, i, live && i === 1)));
+      const pRow = el('div', { className: 'hand' }); h.player.forEach((c, i) => pRow.append(cardEl(c, i + 2, false)));
+      table.append(el('div', { className: 'sub' }, `Dealer ${dv === null ? Math.min(10, h.dealer[0]) === 1 ? 'shows A' : 'shows ' + R.handValue([h.dealer[0]]).total : dv}`), dRow,
+        el('div', { className: 'sub' }, `You ${R.handValue(h.player).total}${h.doubled ? ' · doubled' : ''}`), pRow);
+    } else table.append(el('div', { className: 'sub' }, 'Dealer stands on 17 · Blackjack pays 3:2 · Double on your first two cards'));
+    panel.append(table);
+    const row = el('div', { className: 'bjrow' });
+    if (live) {
+      const hit = el('button', { className: 'spin', type: 'button' }, 'HIT'); hit.onclick = bjHit;
+      const stand = el('button', { className: 'spin', type: 'button' }, 'STAND'); stand.onclick = bjFinish;
+      const dbl = el('button', { className: 'spin', type: 'button', disabled: h.player.length !== 2 || cash < h.bet * 2 }, `DOUBLE · ${money(h.bet * 2)}`); dbl.onclick = bjDouble;
+      row.append(hit, stand, dbl);
+    } else { const deal = el('button', { className: 'spin', type: 'button', disabled: cash < ui.bet }, `DEAL · ${money(ui.bet)}`); deal.onclick = bjDeal; row.append(deal); }
+    panel.append(row, el('div', { className: 'res ' + ui.msgClass }, ui.msg));
+  }
+
   function open() {
     const why = canPlay();
     if (why) { say(why); return false; }
@@ -210,7 +262,7 @@
     panel.hidden = false; ui.msg = ''; render();
     return true;
   }
-  function close() { panel.hidden = true; }
+  function close() { if (ui.bj && !ui.bj.done) bjFinish(); panel.hidden = true; }
   // While open, the casino owns the keyboard (game keys don't move the player); Escape leaves.
   addEventListener('keydown', (e) => {
     if (panel.hidden) return;

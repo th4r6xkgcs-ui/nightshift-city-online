@@ -90,6 +90,21 @@
       CR.report = function (point, now, kind) { if (kind === 'gunshot' && current().suppressed && Math.random() < 0.8) return false; return report.apply(this, arguments); };
       CR.report.__nsWeapons = true;
     }
+    const REC = root.NightshiftRecovery;
+    if (REC && typeof REC.damage === 'function' && !REC.damage.__nsArmor) {
+      const damage = REC.damage;
+      // Body armor soaks part of each hit; refunded if the game ignored the hit (safe zone, immunity).
+      REC.damage = function (amount, now) {
+        const p = P(), a0 = state.armor || 0;
+        if (!p || !(a0 > 0) || !Number.isFinite(amount) || amount <= 0) return damage.apply(this, arguments);
+        const r = W.absorb(a0, amount), hp0 = p.hp;
+        state.armor = r.armor;
+        const out = damage.call(this, r.dmg, now);
+        if (r.dmg > 0 && p.hp === hp0) state.armor = a0; else { persist(); renderPill(); }
+        return out;
+      };
+      REC.damage.__nsArmor = true;
+    }
     const CI = root.NightshiftCitizens;
     if (CI && typeof CI.alert === 'function' && !CI.alert.__nsWeapons) {
       const alertFn = CI.alert;
@@ -100,6 +115,7 @@
   }
   install();
   setInterval(install, 1000);
+  setInterval(() => { const p = P(); if (p && p.hp <= 0 && state.armor > 0) { state.armor = 0; persist(); renderPill(); } }, 500); // armor is lost when you go down
 
   function equip(id, quiet) {
     if (!W.equip(state, id)) return false;
@@ -149,7 +165,7 @@
   function renderPill() {
     const w = current();
     pill.textContent = '';
-    pill.append(document.createTextNode(`${w.icon} ${w.suppressed ? "🔇 " : ""}${w.name.toUpperCase()} `), el('small', {}, state.owned.length > 1 ? `⟳ ${state.owned.length}` : ''));
+    pill.append(document.createTextNode(`${w.icon} ${w.suppressed ? "🔇 " : ""}${w.name.toUpperCase()} ${state.armor > 0 ? `🛡️${Math.ceil(state.armor)} ` : ''}`), el('small', {}, state.owned.length > 1 ? `⟳ ${state.owned.length}` : ''));
   }
   function placePill() {
     const m = document.querySelector('#map');
@@ -223,6 +239,14 @@
     };
     ammo.append(el('span', {}, `📦 Ammo crate · spare ${cs?.reserve ?? 0}/240`), ab);
     shop.append(ammo);
+    const armorRow = el('div', { className: 'ammo' });
+    armorRow.append(el('span', {}, `🛡️ Body armor ${Math.ceil(state.armor || 0)}/100 · soaks ${Math.round(W.ABSORB * 100)}% of each hit`));
+    for (const v of W.ARMOR) {
+      const b = el('button', { className: 'buy', type: 'button', disabled: cash < v.price || (state.armor || 0) >= v.points }, `${v.icon} ${v.points} · ${money(v.price)}`);
+      b.onclick = () => { const pl = P(); if (!pl || pl.cash < v.price || (state.armor || 0) >= v.points) return; pl.cash -= v.price; state.armor = v.points; persist(); gameSave(); renderPill(); say(`${v.icon} ${v.name} on · armor ${v.points}`); renderShop(); };
+      armorRow.append(b);
+    }
+    shop.append(armorRow);
     const grid = el('div', { className: 'grid' });
     for (const w of W.WEAPONS) {
       const owned = state.owned.includes(w.id), eq = state.equipped === w.id, locked = lv < w.level;
