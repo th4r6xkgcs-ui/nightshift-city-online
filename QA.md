@@ -1,4 +1,4 @@
-# v0.14 device acceptance checks
+# v0.15 device acceptance checks
 This is a checklist for an actual browser/device, not a claim that these checks ran. Node suites and Canvas rendering do not exercise native touch, audio or file dialogs. Use the owning account for the private preview; avoid importing a valuable save while testing with disposable progress.
 
 | Area | Steps | Expected result |
@@ -18,3 +18,11 @@ This is a checklist for an actual browser/device, not a claim that these checks 
 
 ## Automated checks
 `npm run check` covers static bundle integrity, mock touch pointer ownership, menu isolation, clock/physics consistency, delayed reloads, inventory custody, economy bounds and fresh-context persistence. Browser harness is separate; it now opens MORE before accessing STYLE. Existing test scripts are not a substitute for the native checks above.
+
+## Additional v0.15 checks
+- MAP → salvage crate: remain still for 2.5 seconds, then sell finds. Repeat attempts during refill must not award items; moving or taking damage cancels the search.
+- Complete three courier routes across refresh: rewards are $225, $275 and $300; STATS records counts/XP, level bonus occurs once.
+- Hold RUN: stamina falls, exhaustion slows movement, releasing/resting restores stamina. No center-stick drift.
+- Driving GPS follows roads and changes to walking routing after EXIT. Traffic waits before red/amber signals and clears occupied junctions.
+- Neutral clinic ring blocks damage/crime/gunfire. Repeat while wanted: protection must not apply.
+- World clock persists through refresh; night windows/headlights remain legible. Outfits also appear indoors and idle feet stop animating.

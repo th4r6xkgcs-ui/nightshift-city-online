@@ -1,0 +1,18 @@
+/* Browser-local reputation and milestones. No online economy authority. */
+(function(root){
+'use strict';
+const KEY='nightshift-city-progress-v1',KINDS=['delivery','salvage','home'];
+function clean(raw){const out={xp:0,delivery:0,salvage:0,home:0};for(const key of Object.keys(out))if(Number.isSafeInteger(raw?.[key])&&raw[key]>=0)out[key]=Math.min(100000,raw[key]);return out}
+function level(xp){return Math.min(10,1+Math.floor(Math.sqrt(Math.max(0,xp)/100)))}
+function apply(state,kind,amount){if(!KINDS.includes(kind)||!Number.isSafeInteger(amount)||amount<1||amount>1000)return {bonus:0,level:level(state.xp)};const before=level(state.xp);state[kind]=Math.min(100000,state[kind]+1);state.xp=Math.min(100000,state.xp+amount);const after=level(state.xp);return {bonus:(after-before)*50,level:after}}
+function milestones(state){return [{label:'FIRST DELIVERY',done:state.delivery>=1},{label:'CITY COURIER · 5 deliveries',done:state.delivery>=5},{label:'SCAVENGER · 5 searches',done:state.salvage>=5},{label:'HOMEOWNER',done:state.home>=1},{label:'ESTABLISHED · level 3',done:level(state.xp)>=3}]}
+root.NightshiftProgress={clean,level,apply,milestones};if(!root.document)return;
+let state=clean();try{state=clean(JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{}
+if(root.NightshiftActivities?.ownsHome()&&state.home===0)state.home=1;
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
+function award(kind,amount){const result=apply(state,kind,amount);if(result.bonus){player.cash=Math.min(100000000,player.cash+result.bonus);root.NightshiftFeedback?.floating(player.x,player.y-30,'LEVEL '+result.level+' · +$'+result.bonus,'#a8c3ff');say('Reputation level '+result.level+' · +$'+result.bonus)}persist();save();return result}
+const panel=document.createElement('div');panel.id='progressPanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label','City progress');panel.style.cssText='position:fixed;z-index:26;inset:8% 6%;overflow:auto;padding:20px;background:#142139;border:1px solid #809cbb;border-radius:12px;color:white';document.body.appendChild(panel);
+function open(){if(NightshiftHome.paused()||NightshiftRecovery.paused()||NightshiftInventory.paused()||NightshiftVehicles.paused()||NightshiftMap.paused()||NightshiftBackups.paused())return;releaseControls();panel.textContent='';const title=document.createElement('h2');title.textContent='CITY REPUTATION · LEVEL '+level(state.xp);panel.appendChild(title);const info=document.createElement('p');info.textContent=state.xp+' XP · '+state.delivery+' deliveries · '+state.salvage+' salvage searches. Earn $50 per new level.';panel.appendChild(info);for(const milestone of milestones(state)){const row=document.createElement('p');row.textContent=(milestone.done?'✓ ':'○ ')+milestone.label;row.style.color=milestone.done?'#7ce3b6':'#a9bad0';panel.appendChild(row)}const close=document.createElement('button');close.textContent='CLOSE';close.style.cssText='width:100%;height:44px;border-radius:7px';close.addEventListener('click',()=>panel.hidden=true);panel.appendChild(close);panel.hidden=false}
+Object.assign(root.NightshiftProgress,{state,award,save:persist,open,paused:()=>!panel.hidden});
+const button=document.createElement('button');button.id='progress';button.textContent='STATS';button.setAttribute('aria-label','City reputation and milestones');button.addEventListener('click',open);document.querySelector('#actions').appendChild(button);
+})(globalThis);

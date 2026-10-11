@@ -1,7 +1,7 @@
 /* User-controlled browser save backups. These do not provide cloud sync. */
 (function(root){
 'use strict';
-const KEYS=['nightshift-city-save-v2','nightshift-city-inventory-v1','nightshift-city-activities-v1','nightshift-city-crime-v1','nightshift-city-profile-v1','nightshift-city-vehicles-v1'];
+const KEYS=['nightshift-city-save-v2','nightshift-city-inventory-v1','nightshift-city-activities-v1','nightshift-city-crime-v1','nightshift-city-profile-v1','nightshift-city-vehicles-v1','nightshift-city-salvage-v1','nightshift-city-progress-v1','nightshift-city-world-v1'];
 const RECOVERY_KEY='nightshift-city-before-restore';
 function validate(raw){
  if(raw?.format!=='nightshift-city-backup'||raw.version!==1||!raw.saves||typeof raw.saves!=='object'||Array.isArray(raw.saves))throw Error('Unsupported backup file');
@@ -52,5 +52,5 @@ const input=document.createElement('input');input.type='file';input.accept='.jso
 button('RESTORE BACKUP · replaces local progress',()=>{input.value='';input.click()});
 button('UNDO LAST RESTORE',()=>{try{undo(localStorage);root.location.reload()}catch(error){say(error.message)}});
 button('CLOSE',()=>panel.hidden=true);root.NightshiftBackups.paused=()=>!panel.hidden;
-const b=document.createElement('button');b.id='saves';b.textContent='SAVES';b.addEventListener('click',()=>{if(NightshiftHome.paused()||NightshiftInventory.paused()||NightshiftRecovery.paused()||NightshiftVehicles.paused()||NightshiftMap.paused())return;releaseControls();panel.hidden=false});document.querySelector('#actions').appendChild(b);
+const b=document.createElement('button');b.id='saves';b.textContent='SAVES';b.addEventListener('click',()=>{if(root.NightshiftProgress?.paused()||NightshiftHome.paused()||NightshiftInventory.paused()||NightshiftRecovery.paused()||NightshiftVehicles.paused()||NightshiftMap.paused())return;releaseControls();panel.hidden=false});document.querySelector('#actions').appendChild(b);
 })(globalThis);

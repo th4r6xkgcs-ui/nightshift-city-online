@@ -1,0 +1,3 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');const c={};vm.createContext(c);vm.runInContext(fs.readFileSync('feedback.js','utf8'),c);const fx=c.NightshiftFeedback;for(let i=0;i<100;i++){fx.burst(100,100);fx.floating(100,100,'+$10')}assert.equal(fx.particles.length,160);assert.equal(fx.labels.length,24);for(let i=0;i<10;i++)fx.tick(.2);assert.equal(fx.particles.length,0);assert.equal(fx.labels.length,0);console.log('PASS: effect buffers bounded and expired effects removed');
+
+fx.burst(0,0);fx.tick(NaN);assert.ok(Number.isFinite(fx.particles[0].life));console.log('PASS: invalid effect timestep cannot create immortal particles');
