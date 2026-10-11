@@ -6,7 +6,7 @@
   'use strict';
   const RACES = [
     { id: 'loop', name: 'Midtown Loop', tier: 'Rookie', reward: 700, xp: 150,
-      points: [[880, 680], [1100, 680], [1320, 680], [1320, 1020], [1100, 1020], [880, 1020], [880, 680]] },
+      points: [[1100, 680], [1320, 680], [1320, 1020], [1100, 1020], [880, 1020], [880, 680]] }, // starts mid-block: (880,680) is the apartment door
     { id: 'docks', name: 'Docks Dash', tier: 'Pro', reward: 1200, xp: 260,
       points: [[440, 340], [880, 340], [1320, 340], [1760, 340], [1760, 680], [1760, 1020], [1760, 1360]] },
     { id: 'tour', name: 'Grand Tour', tier: 'Legend', reward: 2200, xp: 450,

@@ -15,7 +15,7 @@
   const STATS = ['walked', 'drove', 'shots', 'escapes', 'earned'];
 
   function clean(raw) {
-    const s = { version: 1, done: {}, stats: {} };
+    const s = { version: 1, done: {}, stats: {}, track: raw?.track !== false, pin: null };
     for (const k of STATS) {
       const v = raw?.stats?.[k];
       s.stats[k] = Number.isFinite(v) && v > 0 ? Math.min(STAT_CAP, v) : 0;
@@ -23,7 +23,15 @@
     if (raw?.done && typeof raw.done === 'object') {
       for (const [id, t] of Object.entries(raw.done)) if (BY_ID[id] && Number.isFinite(t) && t >= 0) s.done[id] = t;
     }
+    if (BY_ID[raw?.pin] && BY_ID[raw.pin].place && s.done[raw.pin] === undefined) s.pin = raw.pin;
     return s;
+  }
+
+  // Goal the tracker follows: a pinned unfinished goal, else the NEXT goal (if it has a place).
+  function tracked(state) {
+    if (state.pin && state.done[state.pin] === undefined && BY_ID[state.pin]?.place) return BY_ID[state.pin];
+    const g = GOALS.find((x) => state.done[x.id] === undefined);
+    return g && g.place ? g : null;
   }
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
@@ -56,7 +64,7 @@
   }
 
   const doneCount = (state) => Object.keys(state.done).length;
-  const core = { KEY, GOALS, clean, context, progressOf, step, next, doneCount };
+  const core = { KEY, GOALS, clean, context, progressOf, step, next, doneCount, tracked };
   if (typeof module === 'object' && module.exports) { module.exports = core; return; }
   if (!root.document) { root.NightshiftGoals = core; return; }
 
@@ -155,6 +163,45 @@
   setInterval(track, 100);
   setInterval(check, 1000);
 
+  // ---- goal tracker: resolve a goal's place to a live world position and point at it ----
+  const nearest = (list, p) => (list || []).filter((o) => o && Number.isFinite(o.x) && Number.isFinite(o.y)).sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))[0] || null;
+  const PLACES = {
+    car: (p) => (p.car ? null : nearest(G.cars.filter((c) => c?.owned), p)),
+    job: () => { try { return root.NightshiftActivities?.target?.() || null; } catch { return null; } },
+    salvage: (p) => nearest((root.NightshiftSalvage?.locations?.() || []).filter((l) => l.ready !== false), p),
+    apartment: () => ({ x: 880, y: 680 }),
+    property: (p) => nearest(root.NightshiftBusinessRules?.PROPERTIES, p),
+    dealer: (p) => nearest(root.NightshiftBusinessRules?.MARKETS, p),
+    garage: (p) => nearest(root.NightshiftTuning?.sites?.(), p),
+    casino: () => root.NightshiftCasino?.door?.() || null,
+    gunshop: () => root.NightshiftWeapons?.door?.() || null,
+    race: (p) => { const medals = root.NightshiftRaces?.state?.medals || {}; const st = root.NightshiftRaces?.starts?.() || []; return nearest(st.filter((r) => medals[r.id] !== 'gold'), p) || nearest(st, p); },
+  };
+  function trackTarget() {
+    const p = G.player, g = tracked(state);
+    if (!p || !g || !state.track) return null;
+    try { const pos = PLACES[g.place]?.(p); return pos ? { goal: g, x: pos.x, y: pos.y, dist: Math.hypot(pos.x - p.x, pos.y - p.y) } : null; } catch { return null; }
+  }
+  function drawTracker() {
+    const t = trackTarget(), p = G.player;
+    if (!t || !p || t.dist < 110 || root.NightshiftRaces?.active?.()?.phase === 'racing') return;
+    /* eslint-disable-next-line no-undef */
+    const ctx = (() => { try { return g; } catch { return null; } })();
+    if (!ctx) return;
+    const a = Math.atan2(t.y - p.y, t.x - p.x), r = p.car ? 62 : 40, pulse = 1 + 0.12 * Math.sin(performance.now() / 180);
+    ctx.save();
+    ctx.translate(p.x + Math.cos(a) * r, p.y + Math.sin(a) * r); ctx.rotate(a); ctx.scale(pulse, pulse);
+    ctx.fillStyle = '#ffd970'; ctx.strokeStyle = '#1a1300'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(-6, -8); ctx.lineTo(-2, 0); ctx.lineTo(-6, 8); ctx.closePath(); ctx.stroke(); ctx.fill();
+    ctx.restore();
+  }
+  const E = root.NightshiftEncounters;
+  if (E && !E.__goals) {
+    const draw = E.draw;
+    E.draw = function () { const r = draw.apply(this, arguments); try { drawTracker(); } catch { /* cosmetic */ } return r; };
+    E.__goals = true;
+  }
+
   // ---- UI ----
   const css = document.createElement('style');
   css.textContent = `
@@ -163,7 +210,7 @@
   #glCard .t{display:block;color:#ffd970;font-size:10px;letter-spacing:.06em} #glCard .n{display:block;font-size:12px;margin:1px 0}
   #glCard .h{display:block;font-weight:400;color:#b9c8da;font-size:10.5px} #glCard .bar{display:block;height:4px;background:#0a1222;border-radius:3px;margin-top:4px;overflow:hidden}
   #glCard .bar i{display:block;height:100%;background:linear-gradient(90deg,#ffd970,#7cdeb5)}
-  #glCard.min .h,#glCard.min .bar{display:none}
+  #glCard.min .h,#glCard.min .bar{display:none} #glCard .trk{display:block;margin-top:3px;color:#ffd970;font-size:10.5px}
   #glFlash{position:fixed;left:50%;top:68%;transform:translate(-50%,-50%) scale(.9);z-index:45;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;
     background:linear-gradient(180deg,#2a2410f2,#16120af2);border:1px solid #ffd970;border-radius:14px;padding:10px 18px;text-align:center;color:#fff7dd;font:600 13px ui-monospace,Menlo,monospace}
   #glFlash.on{opacity:1;transform:translate(-50%,-50%) scale(1)} #glFlash b{display:block;font-size:18px;color:#ffd970}
@@ -199,7 +246,8 @@
   function render() {
     const ctx = snapshot();
     const n = next(state, ctx);
-    const key = n ? `${n.goal.id}|${n.cur}` : 'all';
+    const tt = trackTarget(), dist = tt ? Math.round(tt.dist / 10) : -1;
+    const key = n ? `${n.goal.id}|${n.cur}|${tt?.goal.id}|${dist >= 0 ? Math.round(dist / 5) : -1}` : 'all';
     if (key !== lastKey) {
       lastKey = key;
       card.textContent = '';
@@ -209,6 +257,7 @@
         card.append(el('span', { className: 't' }, `🎯 NEXT GOAL · ${doneCount(state)}/${GOALS.length}`),
           el('span', { className: 'n' }, n.target > 1 ? `${n.goal.title} · ${fmt(n.cur)}/${fmt(n.target)}` : n.goal.title),
           el('span', { className: 'h' }, n.goal.hint), bar);
+        if (tt) card.append(el('span', { className: 'trk' }, `📍 ${tt.goal.id === n.goal.id ? '' : tt.goal.title + ' · '}${dist < 11 ? 'here' : dist + 'm'}`));
       }
     }
     if (!panel.hidden) renderPanel(ctx, n);
@@ -219,7 +268,11 @@
     panel.textContent = '';
     const close = el('button', { className: 'close', type: 'button' }, 'CLOSE');
     close.onclick = () => { panel.hidden = true; };
-    panel.append(close, el('h2', {}, `GOALS · ${doneCount(state)}/${GOALS.length}`));
+    const trk = el('button', { className: 'close', type: 'button' }, state.track ? '📍 TRACKER ON' : '📍 TRACKER OFF');
+    trk.style.marginRight = '6px';
+    trk.onclick = () => { state.track = !state.track; dirty = true; save(); lastKey = ''; render(); };
+    panel.append(close, trk, el('h2', {}, `GOALS · ${doneCount(state)}/${GOALS.length}`),
+      el('div', { className: 'h', style: 'font-size:11px;color:#b9c8da;margin-bottom:4px' }, 'Tap a goal with 📍 to track it. The gold arrow next to you points the way.'));
     let tier = '';
     for (const g of GOALS) {
       if (g.tier !== tier) { tier = g.tier; panel.append(el('h3', {}, tier.toUpperCase())); }
@@ -227,7 +280,9 @@
       const row = el('div', { className: 'g' + (done ? ' done' : '') + (cur ? ' cur' : '') });
       const body = el('div', { className: 'b' });
       body.append(el('div', {}, g.title + (!done && pr.target > 1 ? ` · ${fmt(pr.cur)}/${fmt(pr.target)}` : '')), el('div', { className: 'h' }, g.hint));
-      row.append(el('span', { className: 'i' }, done ? '✅' : cur ? '🎯' : '▫️'), body, el('span', { className: 'r' }, rewardText(g.reward)));
+      const pinned = tracked(state)?.id === g.id;
+      row.append(el('span', { className: 'i' }, done ? '✅' : pinned ? '📍' : cur ? '🎯' : '▫️'), body, el('span', { className: 'r' }, rewardText(g.reward)));
+      if (!done && g.place) { row.style.cursor = 'pointer'; row.onclick = () => { state.pin = state.pin === g.id ? null : g.id; state.track = true; dirty = true; save(); lastKey = ''; render(); }; }
       panel.append(row);
     }
     panel.scrollTop = scroll;
@@ -243,5 +298,5 @@
   addEventListener('keydown', (e) => { if (e.key === 'g' && !(e.target instanceof HTMLInputElement)) { panel.hidden ? open() : (panel.hidden = true); } });
   render();
 
-  root.NightshiftGoals = Object.freeze({ ...core, open, snapshot, next: () => next(state, snapshot()), get state() { return state; } });
+  root.NightshiftGoals = Object.freeze({ ...core, open, snapshot, next: () => next(state, snapshot()), track: () => trackTarget(), get state() { return state; } });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
