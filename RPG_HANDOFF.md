@@ -119,3 +119,16 @@ Verified in browser:
 - Tests: tests/weapons.cjs, 3 PASS.
 
 **Multiplayer note for later:** online PvP damage is server-authoritative and still uses the server's own weapon rules. When multiplayer resumes, the server sim needs this weapon table (shared/rules.js).
+
+## Tuning garage: `tuning-data.js` + `tuning.js` (Claude-owned)
+- A TUNE point sits beside each GARAGE door (x+90), with a "🔧 TUNING" sidewalk sign, through `NightshiftEncounters`. It works on any owned car parked within 260px of you.
+- Engine: +8% top speed and acceleration per level. Handling: +10% steering per level. Armor: −15% crash (`Vehicles.damage`) and bullet (`Vehicles.hit`) damage per level. 3 levels each, priced $600–$4,500 with the Charisma discount. All of these apply only to the player's car and stack with the Driving skill.
+- Paint costs $150 for 10 colors and sets `car.color`, which Codex's sprites draw and `nightshift-city-vehicles-v1` saves.
+- Save: `nightshift-tuning-v1`, per car id. Goals: "Tuned up" and "Fully loaded".
+- Verified in browser:
+  - The TUNE USE point opens the panel, and upgrades and paint charge the correct cash.
+  - At max engine the car tops out faster than a stock one. Armor 1 cuts crash damage 20 → 17.
+  - Upgrades and paint persist across a reload. No page errors.
+- Tests: tests/tuning.cjs, 3 PASS.
+- UI: goal and level-up banners now sit at 68% and 84% of the screen height, so they never cover the game's toast or each other.
+- v0.41 merged into `claude/rpg-play`; every hook was re-verified.
