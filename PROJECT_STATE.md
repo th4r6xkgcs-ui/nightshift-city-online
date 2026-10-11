@@ -1,5 +1,5 @@
 # Project state
-Current version: **v0.15**. Canonical GitHub branch `codex/mobile-controls-v03`, PR #1. Existing owner-private Sites preview is recorded in DEPLOYMENT.md.
+Current source version: **v0.16** (v0.15 remains deployed). Canonical GitHub branch `codex/mobile-controls-v03`, PR #1. Existing owner-private Sites preview is recorded in DEPLOYMENT.md.
 
 The game is a dependency-free Canvas/localStorage single-player prototype. It does not yet use Phaser, TypeScript, Colyseus, a database or online accounts. Those remain target architecture, not installed functionality.
 
@@ -20,6 +20,7 @@ The game is a dependency-free Canvas/localStorage single-player prototype. It do
 | combat.js | Finite magazine/reserve and timed reload |
 | recovery.js | Shop economy, damage, delayed clinic recovery/protection |
 | home.js | Character preview/outfits, walkable apartment/shop and furniture |
+| crafting.js | Fictional gun/ammo/medkit/salvage recipes and touch menu |
 | inventory.js | Pocket/stash/glovebox custody, consumables, death bags |
 | activities.js | Persistent courier cargo/stages and property purchase |
 | crime.js | Finite NPC wallets, police pursuit/projectiles, escape/surrender |
