@@ -1,0 +1,9 @@
+# Allowlist: the image gets the server, shared rules and the city catalog only.
+*
+!shared/
+!server/
+!city-data.js
+server/tests/
+server/data/
+server/node_modules/
+server/Dockerfile*

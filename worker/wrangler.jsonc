@@ -1,0 +1,24 @@
+{
+  // Nightshift City Online — game server on Cloudflare (Workers Free plan).
+  // Deployed by Workers Builds from GitHub with root directory "worker".
+  // The Worker name in the dashboard must match "name" below.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "nightshift-city-online",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-01",
+  // Serve on nightshift-city-online.<account>.workers.dev (players connect here).
+  "workers_dev": true,
+  "preview_urls": false,
+  "build": { "command": "node build.cjs" },
+  "durable_objects": {
+    "bindings": [{ "name": "GAME", "class_name": "GameRoom" }]
+  },
+  // SQLite-backed Durable Objects are the only kind on the free plan.
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["GameRoom"] }],
+  "vars": {
+    "MAX_CONNECTIONS": "200",
+    "MAX_PER_IP": "8"
+    // "ALLOWED_ORIGINS": "https://your-game-site.example"  (optional lock-down)
+  },
+  "observability": { "enabled": true }
+}

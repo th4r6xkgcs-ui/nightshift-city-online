@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Nightshift Online Test</title>
+<style>
+  :root { --bg:#0e1622; --ink:#e8eff7; --dim:#8ea3bb; --accent:#e8d078; --ok:#7cdeb5; --bad:#ff7d7d; --btn:#1d2c44cc; --line:#4d6a8f; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:14px/1.3 ui-monospace,Menlo,monospace; overflow:hidden; touch-action:none; user-select:none; -webkit-user-select:none; }
+  canvas { position:fixed; inset:0; width:100vw; height:100dvh; display:block; }
+  #hud { position:fixed; top:max(8px,env(safe-area-inset-top)); left:12px; right:64px; display:flex; gap:10px; flex-wrap:wrap; pointer-events:none; text-shadow:0 1px 2px #000; }
+  #hud span { background:#0009; padding:3px 7px; border-radius:6px; }
+  #toast { position:fixed; top:24%; left:50%; transform:translate(-50%,-50%); background:#000b; padding:8px 14px; border-radius:8px; opacity:0; transition:opacity .2s; pointer-events:none; max-width:80vw; text-align:center; }
+  #toast.on { opacity:1; }
+  .stick { position:fixed; bottom:max(18px,env(safe-area-inset-bottom)); width:130px; height:130px; border-radius:50%; border:2px solid var(--line); background:#ffffff0d; touch-action:none; }
+  .stick i { position:absolute; left:50%; top:50%; width:54px; height:54px; margin:-27px; border-radius:50%; background:#ffffff33; pointer-events:none; }
+  #left { left:18px; } #right { right:18px; }
+  #right::after { content:'AIM + FIRE'; position:absolute; top:-18px; width:100%; text-align:center; color:var(--dim); font-size:11px; }
+  /* Buttons sit between the two sticks so they never cover the aim stick. */
+  #btns { position:fixed; left:160px; right:160px; bottom:max(18px,env(safe-area-inset-bottom)); display:flex; flex-wrap:wrap-reverse; justify-content:center; align-content:flex-start; gap:6px; }
+  #btns button { min-width:86px; min-height:40px; border-radius:8px; border:1px solid var(--line); background:var(--btn); color:var(--ink); font:inherit; font-weight:bold; }
+  #btns button:active { background:#30486e; }
+  /* Portrait phones: too narrow between the sticks, so buttons go in rows above them. */
+  @media (max-width: 520px) {
+    #btns { left:10px; right:10px; bottom:calc(max(18px,env(safe-area-inset-bottom)) + 140px); gap:5px; }
+    #btns button { min-width:0; flex:1 1 22%; min-height:38px; font-size:12px; padding:0 4px; }
+    #right::after { display:none; }
+  }
+  /* Chat button lives in the top-right corner, never over the play area. */
+  #bChat { position:fixed; top:max(6px,env(safe-area-inset-top)); right:12px; width:44px; height:36px; border-radius:8px; border:1px solid var(--line); background:var(--btn); font-size:18px; z-index:3; }
+  #chatlog { position:fixed; left:12px; top:calc(max(8px,env(safe-area-inset-top)) + 34px); max-width:min(46vw,360px); pointer-events:none; display:grid; gap:3px; }
+  #chatlog div { background:#0009; padding:3px 7px; border-radius:6px; font-size:12px; overflow-wrap:anywhere; animation:fade 9s forwards; }
+  #chatlog b { color:var(--accent); } #chatlog .city b { color:#a9c6ff; }
+  @keyframes fade { 0%,80% { opacity:1 } 100% { opacity:0 } }
+  #chatbar { position:fixed; left:12px; right:12px; top:calc(max(8px,env(safe-area-inset-top)) + 34px); display:flex; gap:6px; z-index:4; }
+  #chatbar[hidden] { display:none; }
+  #chatbar input { flex:1; min-width:0; font:inherit; font-size:16px; padding:10px; border-radius:8px; border:1px solid var(--line); background:#15233a; color:var(--ink); }
+  #chatbar button { font:inherit; font-weight:bold; border-radius:8px; border:1px solid var(--line); background:var(--btn); color:var(--ink); padding:0 12px; }
+  #join { position:fixed; inset:0; display:grid; place-items:center; background:#0e1622ee; z-index:5; }
+  #join[hidden] { display:none; }
+  #join form { display:grid; gap:10px; width:min(320px,86vw); }
+  #join input, #join button { font:inherit; padding:12px; border-radius:8px; border:1px solid var(--line); background:#15233a; color:var(--ink); }
+  #join button { background:#2c4c7c; font-weight:bold; }
+  #join p { color:var(--dim); margin:0; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"><span id="conn">connecting…</span><span id="hp"></span><span id="cash"></span><span id="ammo"></span><span id="pvp"></span><span id="who"></span></div>
+<button id="bChat" aria-label="Chat">💬</button>
+<div id="toast"></div>
+<div id="chatlog" aria-live="polite"></div>
+<form id="chatbar" hidden><button type="button" id="chCh">NEAR</button><input id="chatText" maxlength="120" placeholder="Say something…" autocomplete="off" enterkeyhint="send"><button>SEND</button></form>
+<div id="left" class="stick"><i></i></div>
+<div id="right" class="stick"><i></i></div>
+<div id="btns">
+  <button id="bReload">RELOAD</button>
+  <button id="bPvp">PVP</button>
+  <button id="bLoot">LOOT</button>
+  <button id="bMed">MEDKIT</button>
+  <button id="bAmmo">BUY AMMO</button>
+  <button id="bKit">BUY KIT</button>
+  <button id="bHome">BUY HOME</button>
+  <button id="bStash">STASH $</button>
+  <button id="bJob">JOB</button>
+</div>
+<div id="join"><form id="joinForm">
+  <h2 style="margin:0">Nightshift Online · test</h2>
+  <p>Multiplayer server test page. Open it in two tabs or on two devices to see each other. Not the real game client.</p>
+  <input id="name" maxlength="20" placeholder="Your name" autocomplete="off" required pattern="[A-Za-z0-9_ .\-]{1,20}">
+  <button>JOIN</button>
+  <p>WASD move · mouse aim · click fire · R reload · E loot</p>
+</form></div>
+
+<script src="/shared/rules.js"></script>
+<script src="/shared/protocol.js"></script>
+<script src="/shared/city.js"></script>
+<script src="/shared/movement.js"></script>
+<script src="/shared/net-client.js"></script>
+<script>
+'use strict';
+// This page uses the same drop-in client the real game can use: NightshiftNet
+// (prediction for your player, smoothing for others, auto-reconnect).
+const R = NightshiftRules, city = NightshiftCity.createCity();
+const $ = (id) => document.getElementById(id);
+const cv = $('c'), g = cv.getContext('2d');
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+// Multiple tabs on one browser should be separate players, so the resume
+// token lives per tab (sessionStorage) with the name remembered globally.
+const tabStore = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch {} } };
+
+let net = null, me = null, myId = null, others = new Map(), bags = [];
+let move = { x: 0, y: 0 }, aim = 0, firing = false, sprint = false;
+const keys = {};
+
+function toast(text, bad) {
+  const t = $('toast'); t.textContent = text; t.style.color = bad ? 'var(--bad)' : 'var(--ink)';
+  t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 1600);
+}
+
+function onResult(m) {
+  if (m.req === 'fire') { if (m.hit) toast('Hit!'); else if (m.blocked) toast('Blocked: ' + m.blocked); }
+  else if (!m.ok) toast(m.reason, true);
+  else if (m.req === 'buy') toast('Bought ' + m.item + ' · -$' + m.cost);
+  else if (m.req === 'pickup') toast('Looted $' + m.got.cash + ' · ' + m.got.rounds + ' rounds');
+  else if (m.req === 'pvp') toast(m.pvp ? 'PvP ON (both players need it on)' : 'PvP OFF');
+  else if (m.req === 'use') toast('Healed');
+  else if (m.req === 'home') toast('Apartment bought · -$' + m.cost);
+  else if (m.req === 'stash') toast((m.dir === 'in' ? 'Stored ' : 'Took ') + (m.item === 'cash' ? '$' + m.count : m.count + ' ' + m.item));
+  else if (m.req === 'reload') toast('Reloading…');
+  else if (m.req === 'job') toast(m.reward ? 'Delivered! +$' + m.reward : m.cancelled ? 'Job cancelled' : m.job.stage === 'pickup' ? 'Job: go to the yellow marker' : 'Parcel collected: deliver to the green marker');
+}
+function onEvent(m) {
+  if (m.kind === 'hit') toast('You were hit · ' + m.hp + ' HP', true);
+  else if (m.kind === 'death') toast(m.victim === myId ? 'You died · bag dropped' : 'Player down', m.victim === myId);
+  else if (m.kind === 'respawn') toast('Back at the clinic');
+  else if (m.kind === 'received') toast('Received $' + m.cash);
+  else if (m.kind === 'job') toast(m.status === 'expired' ? 'Job ran out of time' : 'Job failed', true);
+}
+const STATUS = { connecting: ['connecting…', 'var(--dim)'], online: ['online', 'var(--ok)'], offline: ['offline · retrying', 'var(--bad)'],
+  replaced: ['signed in elsewhere', 'var(--bad)'], banned: ['banned', 'var(--bad)'], kicked: ['kicked by a moderator', 'var(--bad)'], rejected: ['server refused', 'var(--bad)'], closed: ['closed', 'var(--dim)'] };
+
+function connect(name) {
+  net = NightshiftNet.createClient({
+    url: (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host,
+    name, token: tabStore.get('nsco-token'), city,
+    onWelcome: (w) => { myId = w.id; tabStore.set('nsco-token', w.token); toast(w.resumed ? 'Welcome back, ' + w.you.name : 'Joined as ' + w.you.name); },
+    onStatus: (s) => { const [t, c] = STATUS[s] || [s, 'var(--dim)']; $('conn').textContent = t; $('conn').style.color = c; },
+    onResult, onEvent, onChat, onError: (m) => toast(m.reason, true),
+  });
+}
+
+$('joinForm').onsubmit = (e) => {
+  e.preventDefault();
+  const name = $('name').value.trim();
+  if (!/^[\w .-]{1,20}$/.test(name)) return toast('Letters, numbers, space . _ - only', true);
+  store.set('nsco-name', name);
+  $('join').hidden = true;
+  connect(name);
+};
+$('name').value = store.get('nsco-name') || '';
+
+// ---- chat ----
+const bubbles = new Map(); // playerId -> {text, until}
+let chatCh = 'near';
+function onChat(m) {
+  const line = document.createElement('div');
+  line.className = m.ch;
+  const who = document.createElement('b'); who.textContent = (m.ch === 'city' ? '[city] ' : '') + m.name + ': ';
+  line.append(who, document.createTextNode(m.text)); // textContent only: chat can never inject HTML
+  const log = $('chatlog'); log.append(line);
+  while (log.children.length > 6) log.firstChild.remove();
+  setTimeout(() => line.remove(), 9000);
+  if (m.ch === 'near') bubbles.set(m.from, { text: m.text, until: performance.now() + 5000 });
+}
+$('bChat').onclick = () => { $('chatbar').hidden = false; $('chatText').focus(); };
+$('chCh').onclick = () => { chatCh = chatCh === 'near' ? 'city' : 'near'; $('chCh').textContent = chatCh.toUpperCase(); };
+$('chatbar').onsubmit = (e) => {
+  e.preventDefault();
+  const t = $('chatText').value.trim();
+  if (t && net) net.chat(chatCh, t);
+  $('chatText').value = ''; $('chatbar').hidden = true; $('chatText').blur();
+};
+$('chatText').addEventListener('keydown', (e) => { if (e.key === 'Escape') { $('chatbar').hidden = true; e.target.blur(); } });
+
+// ---- twin sticks (pointer events, one pointer per stick) ----
+function stick(el, onMove, onEnd) {
+  let pid = null; const knob = el.querySelector('i');
+  const upd = (e) => {
+    const r = el.getBoundingClientRect();
+    let x = (e.clientX - r.left - r.width / 2) / (r.width / 2), y = (e.clientY - r.top - r.height / 2) / (r.height / 2);
+    const l = Math.hypot(x, y); if (l > 1) { x /= l; y /= l; }
+    knob.style.transform = `translate(${x * 38}px,${y * 38}px)`;
+    onMove(x, y);
+  };
+  el.addEventListener('pointerdown', (e) => { if (pid !== null) return; pid = e.pointerId; el.setPointerCapture(pid); upd(e); });
+  el.addEventListener('pointermove', (e) => { if (e.pointerId === pid) upd(e); });
+  const end = (e) => { if (e.pointerId !== pid) return; pid = null; knob.style.transform = ''; onEnd(); };
+  el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end); el.addEventListener('lostpointercapture', end);
+}
+stick($('left'), (x, y) => { move = { x, y }; sprint = Math.hypot(x, y) > 0.9; }, () => { move = { x: 0, y: 0 }; sprint = false; });
+stick($('right'), (x, y) => { if (Math.hypot(x, y) > 0.25) { aim = Math.atan2(y, x); firing = Math.hypot(x, y) > 0.6; } }, () => { firing = false; });
+
+// ---- keyboard + mouse ----
+addEventListener('keydown', (e) => {
+  if (e.target instanceof HTMLInputElement) return; // typing in chat never moves the player
+  if (e.key === 'Enter' || e.key === 't') { e.preventDefault(); $('bChat').click(); return; }
+  keys[e.key.toLowerCase()] = true;
+  if (e.key === 'r') net?.reload();
+  if (e.key === 'e') loot();
+});
+addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+addEventListener('blur', () => { for (const k in keys) keys[k] = false; firing = false; move = { x: 0, y: 0 }; });
+cv.addEventListener('mousemove', (e) => { aim = Math.atan2(e.clientY - innerHeight / 2, e.clientX - innerWidth / 2); });
+cv.addEventListener('mousedown', () => { firing = true; });
+addEventListener('mouseup', () => { firing = false; });
+
+function loot() {
+  if (!me) return;
+  const b = bags.map((b) => ({ b, d: Math.hypot(b.x - me.x, b.y - me.y) })).sort((a, b) => a.d - b.d)[0];
+  if (!b) return toast('No bag nearby', true);
+  net.pickup(b.b.id);
+}
+$('bReload').onclick = () => net?.reload();
+$('bPvp').onclick = () => me && net.setPvp(!me.pvp);
+$('bLoot').onclick = loot;
+$('bMed').onclick = () => net?.use('medkit');
+$('bAmmo').onclick = () => net?.buy('ammo');
+$('bKit').onclick = () => net?.buy('medkit');
+$('bHome').onclick = () => net?.buyHome();
+// JOB: start a delivery, then collect / deliver at the markers.
+$('bJob').onclick = () => {
+  if (!me) return;
+  if (!me.job) net.job('start');
+  else net.job(me.job.stage === 'pickup' ? 'pickup' : 'deliver');
+};
+// STASH $: store all carried cash; with empty pockets, take it all back.
+$('bStash').onclick = () => {
+  if (!me) return;
+  const kept = me.home.stash.cash || 0;
+  if (me.cash > 0) net.stash('in', 'cash', me.cash);
+  else if (kept > 0) net.stash('out', 'cash', kept);
+  else toast('No cash to store', true);
+};
+
+// ---- controls -> network client (it sends on change + heartbeat) ----
+function readControls() {
+  let mx = move.x, my = move.y, sp = sprint;
+  const kx = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
+  const ky = (keys.s || keys.arrowdown ? 1 : 0) - (keys.w || keys.arrowup ? 1 : 0);
+  if (kx || ky) { mx = kx; my = ky; sp = !!keys.shift; }
+  return { mx, my, aim, sprint: sp };
+}
+
+// ---- render ----
+function resize() { const d = devicePixelRatio || 1; cv.width = innerWidth * d; cv.height = innerHeight * d; g.setTransform(d, 0, 0, d, 0, 0); }
+addEventListener('resize', resize); resize();
+
+function person(x, y, a, color, label, hp, dead) {
+  g.save(); g.translate(x, y);
+  g.globalAlpha = dead ? 0.35 : 1;
+  g.fillStyle = '#0006'; g.beginPath(); g.ellipse(2, 4, 13, 9, 0, 0, 7); g.fill();
+  g.rotate(a); g.fillStyle = '#ddd'; g.fillRect(8, -2, 14, 4); g.rotate(-a);
+  g.fillStyle = color; g.beginPath(); g.arc(0, 0, R.player.radius, 0, 7); g.fill();
+  g.globalAlpha = 1; g.fillStyle = '#fff'; g.font = 'bold 11px monospace'; g.textAlign = 'center';
+  g.fillText(label, 0, -24);
+  g.fillStyle = '#300'; g.fillRect(-16, -20, 32, 4); g.fillStyle = '#7cdeb5'; g.fillRect(-16, -20, 32 * hp / 100, 4);
+  g.restore();
+}
+
+let lastFrame = performance.now();
+const draw = { x: R.spawn.x, y: R.spawn.y };
+function frame(now) {
+  const dt = now - lastFrame; lastFrame = now;
+  if (net) {
+    net.setInput(readControls());
+    if (firing && me && !me.dead) net.fire(aim);
+    const view = net.update(dt);
+    me = view.me; bags = view.bags;
+    others = new Map(view.others.map((o) => [o.id, o]));
+    if (me) { draw.x = me.x; draw.y = me.y; } // prediction already smooths: no camera lag
+    $('who').textContent = view.others.length ? view.others.length + ' player' + (view.others.length > 1 ? 's' : '') + ' nearby' : 'nobody nearby';
+  }
+  const W = innerWidth, H = innerHeight;
+  g.fillStyle = '#20383a'; g.fillRect(0, 0, W, H);
+  g.save(); g.translate(Math.round(W / 2 - draw.x), Math.round(H / 2 - draw.y));
+  g.fillStyle = '#2b303c';
+  for (let x = 0; x < R.world.w; x += 440) g.fillRect(x - 65, 0, 130, R.world.h);
+  for (let y = 0; y < R.world.h; y += 340) g.fillRect(0, y - 62, R.world.w, 124);
+  g.strokeStyle = '#ffffff22'; g.strokeRect(0, 0, R.world.w, R.world.h);
+  const c = city.clinic;
+  g.strokeStyle = '#7cdeb588'; g.lineWidth = 3; g.beginPath(); g.arc(c.x, c.y, c.radius, 0, 7); g.stroke();
+  g.fillStyle = '#9be7c8'; g.font = 'bold 11px monospace'; g.textAlign = 'center'; g.fillText('CLINIC · SAFE', c.x, c.y - c.radius - 8);
+  for (const b of city.buildings) {
+    g.fillStyle = '#161f2c'; g.fillRect(b.x + 8, b.y + 10, b.w, b.h);
+    g.fillStyle = b.name === 'CORNER SHOP' ? '#52603f' : '#3b4659'; g.fillRect(b.x, b.y, b.w, b.h);
+    g.fillStyle = '#e9d39a'; g.fillText(b.name, b.x + b.w / 2, b.y + 30);
+  }
+  const ap = city.apartment;
+  g.strokeStyle = '#a9c6ff88'; g.setLineDash([4, 6]); g.beginPath(); g.arc(ap.x, ap.y, ap.radius, 0, 7); g.stroke(); g.setLineDash([]);
+  g.fillStyle = '#a9c6ff'; g.fillText(me && me.home.owned ? 'YOUR APARTMENT · stash' : 'APARTMENT · $' + R.home.price, ap.x, ap.y - ap.radius - 8);
+  for (const s of city.shops) {
+    g.strokeStyle = '#e8d07888'; g.setLineDash([6, 6]); g.beginPath(); g.arc(s.x, s.y, NightshiftCity.SHOP_RANGE, 0, 7); g.stroke(); g.setLineDash([]);
+    g.fillStyle = '#e8d078'; g.fillText('SHOP · trade here', s.x, s.y + 4);
+  }
+  if (me && me.job) {
+    const target = me.job.stage === 'pickup' ? me.job.pickup : me.job.drop;
+    const col = me.job.stage === 'pickup' ? '#e8d078' : '#7cdeb5';
+    g.strokeStyle = col; g.lineWidth = 3; g.beginPath(); g.arc(target.x, target.y, R.jobs.rangePx, 0, 7); g.stroke();
+    g.fillStyle = col; g.fillText((me.job.stage === 'pickup' ? 'PICKUP · ' : 'DELIVER · $' + me.job.reward + ' · ') + target.label, target.x, target.y - R.jobs.rangePx - 6);
+    // Arrow from the player toward the target.
+    const ang = Math.atan2(target.y - draw.y, target.x - draw.x);
+    g.save(); g.translate(draw.x + Math.cos(ang) * 34, draw.y + Math.sin(ang) * 34); g.rotate(ang);
+    g.beginPath(); g.moveTo(10, 0); g.lineTo(-6, -7); g.lineTo(-6, 7); g.closePath(); g.fill(); g.restore();
+  }
+  for (const b of bags) { g.fillStyle = '#c99a4a'; g.fillRect(b.x - 8, b.y - 8, 16, 16); g.fillStyle = '#fff'; g.fillText('BAG', b.x, b.y - 12); }
+  for (const o of others.values()) person(o.x, o.y, o.aim, o.pvp ? '#e46b6b' : '#7ba7e0', o.name, o.hp, o.dead);
+  const tNow = performance.now();
+  for (const [pid, bub] of bubbles) {
+    if (tNow > bub.until) { bubbles.delete(pid); continue; }
+    const at = pid === myId ? (me && { x: draw.x, y: draw.y }) : others.get(pid);
+    if (!at) continue;
+    const text = bub.text.length > 40 ? bub.text.slice(0, 39) + '…' : bub.text;
+    g.font = '11px monospace'; const wTxt = g.measureText(text).width + 12;
+    g.fillStyle = '#f2f5f9ee'; g.fillRect(at.x - wTxt / 2, at.y - 56, wTxt, 18);
+    g.fillStyle = '#111'; g.textAlign = 'center'; g.fillText(text, at.x, at.y - 43);
+  }
+  if (me) person(draw.x, draw.y, aim, '#e8d078', me.name + ' (you)', me.hp, me.dead);
+  g.restore();
+  if (me) {
+    $('hp').textContent = me.hp + ' HP';
+    $('ammo').textContent = (me.pocket.pistol ? '' : 'no pistol · ') + me.mag + '/' + R.combat.magSize + ' +' + me.reserve + (me.reloading ? ' ⏳' : '');
+    $('bHome').hidden = me.home.owned;
+    $('bJob').textContent = !me.job ? 'JOB' : me.job.stage === 'pickup' ? 'COLLECT' : 'DELIVER';
+    $('cash').textContent = '$' + me.cash + (me.home.owned ? ' · stash $' + (me.home.stash.cash || 0) : '');
+    $('pvp').textContent = 'PvP ' + (me.pvp ? 'ON' : 'off'); $('pvp').style.color = me.pvp ? 'var(--bad)' : 'var(--ink)';
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

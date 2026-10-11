@@ -1,0 +1,13 @@
+{
+  "name": "nightshift-city-online-worker",
+  "private": true,
+  "description": "Cloudflare Workers host for the Nightshift City Online game server.",
+  "scripts": {
+    "build": "node build.cjs",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}
