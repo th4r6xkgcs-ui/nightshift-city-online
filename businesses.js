@@ -8,10 +8,10 @@ const panel=doc.createElement('div');panel.id='businessPanel';panel.hidden=true;
 function blocked(){return ['Craft','Progress','Backups','Map','Vehicles','Inventory','Recovery','Home'].some(name=>root['Nightshift'+name]?.paused?.())}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
 function pocket(){return root.NightshiftInventory.state.pocket}
-function preview(cmd){return R.transact(state,player,pocket(),cmd,Date.now(),true)}
+function preview(cmd){const refusal=root.NightshiftCrews?.marketAccess(cmd.id);if(refusal&&['buy','sell'].includes(cmd.action))return {ok:false,reason:refusal};return R.transact(state,player,pocket(),cmd,Date.now(),true)}
 function perform(cmd){
  if(!open||blocked())return {ok:false,reason:'Business menu unavailable'};
- R.advance(state,Date.now());const result=R.transact(state,player,pocket(),cmd);
+ R.advance(state,Date.now());const refusal=root.NightshiftCrews?.marketAccess(cmd.id);const result=refusal&&['buy','sell'].includes(cmd.action)?{ok:false,reason:refusal}:R.transact(state,player,pocket(),cmd);
  if(result.ok){persist();save();root.NightshiftAudio?.play('pickup')}
  say(result.message||result.reason);render();
  if(result.ok&&cmd.action==='accept-order'){const order=R.ORDERS[state.orders.active.index];route({...order,id:'rush-order',label:'RUSH ORDER · '+order.name})}
