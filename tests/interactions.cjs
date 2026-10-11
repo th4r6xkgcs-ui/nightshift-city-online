@@ -10,3 +10,5 @@ assert.equal(second('NightshiftInteractions.select({x:NaN,y:0},[])'),null);
 console.log('PASS: one shared USE/hint target for salvage, properties, locked cars, bags and courier handoffs; unavailable/dead prompts hidden');
 
 const indoor=boot();indoor('NightshiftHome.enter("shop");NightshiftHome.render(100)');assert.equal(indoor.nodes.get('#use').textContent,'EXIT');assert.equal(indoor.nodes.get('#aimPad').hidden,true);indoor('keys.w=true');for(let t=120;t<=1100;t+=20)indoor(`NightshiftHome.render(${t})`);indoor('keys.w=false;NightshiftHome.render(1120)');assert.equal(indoor('NightshiftHome.interaction()'),null);assert.equal(indoor.nodes.get('#use').hidden,true);console.log('PASS: interior EXIT prompt matches its action; empty room floor hides USE and combat sticks');
+
+const labelRun=boot();labelRun('cars.length=0;loot.length=0;player.x=640;player.y=597;NightshiftGuidance.render()');assert.equal(labelRun.nodes.get('#use').title,labelRun('NightshiftInteractions.nearby().label'));console.log('PASS: contextual USE tooltip matches the selected property');

@@ -17,6 +17,6 @@ const style=document.createElement('style');style.textContent='#help{bottom:152p
 let previous='';root.NightshiftGuidance.render=room=>{
  const target=room?root.NightshiftHome?.interaction():root.NightshiftInteractions?.nearby();const value=target?{action:target.action,text:target.label}:{action:'USE',text:''};document.querySelector('#use').hidden=!target;const key=value.action+'|'+value.text+'|'+!!player.car;
  if(key===previous)return;previous=key;
- const help=document.querySelector('#help'),use=document.querySelector('#use');help.textContent=value.text;use.textContent=value.action;use.setAttribute('aria-label',value.action==='EXIT'?'Exit stopped vehicle':value.action==='ENTER'?'Enter nearby vehicle':value.action==='SHOP'?'Enter corner shop':'Interact');document.querySelector('#reload').disabled=!!player.car;document.querySelector('#run').disabled=!!player.car;
+ const help=document.querySelector('#help'),use=document.querySelector('#use');help.textContent=value.text;use.textContent=value.action;use.title=value.text||value.action;use.setAttribute('aria-label',value.action==='EXIT'?'Exit stopped vehicle':value.action==='ENTER'?'Enter nearby vehicle':value.action==='SHOP'?'Enter corner shop':'Interact');document.querySelector('#reload').disabled=!!player.car;document.querySelector('#run').disabled=!!player.car;
 };
 })(globalThis);

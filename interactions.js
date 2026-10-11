@@ -14,6 +14,6 @@ function nearby(){if(player.hp<=0)return null;if(player.car)return {kind:'exit',
  add('apartment','home','HOME',root.NightshiftActivities?.ownsHome()?'Enter apartment':'Apartment · $1,200',880,680,105,null);
  return select(player,candidates);
 }
-function draw(){const target=nearby();if(!target||target.kind==='exit')return;g.save();g.strokeStyle='#b8e9dc';g.lineWidth=2;g.setLineDash?.([4,4]);if(target.kind==='car'){const c=target.entity;g.translate(c.x,c.y);g.rotate(c.angle);g.strokeRect(-21,-36,42,72)}else{g.beginPath();g.arc(target.x,target.y,18,0,Math.PI*2);g.stroke()}g.restore()}
+function draw(){const target=nearby();if(!target||target.kind==='exit')return;g.save();g.strokeStyle='#b8e9dc';g.lineWidth=2;g.setLineDash?.([4,4]);if(target.kind==='car'){const c=target.entity;g.translate(c.x,c.y);g.rotate(c.angle);g.strokeRect(-21,-36,42,72)}else{g.beginPath();g.arc(target.x,target.y,18,0,Math.PI*2);g.stroke()}g.restore();g.save();g.font='bold 11px monospace';g.textAlign='center';g.textBaseline='middle';const label=String(target.action||'USE').slice(0,10);const width=Math.max(44,label.length*7+14);const lx=target.x,ly=target.y-(target.kind==='car'?54:32);g.fillStyle='#10283ddd';g.fillRect(lx-width/2,ly-10,width,20);g.fillStyle='#e6f9f3';g.fillText(label,lx,ly);g.restore()}
 Object.assign(root.NightshiftInteractions,{nearby,draw});
 })(globalThis);
