@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');const storage=new Map(),run=boot(storage);
+run('globalThis.fillCount=0;globalThis.imageCount=0;g.fillRect=()=>fillCount++;g.drawImage=()=>imageCount++;globalThis.snapshot=JSON.stringify({player,cars,peds,buildings});NightshiftWorld.road();globalThis.firstFill=fillCount;NightshiftWorld.road()');
+assert.ok(run('firstFill')>1000);assert.equal(run('fillCount'),run('firstFill'));assert.equal(run('imageCount'),2);
+assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);
+for(let i=0;i<8;i++)assert.equal(run(`NightshiftSprites.pose({angle:${i}*Math.PI/4,moving:false,walkTicks:20}).facing`),i);
+assert.equal(run('NightshiftSprites.pose({angle:0,moving:false,walkTicks:15}).stride'),0);
+assert.equal(run('NightshiftSprites.pose({angle:0,moving:true,walkTicks:5}).stride'),3);
+assert.equal(run('NightshiftSprites.pose({angle:0,moving:true,walkTicks:15}).stride'),-3);
+run('globalThis.models=[];g.fillRect=(...args)=>models.push([g.fillStyle,...args]);NightshiftSprites.car({x:100,y:100,angle:0,model:"COMPACT",color:"#abcdef",condition:100});globalThis.compact=JSON.stringify(models);models=[];NightshiftSprites.car({x:100,y:100,angle:0,model:"VAN",color:"#abcdef",condition:100});globalThis.van=JSON.stringify(models);models=[];NightshiftSprites.car({x:100,y:100,angle:0,model:"SEDAN",color:"#abcdef",condition:100});globalThis.sedan=JSON.stringify(models)');
+assert.notEqual(run('compact'),run('van'));assert.notEqual(run('van'),run('sedan'));assert.notEqual(run('compact'),run('sedan'));
+run('NightshiftSprites.person(player,true,{weapon:false});NightshiftSprites.person({x:100,y:100,angle:Math.PI,hp:20,moving:true,walkTicks:12});NightshiftWorld.building(buildings[0]);NightshiftEnvironment.lights()');assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);
+assert.equal(run('NightshiftWorld.hash(100,200)'),run('NightshiftWorld.hash(100,200)'));assert.notEqual(run('NightshiftWorld.hash(100,200)'),run('NightshiftWorld.hash(101,200)'));
+console.log('PASS: cached street reuse, deterministic texture, eight directional poses/idle gait, distinct model detail and rendering preserves gameplay geometry/state');
