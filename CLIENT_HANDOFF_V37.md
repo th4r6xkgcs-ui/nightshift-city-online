@@ -8,4 +8,4 @@ Touched world.js and game.js/index.html/package.json version labels plus this re
 
 Validation: all 61 suites and root syntax checks passed, including deterministic district architecture, render state/geometry preservation, night art and cached ground reuse. Reviewed daytime Midtown and wet-night Southside Canvas scenes. Real browser/iPhone touch, DOM layout/audio/performance QA remains pending.
 
-Release: draft PR based on codex/driving-view-v36; private publication pending. No merge or online/server/shared/worker changes.
+Release: draft PR based on codex/driving-view-v36; private publication succeeded. Draft PR #22 is open; final code commit b51059a65c2119e85ef85121011235dd87fe7961. GitHub Client simulation checks passed after the neon sign alignment. No merge or online/server/shared/worker changes.
