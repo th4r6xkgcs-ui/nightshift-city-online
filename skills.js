@@ -78,8 +78,16 @@
   // The game's say() is a top-level function declaration, so it lives on window.
   const toast = (t) => { try { if (typeof root.say === 'function') root.say(t); } catch { /* no toast */ } };
 
+  // Temporary XP boost (e.g. "Well rested" from home-upgrades.js). Not saved: it is a session buff.
+  let boost = { mult: 1, until: 0, label: '' };
+  const boostMult = () => (performance.now() < boost.until ? boost.mult : 1);
+  function setBoost(mult, ms, label = 'Boost') {
+    if (!Number.isFinite(mult) || mult < 1 || mult > 3 || !Number.isFinite(ms) || ms <= 0) return false;
+    boost = { mult, until: performance.now() + Math.min(ms, 3600000), label };
+    renderChip(); return true;
+  }
   function award(skill, amount, reason) {
-    const r = gain(state, skill, amount);
+    const r = gain(state, skill, Number.isFinite(amount) ? amount * boostMult() : amount);
     if (!r.level) return r;
     dirty = true;
     if (r.leveled) {
@@ -189,7 +197,11 @@
     clearTimeout(flashTimer); flashTimer = setTimeout(() => flashEl.classList.remove('on'), 1800);
   }
   const totalLevel = () => SKILLS.reduce((t, s) => t + levelInfo(state.xp[s.id]).level, 0);
-  function renderChip() { chip.textContent = `⭐ SKILLS · ${totalLevel()}`; }
+  function renderChip() {
+    const left = boost.until - performance.now();
+    chip.textContent = `⭐ SKILLS · ${totalLevel()}` + (left > 0 ? ` · 🔥+${Math.round((boost.mult - 1) * 100)}% ${Math.ceil(left / 60000)}m` : '');
+  }
+  setInterval(renderChip, 5000);
   function placeChip() {
     const hud = document.querySelector('#hud');
     if (hud) { const r = hud.getBoundingClientRect(); if (r.height) { chip.style.top = Math.round(r.bottom + 6) + 'px'; chip.style.left = Math.round(r.left) + 'px'; } }
@@ -233,6 +245,8 @@
     mod: (key) => mod(state, key),
     open,
     onLevelUp: (fn) => { if (typeof fn === 'function') listeners.push(fn); },
+    setBoost,
+    boost: () => ({ mult: boostMult(), left: Math.max(0, boost.until - performance.now()), label: boost.label }),
     get state() { return state; },
   });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
