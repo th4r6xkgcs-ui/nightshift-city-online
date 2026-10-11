@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),boot=require('./harness.cjs');const c={};vm.createContext(c);vm.runInContext(fs.readFileSync('traffic-safety.js','utf8'),c);const api=c.NightshiftTrafficSafety;
+const actor={x:0,y:0,angle:0,pace:90,velocity:90};
+assert.equal(api.clearance(actor,[{x:50,y:36,angle:Math.PI}]),Infinity);
+assert.equal(api.overlaps({x:0,y:0,angle:0},{x:0,y:36,angle:Math.PI}),false);
+assert.equal(api.overlaps({x:0,y:0,angle:0},{x:45,y:0,angle:0}),true);
+assert.equal(api.overlaps({x:0,y:0,angle:0},{x:55,y:0,angle:0}),false);
+assert.equal(api.clearance(actor,[{x:-10,y:0},{x:60,y:70}]),Infinity);
+assert.equal(api.clearance(actor,[{x:70,y:0,radius:12}]),31);
+assert.ok(api.speed(actor,[{x:70,y:0,radius:12}],1/60)<90);assert.equal(api.speed(actor,[{x:35,y:0,radius:12}],1/60),0);assert.ok(api.speed({...actor,velocity:0},[],1/60)>0);
+const run=boot();run('cars.length=0;peds.length=0;player.x=850;player.y=500;NightshiftSignals.stop=()=>false;const a=NightshiftTraffic.actors[0];NightshiftTraffic.actors.splice(1);Object.assign(a,{x:440,y:322,next:1,velocity:90,pace:90});player.x=520;player.y=322');
+for(let i=0;i<300;i++)run(`NightshiftTraffic.tick(${1000+i*1000/60})`);
+assert.ok(run('NightshiftTraffic.actors[0].x')<481);assert.equal(run('player.hp'),100);
+const stopped=run('NightshiftTraffic.actors[0].x');run('player.y=500');for(let i=0;i<120;i++)run(`NightshiftTraffic.tick(${6000+i*1000/60})`);assert.ok(run('NightshiftTraffic.actors[0].x')>stopped+40);
+run('NightshiftSignals.stop=()=>true');const before=run('NightshiftTraffic.actors[0].x');run('NightshiftTraffic.tick(9000)');assert.equal(run('NightshiftTraffic.actors[0].x'),before);
+console.log('PASS: forward corridor ignores rear/parallel lanes, traffic brakes for pedestrian, resumes when clear and obeys red signals');
