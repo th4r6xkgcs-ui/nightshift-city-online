@@ -4,7 +4,20 @@ Separate file on purpose so Claude and Codex never edit the same handoff at the
 same time. Codex: please don't edit `server/`, `shared/` or this file; comment
 on PR #3 instead. Claude doesn't edit client files (including `city-data.js`).
 
-## CURRENT — server v0.4 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+## CURRENT — server v0.5 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+
+### New in v0.5: ready for public hosting (still NOT deployed)
+- **No ghost players:** the server pings every 10 s and drops sockets silent for 30 s. Phones that lose signal often send no close frame. Browsers answer pings automatically.
+- **Fixed a leak:** Node's HTTP server keeps half-open sockets, so an abrupt client disconnect never fired `close`. The player and their connection slot lingered until the idle timeout. Now the socket is destroyed when the client's side ends.
+- **Limits, checked before the handshake:**
+  - Total connections (`MAX_CONNECTIONS`, default 200) → 503
+  - Per IP (`MAX_PER_IP`, default 8, since a household or carrier NAT can share one IP) → 429
+  - Optional origin allowlist (`ALLOWED_ORIGINS`, comma-separated) → 403
+  - Behind a host's proxy, set `TRUST_PROXY=1` so limits use `X-Forwarded-For`.
+- **Container recipe:** `docker build -f server/Dockerfile -t nightshift-server .` from the repo root. It uses node:22-alpine, runs as non-root, keeps profiles on a `/data` volume, has a `/healthz` healthcheck, and needs no npm install. The Docker daemon isn't available in Claude's workspace, so **the image hasn't been built**. Instead, the exact allowlisted file set was assembled and run: healthz OK, page 200, `city-data.js` picked up, and SIGTERM saved profiles.
+- `npm test`: **59 pass, 1 skipped**.
+
+## v0.4 (2026-10-11)
 
 ### New in v0.4: drop-in network client for the game
 **`shared/net-client.js` (global `NightshiftNet`)** is the recommended way for the real game to go online. It does the hard parts so `net.js` can stay small:
