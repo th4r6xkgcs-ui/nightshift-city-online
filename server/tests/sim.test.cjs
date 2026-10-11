@@ -4,18 +4,26 @@ const assert = require('node:assert/strict');
 const { World } = require('../sim.js');
 const R = require('../../shared/rules.js');
 
+// Open road on the y=340 street, away from the clinic safe zone.
+const ROAD = { x: 700, y: 340 };
+const SHOP = { x: 1080, y: 1287 }; // corner shop door from shared/city.js
+const at = (p, pos) => { p.x = pos.x; p.y = pos.y; };
+
 function two(opts) {
   const w = new World(opts);
   const a = w.addPlayer('a', 'Ana', 0);
   const b = w.addPlayer('b', 'Ben', 0);
+  at(a, ROAD); at(b, { x: ROAD.x + 60, y: ROAD.y });
   return { w, a, b };
 }
 
 test('movement is integrated by the server at rule speed, not client claims', () => {
-  const { w, a } = two();
+  const { w, a, b } = two();
+  at(b, { x: 2000, y: 1000 });
+  const start = a.x;
   w.handle('a', { t: 'input', seq: 1, mx: 1, my: 0, aim: 0, sprint: false }, 0);
   for (let i = 1; i <= 20; i++) w.step(50, i * 50); // 1 second
-  assert.ok(Math.abs(a.x - (R.spawn.x + R.player.walkPxPerSec)) < 0.01);
+  assert.ok(Math.abs(a.x - (start + R.player.walkPxPerSec)) < 0.01);
   // A hacked stick value of 50 is clamped to 1; sprint caps at run speed.
   const x0 = a.x;
   w.handle('a', { t: 'input', seq: 2, mx: 50, my: 0, aim: 0, sprint: true }, 1000);
@@ -25,9 +33,10 @@ test('movement is integrated by the server at rule speed, not client claims', ()
 
 test('diagonal input is normalized and world bounds hold', () => {
   const { w, a } = two();
+  const x0 = a.x, y0 = a.y;
   w.handle('a', { t: 'input', seq: 1, mx: 1, my: 1, aim: 0, sprint: false }, 0);
   w.step(1000, 1000); // 1s, bounded to 250ms per step
-  const moved = Math.hypot(a.x - R.spawn.x, a.y - R.spawn.y);
+  const moved = Math.hypot(a.x - x0, a.y - y0);
   assert.ok(Math.abs(moved - R.player.walkPxPerSec * 0.25) < 0.01, 'stall is bounded and diagonal not faster');
   w.handle('a', { t: 'input', seq: 2, mx: -1, my: -1, aim: 0, sprint: true }, 1000);
   for (let i = 0; i < 40; i++) w.step(250, 1000 + i * 250);
@@ -142,6 +151,7 @@ test('bags expire', () => {
 
 test('shop prices match client and replayed transaction ids never double-charge', () => {
   const { w, a } = two();
+  at(a, SHOP);
   const r1 = w.handle('a', { t: 'buy', item: 'ammo', tx: 'buy-1' }, 0);
   assert.deepEqual([r1.ok, r1.rounds, r1.cost], [true, 30, 60]);
   assert.equal(a.cash, 690);
@@ -158,6 +168,7 @@ test('shop prices match client and replayed transaction ids never double-charge'
 
 test('ammo purchases stop at reserve and carried caps', () => {
   const { w, a } = two();
+  at(a, SHOP);
   a.cash = 100000;
   for (let i = 0; i < 20; i++) w.handle('a', { t: 'buy', item: 'ammo', tx: 'a' + i }, 0);
   assert.equal(a.reserve, R.combat.maxReserve);
@@ -166,6 +177,7 @@ test('ammo purchases stop at reserve and carried caps', () => {
 
 test('insufficient funds leaves state untouched', () => {
   const { w, a } = two();
+  at(a, SHOP);
   a.cash = 10;
   const snap = JSON.stringify(w.privateView(a));
   assert.equal(w.handle('a', { t: 'buy', item: 'pistol', tx: 'p' }, 0).reason, 'not enough cash');
@@ -174,6 +186,7 @@ test('insufficient funds leaves state untouched', () => {
 
 test('selling only what you carry; medkit use only when hurt', () => {
   const { w, a } = two();
+  at(a, SHOP);
   assert.equal(w.handle('a', { t: 'sell', item: 'watch', tx: 's1' }, 0).reason, 'none carried');
   a.pocket.watch = 1;
   assert.equal(w.handle('a', { t: 'sell', item: 'watch', tx: 's2' }, 0).price, 85);
@@ -214,7 +227,56 @@ test('snapshots hide other players private data and respect interest radius', ()
 
 test('transaction memory is bounded', () => {
   const { w, a } = two();
+  at(a, SHOP);
   a.cash = 1e6;
   for (let i = 0; i < R.net.txMemory + 50; i++) w.handle('a', { t: 'sell', item: 'watch', tx: 'x' + i }, 0);
   assert.equal(a.tx.size, R.net.txMemory);
+});
+
+test('buildings block walking; players slide along walls', () => {
+  const { w, a } = two();
+  const city = w.city;
+  const bld = city.buildings.find((b) => b.y > ROAD.y && b.x < ROAD.x && b.x + b.w > ROAD.x);
+  // Walk straight down from the road into the building below.
+  w.handle('a', { t: 'input', seq: 1, mx: 0, my: 1, aim: 0, sprint: true }, 0);
+  for (let i = 1; i <= 40; i++) w.step(50, i * 50);
+  assert.ok(a.y <= bld.y - 9, 'stopped at the wall');
+  assert.equal(city.blocked(a.x, a.y), false);
+  // Diagonal into the wall still slides sideways.
+  const x0 = a.x;
+  w.handle('a', { t: 'input', seq: 2, mx: 1, my: 1, aim: 0, sprint: false }, 2000);
+  for (let i = 1; i <= 10; i++) w.step(50, 2000 + i * 50);
+  assert.ok(a.x > x0 + 50, 'slid along the wall');
+  assert.equal(city.blocked(a.x, a.y), false);
+});
+
+test('buildings stop bullets (cover)', () => {
+  const { w, a, b } = two({ pvpDefault: true });
+  const bld = w.city.buildings.find((q) => q.y > ROAD.y && q.x < ROAD.x && q.x + q.w > ROAD.x);
+  at(a, { x: bld.x - 40, y: bld.y + 80 });
+  at(b, { x: bld.x + bld.w + 40, y: bld.y + 80 });
+  const r = w.handle('a', { t: 'fire', aim: 0 }, 0);
+  assert.equal(r.blocked, 'wall');
+  assert.equal(b.hp, 100);
+});
+
+test('clinic safe zone blocks damage both ways', () => {
+  const { w, a, b } = two({ pvpDefault: true });
+  const c = w.city.clinic;
+  at(b, { x: c.x, y: c.y });
+  at(a, { x: c.x + 150, y: c.y });
+  assert.equal(w.handle('a', { t: 'fire', aim: Math.PI }, 0).blocked, 'safe zone');
+  at(a, { x: c.x, y: c.y }); at(b, { x: c.x + 150, y: c.y });
+  assert.equal(w.handle('a', { t: 'fire', aim: 0 }, 200).blocked, 'safe zone');
+  assert.equal(b.hp, 100);
+});
+
+test('trading requires standing at a corner shop', () => {
+  const { w, a } = two();
+  a.pocket.watch = 1;
+  assert.equal(w.handle('a', { t: 'buy', item: 'ammo', tx: 'f1' }, 0).reason, 'not at a shop');
+  assert.equal(w.handle('a', { t: 'sell', item: 'watch', tx: 'f2' }, 0).reason, 'not at a shop');
+  assert.equal(a.cash, R.player.startCash);
+  at(a, SHOP);
+  assert.equal(w.handle('a', { t: 'sell', item: 'watch', tx: 'f3' }, 0).ok, true);
 });

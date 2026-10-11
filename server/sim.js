@@ -11,6 +11,7 @@
 
 const RULES = require('../shared/rules.js');
 const { C, S, validate } = require('../shared/protocol.js');
+const { createCity } = require('../shared/city.js');
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -24,6 +25,7 @@ class World {
     this.nextBag = 1;
     this.outbox = []; // [{to: playerId, msg}]
     this.pvpDefault = opts.pvpDefault === true; // PvP is opt-in by default
+    this.city = opts.city || createCity(RULES.world.w, RULES.world.h);
   }
 
   // ---------- lifecycle ----------
@@ -93,8 +95,11 @@ class World {
       if (len < 0.05) continue; // deadzone, matches client stick
       const speed = p.input.sprint ? R.player.runPxPerSec : R.player.walkPxPerSec;
       const r = R.player.radius;
-      p.x = clamp(p.x + mx * speed * dt, r, R.world.w - r);
-      p.y = clamp(p.y + my * speed * dt, r, R.world.h - r);
+      // Axis-separated moves so players slide along walls like the client.
+      const nx = clamp(p.x + mx * speed * dt, r, R.world.w - r);
+      if (!this.city.blocked(nx, p.y)) p.x = nx;
+      const ny = clamp(p.y + my * speed * dt, r, R.world.h - r);
+      if (!this.city.blocked(p.x, ny)) p.y = ny;
     }
     for (const [id, b] of this.bags) if (now >= b.expires) this.bags.delete(id);
   }
@@ -119,8 +124,7 @@ class World {
     p.nextShotAt = now + R.fireIntervalMs;
     p.aim = aim;
 
-    // Hitscan against other players. Building occlusion: TODO once the
-    // city layout is shared (see SERVER_HANDOFF.md).
+    // Hitscan against other players; buildings stop bullets.
     const dx = Math.cos(aim), dy = Math.sin(aim);
     let best = null, bestT = Infinity;
     for (const q of this.players.values()) {
@@ -132,7 +136,9 @@ class World {
       if (miss <= RULES.player.radius && t < bestT) { best = q; bestT = t; }
     }
     if (!best) return { ok: true, hit: null };
+    if (this.city.rayHit(p.x, p.y, dx, dy, bestT) < bestT) return { ok: true, hit: null, blocked: 'wall' };
     if (!(p.pvp && best.pvp)) return { ok: true, hit: null, blocked: 'pvp off' };
+    if (this.city.inClinic(best) || this.city.inClinic(p)) return { ok: true, hit: null, blocked: 'safe zone' };
 
     best.hp = Math.max(0, best.hp - R.damage);
     this._send(best.id, { t: S.EVENT, kind: 'hit', by: p.id, hp: best.hp });
@@ -168,7 +174,7 @@ class World {
   _buy(p, item) {
     const R = RULES.shop, CB = RULES.combat;
     if (p.deadUntil) return { ok: false, reason: 'dead' };
-    // TODO: require proximity to a corner shop once shop locations are shared.
+    if (!this.city.nearShop(p)) return { ok: false, reason: 'not at a shop' };
     if (item === 'ammo') {
       const room = Math.min(CB.maxReserve - p.reserve, CB.maxCarriedRounds - p.mag - p.reserve);
       const rounds = Math.min(R.ammoPackRounds, room);
@@ -198,6 +204,7 @@ class World {
     if (p.deadUntil) return { ok: false, reason: 'dead' };
     const price = RULES.shop.sell[item];
     if (!price) return { ok: false, reason: 'cannot sell that' };
+    if (!this.city.nearShop(p)) return { ok: false, reason: 'not at a shop' };
     if (!(p.pocket[item] > 0)) return { ok: false, reason: 'none carried' };
     if (p.cash + price > RULES.cashCap) return { ok: false, reason: 'cash cap' };
     if (--p.pocket[item] === 0) delete p.pocket[item];

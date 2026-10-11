@@ -63,7 +63,7 @@ test('two clients see each other, move, trade and fight through the server', asy
 
   // Line them up deterministically for the economy/combat part.
   const pa = srv.world.players.get(a.id), pb = srv.world.players.get(b.id);
-  pa.x = 600; pa.y = 600; pb.x = 640; pb.y = 600;
+  pa.x = 700; pa.y = 340; pb.x = 740; pb.y = 340; // open street, outside the clinic
 
   // Gift: exactly-once even when the client resends the same tx.
   a.send({ t: 'give', to: b.id, cash: 100, tx: 'gift-1' });
