@@ -88,6 +88,8 @@
       progress: (c) => [Math.min(c.raceGolds, 3), 3], reward: { cash: 6000, xp: { driving: 900 } } },
     { id: 'homeAll', place: 'apartment', tier: 'Kingpin', title: 'Penthouse vibes', hint: 'Install all 5 home upgrades.',
       progress: (c) => [Math.min(c.homeItems, 5), 5], reward: { cash: 5000, xp: { charisma: 600 } } },
+    { id: 'respectBoss', tier: 'Kingpin', title: 'Made it', hint: 'Reach the BOSS Respect rank (tap your rank badge).',
+      progress: (c) => [Math.min(c.respectRank, 4), 4], reward: { cash: 7500 } },
     { id: 'earn1m', tier: 'Legend', title: 'Millionaire', hint: 'Earn $1,000,000 in total.',
       progress: (c) => [Math.min(c.earned, 1000000), 1000000], reward: { cash: 50000 } },
     { id: 'skill50', tier: 'Legend', title: 'Legend', hint: 'Max any skill (level 50).',
