@@ -16,7 +16,7 @@ function clean(raw={},fallback={}){return {x:Number.isFinite(raw.x)?Math.max(32,
 function service(car,wallet,kind){const cost=kind==='fuel'?Math.ceil((100-car.fuel)*.8):kind==='repair'?Math.ceil((100-car.condition)*1.5):0;if(!['fuel','repair'].includes(kind)||cost<=0)return {ok:false,cost:0};if(wallet.cash<cost)return {ok:false,cost};wallet.cash-=cost;car[kind==='fuel'?'fuel':'condition']=100;return {ok:true,cost}}
 root.NightshiftVehicles={clean,service,MODELS,model,handling};if(!root.document)return;
 const KEY='nightshift-city-vehicles-v1';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{}
-for(let i=0;i<cars.length;i++){const c=cars[i];c.id='car-'+i;c.model=model(c).name;const defaults={...c};Object.assign(c,clean(saved[c.id]||{owned:i===0},defaults));if([[-28,-18],[-28,18],[28,-18],[28,18]].some(([x,y])=>blocked(c.x+x,c.y+y))){c.x=(i%5)*440+28;c.y=175+Math.floor(i/5)*340}}
+for(let i=0;i<cars.length;i++){const c=cars[i];c.id='car-'+i;c.model=model(c).name;const defaults={...c};Object.assign(c,clean(saved[c.id]||{owned:i===0},defaults));if(NightshiftVehicleGeometry.blocked(c,buildings,world)){c.x=(i%5)*440+44;c.y=175+Math.floor(i/5)*340;c.angle=Math.PI/2}}
 function persist(){const data={};for(const c of cars)data[c.id]=clean(c,c);try{localStorage.setItem(KEY,JSON.stringify(data))}catch{}}root.NightshiftVehicles.save=persist;
 let theft=null;
 root.NightshiftVehicles.canEnter=car=>car.owned||car.stolen;
