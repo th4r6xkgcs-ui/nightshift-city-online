@@ -12,6 +12,7 @@
 const RULES = require('../shared/rules.js');
 const { C, S, validate } = require('../shared/protocol.js');
 const { createCity } = require('../shared/city.js');
+const movement = require('../shared/movement.js');
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -125,8 +126,7 @@ class World {
 
   // ---------- simulation step ----------
   step(dtMs, now) {
-    const dt = clamp(dtMs, 0, 250) / 1000; // bound stalls like the client does
-    const R = RULES;
+    const R = RULES; // movement.step bounds long stalls itself
     this.tick++;
     for (const p of this.players.values()) {
       if (p.deadUntil) {
@@ -134,17 +134,8 @@ class World {
         continue;
       }
       if (p.reloadUntil && now >= p.reloadUntil) this._finishReload(p);
-      let { mx, my } = p.input;
-      const len = Math.hypot(mx, my);
-      if (len > 1) { mx /= len; my /= len; }
-      if (len < 0.05) continue; // deadzone, matches client stick
-      const speed = p.input.sprint ? R.player.runPxPerSec : R.player.walkPxPerSec;
-      const r = R.player.radius;
-      // Axis-separated moves so players slide along walls like the client.
-      const nx = clamp(p.x + mx * speed * dt, r, R.world.w - r);
-      if (!this.city.blocked(nx, p.y)) p.x = nx;
-      const ny = clamp(p.y + my * speed * dt, r, R.world.h - r);
-      if (!this.city.blocked(p.x, ny)) p.y = ny;
+      const moved = movement.step(p, p.input, dtMs, this.city, R); // same code as client prediction
+      p.x = moved.x; p.y = moved.y;
     }
     for (const [id, b] of this.bags) if (now >= b.expires) this.bags.delete(id);
   }

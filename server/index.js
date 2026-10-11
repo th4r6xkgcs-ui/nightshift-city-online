@@ -139,6 +139,7 @@ function createServer({ port = 2567, host = '127.0.0.1', clock = Date.now, world
     ready,
     get port() { return wss.address().port; },
     store,
+    _wss: wss, // for tests (e.g. simulating dropped connections)
     close: () => new Promise((resolve) => {
       for (const pid of conns.keys()) persist(pid);
       store.flush();
