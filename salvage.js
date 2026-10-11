@@ -8,7 +8,7 @@ function available(spot,history,now){return now>=(history[spot.id]||0)}
 function reward(spot){const index=SPOTS.findIndex(s=>s.id===spot.id);return index%3===2?{scrap:2,watch:1}:{scrap:3}}
 root.NightshiftSalvage={SPOTS,clean,available,reward,SEARCH_MS,COOLDOWN};if(!root.document)return;
 let history={},search=null;try{history=clean(JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{}
-function paused(){return root.NightshiftProgress?.paused()||root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused()||root.NightshiftInventory?.paused()||root.NightshiftVehicles?.paused()||root.NightshiftMap?.paused()||root.NightshiftBackups?.paused()}
+function paused(){return root.NightshiftBusinesses?.paused()||root.NightshiftCraft?.paused()||root.NightshiftProgress?.paused()||root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused()||root.NightshiftInventory?.paused()||root.NightshiftVehicles?.paused()||root.NightshiftMap?.paused()||root.NightshiftBackups?.paused()}
 function nearest(){return SPOTS.filter(spot=>Math.hypot(spot.x-player.x,spot.y-player.y)<55&&available(spot,history,Date.now())).sort((a,b)=>distance(a,player)-distance(b,player))[0]}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(history))}catch{}}
 function cancel(){if(!search)return;search=null;say('Salvage search interrupted')}

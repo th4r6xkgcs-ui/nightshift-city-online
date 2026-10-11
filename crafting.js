@@ -43,7 +43,7 @@ function upgrade(){if(!open||blocked()||!atBench()||state.bench!==1||level(state
 const panel=doc.createElement('div');panel.id='craftPanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label','Crafting');panel.style.cssText='position:fixed;z-index:35;inset:8% 6%;overflow:auto;padding:16px;background:#101e30;border:1px solid #d5ac64;border-radius:12px;color:#fff;font:14px system-ui';doc.body.appendChild(panel);
 const btn=doc.createElement('button');btn.id='craft';btn.textContent='CRAFT';btn.setAttribute('aria-label','Open crafting recipes');doc.querySelector('#actions')?.appendChild(btn);
 function atBench(){return root.NightshiftHome?.canCraft?.()&&root.NightshiftActivities?.ownsHome?.()}
-function blocked(){return root.NightshiftInventory?.paused?.()||root.NightshiftRecovery?.paused?.()||root.NightshiftVehicles?.paused?.()||root.NightshiftMap?.paused?.()||root.NightshiftBackups?.paused?.()||root.NightshiftProgress?.paused?.()}
+function blocked(){return root.NightshiftBusinesses?.paused()||root.NightshiftInventory?.paused?.()||root.NightshiftRecovery?.paused?.()||root.NightshiftVehicles?.paused?.()||root.NightshiftMap?.paused?.()||root.NightshiftBackups?.paused?.()||root.NightshiftProgress?.paused?.()}
 function close(){open=false;panel.hidden=true}
 function render(){
  panel.textContent='';

@@ -1,0 +1,24 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');const ctx={};vm.createContext(ctx);vm.runInContext(fs.readFileSync('business-rules.js','utf8'),ctx);const R=ctx.NightshiftBusinessRules,NOW=1000000;
+let state=R.clean({},NOW),wallet={cash:10000,hp:100,x:640,y:597,heat:0,car:null},pocket={};
+const cmd=(action,id,count,item)=>({action,id,count,item});const act=(c,now=NOW)=>R.transact(state,wallet,pocket,c,now);
+function failsUnchanged(c,now=NOW){const before=JSON.stringify({state,wallet,pocket});assert.equal(act(c,now).ok,false);assert.equal(JSON.stringify({state,wallet,pocket}),before)}
+assert.equal(act(cmd('purchase','farm')).ok,true);assert.equal(wallet.cash,8200);failsUnchanged(cmd('purchase','farm'));
+const preview=JSON.stringify({state,wallet,pocket});assert.equal(R.transact(state,wallet,pocket,cmd('start','farm'),NOW,true).ok,true);assert.equal(JSON.stringify({state,wallet,pocket}),preview);
+assert.equal(act(cmd('start','farm')).ok,true);assert.equal(wallet.cash,8140);failsUnchanged(cmd('start','farm'));
+assert.equal(act(cmd('upgrade','farm')).ok,true);assert.equal(state.properties.farm.level,2);assert.equal(state.properties.farm.batch,3);
+R.advance(state,NOW+119999);assert.equal(state.properties.farm.stock,0);R.advance(state,NOW+120000);assert.equal(state.properties.farm.stock,3);assert.equal(state.ledger.batches,1);R.advance(state,NOW+120001);assert.equal(state.properties.farm.stock,3);assert.equal(state.ledger.batches,1);
+pocket.weed=998;failsUnchanged(cmd('collect','farm',3));assert.equal(act(cmd('collect','farm',1)).ok,true);assert.equal(pocket.weed,999);assert.equal(state.properties.farm.stock,2);
+state.properties.farm.stock=R.capacity(R.property('farm'),state.properties.farm);failsUnchanged(cmd('start','farm'));
+wallet.x=440;wallet.y=1020;pocket={};wallet.heat=0;const cash=wallet.cash;assert.equal(act(cmd('buy','west',1,'weed')).ok,true);assert.equal(act(cmd('sell','west',1,'weed')).ok,true);assert.equal(wallet.cash,cash-10);
+failsUnchanged(cmd('buy','west',1.5,'weed'));failsUnchanged(cmd('buy','west',1,'parcel'));wallet.x=0;failsUnchanged(cmd('buy','west',1,'weed'));wallet.x=440;wallet.heat=2;failsUnchanged(cmd('buy','west',1,'weed'));wallet.heat=0;
+assert.equal(act(cmd('buy','west',5,'weed')).ok,true);failsUnchanged(cmd('buy','west',1,'weed'));R.advance(state,NOW+R.REFILL);assert.equal(state.markets.west.bought.weed,0);
+wallet.x=1760;wallet.y=1360;wallet.heat=0;assert.equal(act(cmd('sell','docks',5,'weed'),NOW+R.REFILL).ok,true);assert.equal(wallet.heat,1);
+wallet.cash=R.CASH_LIMIT;pocket.weed=1;failsUnchanged(cmd('sell','docks',1,'weed'),NOW+R.REFILL);
+const malformed=R.clean({properties:{farm:{owned:false,level:3,stock:900,batch:99,until:NOW+999999999},house:{owned:true,level:99,stock:0,batch:99,until:NOW+999999999}},markets:{west:{refillAt:NOW+999999999,bought:{weed:100}}}},NOW);
+assert.equal(malformed.properties.farm.stock,0);assert.equal(malformed.properties.farm.batch,0);assert.equal(malformed.properties.house.level,3);assert.equal(malformed.properties.house.until,NOW+180000);assert.equal(malformed.properties.house.batch,4);assert.equal(malformed.markets.west.refillAt,NOW+R.REFILL);assert.equal(malformed.markets.west.bought.weed,6);
+state=R.clean({},NOW);wallet={cash:1000,hp:100,x:440,y:1020,heat:0,car:null};pocket={weed:4};assert.equal(act({action:'accept-order'}).ok,true);failsUnchanged({action:'accept-order'});failsUnchanged({action:'complete-order'});wallet.x=1760;wallet.y=1360;
+assert.equal(act({action:'complete-order'},NOW+59999).ok,true);assert.equal(wallet.cash,1300);assert.equal(pocket.weed,undefined);assert.equal(state.orders.completed,1);assert.equal(state.orders.index,1);failsUnchanged({action:'complete-order'});failsUnchanged({action:'accept-order'});
+R.advance(state,NOW+R.REFILL);assert.equal(act({action:'accept-order'},NOW+R.REFILL).ok,true);assert.equal(act({action:'cancel-order'},NOW+R.REFILL).ok,true);failsUnchanged({action:'accept-order'},NOW+R.REFILL);
+assert.equal(act({action:'accept-order'},NOW+2*R.REFILL).ok,true);pocket.parts=3;assert.ok(R.advance(state,NOW+2*R.REFILL+75000).includes('order-expired'));assert.equal(pocket.parts,3);failsUnchanged({action:'complete-order'},NOW+2*R.REFILL+75000);
+wallet.hp=0;failsUnchanged({action:'accept-order'},NOW+3*R.REFILL);wallet.hp=100;wallet.car={};failsUnchanged({action:'accept-order'},NOW+3*R.REFILL);
+console.log('PASS: property costs/upgrade batches, capacity, atomic/dry transactions, dealer spread/quotas, heat, save bounds and timed order custody/reward once');
