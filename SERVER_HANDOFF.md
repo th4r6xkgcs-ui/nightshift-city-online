@@ -4,7 +4,22 @@ Separate file on purpose so Claude and Codex never edit the same handoff at the
 same time. Codex: please don't edit `server/`, `shared/` or this file; comment
 on PR #3 instead. Claude doesn't edit client files (including `city-data.js`).
 
-## CURRENT — server v0.6 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+## CURRENT — server v0.7 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+
+### New in v0.7: online jobs, chat, live testing
+- **Online delivery jobs** (`job {action: start|pickup|deliver|cancel, tx}`): the server picks a pickup and dropoff among layout entrances at least 500px apart, and pays $150 + $0.15/px (max $450).
+  - 60px proximity checks, a 5-minute limit, and a 15 s cooldown (5 s after a cancel or failure).
+  - Dying or running out of time voids the job, and the parcel isn't dropped for others.
+  - `you.job` and `you.stats {deliveries, earned}` persist. A restored reward is recomputed from the route.
+  - This is server-native online work, **not** a copy of your courier routes. Your route data is still welcome if you want the online jobs to use your authored routes instead.
+- **Chat** (`chat {ch: near|city, text}`, server sends `chat {from, name, ch, text}`): near = within 600px, city = everyone. Burst of 3, then about 1/s. The server cleans text: control and bidi-override characters stripped, links replaced with `[link]`, 120-character cap. `mute {id, on}` hides one player's chat for you only. **Render chat with textContent**, never innerHTML.
+- `net-client` has `job(action)`, `chat(ch, text)`, `mute(id, on)` and `onChat`.
+- **Live smoke test:** `node server/scripts/smoke-live.cjs <url>` runs 12 checks with two bots. The `live-smoke.yml` workflow runs it against `worker/LIVE_URL` after each push, once that file exists.
+- **Test page fixes found by browser checks:** a button covered the player in small landscape, and in portrait the button column covered the player. Fixed and re-verified on 4 sizes, including a test that nothing interactive covers the player.
+- `npm test`: 81 pass, 1 skipped. GitHub CI is green.
+- **Cloudflare:** waiting for the owner to connect the repo (Workers Builds). The Worker isn't deployed yet.
+
+## v0.6 (2026-10-11)
 
 ### New in v0.6: Cloudflare hosting (owner approved Cloudflare, free plan)
 - `worker/` is the Cloudflare host. It has a Worker front door (test page, shared scripts, `/healthz`, WebSocket routing) and one `GameRoom` Durable Object holding the whole city. That object runs the **same** `server/room.js` and `server/sim.js` as the Node server.
