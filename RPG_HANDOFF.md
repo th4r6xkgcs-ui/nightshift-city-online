@@ -132,3 +132,14 @@ Verified in browser:
 - Tests: tests/tuning.cjs, 3 PASS.
 - UI: goal and level-up banners now sit at 68% and 84% of the screen height, so they never cover the game's toast or each other.
 - v0.41 merged into `claude/rpg-play`; every hook was re-verified.
+
+## Street races: `races-data.js` + `races.js` (Claude-owned)
+- Three courses on road centre lines: **Midtown Loop** (start 880,680), **Docks Dash** (440,340 → 1760,1360) and **Grand Tour** (a 15-checkpoint lap from 440,1360). To start, drive into a 🏁 start ring and stop for 0.7 s, then the 3-2-1-GO countdown runs. Pass every checkpoint (radius 75); a guide arrow points to the next one. Leaving the car, wrecking, a false start or exceeding the DNF limit ends the race.
+- Par/gold time = length/420 + turns×0.63 s, calibrated with an autopilot on the real physics:
+  - A stock car driven near-perfectly gets **silver**: Loop 5.9 s vs gold 5.6, Docks 6.75 vs 6.2.
+  - A maxed car with Driving 50 gets **gold**: Loop 4.5, Docks 4.6.
+  - Bronze is par×1.6, friendly to touch controls.
+- Payouts: gold pays 100% of the race reward ($700 / $1,200 / $2,200), silver 60%, bronze 35%. A new best medal tier pays full; a repeat pays half. Driving XP: 150, 260 and 450 × the medal factor. Cooldown: 90 s after a finish, 15 s after a DNF.
+- Drawn by wrapping `NightshiftEncounters.draw` (world space): start rings show only within 600 px, and the next 2 checkpoints show while racing. The HUD bar sits at top: 58px.
+- Save: `nightshift-races-v1` (best times, medals). Goals: "Street racer" and "Gold rush".
+- Tests: tests/races.cjs, 3 PASS (every leg is a straight road segment, medals, payouts, save). Browser: autopilot runs with no page errors; screenshot verified.
