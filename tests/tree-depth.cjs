@@ -10,3 +10,6 @@ assert.equal(run('NightshiftScene.order([one,actor,front],view).map(e=>e.kind).j
 run('globalThis.before=JSON.stringify({player,cars,peds,buildings});NightshiftWorld.treeCrown(trees[0].entity)');
 assert.equal(run('JSON.stringify({player,cars,peds,buildings})===before'),true);
 console.log('PASS: cached street tree canopy depth ordering, view culling and state isolation');
+
+run('globalThis.allTrees=NightshiftWorld.treeActors({x:0,y:0,width:2200,height:1700,zoom:1})');
+assert.equal(run('allTrees.some(t=>buildings.some(b=>t.entity.x-5<b.x+b.w&&t.entity.x+32>b.x&&t.entity.y-32<b.y+b.h&&t.entity.y+7>b.y))'),false,'tree crowns must not cover building roofs');

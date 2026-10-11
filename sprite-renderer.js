@@ -12,7 +12,7 @@ function drawCar(v){
  const roll=Math.abs(v.speed||0)>.1&&(Math.floor((typeof ticks==='number'?ticks:0)/3)%2===0);
  for(const x of [-18,15])for(const y of [-19,14]){g.save();g.translate(x+4,y+2);if(x>0)g.rotate(steering*.35);rect('#111c25',-4,-2,9,5);rect('#616a6c',-2,roll?-1:0,5,1);g.restore()}
  const shape=van?[[-27,-14],[-23,-17],[22,-17],[27,-12],[27,12],[22,17],[-23,17],[-27,14]]:compact?[[-24,-10],[-18,-16],[15,-16],[26,-10],[27,9],[17,15],[-17,15],[-24,10]]:[[-28,-10],[-22,-16],[18,-16],[27,-10],[28,10],[18,16],[-22,16],[-28,10]];
- polygon('#182831',shape);g.save();g.scale(.94,.91);polygon(color,shape);g.restore();
+ polygon('#182831',shape);g.save();g.scale(.94,.91);polygon(color,shape);g.save();g.beginPath();shape.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();g.clip();finishPaint(g,-29,-17,58,34);g.restore();g.restore();
  rect('#ffffff28',-20,-14,37,2);rect('#00000024',-23,11,43,3);rect('#152a33',-3,-19,7,3);rect('#152a33',-3,16,7,3);
  if(van){rect('#c3d0c022',-23,-12,26,24);rect('#213941',4,-12,9,24);rect('#8badb2',7,-10,5,20);rect(color,14,-11,8,22);rect('#ffffff28',-20,-9,20,2);rect('#00000020',-20,7,20,2);rect('#727e7755',-21,-5,1,9);rect('#172e3666',-12,-11,1,22);rect('#bfd0c233',-22,0,20,1)}
  else{
@@ -36,36 +36,30 @@ function drawCar(v){
  if(Number.isFinite(v.condition)&&v.condition<65){rect('#24353b',17,-9,6,2);rect('#b0b5a077',20,-7,2,6);rect('#283238',-10,11,10,2)}
  if(Number.isFinite(v.condition)&&v.condition<25){rect('#172932',18,3,6,7);rect('#747d77',19,4,3,3)}g.restore();
 }
+function rounded(color,x,y,w,h,r=2){const ctx=drawing||g;ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();ctx.fill()}
+function finishPaint(ctx,x,y,w,h){const shade=ctx.createLinearGradient?.(x,y,x,y+h);if(!shade?.addColorStop)return;shade.addColorStop(0,'#ffffff38');shade.addColorStop(.35,'#ffffff08');shade.addColorStop(.65,'#10253508');shade.addColorStop(1,'#071c4055');ctx.fillStyle=shade;ctx.fillRect(x,y,w,h)}
 function drawPersonDirect(p,isPlayer=false,options={}){
  const ctx=options.context||g,previousDrawing=drawing;drawing=ctx;const profile=options.profile??(isPlayer?root.NightshiftHome?.profile:null),shirt=profile?.shirt||p.color||'#799f98',skin=profile?.skin||'#c79977',hair=profile?.hair||'#29262b',pants=profile?.pants||'#273543',shoes=profile?.shoes||'#c5cbbb';
- const {facing,stride}=options.pose||pose(p,isPlayer),front=facing>=1&&facing<=3,back=facing>=5&&facing<=7,side=facing===0||facing===4,look=facing===0||facing===1||facing===7?2:facing===3||facing===4||facing===5?-2:0;
- ctx.save();ctx.translate(Math.round(p.x),Math.round(p.y));ctx.fillStyle='#101d2855';ctx.beginPath();ctx.ellipse(1,11,10,4,0,0,Math.PI*2);ctx.fill();
- rect('#192b34',-6,0,12,8);rect(pants,-6,4,5,9+stride);rect(pants,1,4,5,9-stride);rect('#ffffff0d',-5,5,1,7);rect('#111d2980',4,5,1,7);
- rect('#14232e',-7,13+stride,7,3);rect(shoes,-6,13+stride,5,2);rect('#14232e',1,13-stride,7,3);rect(shoes,2,13-stride,5,2);
- // Layered shoulders, jacket hem/zip and swinging sleeves rather than a box torso.
- polygon('#1b2b33',[[-8,-8],[-5,-11],[5,-11],[8,-8],[7,5],[-7,5]]);rect(shirt,-6,-9,12,12);rect(shirt,-8,-6,3,9+stride/2);rect(shirt,6,-6,3,9-stride/2);
- rect('#ffffff20',-5,-7,2,8);rect('#14232e44',4,-6,2,9);rect('#1a293444',-6,2,12,2);if(!back){rect('#c6c5b155',0,-5,1,7);rect('#1b2c36',-3,-2,2,3);rect('#1b2c36',3,-2,2,3)}
- // Art-only cloth styling with stable per-color variation, baked into the sprite atlas.
+ const {facing,stride}=options.pose||pose(p,isPlayer),front=facing>=1&&facing<=3,back=facing>=5&&facing<=7,side=facing===0||facing===4,look=facing===0||facing===1||facing===7?1.5:facing===3||facing===4||facing===5?-1.5:0;
+ ctx.save();ctx.translate(Math.round(p.x),Math.round(p.y));ctx.fillStyle='#101d2838';ctx.beginPath();ctx.ellipse(1,13,9,3.5,0,0,Math.PI*2);ctx.fill();
+ // Longer tapered legs, smaller head and continuous clothing silhouettes.
+ rounded('#172733',-5.5,1,11,8,2);rounded(pants,-5.5,4,4.5,10+stride,1.5);rounded(pants,1,4,4.5,10-stride,1.5);
+ rect('#d0dce718',-4.5,5,1,8);rect('#08172555',3.5,5,1,8);
+ rounded('#162532',-6,13+stride,6,3.5,1.5);rounded(shoes,-5.5,13+stride,5,2,1);rounded('#162532',.5,13-stride,6,3.5,1.5);rounded(shoes,1,13-stride,5,2,1);
+ rounded('#1b2b36',-7,-11,14,17,3.5);rounded(shirt,-6,-10,12,14,3);
+ rounded(shirt,-8,-8,3.5,12+stride/2,1.75);rounded(shirt,4.5,-8,3.5,12-stride/2,1.75);
+ rounded(skin,-8,3+stride/2,3,3,1.5);rounded(skin,5,3-stride/2,3,3,1.5);
+ rect('#ffffff22',-4.5,-7,1.5,8);rect('#13243144',4,-5,1,8);rect('#162b3d55',-4,3,8,1);
  const lookSeed=[...String(shirt)].reduce((n,ch)=>n+ch.charCodeAt(0),0)%4;
- if(lookSeed===0){ // work jacket with contrasting shoulders
-  rect('#1a3545',-6,-9,12,3);rect('#d9c7a866',-1,-4,2,8);
-  rect('#243947',-8,-4,3,5+stride/2);rect('#243947',6,-4,3,5-stride/2);
- }else if(lookSeed===1){ // streetwear top with chest print
-  rect('#142d3b',-4,-4,8,5);rect('#e9d8af',-3,-3,6,1);rect('#b9bca666',-2,-1,4,2);
- }else if(lookSeed===2){ // layered vest
-  rect('#1f3541',-5,-8,3,11);rect('#1f3541',2,-8,3,11);rect('#ddc4a077',-1,-8,2,6);
- }else{ // striped overshirt
-  for(let k=0;k<3;k++)rect('#d9c9aa55',-5,-6+k*3,10,1);
- }
- // Contrasting cuffs give walking arms a readable rhythm.
- rect('#d1bc9c77',-8,1+stride/2,3,2);rect('#d1bc9c77',6,1-stride/2,3,2);
- rect(skin,-8,3+stride/2,3,3);rect(skin,6,3-stride/2,3,3);
- rect('#192c3455',-4,-17,10,11);rect(skin,-4+look/2,-17,9,10);rect('#f0c29444',-3+look/2,-16,3,5);
- polygon(hair,[[-5,-17],[-3,-20],[4,-20],[6,-17],[6,-13],[3,-14],[-4,-14],[-5,-12]]);
- if(back){rect(hair,-4,-17,10,9);rect('#ffffff13',-2,-18,5,2)}else{rect('#192b33',look+1,-11,2,1);if(front)rect('#192b33',look-2,-11,1,1);rect('#7b584b',look,-8,3,1);if(side)rect(skin,look>0?5:-5,-13,2,3)}
- if(profile?.bag&&profile.bag!=='none'){rect('#26383b',-7,-5,3,12);rect('#a58a5b',back?-5:-8,-6,back?10:4,12);rect('#d2b078',back?-4:-7,-4,back?8:2,2)}
- if(profile?.hat&&profile.hat!=='none'){rect(profile.hat==='cap'?'#526575':'#b97562',-5,-20,12,5);rect('#20333f',look>=0?3:-8,-16,6,2)}
- if(isPlayer&&options.weapon!==false&&(!root.NightshiftInventory||root.NightshiftInventory.state.pocket.pistol>0)){ctx.save();ctx.rotate(p.angle||0);rect(shirt,4,-3,7,5);rect(skin,10,-2,4,3);rect('#152a35',13,-3,10,4);rect('#929c9b',14,-3,9,2);rect('#20343d',14,0,3,5);ctx.restore()}
+ if(lookSeed===0){rounded('#273d4b',-5,-10,10,4,2);rect('#c7b9a577',0,-5,.8,8);rect('#203541',-7,0,3,3);rect('#203541',5,0,2,3)}
+ else if(lookSeed===1){rounded('#182e40',-3,-5,6,4,1);rect('#dfd6bd',-2,-4,4,1)}
+ else if(lookSeed===2){rounded('#243a49',-5,-8,3,11,1);rounded('#243a49',2,-8,3,11,1);rect('#d2c3a277',0,-7,1,7)}
+ else{rect('#d9c9aa55',-4,-5,8,1);rect('#d9c9aa33',-4,-1,8,1)}
+ rounded(skin,-3.5+look/2,-19,7.5,8.5,3);rounded('#edd0a044',-2.5+look/2,-17.5,2,4,1);
+ rounded(hair,-4,-21,8.5,5.5,2.5);if(back)rounded(hair,-3.5,-19,8,7,2.5);else{rect('#24313a',look+1,-14,1,1);if(front)rect('#24313a',look-1.5,-14,1,1);rect('#88634f',look,-11.5,2,1);if(side)rounded(skin,look>0?3.5:-4,-16,1.5,3,1)}
+ if(profile?.bag&&profile.bag!=='none'){rect('#26383b',-6,-7,1.5,12);rounded('#a58a5b',back?-4:-7,-7,back?9:3,12,2);rect('#d2b078',back?-3:-6,-5,back?7:1,1)}
+ if(profile?.hat&&profile.hat!=='none'){rounded(profile.hat==='cap'?'#526575':'#b97562',-4.5,-22,10,5,2);rect('#20333f',look>=0?2:-6,-18,5,1.5)}
+ if(isPlayer&&options.weapon!==false&&(!root.NightshiftInventory||root.NightshiftInventory.state.pocket.pistol>0)){ctx.save();ctx.rotate(p.angle||0);rounded(shirt,4,-3,7,5,2);rounded(skin,10,-2,4,3,1);rect('#152a35',13,-3,10,4);rect('#929c9b',14,-3,9,2);rect('#20343d',14,0,3,5);ctx.restore()}
  if(!options.hideHealth&&!isPlayer&&Number.isFinite(p.hp)&&p.hp<(p.maxHp||40)){rect('#182832',-13,-29,26,4);rect('#dd9884',-13,-29,26*Math.max(0,p.hp/(p.maxHp||40)),3)}ctx.restore();drawing=previousDrawing;
 }
 const atlasCache=new Map(),MAX_ATLASES=8,CELL_W=48,CELL_H=52;
