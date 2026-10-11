@@ -30,7 +30,7 @@ function onlineHtml(indexHtml) {
 
 // Claude's RPG layer (skills + goals). Injected before boot.js at build time so
 // Codex's index.html stays untouched; skipped for any script it already lists.
-const RPG_SCRIPTS = ['skills-data.js', 'skills.js', 'weapons-data.js', 'weapons.js', 'skill-effects.js', 'casino-data.js', 'casino.js', 'tuning-data.js', 'tuning.js', 'races-data.js', 'races.js', 'home-data.js', 'home-upgrades.js', 'goals-data.js', 'goals.js'];
+const RPG_SCRIPTS = ['skills-data.js', 'skills.js', 'weapons-data.js', 'weapons.js', 'skill-effects.js', 'casino-data.js', 'casino.js', 'tuning-data.js', 'tuning.js', 'races-data.js', 'races.js', 'home-data.js', 'home-upgrades.js', 'goals-data.js', 'goals.js', 'dailies-data.js', 'dailies.js'];
 function withRpg(html) {
   const missing = RPG_SCRIPTS.filter((s) => fs.existsSync(path.join(ROOT, s)) && !html.includes(`src="${s}"`));
   if (!missing.length || !/<script\s+src="boot\.js"/.test(html)) return html;
