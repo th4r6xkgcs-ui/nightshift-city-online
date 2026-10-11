@@ -40,6 +40,9 @@
     let ws = null, status = 'connecting', closedByUser = false, retryMs = 500, retryTimer = null;
     let id = null, token = o.token || null, me = null, pos = null;
     let input = { mx: 0, my: 0, aim: 0, sprint: false }, seq = 0, lastKey = '', lastSentAt = -1e9;
+    // Shared-world mode: the game owns the player's position and reports it.
+    const presence = o.mode === 'presence';
+    let report = null, posSeq = 0, lastPosKey = '', lastPosAt = -1e9;
     let history = []; // [{seq, dx, dy}] predicted movement not yet confirmed by the server
     let nextFireAt = 0, txN = 0;
     const others = new Map(); // id -> {name, pvp, hp, dead, aim, snaps:[{t,x,y}]}
@@ -56,6 +59,7 @@
       ws = sock;
       sock.onopen = () => {
         const hello = { t: C.HELLO, name: o.name, v: VERSION };
+        if (presence) hello.mode = 'presence';
         if (token) hello.token = token;
         sock.send(JSON.stringify(hello));
       };
@@ -89,7 +93,7 @@
           seen.add(p.id);
           let rec = others.get(p.id);
           if (!rec) { rec = { snaps: [] }; others.set(p.id, rec); }
-          Object.assign(rec, { id: p.id, name: p.name, pvp: p.pvp, hp: p.hp, dead: p.dead, aim: p.aim });
+          Object.assign(rec, { id: p.id, name: p.name, pvp: p.pvp, hp: p.hp, dead: p.dead, aim: p.aim, car: p.car || null });
           rec.snaps.push({ t, x: p.x, y: p.y });
           if (rec.snaps.length > 12) rec.snaps.shift();
         }
@@ -116,6 +120,15 @@
         if (!city.blocked(nx, ny)) pos = { x: nx, y: ny };
         else pos = { x: you.x, y: you.y };
       }
+    }
+
+    function sendReport(t) {
+      const r = report;
+      const key = [Math.round(r.x), Math.round(r.y), r.aim.toFixed(2), r.car ? r.car.angle.toFixed(2) + (r.car.color || '') : '-'].join();
+      const since = t - lastPosAt;
+      if (key === lastPosKey ? since < HEARTBEAT_MS : since < MIN_INPUT_MS) return;
+      const msg = { t: C.POS, seq: posSeq + 1, x: r.x, y: r.y, aim: r.aim, car: r.car };
+      if (send(msg)) { posSeq++; lastPosKey = key; lastPosAt = t; }
     }
 
     function sendInput(t) {
@@ -146,6 +159,16 @@
       get id() { return id; },
       get token() { return token; },
 
+      // Shared-world mode: tell the server where the game put the player.
+      // car: null on foot, or { angle, color } while driving.
+      setPosition(next) {
+        const num = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
+        const car = next.car && Number.isFinite(next.car.angle)
+          ? { angle: next.car.angle, ...(typeof next.car.color === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(next.car.color) ? { color: next.car.color } : {}) }
+          : null;
+        report = { x: num(next.x), y: num(next.y), aim: num(next.aim), car };
+      },
+
       setInput(next) {
         const num = (v, d) => (typeof v === 'number' && Number.isFinite(v) ? v : d);
         input = {
@@ -157,7 +180,9 @@
       // Call once per frame. Returns what to draw.
       update(dtMs) {
         const t = o.now();
-        if (id) {
+        if (id && presence) {
+          if (report) sendReport(t);
+        } else if (id) {
           sendInput(t);
           if (me && pos && !me.dead) {
             const next = MOVE.step(pos, input, dtMs, city, RULES);
@@ -174,7 +199,7 @@
         const list = [];
         for (const rec of others.values()) {
           const p = interpolated(rec, rt);
-          list.push({ id: rec.id, name: rec.name, x: p.x, y: p.y, aim: rec.aim, hp: rec.hp, dead: rec.dead, pvp: rec.pvp });
+          list.push({ id: rec.id, name: rec.name, x: p.x, y: p.y, aim: rec.aim, hp: rec.hp, dead: rec.dead, pvp: rec.pvp, car: rec.car });
         }
         return {
           status, me: me && pos ? { ...me, x: pos.x, y: pos.y, aim: input.aim, serverX: me.x, serverY: me.y } : null,

@@ -107,7 +107,7 @@ class Room {
     }
     const id = newId();
     clearTimeout(st.helloTimer);
-    const p = this.world.addPlayer(id, msg.name, this.clock(), saved);
+    const p = this.world.addPlayer(id, msg.name, this.clock(), saved, { presence: msg.mode === 'presence' });
     st.id = id;
     this.conns.set(id, conn);
     this.tokens.set(id, token);

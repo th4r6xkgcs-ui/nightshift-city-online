@@ -9,7 +9,7 @@
 
   // Client -> server
   const C = Object.freeze({
-    HELLO: 'hello',       // {name, v, token?}
+    HELLO: 'hello',       // {name, v, token?, mode?: 'full' | 'presence'}
     INPUT: 'input',       // {seq, mx, my, aim, sprint}
     FIRE: 'fire',         // {aim}
     RELOAD: 'reload',     // {}
@@ -24,6 +24,7 @@
     JOB: 'job',           // {action: start|pickup|deliver|cancel, tx}
     CHAT: 'chat',         // {ch: near|city, text}
     MUTE: 'mute',         // {id, on}  hide one player's chat from you
+    POS: 'pos',           // presence mode only: {seq, x, y, aim, car: null | {angle, color?}}
     PING: 'ping',         // {at}
   });
 
@@ -51,6 +52,7 @@
         if (typeof msg.name !== 'string' || !/^[\w .-]{1,20}$/.test(msg.name)) return 'bad name';
         if (msg.v !== VERSION) return 'protocol version mismatch';
         if (msg.token !== undefined && (typeof msg.token !== 'string' || !/^[a-f0-9]{32}$/.test(msg.token))) return 'bad token';
+        if (msg.mode !== undefined && msg.mode !== 'full' && msg.mode !== 'presence') return 'bad mode';
         return null;
       case C.INPUT:
         if (!Number.isSafeInteger(msg.seq) || msg.seq < 0) return 'bad seq';
@@ -86,6 +88,11 @@
         return typeof msg.text === 'string' && msg.text.length <= 400 ? null : 'bad chat';
       case C.MUTE:
         return isId(msg.id) && typeof msg.on === 'boolean' ? null : 'bad mute';
+      case C.POS:
+        if (!Number.isSafeInteger(msg.seq) || msg.seq < 0 || !isNum(msg.x) || !isNum(msg.y) || !isNum(msg.aim)) return 'bad pos';
+        if (msg.car === null || msg.car === undefined) return null;
+        if (typeof msg.car !== 'object' || !isNum(msg.car.angle)) return 'bad pos';
+        return msg.car.color === undefined || (typeof msg.car.color === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(msg.car.color)) ? null : 'bad pos';
       case C.PING:
         return isNum(msg.at) ? null : 'bad ping';
       default:

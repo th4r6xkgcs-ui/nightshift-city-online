@@ -51,6 +51,10 @@
     transfer: Object.freeze({ rangePx: 60, maxPerTransfer: 10000 }),
     // Text chat. "near" reaches players within nearRangePx, "city" everyone.
     chat: Object.freeze({ maxLen: 120, nearRangePx: 600, burst: 3, perSec: 1 }),
+    // Shared-world ("presence") mode for the real game while its economy and
+    // combat are still local: the client reports its position; the server
+    // accepts only physically possible moves (cars included).
+    presence: Object.freeze({ maxSpeedPxPerSec: 480, slackPx: 40, anchorRangePx: 150, resyncAfterMs: 2000 }),
     // Online delivery jobs between building entrances (server-chosen).
     jobs: Object.freeze({
       basePay: 150, payPerPx: 0.15, maxPay: 450, minDistancePx: 500,

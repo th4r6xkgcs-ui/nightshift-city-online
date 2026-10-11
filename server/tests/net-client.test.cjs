@@ -182,3 +182,21 @@ test('wiggling the stick every frame stays far under the server rate limit', asy
   assert.ok(sent <= 44, `at most ~20 inputs/s (sent ${sent} in 2s)`);
   assert.ok(sent >= 30, `still responsive (sent ${sent} in 2s)`);
 });
+
+test('shared-world mode: the game reports position (walking, then driving) and others see it', async (t) => {
+  const { srv, make } = await setup(t, 40);
+  const a = make('Walker', { mode: 'presence' }), b = make('Watcher', { mode: 'presence' });
+  const wa = await a.welcomed(); await b.welcomed();
+  assert.equal(srv.world.players.get(wa.id).presence, true);
+  let x = 700; const stops = [loop(b), loop(a)];
+  a.setPosition({ x, y: 340, aim: 0, car: null });
+  const h = setInterval(() => { x += 3; a.setPosition({ x, y: 340, aim: 0, car: x > 760 ? { angle: 0.3, color: '#3a7' } : null }); }, 16);
+  await sleep(1200);
+  clearInterval(h);
+  await sleep(400);
+  stops.forEach((s) => s());
+  const seen = b.update(0).others.find((o) => o.id === wa.id);
+  assert.ok(seen && Math.abs(seen.x - x) < 6, `watcher sees the reported spot (${seen && seen.x} vs ${x})`);
+  assert.deepEqual(seen.car, { angle: 0.3, color: '#3a7' });
+  assert.equal(srv.world.players.get(wa.id).posRejects, 0, 'no legitimate report rejected');
+});

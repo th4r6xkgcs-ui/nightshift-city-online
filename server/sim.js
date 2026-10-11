@@ -31,7 +31,7 @@ class World {
   }
 
   // ---------- lifecycle ----------
-  addPlayer(id, name, now, saved = null) {
+  addPlayer(id, name, now, saved = null, { presence = false } = {}) {
     if (this.players.has(id)) throw new Error('duplicate player id');
     const R = RULES;
     const p = {
@@ -58,6 +58,7 @@ class World {
       joinedAt: now,
     };
     if (saved) this._restore(p, saved);
+    if (presence) Object.assign(p, { presence: true, posSeq: -1, posAt: now, posRejectSince: 0, car: null, posRejects: 0 });
     this.players.set(id, p);
     return p;
   }
@@ -121,6 +122,13 @@ class World {
     const bad = validate(msg);
     if (bad) return { ok: false, reason: bad, strike: true };
 
+    if (p.presence) {
+      // Shared-world mode: the real game keeps its own economy/combat for now.
+      if (msg.t === C.POS) return this._pos(p, msg, now);
+      if (msg.t !== C.CHAT && msg.t !== C.MUTE) return { ok: false, reason: 'not available in shared-world mode', quiet: msg.t === C.INPUT };
+    } else if (msg.t === C.POS) {
+      return { ok: false, reason: 'pos is for shared-world mode', quiet: true };
+    }
     switch (msg.t) {
       case C.INPUT: return this._input(p, msg);
       case C.FIRE: return this._fire(p, msg.aim, now);
@@ -186,7 +194,7 @@ class World {
     const dx = Math.cos(aim), dy = Math.sin(aim);
     let best = null, bestT = Infinity;
     for (const q of this.players.values()) {
-      if (q === p || q.deadUntil) continue;
+      if (q === p || q.deadUntil || q.presence) continue;
       const ox = q.x - p.x, oy = q.y - p.y;
       const t = ox * dx + oy * dy;
       if (t <= 0 || t > R.rangePx) continue;
@@ -526,10 +534,46 @@ class World {
   }
 
   publicView(p) {
-    return {
+    const v = {
       id: p.id, name: p.name, x: Math.round(p.x), y: Math.round(p.y), aim: p.aim,
       hp: p.hp, dead: !!p.deadUntil, pvp: p.pvp,
     };
+    if (p.presence) { v.presence = true; v.car = p.car; }
+    return v;
+  }
+
+  // ---------- shared-world position reports ----------
+  _anchors() {
+    if (!this._anchorList) {
+      const c = this.city;
+      this._anchorList = [RULES.hospital, RULES.spawn, c.apartment, c.clinic, ...c.buildings.map((b) => b.entrance)];
+    }
+    return this._anchorList;
+  }
+
+  _pos(p, m, now) {
+    const P = RULES.presence, R = RULES;
+    if (m.seq <= p.posSeq) return { ok: false, reason: 'stale', quiet: true };
+    const x = m.x, y = m.y;
+    const inBuilding = this.city.buildings.some((b) => x > b.x && x < b.x + b.w && y > b.y && y < b.y + b.h);
+    const outside = x < 0 || y < 0 || x > R.world.w || y > R.world.h;
+    let ok = !inBuilding && !outside;
+    if (ok && p.posSeq >= 0) {
+      const allowed = (P.maxSpeedPxPerSec * Math.max(0, now - p.posAt)) / 1000 + P.slackPx;
+      const near = (a) => Math.hypot(a.x - x, a.y - y) <= P.anchorRangePx;
+      // Long jumps only to places the game legitimately puts you (respawn, doors, home).
+      if (Math.hypot(x - p.x, y - p.y) > allowed && !this._anchors().some(near)) {
+        // A client that keeps disagreeing for a while is resynced rather than stuck.
+        if (!p.posRejectSince) p.posRejectSince = now;
+        ok = now - p.posRejectSince >= P.resyncAfterMs;
+      }
+    }
+    if (!ok) { p.posRejects++; return { ok: false, reason: 'rejected', quiet: true }; }
+    p.posRejectSince = 0;
+    p.posSeq = m.seq; p.posAt = now;
+    p.x = x; p.y = y; p.aim = m.aim;
+    p.car = m.car ? { angle: m.car.angle, ...(m.car.color ? { color: m.car.color } : {}) } : null;
+    return { ok: true, quiet: true };
   }
 
   snapshotFor(id) {
