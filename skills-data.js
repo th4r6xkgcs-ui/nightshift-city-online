@@ -28,11 +28,12 @@
         { key: 'driving.handling', label: 'Handling', per: 0.008, max: 1.4 },
         { key: 'driving.crashDamage', label: 'Crash damage taken', per: -0.01, min: 0.5 },
       ] },
-    { id: 'luck', name: 'Luck', icon: '🍀', desc: 'Lucky cash finds when you scavenge.',
-      earn: 'Search salvage crates.',
+    { id: 'luck', name: 'Luck', icon: '🍀', desc: 'Lucky cash finds and bigger slot wins.',
+      earn: 'Search salvage crates; bet at the casino.',
       perks: [
         { key: 'luck.rare', label: 'Lucky find chance', per: 0.02, max: 2.0, show: (m) => `${Math.round((m - 1) * 50)}% per salvage` },
         { key: 'luck.salvage', label: 'Lucky find value', per: 0.02, max: 2.0 },
+        { key: 'luck.casino', label: 'Slot winnings', per: 0.0016, max: 1.08 },
       ] },
     { id: 'farming', name: 'Farming', icon: '🌿', desc: 'Bigger harvests, faster growth.',
       earn: 'Complete grow batches.',
@@ -72,6 +73,7 @@
   // XP awarded by observed actions (tunable).
   const XP = Object.freeze({
     shot: 2,                 // each round fired
+    hit: 5,                  // bonus per bullet that lands (skill-effects.js)
     run100px: 3,             // per 100px run on foot
     drive100px: 1,           // per 100px driven
     delivery: { driving: 40, charisma: 25 },

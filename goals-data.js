@@ -38,6 +38,8 @@
       progress: (c) => [Math.min(c.salvage, 10), 10], reward: { cash: 400, xp: { luck: 120 } } },
     { id: 'escape1', tier: 'Hustle', title: 'Lose the cops', hint: 'Get wanted, then lose the police until heat clears.',
       progress: (c) => [Math.min(c.escapes, 1), 1], reward: { cash: 250, xp: { stealth: 80 } } },
+    { id: 'casino1', tier: 'Hustle', title: 'Feeling lucky', hint: 'Win a bet at the LUCKY 7 CASINO (east side, by the docks).',
+      progress: (c) => [Math.min(c.casinoWins, 1), 1], reward: { cash: 200, xp: { luck: 60 } } },
     { id: 'sold25', tier: 'Hustle', title: 'Street supplier', hint: 'Sell 25 units of product.',
       progress: (c) => [Math.min(c.sold, 25), 25], reward: { cash: 750, xp: { dealing: 150 } } },
     { id: 'batch5', tier: 'Hustle', title: 'Green thumb', hint: 'Finish 5 grow batches.',
@@ -56,6 +58,9 @@
       progress: (c) => [Math.min(c.maxSkill, 10), 10], reward: { cash: 1500 } },
     { id: 'escape5', tier: 'Rising', title: 'Ghost', hint: 'Lose the police 5 times.',
       progress: (c) => [Math.min(c.escapes, 5), 5], reward: { cash: 1500, xp: { stealth: 300 } } },
+
+    { id: 'highRoller', tier: 'Rising', title: 'High roller', hint: 'Wager $25,000 in total at the casino.',
+      progress: (c) => [Math.min(c.casinoWagered, 25000), 25000], reward: { cash: 1500, xp: { luck: 300 } } },
 
     // ---- kingpin ----
     { id: 'cars3', tier: 'Kingpin', title: 'Collector', hint: 'Own 3 cars.',
