@@ -12,4 +12,4 @@ Touched: vehicle-geometry.js, vehicles.js, game.js, crime.js, feedback.js, index
 
 Validation: npm run check passes 48 suites and root syntax checks; git diff --check passes. Coverage includes rotated body intersections, zero/invalid rays, nearest wall/car/entity ordering, persisted bounded damage, police cover, driver damage, muzzle obstruction, live reticle/entity precedence, event-time reload completion once, menu isolation and surrender input reset. Existing controls/custody/physics/economy suites retained. Internal 390x844 canvas render reviewed; real browser/iPhone DOM, dual-touch, audio and file-picker QA remains pending. No multiplayer authority is claimed.
 
-Release: prepared for draft PR and update to the existing owner-private preview. No backend changes, paid services, audience changes or PR merges.
+Release: draft PR #9 published; existing owner-private preview updated successfully to v0.24. GitHub Client simulation checks passed on 211e42257e02dc274f09c596011ab4c02fa5b626. All 43 playable assets were packaged and byte-checked against source before publication. No backend changes, paid services, audience changes or PR merges.
