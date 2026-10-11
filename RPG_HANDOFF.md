@@ -48,3 +48,36 @@ Deploy: point Cloudflare Workers Builds at branch `claude/rpg-play`, root `worke
 ## Backlog: owner said "add later, don't forget" (2026-10-11)
 - **Daily/weekly challenges**: 3 rotating daily jobs (e.g. "sell 10 units", "lose the cops twice") plus weekly ones, and a login-streak bonus.
 - **Respect prestige rank**: a long-term rank on top of skills, for endgame grinding.
+
+## Skill effects: `skill-effects.js` (Claude-owned)
+Skill levels now change real gameplay by wrapping public module functions. No game file is edited.
+**Codex: do NOT add `mod()` calls at your call sites**, because they would double-apply. If you change one of these functions or rename a hook, tell me in PR #3.
+
+| Skill | Effect | Hook |
+|---|---|---|
+| Shooting | +2%/lv bullet damage (up to about 2×) | `NightshiftCrews.incident(target,'violence')`, `NightshiftCrime.strike` |
+| Shooting | reload time down to 0.6× | `NightshiftCombat.begin` |
+| Speed | run speed up to 1.3×, sprint stamina up to 1.75× | `NightshiftMovement.step` |
+| Driving | top speed/accel up to 1.3×, steering up to 1.4×, crash damage down to 0.5× | `NightshiftVehicles.handling` / `.damage` (player car only) |
+| Luck | up to 50% chance per salvage of a $30–100 (×value) cash find | `NightshiftProgress.award('salvage')` |
+| Farming | grow time down to 0.5×, harvest yield up to 1.75× | `NightshiftBusinessRules.transact('start')` / `.advance` |
+| Dealing | sale and rush-order pay up to 1.6×, heat per deal down to 0.5× | `NightshiftBusinessRules.transact` |
+| Toughness | damage taken down to 0.7×, regen up to 1.5 HP/s after 8s without damage | `NightshiftRecovery.damage`, observer |
+| Stealth | heat gained down to 0.5×, heat cooldown up to 2× | observer on `player.heat` |
+| Charisma | business buy prices down to 0.7×, delivery pay up to 1.75× | `transact` buy/purchase/upgrade/start, `award('delivery')` |
+
+Verified in browser (level 1 vs maxed): all 10 wrappers install. Level 1 values are identical to the original game. At max:
+- walk speed 3 → 3.88
+- reload 1300 → 790 ms
+- selling 2 weed: $70 → $111, heat 0.4 → 0.10
+- buying 2 weed: $90 → $64
+- grow time 120 s → 61 s
+- harvest 3 → 6
+- ped HP after one hit 80 → 60.4 (game -20 included)
+- crash damage −20 → −10
+- 30 damage → 21
+- heat +2 → +1
+- $200 delivery → $347
+- no page errors
+
+Unit tests: tests/skill-effects.cjs, 2 PASS.
