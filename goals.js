@@ -36,7 +36,7 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -134,6 +134,7 @@
       weaponsOwned: root.NightshiftWeapons?.state?.owned?.length || 1,
       tuneLevels: tuneStat('totalLevels'), tuneBestCar: tuneStat('bestCar'),
       homeItems: root.NightshiftHomeUpgrades?.state?.owned?.length || 0,
+      respectRank: root.NightshiftRespect?.state?.reached || 0,
       raceMedals: Object.keys(root.NightshiftRaces?.state?.medals || {}).length,
       raceGolds: Object.values(root.NightshiftRaces?.state?.medals || {}).filter((m) => m === 'gold').length,
     });
