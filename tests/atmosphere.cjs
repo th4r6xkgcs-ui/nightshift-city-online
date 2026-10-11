@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');const run=boot();
+run('globalThis.view={x:100,y:100,width:390,height:844,zoom:1.25};globalThis.entries=[{entity:{x:200,y:300},kind:"ped"},{entity:{x:200,y:200},kind:"car"},{entity:{x:200,y:300},kind:"player"},{entity:{x:2100,y:1600},kind:"ped"}];globalThis.before=JSON.stringify(entries)');
+assert.equal(run('NightshiftScene.order(entries,view).map(e=>e.kind).join(",")'),'car,ped,player');assert.equal(run('JSON.stringify(entries)===before'),true);
+assert.equal(run('NightshiftScene.visible({x:NaN,y:200},view)'),false);assert.equal(run('NightshiftScene.visible({x:200,y:200},{...view,zoom:0})'),false);
+assert.equal(run('NightshiftEnvironment.weather(720)'),0);assert.equal(run('NightshiftEnvironment.weather(1140)'),1);assert.equal(run('NightshiftEnvironment.weather(1095)'),.5);assert.equal(run('NightshiftEnvironment.weather(1270)'),0);assert.equal(run('NightshiftEnvironment.weather(NaN)'),0);
+assert.equal(run('NightshiftEnvironment.rainCount(100000,100000)'),90);assert.equal(run('NightshiftEnvironment.rainCount(NaN,844)'),0);
+run('globalThis.lines=0;g.lineTo=()=>lines++;NightshiftEnvironment.state.minute=1140;globalThis.snapshot=JSON.stringify({player,cars,peds,buildings});NightshiftEnvironment.overlay(NaN);NightshiftEnvironment.reflections()');assert.ok(run('lines')<=90);assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);
+assert.equal(run('NightshiftSprites.pose({moving:true,angle:0,moveAngle:Math.PI,walkTicks:5}).facing'),4);
+run('peds.length=0;peds.push({x:690,y:620,hp:40,dx:0,dy:1,t:1000});NightshiftCitizens.step(peds[0],100,1,{cars:[],blocked:()=>false,world})');assert.equal(run('peds[0].moveAngle'),Math.PI/2);
+run('player.x=690;player.y=620;keys.s=true;update(200,1);keys.s=false');assert.equal(run('player.moveAngle'),Math.PI/2);
+const home=boot();home('NightshiftHome.enter();keys.w=true;NightshiftHome.render(150);NightshiftHome.render(200);keys.w=false;globalThis.lastSprite=null;NightshiftSprites.person=(p,flag)=>{if(flag)lastSprite={...p}};NightshiftHome.render(250)');assert.ok(home('lastSprite.walkTicks')>0);assert.equal(home('lastSprite.moveAngle'),-Math.PI/2);
+console.log('PASS: stable visible actor depth, invalid view rejection, bounded rain/fade/reflections without state writes, actual outdoor/civilian movement facing and indoor walking clock/facing');

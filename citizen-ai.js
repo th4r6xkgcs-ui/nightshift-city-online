@@ -36,7 +36,7 @@ function step(npc,now,dt,context){
   const to={x:Math.max(10,Math.min(world.w-10,npc.x+npc.dx*.38*dt)),y:Math.max(10,Math.min(world.h-10,npc.y+npc.dy*.38*dt))};
   if(canStep(npc,{x:to.x,y:npc.y},blocked,cars))npc.x=to.x;else npc.dx*=-1;
   if(canStep(npc,{x:npc.x,y:to.y},blocked,cars))npc.y=to.y;else npc.dy*=-1;
- }npc.moving=distance(npc,before)>.01;if(npc.moving)npc.walkTicks=(npc.walkTicks||0)+dt;
+ }npc.moving=distance(npc,before)>.01;if(npc.moving){npc.walkTicks=(npc.walkTicks||0)+dt;npc.moveAngle=Math.atan2(npc.y-before.y,npc.x-before.x);}
 }
 function alert(source,now,{kind='gunshot',radius=260}={}){let count=0;for(const npc of peds)if(distance(npc,source)<=radius&&react(npc,source,now,kind))count++;return count}
 root.NightshiftCitizens={react,occupied,canStep,coverGoal,step,alert};
