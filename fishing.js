@@ -41,7 +41,7 @@
     for (const s of F.SPOTS) {
       if (Math.hypot(p.x - s.x, p.y - s.y) > 700) continue;
       // water edge + pier planks + a bobbing float
-      const wx = s.id === 'pier' ? s.x - 40 : s.x - 60, wy = s.id === 'pier' ? s.y + 18 : s.y - 70, ww = s.id === 'pier' ? 90 : 50, wh = s.id === 'pier' ? 32 : 140;
+      const wx = s.id === 'pier' ? s.x - 70 : s.x - 60, wy = s.id === 'pier' ? s.y + 18 : s.y - 70, ww = s.id === 'pier' ? 140 : 50, wh = s.id === 'pier' ? 30 : 140;
       const grd = ctx.createLinearGradient(wx, wy, wx + ww, wy + wh); grd.addColorStop(0, '#0d3550'); grd.addColorStop(1, '#14567a');
       ctx.fillStyle = grd; ctx.fillRect(wx, wy, ww, wh);
       ctx.strokeStyle = '#7fd3ff55'; ctx.lineWidth = 1;
