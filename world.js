@@ -21,6 +21,31 @@ function furnishings(ctx,x,y){
   for(let k=0;k<2;k++){const xx=x+112+k*102;rect(ctx,'#192c3166',xx+5,y+279,87,25);rect(ctx,k?'#8b7051':'#497c7c',xx,y+267,87,28);rect(ctx,k?'#b09065':'#76a39a',xx,y+267,87,3);for(let r=0;r<10;r++)rect(ctx,'#192c3133',xx+4+r*8,y+272,2,20);rect(ctx,'#c3bc8d',xx+75,y+273,2,16)}
  }
 }
+function neonColor(name){return name==='CLUB'?'#ef99da':name==='DINER'?'#ffd290':name==='GARAGE'?'#edbd7e':name==='CLOTHING'?'#a3dfcf':name==='CORNER SHOP'?'#9ed8ed':'#d6d7b1'}
+function storefrontLight(b,night){
+ if(night<=0)return;
+ const {x,y,w,h}=b,color=neonColor(b.name),commercial=b.name!=='APARTMENTS'&&b.name!=='WAREHOUSE';
+ g.save();
+ // Stepped translucent pixel bands create glow without per-building blur surfaces.
+ if(commercial){
+  g.fillStyle=color;
+  for(let k=3;k>0;k--){g.globalAlpha=night*(.025+(3-k)*.015);g.fillRect(x+12-k*3,y+h-64-k*3,w-24+k*6,19+k*6)}
+  g.globalAlpha=night*.9;g.fillRect(x+15,y+h-62,w-30,1);g.fillRect(x+15,y+h-47,w-30,1);
+  if(b.name==='CLUB'||b.name==='CLOTHING'){g.globalAlpha=night*.7;for(const xx of [x+14,x+w-68]){g.fillRect(xx,y+h-31,54,1);g.fillRect(xx,y+h-31,1,24);g.fillRect(xx+53,y+h-31,1,24)}}
+  if(b.name==='CLUB'||b.name==='DINER'){
+   const phase=Math.floor((typeof ticks==='number'&&Number.isFinite(ticks)?ticks:0)/18)%3;
+   for(let i=0;i<14;i++){g.globalAlpha=night*(i%3===phase?.95:.35);g.fillRect(x+20+i*15,y+h-63,3,3)}
+  }
+ }
+ // Warm entry wash; small window light pools stay clear of the street itself.
+ g.fillStyle=b.name==='APARTMENTS'?'#e3c18b':color;
+ for(let k=0;k<3;k++){g.globalAlpha=night*(.09-k*.025);g.fillRect(x+w/2-24-k*10,y+h+4+k*8,48+k*20,7)}
+ const wet=root.NightshiftEnvironment?.weather(root.NightshiftEnvironment.state?.minute??720)||0;
+ if(commercial&&wet){
+  for(let k=0;k<6;k++){g.globalAlpha=night*wet*(.18-k*.022);g.fillRect(x+20+(k%2)*13,y+h+10+k*5,w-40-(k%3)*19,2)}
+ }
+ g.restore();
+}
 function ground(ctx,width,height){
  rect(ctx,'#39413c',0,0,width,height);
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
@@ -48,6 +73,10 @@ function ground(ctx,width,height){
   rect(ctx,'#b8b8a2',x-53,y-101,106,3);rect(ctx,'#b8b8a2',x-53,y+98,106,3);
   rect(ctx,'#c8b674',x-2,y+112,2,90);rect(ctx,'#c8b674',x+2,y+112,2,90);
   for(let k=114;k<335;k+=48){rect(ctx,'#c8b674',x+k,y-2,26,2);rect(ctx,'#c8b674',x+k,y+2,26,2)}
+  if(x>0&&y>0&&(x/440+y/340)%3===0){
+   const name={west:'WEST END',midtown:'MIDTOWN',south:'SOUTHSIDE',docks:'HARBOR WAY'}[districtStyle(x+150,y+30)];
+   ctx.save();ctx.font='bold 10px monospace';ctx.textAlign='center';ctx.fillStyle='#a7b3ae66';ctx.fillText(name,x+224,y+31);ctx.fillRect(x+165,y+37,118,1);ctx.restore();
+  }
   // Drain grilles and brick pedestrian corners.
   for(const sx of [-1,1])for(const sy of [-1,1]){rect(ctx,'#252e32',x+sx*59-6,y+sy*112,12,7);for(let k=0;k<4;k++)rect(ctx,'#515b5e',x+sx*59-5+k*3,y+sy*112,1,6)}
   rect(ctx,'#263238',x+24,y+165,20,20);rect(ctx,'#53616a',x+26,y+167,16,16);for(let k=0;k<4;k++)rect(ctx,'#36434a',x+28+k*3,y+169,1,12);
@@ -118,7 +147,7 @@ function building(b){
  for(const xx of [x+14,x+w-68]){if(night>.2)rect(g,'#e3bc6922',xx-4,y+h-35,62,33);rect(g,'#283a43',xx,y+h-31,54,25);rect(g,night>.2?'#bca46c':'#637e87',xx+3,y+h-28,48,19);rect(g,'#2d4247',xx+26,y+h-30,3,22);rect(g,'#a8a394',xx-2,y+h-5,58,4)}
  if(industrial){rect(g,'#343e43',x+w/2-37,y+h-31,74,31);for(let yy=0;yy<26;yy+=4)rect(g,'#7b827b',x+w/2-34,y+h-29+yy,68,2)}
  else{rect(g,'#243840',x+w/2-17,y+h-29,34,29);rect(g,'#63808a',x+w/2-13,y+h-26,25,19);rect(g,'#dcc89e',x+w/2+8,y+h-15,2,5)}
- const sign=club?'#d291b8':b.name==='DINER'?'#d7ae70':b.name==='CLOTHING'?'#9fb5a3':'#c1c0a6';
+ const sign=night>.2?neonColor(b.name):club?'#d291b8':b.name==='DINER'?'#d7ae70':b.name==='CLOTHING'?'#9fb5a3':'#c1c0a6';
  rect(g,'#1b3038',x+12,y+h-64,w-24,19);rect(g,sign,x+14,y+h-64,w-28,2);g.fillStyle=sign;g.font='bold 11px monospace';g.textAlign='center';g.fillText(b.name,x+w/2,y+h-50);
  if(shop){
   for(const xx of [x+14,x+w-68]){
@@ -130,6 +159,7 @@ function building(b){
   }
   rect(g,'#343d3d',x+w/2-24,y+h-1,48,3);rect(g,'#8b8978',x+w/2-23,y+h+2,46,3);rect(g,'#615f52',x+w/2-19,y+h+5,38,3);
   for(let xx=x+9;xx<x+w-9;xx+=14)rect(g,(xx-x)%28<14?'#b89873':'#d3c4a0',xx,y+h-38,14,7);rect(g,'#30363366',x+10,y+h-31,w-20,4)}
+ storefrontLight(b,night);
 }
-root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle};
+root.NightshiftWorld={createBuildings,road,building,ground,hash,districtStyle,neonColor};
 })(globalThis);
