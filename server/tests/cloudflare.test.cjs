@@ -190,3 +190,18 @@ test('BUNDLED Worker (as Cloudflare deploys it) runs the same scenario', { skip:
   assert.match(await page.text(), /Nightshift Online/, 'serves the real test page');
   await scenario(t, { GameRoom: mod.GameRoom, fetchFn: (r, env) => mod.default.fetch(r, env), label: 'bundle' });
 });
+
+test('Cloudflare host: /stats and authenticated /admin reach the city object', async () => {
+  const { gr } = loadSource();
+  const GameRoom = gr.createGameRoomClass(FakeDurableObject, { WebSocketPairImpl: FakePair, ResponseImpl: FakeResponse });
+  const rt = runtime(GameRoom, new FakeStorage(), { ADMIN_KEY: 'cf-admin-key-0123456789' });
+  const call = (path, init = {}) => gr.handleHttp({ url: 'https://game.test' + path, method: init.method || 'GET',
+    headers: new Headers(init.headers || {}), text: async () => init.body || '' }, rt.env, {}, FakeResponse);
+  const stats = await call('/stats');
+  assert.equal(stats.status, 200);
+  assert.equal(JSON.parse(stats.body).players, 0);
+  assert.equal((await call('/admin', { method: 'POST', headers: { Authorization: 'Bearer nope-nope-nope-nope' }, body: '{}' })).status, 401);
+  const ok = await call('/admin', { method: 'POST', headers: { Authorization: 'Bearer cf-admin-key-0123456789' }, body: '{"action":"list"}' });
+  assert.equal(ok.status, 200);
+  assert.deepEqual(JSON.parse(ok.body), { ok: true, players: [] });
+});
