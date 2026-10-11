@@ -21,7 +21,8 @@
     const s = root.NightshiftGoals?.snapshot?.();
     if (!s) return null;
     return { delivery: s.delivery, salvage: s.salvage, sold: s.sold, batches: s.batches, escapes: s.escapes, drove: s.drove, walked: s.walked,
-      shots: s.shots, earned: s.earned, casinoSpins: root.NightshiftCasino?.state?.spins || 0, raceRuns: root.NightshiftRaces?.state?.runs || 0 };
+      shots: s.shots, earned: s.earned, casinoSpins: root.NightshiftCasino?.state?.spins || 0, raceRuns: root.NightshiftRaces?.state?.runs || 0,
+      fishCaught: root.NightshiftFishing?.state?.total || 0 };
   }
 
   const queue = []; // pays one reward at a time so toasts stay readable
