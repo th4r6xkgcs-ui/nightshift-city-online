@@ -38,6 +38,7 @@
   function payNext() {
     const pay = queue.shift(), p = P();
     if (!pay || !p) return;
+    try { root.NightshiftGoals?.notePayout?.(pay.cash); } catch { /* optional */ }
     p.cash = Math.min(100000000, p.cash + pay.cash);
     if (pay.xp) try { root.NightshiftSkills?.gain(pay.xp, pay.xpAmount, 'daily'); } catch { /* optional */ }
     gameSave();

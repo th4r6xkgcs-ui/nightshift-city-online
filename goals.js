@@ -311,5 +311,7 @@
   addEventListener('keydown', (e) => { if (e.key === 'g' && !(e.target instanceof HTMLInputElement)) { panel.hidden ? open() : (panel.hidden = true); } });
   render();
 
-  root.NightshiftGoals = Object.freeze({ ...core, open, snapshot, next: () => next(state, snapshot()), track: () => trackTarget(), gps: () => gps(null), get state() { return state; } });
+  root.NightshiftGoals = Object.freeze({ ...core, open, snapshot, next: () => next(state, snapshot()), track: () => trackTarget(), gps: () => gps(null),
+    // Other reward systems call this when they pay cash, so rewards don't count as 'earned' (no self-feeding).
+    notePayout: (n) => { if (Number.isFinite(n) && n > 0 && n < 1e7) paying += n; }, get state() { return state; } });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
