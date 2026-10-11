@@ -21,7 +21,7 @@ function transfer(from,to,type,count=1){syncPocket();if(type==='ammo'&&combatSta
 function death(x,y){syncPocket();const items=dropAll(state.pocket);player.cash=0;player.ammo=0;combatState.reserve=0;combatState.until=0;return {x,y,items,expires:Date.now()+120000}}
 
 function loseOnDeath(x,y){const drop=death(x,y);if(total(drop.items)){drops.push(drop);saveItems();save();return total(drop.items)}return 0}
-function takeDrop(x,y){syncPocket();const i=drops.findIndex(d=>Date.now()<d.expires&&Math.hypot(x-d.x,y-d.y)<48);if(i<0)return 0;const d=drops[i];let n=0;for(const [type,count] of Object.entries(d.items)){const capacity=limit(type)-(state.pocket[type]||0);const qty=Math.min(count,capacity);if(qty>0){state.pocket[type]=(state.pocket[type]||0)+qty;d.items[type]-=qty;n+=qty;if(!d.items[type])delete d.items[type]}}if(!total(d.items))drops.splice(i,1);applyPocket();saveItems();save();return n}
+function takeDrop(x,y){syncPocket();const i=drops.findIndex(d=>Date.now()<d.expires&&Math.hypot(x-d.x,y-d.y)<=48);if(i<0)return 0;const d=drops[i];let n=0;for(const [type,count] of Object.entries(d.items)){const capacity=limit(type)-(state.pocket[type]||0);const qty=Math.min(count,capacity);if(qty>0){state.pocket[type]=(state.pocket[type]||0)+qty;d.items[type]-=qty;n+=qty;if(!d.items[type])delete d.items[type]}}if(!total(d.items))drops.splice(i,1);applyPocket();saveItems();save();return n}
 root.NightshiftInventory.state=state;
 root.NightshiftInventory.transfer=transfer;
 root.NightshiftInventory.loseOnDeath=loseOnDeath;

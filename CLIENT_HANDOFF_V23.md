@@ -1,0 +1,15 @@
+# Client aim and interaction polish — v0.23
+
+Branch codex/aim-feedback-v23, based on 30d6fb5 on codex/controls-v22. Includes the externally added selected-object action label and USE tooltip, now tested. Server/shared/workflows remain Claude-owned and untouched. Reviewed server v0.7 jobs/chat handoff (5705059); the game remains offline, with local and online courier rules separate. Keep the PR stack unmerged.
+
+Interaction selection retains the current visible, in-range target until another is materially closer (0.12 normalized distance advantage). Candidates behind building walls are excluded. Active courier objectives override stale home selection at the same location. No range is extended past an action's validation: bags and salvage now include their displayed exact boundary; parked-car interaction range is 75px, matching vehicle management. USE accessible labels describe the selected object. Selected car outlines use the actual vehicle geometry and orientation. The action badge moved above property-ready labels; redundant nearby salvage prompts are suppressed when another object owns USE.
+
+Touch aim has size-relative fire-zone hysteresis: starts at 68% of stick radius, releases below 50%. This preserves responsiveness while reducing on/off flicker at the fire boundary. Aim direction remains immediate and stays fixed while moving; no aim assist or altered projectile accuracy. Aim-ring tint shows armed fire input. Pointer capture failures release ownership; malformed aim coordinates disarm fire. Resize/orientation changes reset held controls and simulation clock.
+
+Crosshair feedback: short bounded shot pulse, green X for confirmed projectile hits, amber reload progress ring, muted state when firing is unavailable. Effects are transient and pause with simulation; no extra persistent HUD elements. Held aim/fire in the neutral clinic does not generate repeated blocked-fire toasts. Existing mouse/touch/keyboard rate limits, cargo custody and finite ammo rules remain covered.
+
+Touched: aim-input.js, interactions.js, game.js, feedback.js, guidance.js, controls-ui.css, inventory.js, salvage.js, vehicles.js, index.html, package.json, tests/interactions.cjs, tests/interaction-stability.cjs, tests/aim-feedback.cjs and tests/run.cjs. This separate handoff avoids simultaneous shared-document edits.
+
+Validation: npm run check passes 46 suites and all root JavaScript syntax checks; git diff --check passes. New tests cover stable target retention/switches, wall obstruction, exact range actions, courier/home priority, fire-zone scaling/hysteresis, capture/malformed input, actual projectile-hit feedback, effect expiry, reload/blocked reticle colors and clinic toast suppression. Internal Canvas rendering reviewed at 390x844. Real browser/iPhone DOM layout, dual-touch, audio and file-picker QA remains pending; no such verification is claimed.
+
+Release: prepared for draft PR and existing owner-private preview update. No PR merge, audience change, backend edits or multiplayer wiring.
