@@ -1,13 +1,13 @@
-# Next tasks after v0.51
+# Next tasks after v0.52
 
 - P0: Real iPhone Safari and desktop DOM/audio QA: portrait/landscape, STREET/crew/customer menus, live countdowns, simultaneous controls, audio and backup export/restore.
-- P1: Crew vehicle seating and safe exit/follow resumption; companion/rival combat is a separate tested phase.
+- P1: Crew transport art and persistence improvements; companion/rival combat is a separate tested phase.
 - P1: Generate customer requests from civilian routines and add persistent relationships without duplicating inventory/market demand.
 - P1: Expand interiors and storefront art; preserve immutable collision footprints and mobile render budgets.
 - P1: Long-session economy balance: production, dealer/customer demand, escort income and corner upkeep.
 - P2 (Claude-owned): Integrate authoritative server/economy/network modules after client contracts are agreed; current private preview remains single-player.
 
-Completed this session: recruitment/follow/hold/dismiss, loyalty/support, physical escort jobs with safe saved positions, rival corner choices, street-customer sales through shared demand/ledger, routing/spawn fixes and crowded-atlas allocation fix. 83 suites pass. Canonical branch `codex/street-customers-v51`; see current release handoffs before implementation.
+Completed latest: crew passenger boarding and safe exits. Completed prior session: recruitment/follow/hold/dismiss, loyalty/support, physical escort jobs with safe saved positions, rival corner choices, street-customer sales through shared demand/ledger, routing/spawn fixes and crowded-atlas allocation fix. 84 suites pass. Canonical branch `codex/crew-transport-v52`; see current release handoffs before implementation.
 
 ## Historical backlog (superseded by priorities above)
 

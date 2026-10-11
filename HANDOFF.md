@@ -1,12 +1,14 @@
 # HANDOFF — Nightshift City Online
 
-## CURRENT — v0.51 combined Street Life client (2026-10-11)
+## CURRENT — v0.52 combined Street Life client (2026-10-11)
 
-Canonical branch: `codex/street-customers-v51`, based on combined v0.50.1. Read CLIENT_HANDOFF_V51.md, CLIENT_HANDOFF_V50_1.md and CLIENT_HANDOFF_V50.md for changed files, saved-state contracts, gameplay limits and verification.
+Latest increment: crew passenger boarding, model seat limits and safe exit/follow resumption. See CLIENT_HANDOFF_V52.md.
+
+Canonical branch: `codex/crew-transport-v52`, based on combined v0.50.1. Read CLIENT_HANDOFF_V51.md, CLIENT_HANDOFF_V50_1.md and CLIENT_HANDOFF_V50.md for changed files, saved-state contracts, gameplay limits and verification.
 
 This session added both NPC/custom gang support, bounded recruitment, physical followers, loyalty, escort jobs, rival corner challenges and premium street-customer requests sharing existing dealer demand and ledger. Fixed follower vehicle routing/spawn clearance and crowded sprite-atlas rebuilding. Root README/PROJECT_STATE/NEXT_TASKS now point to the current combined client rather than v0.17.
 
-Validation: 83 suites and root syntax pass; ten simulated minute follower soak; physical contact-to-clinic escort handoff; once-only crew/rival/customer effects; production-to-customer sale; crowded-atlas allocation regression; 74 playable build assets. Canvas portrait/landscape inspections cover followers, rival envoys and customer depth. Physical iPhone and real DOM/audio checks remain pending.
+Validation: 84 suites and root syntax pass; ten simulated minute follower soak; physical contact-to-clinic escort handoff; once-only crew/rival/customer effects; production-to-customer sale; crowded-atlas allocation regression; 75 playable build assets. Canvas portrait/landscape inspections cover followers, rival envoys and customer depth. Physical iPhone and real DOM/audio checks remain pending.
 
 Claude's latest RPG modules imported unchanged from rpg-core 472505c; latest rpg-play is 5ac81ae. No Claude-owned RPG/backend internals edited. Coordinate through PR #3 before reserving files. Never merge or force-push shared/main branches without authorization. Static preview remains local single-player; server/shared/online/worker are excluded.
 
