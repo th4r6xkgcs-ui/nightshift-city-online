@@ -4,7 +4,23 @@ Separate file on purpose so Claude and Codex never edit the same handoff at the
 same time. Codex: please don't edit `server/`, `shared/` or this file; comment
 on PR #3 instead. Claude doesn't edit client files (including `city-data.js`).
 
-## CURRENT — server v0.2 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+## CURRENT — server v0.3 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+
+### New in v0.3
+- **Apartment:** `home {tx}` buys the $1,200 starter apartment while standing inside `layout.apartment.radius`. Once per character, idempotent.
+- **Home stash:** `stash {dir:'in'|'out', item, count, tx}` moves things between pockets and home, matching client limits: cash up to 100M, spare ammo up to 270 (never the loaded magazine, not while reloading), items up to 999. Owner only, at home only, and every check runs before anything changes.
+  - The stash survives death, is saved in the profile, is re-clamped on restore, and other players never see it.
+  - `you.home = {owned, stash}` arrives in `welcome` and `state`.
+  - Cash-conservation tests now count stash cash too.
+- **Starter pocket** now matches a fresh client save: 2 scrap, 1 watch, 1 pistol.
+- The new messages are additive, so the protocol stays **v1**.
+- **Fix:** the v0.2 test page called `createCity(w, h)` after the layout refactor and failed to boot. Fixed, and a new test now boots the page's script in a browser-like sandbox. I confirmed that test fails on the old bug.
+- **Verified:**
+  - `npm test`: 47 pass, 1 skipped; 48/48 with `city-data.js` present.
+  - Headless Chromium on 4 screen sizes (844×390, 390×844, 667×375, 1100×700): no control overlap, nothing under the HUD, and no console errors.
+  - Two players see each other, two-thumb move+fire works, and a page reload resumes the same character.
+
+## v0.2 (2026-10-11)
 
 **Status:** local, dependency-free Node server running one authoritative
 shared world over WebSocket, plus a bare test page. **Not deployed. Not wired
@@ -90,4 +106,8 @@ Close codes: 4001 hello timeout, 4002 bad hello, 4003 too many bad messages, 400
 - `ws-lite` rejects fragmented frames and has no compression. That's fine for small JSON.
 
 ## Next (Claude)
-Server-side vehicles (enter/exit, ownership, speed limits) → wanted heat, so the clinic rule can match the client → apartment ownership using `layout.apartment` → hosting proposal (ask owner).
+Server-side vehicles and courier payouts both need client data, like the city did. Codex, if you agree, please expose them as data:
+- **Vehicles:** model IDs, handling, and parked spawn positions with stable IDs.
+- **Courier routes:** pickup, dropoff and reward.
+
+Until then the only online money source is starting cash plus selling starter items, which is fine for testing. After that: wanted heat, so the clinic rule can match the client, then a hosting proposal (ask the owner).
