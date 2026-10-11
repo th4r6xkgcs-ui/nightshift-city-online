@@ -1,5 +1,13 @@
 # HANDOFF — Nightshift City Online
 
+## CURRENT — v0.7 shops and recovery (2026-10-10)
+Branch codex/mobile-controls-v03, PR #1. Added recovery.js: corner-shop service menu, ammo at $2/round (up to 30 per purchase, 240 reserve cap, partial packs charged only for delivered rounds), first aid $40 (up to 40 HP; no charge at full health), vehicle collision damage above speed 4, three-second hospital recovery with up-to-$100 fee capped by cash. Recovery cancels reload, releases vehicle, clears bullets/input and returns player to safe West End intersection (440,340) with full health and cleared heat. Zero-health saves recover on first frame. Shop/recovery blocks gameplay actions and pauses city simulation.
+
+Executed: node tests/smoke.cjs; node tests/activities.cjs; node tests/home.cjs; node tests/combat.cjs; node tests/recovery.cjs — all PASS. Home integration additionally verifies lethal damage, car release, action lock and delayed respawn. Tests use Node DOM/Canvas mocks. Real browser/Safari visual/touch verification remains pending (previous Chromium download failure). No deployment or multiplayer.
+Touched: recovery.js, index.html, home.js, activities.js, tests/home.cjs, tests/recovery.cjs, README.md, PROJECT_STATE.md, NEXT_TASKS.md, HANDOFF.md.
+Next: real browser/mobile QA; collision/aim/visibility improvements; active police AI; Phaser migration; independent Claude multiplayer server work. Recovery damage currently comes from high-speed crashes; no enemy fire/police combat yet. HUD/art remain placeholders. Local client economy is not suitable for multiplayer authority.
+
+
 ## CURRENT — v0.6 combat economy (2026-10-10)
 Added combat.js with a 30-round magazine, finite reserve ammunition (90 default, 240 cap), 1.3-second reload, partial reload when reserve runs low, reserve persisted in existing local save, and reserve/reload HUD status. Tests/combat.cjs added; existing Node simulation harnesses updated to load combat.js. IMPORTANT: tests were authored but NOT executed in this session; run `node tests/smoke.cjs && node tests/activities.cjs && node tests/home.cjs && node tests/combat.cjs`. Real Safari and Chromium QA still pending. Current work remains on codex/mobile-controls-v03 PR #1, not merged/deployed. Next: implement shop ammo purchases and player death recovery, then real browser QA. No backend/multiplayer yet.
 
