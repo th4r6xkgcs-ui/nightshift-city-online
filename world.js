@@ -51,8 +51,9 @@ function treeActors(view){
  if(!view||!Number.isFinite(view.x)||!Number.isFinite(view.y)||!Number.isFinite(view.zoom)||view.zoom<=0||!Number.isFinite(view.width)||!Number.isFinite(view.height))return entries;
  const right=view.x+view.width/view.zoom+margin,bottom=view.y+view.height/view.zoom+margin;
  for(let x=0;x<world.w;x+=440)for(let y=0;y<world.h;y+=340){
+  if(!['west','south'].includes(districtStyle(x+100,y+100)))continue;
   for(const yy of [122,245]){
-   const px=x+86,py=y+yy+12;
+   const px=x+360,py=y+yy+12;
    if(px>=view.x-margin&&px<=right&&py>=view.y-margin&&py<=bottom)entries.push({kind:'tree-crown',entity:{x:px,y:py}});
   }
  }
@@ -177,7 +178,7 @@ function ground(ctx,width,height){
   rect(ctx,'#263238',x+24,y+165,20,20);rect(ctx,'#53616a',x+26,y+167,16,16);for(let k=0;k<4;k++)rect(ctx,'#36434a',x+28+k*3,y+169,1,12);
   rect(ctx,'#263139',x-37,y+236,46,14);rect(ctx,'#41494a',x-35,y+238,40,10);rect(ctx,'#222b31',x-29,y+240,29,5);
   // Trees, planters, benches, bins, bollards: cosmetic and outside road lanes.
-  for(const yy of [122,245]){rect(ctx,'#30383088',x+87,y+yy+5,29,25);rect(ctx,'#777160',x+86,y+yy+3,27,24);rect(ctx,'#433e32',x+97,y+yy+10,5,22);rect(ctx,'#244c49',x+81,y+yy-12,37,31);rect(ctx,'#3f7565',x+85,y+yy-16,28,26);rect(ctx,'#83a67b',x+88,y+yy-14,15,9);rect(ctx,'#344f3e',x+100,y+yy+1,15,10)}
+  if(['west','south'].includes(districtStyle(x+374,y+100)))for(const yy of [122,245]){rect(ctx,'#30383088',x+361,y+yy+5,29,25);rect(ctx,'#777160',x+360,y+yy+3,27,24);rect(ctx,'#433e32',x+371,y+yy+10,5,22);rect(ctx,'#244c49',x+355,y+yy-12,37,31);rect(ctx,'#3f7565',x+359,y+yy-16,28,26);rect(ctx,'#83a67b',x+362,y+yy-14,15,9);rect(ctx,'#344f3e',x+374,y+yy+1,15,10)}
   rect(ctx,'#242c31',x-78,y+157,10,20);rect(ctx,'#536960',x-77,y+155,9,16);rect(ctx,'#879787',x-78,y+154,11,3);
   furnishings(ctx,x,y);
   if(x>0&&y>0&&(districtStyle(x+100,y+100)==='midtown'||districtStyle(x+100,y+100)==='docks')){palm(ctx,x+360,y+147);palm(ctx,x+360,y+246)}
