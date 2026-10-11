@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');const run=boot();
+run('globalThis.unit={x:100,y:100};globalThis.incident={x:300,y:100,at:100};globalThis.subject={x:900,y:900};globalThis.clear=p=>p.x>10&&p.y>10&&p.x<1000&&p.y<1000');
+assert.equal(run('NightshiftPoliceAI.goal(unit,subject,false,incident,200,clear).x'),300);
+run('subject.x=700;subject.y=700');assert.equal(run('NightshiftPoliceAI.goal(unit,subject,false,incident,300,clear).x'),300);
+assert.equal(run('unit.mode'),'investigate');
+assert.equal(run('NightshiftPoliceAI.goal(unit,subject,true,incident,400,clear).x'),700);assert.equal(run('unit.mode'),'pursue');
+run('subject.x=850');assert.equal(run('NightshiftPoliceAI.goal(unit,subject,false,incident,500,clear).x'),700);
+run('unit.x=700;unit.y=700');assert.equal(run('clear(NightshiftPoliceAI.goal(unit,subject,false,incident,600,clear))'),true);assert.equal(run('unit.mode'),'search');
+assert.equal(run('NightshiftPoliceAI.goal(unit,subject,false,{x:200,y:200,at:900},1000,clear).x'),200);assert.equal(run('unit.mode'),'investigate');
+assert.equal(run('NightshiftCrime.report({x:NaN,y:100},100)'),false);
+run('peds.length=0;NightshiftCrime.officers.length=0;player.heat=1;player.x=2000;player.y=1500;NightshiftCrime.report({x:690,y:620},1000);NightshiftCrime.tick(1000);NightshiftCrime.tick(4100)');
+assert.equal(run('NightshiftCrime.officers.length'),1);
+assert.equal(run('NightshiftCrime.officers[0].memory.x'),690);
+assert.equal(run('NightshiftCrime.projectiles.length'),0);
+assert.equal(run('NightshiftCitizens.occupied(NightshiftCrime.officers[0],cars)'),false);
+run('player.heat=0;NightshiftCrime.tick(4200)');assert.equal(run('NightshiftCrime.officers.length'),0);
+console.log('PASS: police incident dispatch, visible pursuit, hidden-position isolation, bounded search, newer reports, invalid events and search cleanup');
