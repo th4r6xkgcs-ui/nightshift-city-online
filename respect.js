@@ -50,6 +50,21 @@
   setInterval(tick, 3000);
   setInterval(payNext, 3100);
 
+  // Everything the player has done, gathered from every RPG module (read-only).
+  function lifetime() {
+    const m = (n) => '$' + Math.round(n || 0).toLocaleString(), km = (px) => ((px || 0) / 1000).toFixed(1) + ' km';
+    const st = root.NightshiftGoals?.state?.stats || {}, snap = root.NightshiftGoals?.snapshot?.() || {};
+    const fish = root.NightshiftFishing?.state, jobs = root.NightshiftJobs?.state, heist = root.NightshiftHeists?.state, cas = root.NightshiftCasino?.state;
+    const races = root.NightshiftRaces?.state, lab = root.NightshiftLab?.state, ven = root.NightshiftVenues?.state, daily = root.NightshiftDailies?.state;
+    return [
+      ['Money earned', m(st.earned)], ['Distance run', km(st.walked)], ['Distance driven', km(st.drove)], ['Rounds fired', (st.shots || 0).toLocaleString()],
+      ['Police escapes', String(st.escapes || 0)], ['Deliveries', String(snap.delivery || 0)], ['Product sold', String(snap.sold || 0)],
+      ['Phone jobs done', String(jobs?.done || 0)], ['Heists pulled', `${heist?.done || 0} (best ${m(heist?.best)})`],
+      ['Fish caught', `${fish?.total || 0} (best ${m(fish?.best)})`], ['Lab batches', String(lab?.cooked || 0)],
+      ['Races run', String(races?.runs || 0)], ['Casino bets', `${cas?.spins || 0} (best win ${m(cas?.biggest)})`],
+      ['Gym sessions', String(ven?.sessions || 0)], ['Best daily streak', String(daily?.best || 0)], ['Goals done', String(Object.keys(root.NightshiftGoals?.state?.done || {}).length)],
+    ];
+  }
   // ---- UI ----
   const css = document.createElement('style');
   css.textContent = `
@@ -88,7 +103,8 @@
     }
     const ranks = el('div', { className: 'ranks' });
     for (const [i, k] of R.RANKS.entries()) ranks.append(el('span', { className: 'rk' + (i <= r.index ? ' on' : '') }, `${k.icon} ${k.name} · ${k.min.toLocaleString()}`));
-    panel.append(ranks);
+    panel.append(ranks, el('h2', { style: 'margin-top:16px;font-size:14px' }, '📊 LIFETIME STATS'));
+    for (const [label, value] of lifetime()) { const row = el('div', { className: 'row' }); row.append(el('span', {}, label), el('span', { className: 'pts' }, value)); panel.append(row); }
     panel.scrollTop = scroll;
   }
   badge.onclick = () => { if (panel.hidden) { try { root.releaseControls?.(); } catch { /* n/a */ } panel.hidden = false; renderPanel(); } else panel.hidden = true; };

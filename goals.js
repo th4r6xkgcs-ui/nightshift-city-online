@@ -36,7 +36,7 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked', 'heists', 'gymSessions', 'clubSold'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -135,6 +135,7 @@
       tuneLevels: tuneStat('totalLevels'), tuneBestCar: tuneStat('bestCar'),
       homeItems: root.NightshiftHomeUpgrades?.state?.owned?.length || 0,
       respectRank: root.NightshiftRespect?.state?.reached || 0,
+      heists: root.NightshiftHeists?.state?.done || 0, gymSessions: root.NightshiftVenues?.state?.sessions || 0, clubSold: root.NightshiftVenues?.state?.sold || 0,
       jobsDone: root.NightshiftJobs?.state?.done || 0, labCooked: root.NightshiftLab?.state?.cooked || 0,
       fishCaught: root.NightshiftFishing?.state?.total || 0, koi: root.NightshiftFishing?.state?.caught?.koi || 0,
       raceMedals: Object.keys(root.NightshiftRaces?.state?.medals || {}).length,
@@ -179,6 +180,9 @@
     casino: () => root.NightshiftCasino?.door?.() || null,
     gunshop: () => root.NightshiftWeapons?.door?.() || null,
     fishing: (p) => nearest(root.NightshiftFishingData?.SPOTS, p),
+    bank: (p) => nearest(root.NightshiftHeists?.vaults?.(), p),
+    gym: (p) => nearest((root.NightshiftVenues?.places?.() || []).filter((v) => v.kind === 'gym'), p),
+    club: (p) => nearest((root.NightshiftVenues?.places?.() || []).filter((v) => v.kind === 'club'), p),
     race: (p) => { const medals = root.NightshiftRaces?.state?.medals || {}; const st = root.NightshiftRaces?.starts?.() || []; return nearest(st.filter((r) => medals[r.id] !== 'gold'), p) || nearest(st, p); },
   };
   function trackTarget() {

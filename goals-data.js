@@ -77,6 +77,8 @@
 
     { id: 'jobs25', tier: 'Rising', title: 'Fixer', hint: 'Finish 25 Hustle phone jobs.',
       progress: (c) => [Math.min(c.jobsDone, 25), 25], reward: { cash: 3000, xp: { charisma: 300 } } },
+    { id: 'heist1', place: 'bank', tier: 'Rising', title: 'Bank job', hint: 'Rob a bank vault and get away with the bag (USE: HEIST, needs a gun).',
+      progress: (c) => [Math.min(c.heists, 1), 1], reward: { cash: 2500, xp: { stealth: 300 } } },
     { id: 'cars3', place: 'garage', tier: 'Kingpin', title: 'Collector', hint: 'Own 3 cars.',
       progress: (c) => [Math.min(c.carsOwned, 3), 3], reward: { cash: 3000 } },
     { id: 'earn100k', tier: 'Kingpin', title: 'Six figures', hint: 'Earn $100,000 in total.',
@@ -97,6 +99,8 @@
       progress: (c) => [Math.min(c.respectRank, 4), 4], reward: { cash: 7500 } },
     { id: 'koi', place: 'fishing', tier: 'Legend', title: 'The golden one', hint: 'Catch the legendary Golden koi. Better rods and night help.',
       progress: (c) => [Math.min(c.koi, 1), 1], reward: { cash: 15000, xp: { fishing: 2000 } } },
+    { id: 'heist10', place: 'bank', tier: 'Kingpin', title: 'Public enemy', hint: 'Pull off 10 bank heists.',
+      progress: (c) => [Math.min(c.heists, 10), 10], reward: { cash: 20000, xp: { shooting: 1000, stealth: 1000 } } },
     { id: 'earn1m', tier: 'Legend', title: 'Millionaire', hint: 'Earn $1,000,000 in total.',
       progress: (c) => [Math.min(c.earned, 1000000), 1000000], reward: { cash: 50000 } },
     { id: 'skill50', tier: 'Legend', title: 'Legend', hint: 'Max any skill (level 50).',
