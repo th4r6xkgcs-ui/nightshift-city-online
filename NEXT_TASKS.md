@@ -9,5 +9,5 @@
 
 - P1: Tune grid pursuit and projectile effects, persist remaining transient NPC loot; real-browser crime-loop QA.
 
-- P1: Persistent stable vehicle IDs; robbery and vehicle search rules; bag lifetime design.
+- P1: Expand current fixed-catalog vehicle IDs for authored content; vehicle search/impound rules; bag lifetime design.
 - P2: Server-authoritative inventory transactions and multiplayer loot ownership.

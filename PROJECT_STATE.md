@@ -1,5 +1,5 @@
 # Project state
-v0.11 client: dependency-free Canvas HTML local simulation with mobile twin-stick controls, vehicle collision/exit rules, minimap and validated local saves. Tests: Node VM simulation harness.
+v0.12 client: dependency-free Canvas HTML local simulation with mobile twin-stick controls, vehicle collision/exit rules, minimap and validated local saves. Tests: Node VM simulation harness.
 Target: Phaser/TypeScript client, Colyseus authoritative multiplayer, persistent profiles/inventory, properties and hybrid legal/crime city activities. No server, database or multiplayer exists yet.
 Art remains geometric placeholders. Mobile Safari visual and touch testing is pending.
 
@@ -12,3 +12,5 @@ Inventory custody now includes carried wallet, ammunition and pistol. Death drop
 crime.js: local NPC robbery, fleeing, delayed police dispatch, building-blocked sight, officer damage, escape heat decay and surrender. Combat script loading order repaired; integration follows HTML order. Seven simulation suites pass. Police pathfinding and browser/device QA pending.
 
 Navigation/projectiles: navigation.js (grid BFS, wall tracing, segment-circle queries). Police use visible traveling bullets. Crime persistence uses stable NPC IDs and localStorage. npm run check passes nine suites plus module syntax; CI configured but not yet confirmed. Touch CSS spacing adjusted without visual verification.
+
+vehicles.js owns local vehicle registry/services/theft/fuel/condition. game.js holds extracted client simulation. interface.js adds secondary-action tray. Courier stage/cargo and ground NPC cash now save. Ten check suites pass.

@@ -1,5 +1,5 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const html=fs.readFileSync('index.html','utf8'),code=html.match(/<script>([\s\S]*?)<\/script>/)[1];
+const html=fs.readFileSync('index.html','utf8'),code=fs.readFileSync('game.js','utf8');
 const elements=new Map(),ctx=new Proxy({}, {get:(o,k)=>o[k]??(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
 function el(id){if(!elements.has(id))elements.set(id,{style:{},addEventListener(){},setPointerCapture(){},hasPointerCapture(){return true},getBoundingClientRect(){return {left:0,top:0,width:132,height:132}},getContext(){return ctx}});return elements.get(id)}
 const sandbox={document:{querySelector:el},innerWidth:390,innerHeight:844,addEventListener(){},localStorage:{getItem(){return JSON.stringify({cash:0,hp:0,ammo:0,x:-100,y:999999})},setItem(){}},performance:{now:()=>0},requestAnimationFrame(){},Math,console};vm.createContext(sandbox);vm.runInContext(fs.readFileSync('navigation.js','utf8'),sandbox);vm.runInContext(fs.readFileSync('combat.js','utf8'),sandbox);vm.runInContext(code,sandbox);

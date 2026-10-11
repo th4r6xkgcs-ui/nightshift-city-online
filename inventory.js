@@ -1,7 +1,7 @@
 /* v0.8 local-only item custody. Server must eventually own this state. */
 (function(root){
 'use strict';
-const TYPES=['scrap','watch','medkit','jewelry','pistol','cash','ammo'];
+const TYPES=['scrap','watch','medkit','jewelry','pistol','cash','ammo','parcel'];
 const limit=t=>t==='cash'?100000000:t==='ammo'?270:999;
 function clean(raw){const out={};for(const type of TYPES){const n=raw?.[type];if(Number.isSafeInteger(n)&&n>0)out[type]=Math.min(n,limit(type))}return out}
 function move(from,to,type,count=1){if(!TYPES.includes(type)||!Number.isSafeInteger(count)||count<1||!from||!to||from===to)return false;if((from[type]||0)<count||((to[type]||0)+count)>limit(type))return false;from[type]-=count;if(!from[type])delete from[type];to[type]=(to[type]||0)+count;return true}
@@ -15,7 +15,7 @@ try{const raw=JSON.parse(root.localStorage.getItem(KEY)||'null');if(raw&&typeof 
 function syncPocket(){state.pocket.cash=Math.floor(player.cash);state.pocket.ammo=player.ammo+combatState.reserve;if(!state.pocket.cash)delete state.pocket.cash;if(!state.pocket.ammo)delete state.pocket.ammo}
 function applyPocket(){player.cash=state.pocket.cash||0;let rounds=state.pocket.ammo||0;player.ammo=Math.min(player.ammo,rounds);combatState.reserve=rounds-player.ammo;if(combatState.reserve>240){player.ammo+=combatState.reserve-240;combatState.reserve=240}}
 const saveItems=()=>{syncPocket();drops=drops.filter(d=>d.expires>Date.now());root.NightshiftInventory.drops=drops;try{root.localStorage.setItem(KEY,JSON.stringify({...state,version:2,magazine:player.ammo,drops}))}catch{}};
-function glove(){const i=typeof cars==='undefined'?-1:cars.indexOf(player.car);return i>=0?'car-'+i:null}
+function glove(){return player.car?.id||null}
 function bag(which){if(which==='pocket')return state.pocket;if(which==='stash')return state.stash;if(which==='glove'){const id=glove();if(!id)return null;return state.gloveboxes[id]??(state.gloveboxes[id]={})}return null}
 function transfer(from,to,type,count=1){syncPocket();if(type==='ammo'&&combatState.until)return false;const ok=move(bag(from),bag(to),type,count);if(ok){applyPocket();saveItems();save()}return ok}
 function death(x,y){syncPocket();const items=dropAll(state.pocket);player.cash=0;player.ammo=0;combatState.reserve=0;combatState.until=0;return {x,y,items,expires:Date.now()+120000}}
@@ -31,7 +31,7 @@ const panel=document.createElement('div');panel.hidden=true;panel.style.cssText=
 function render(){panel.textContent='';const header=document.createElement('p');header.textContent=place==='pocket'?'POCKETS · everything carried drops on death':place==='stash'?'HOME STASH · protected from death':'GLOVEBOX · protected from character death';panel.appendChild(header);syncPocket();for(const type of TYPES){const row=document.createElement('div');row.style.cssText='padding:6px 0;border-bottom:1px solid #3c4b63';const text=document.createElement('span');text.textContent=`${type}: ${state.pocket[type]||0} carried`+(place==='pocket'?'':` / ${bag(place)?.[type]||0} stored`);row.appendChild(text);if(place!=='pocket')for(const [label,from,to] of [['Store','pocket',place],['Take',place,'pocket']]){const button=document.createElement('button');button.style.cssText='width:64px;height:34px;border-radius:6px;margin:4px';button.textContent=label;button.addEventListener('click',()=>{const qty=type==='cash'?Math.min(100,bag(from)?.[type]||0):type==='ammo'?Math.min(30,bag(from)?.[type]||0):1;say(transfer(from,to,type,qty)?'Transferred':'Unavailable, full or reloading');render()});row.appendChild(button)}panel.appendChild(row)}const close=document.createElement('button');close.textContent='CLOSE';close.style.cssText='width:100%;height:44px;border-radius:6px;margin-top:12px';close.addEventListener('click',()=>{panel.hidden=true;place=null});panel.appendChild(close)}
 root.NightshiftInventory.paused=()=>!panel.hidden;
 root.NightshiftInventory.save=saveItems;
-root.NightshiftInventory.open=(target)=>{if(root.NightshiftRecovery?.paused())return;if(target==='stash'&&!root.NightshiftHome?.paused())return;if(target==='glove'&&!glove())return;place=target;resetPad();firing=false;run=false;panel.hidden=false;render()};
+root.NightshiftInventory.open=(target)=>{if(root.NightshiftRecovery?.paused()||root.NightshiftVehicles?.paused())return;if(target==='stash'&&!root.NightshiftHome?.paused())return;if(target==='glove'&&!glove())return;place=target;resetPad();firing=false;run=false;panel.hidden=false;render()};
 const lootButton=document.createElement('button');lootButton.id='loot';lootButton.textContent='LOOT';lootButton.addEventListener('click',()=>{if(root.NightshiftRecovery?.paused()||root.NightshiftHome?.paused())return;const n=takeDrop(player.x,player.y);if(typeof say==='function')say(n?'Recovered '+n+' items from a dropped bag':'No dropped bag nearby')});document.querySelector('#actions').appendChild(lootButton);
 const gloveButton=document.createElement('button');gloveButton.id='glove';gloveButton.textContent='BOX';gloveButton.addEventListener('click',()=>root.NightshiftInventory.open('glove'));document.querySelector('#actions').appendChild(gloveButton);
 root.NightshiftInventory.inspect=()=>root.NightshiftInventory.open('pocket');

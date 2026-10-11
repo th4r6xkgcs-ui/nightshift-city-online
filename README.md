@@ -1,7 +1,7 @@
 # Nightshift City Online
 Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current build: v0.11 local prototype
+## Current build: v0.12 local prototype
 Walking, touch twin-stick aiming, held fire, driving, building/parked-car collision, safe vehicle exits, NPCs, shops, loot, minimap and validated browser-local saves. Programmer-drawn placeholder art. Character colors persist locally. Owned apartments have walkable furnished interiors, bed healing and wardrobe access. Multiplayer is not implemented. No deployment.
 
 ## Run and verify
@@ -22,3 +22,5 @@ BAG shows carried inventory. BOX accesses your current vehicle glovebox; apartme
 ROB threatens a nearby NPC with a carried pistol, takes their cash and alerts police. Police arrive after a delay, chase visible players and damage them. Break line of sight to lose heat or GIVE UP to pay a fine up to $150. NPC robbery and police are local prototype systems.
 
 Run `npm run check` with Node 24 for all nine simulation suites and JavaScript syntax checks. No npm dependencies are required. GitHub Actions runs this command on pushes/PRs. Police now route around buildings and fire visible projectiles stopped by cover. Player bullets use swept impacts. Heat and NPC robbery/death state persist locally across refresh. Browser testing is separate and still pending.
+
+MORE opens secondary actions. CAR shows nearby/current vehicle: own starter car, buy another ($900) or attempt theft (stay nearby 3 seconds, adds heat). Garage entrances provide repair/refueling. Fuel/condition and vehicle identity save locally. Courier parcels are carried items at risk; job stages persist. Client simulation lives in game.js. npm run check now runs ten suites.
