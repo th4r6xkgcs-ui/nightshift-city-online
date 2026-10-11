@@ -26,3 +26,9 @@ This is a checklist for an actual browser/device, not a claim that these checks 
 - Driving GPS follows roads and changes to walking routing after EXIT. Traffic waits before red/amber signals and clears occupied junctions.
 - Neutral clinic ring blocks damage/crime/gunfire. Repeat while wanted: protection must not apply.
 - World clock persists through refresh; night windows/headlights remain legible. Outfits also appear indoors and idle feet stop animating.
+
+## Release acceptance details
+- BOX beside an owned or stolen parked vehicle must open that exact vehicle's glovebox. Locked cars, moving cars and indoor access must be rejected.
+- On a throttled connection, the page shows loading text, scripts download in parallel, and simulation starts only after the last ordered module.
+- Expected courier cycle cash before other purchases/earnings: first route +$225, second +$275, third +$300 and one level bonus +$50 (total $850). Refresh after each delivery must not repeat payment.
+- An old save owning the apartment keeps HOMEOWNER in STATS without receiving extra XP/cash from migration.
