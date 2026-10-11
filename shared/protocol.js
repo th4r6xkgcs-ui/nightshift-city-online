@@ -37,6 +37,7 @@
     ERROR: 'error',       // {reason}
     PONG: 'pong',         // {at, now}
     CHAT: 'chat',         // {from, name, ch, text}
+    ROSTER: 'roster',     // {players: [{id, name, pvp, x, y}]} every 2 s (coarse positions)
   });
 
   const isNum = (v) => typeof v === 'number' && Number.isFinite(v);

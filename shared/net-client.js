@@ -47,6 +47,7 @@
     let nextFireAt = 0, txN = 0;
     const others = new Map(); // id -> {name, pvp, hp, dead, aim, snaps:[{t,x,y}]}
     let bags = [];
+    let roster = [];
 
     const setStatus = (s) => { if (s !== status) { status = s; emit(o.onStatus, s); } };
     const send = (m) => { if (ws && ws.readyState === 1 && id) { ws.send(JSON.stringify(m)); return true; } return false; };
@@ -103,6 +104,7 @@
       } else if (m.t === S.RESULT) emit(o.onResult, m);
       else if (m.t === S.EVENT) emit(o.onEvent, m);
       else if (m.t === S.CHAT) emit(o.onChat, m);
+      else if (m.t === S.ROSTER) { roster = m.players; emit(o.onRoster, m.players); }
       else if (m.t === S.ERROR) emit(o.onError, m);
     }
 
@@ -203,7 +205,7 @@
         }
         return {
           status, me: me && pos ? { ...me, x: pos.x, y: pos.y, aim: input.aim, serverX: me.x, serverY: me.y } : null,
-          others: list, bags,
+          others: list, bags, roster,
         };
       },
 

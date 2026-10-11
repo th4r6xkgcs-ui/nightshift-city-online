@@ -164,6 +164,10 @@ class Room {
     this.last = now;
     this.flush();
     for (const [pid, conn] of this.conns) this._send(conn, this.world.snapshotFor(pid));
+    if (this.conns.size && this.world.tick % RULES.net.rosterEveryTicks === 0) {
+      const roster = JSON.stringify(this.world.roster());
+      for (const conn of this.conns.values()) { try { conn.send(roster); } catch { /* gone */ } }
+    }
   }
 
   // Closes connections silent longer than idleMs (phones that lost signal).

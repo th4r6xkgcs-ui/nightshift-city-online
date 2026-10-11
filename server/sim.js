@@ -619,6 +619,15 @@ class World {
     return { ok: true, quiet: true };
   }
 
+  // Everyone in the city, with coarse positions (for lists, arrows, maps).
+  roster() {
+    const grid = RULES.net.rosterGridPx, snap = (v) => Math.round(v / grid) * grid;
+    const players = [];
+    for (const p of this.players.values()) players.push({ id: p.id, name: p.name, pvp: p.pvp, x: snap(p.x), y: snap(p.y) });
+    players.sort((a, b) => a.name.localeCompare(b.name));
+    return { t: S.ROSTER, players };
+  }
+
   snapshotFor(id) {
     const p = this.players.get(id);
     if (!p) return null;

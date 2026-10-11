@@ -66,6 +66,8 @@
 
     net: Object.freeze({
       tickHz: 20,
+      rosterEveryTicks: 40,   // who's-online list every 2 s
+      rosterGridPx: 50,       // roster positions are coarse (for edge arrows/map)
       interestRadiusPx: 900,
       maxMsgsPerSec: 60,
       maxMsgBytes: 2048,

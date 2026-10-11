@@ -78,3 +78,22 @@ test('closing saves the character; reap closes silent connections', async () => 
   await room.close(c);
   assert.equal(store.data.get(tok).cash, 4242);
 });
+
+test('roster: everyone in the city every 2 s, coarse positions, sorted by name', async () => {
+  const R = require('../../shared/rules.js');
+  const room = new Room({ store: new SlowStore(1) });
+  const a = fakeConn(), b = fakeConn();
+  room.open(a); room.open(b);
+  await room.message(a, JSON.stringify({ t: 'hello', name: 'Zed', v: 1 }));
+  await room.message(b, JSON.stringify({ t: 'hello', name: 'Amy', v: 1 }));
+  const zed = room.world.players.get(a.of('welcome')[0].id);
+  zed.x = 2123; zed.y = 1688; // far away: not in snapshots, but in the roster
+  for (let i = 0; i < R.net.rosterEveryTicks; i++) room.tick();
+  const r = b.of('roster').at(-1);
+  assert.ok(r, 'roster delivered');
+  assert.deepEqual(r.players.map((p) => p.name), ['Amy', 'Zed']);
+  const z = r.players.find((p) => p.name === 'Zed');
+  assert.deepEqual([z.x % R.net.rosterGridPx, z.y % R.net.rosterGridPx], [0, 0], 'coarse grid');
+  assert.equal(z.cash, undefined, 'no private data');
+  assert.equal(b.of('state').at(-1).others.length, 0, 'far player not in detailed snapshot');
+});

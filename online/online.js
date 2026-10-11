@@ -40,6 +40,10 @@
   #nsChatBar[hidden],#nsJoin[hidden]{display:none}
   #nsChatBar input,#nsJoin input{flex:1;min-width:0;font:16px ui-monospace,Menlo,monospace;padding:9px;border-radius:8px;border:1px solid #5e7793;background:#15233a;color:#e8eff7}
   #nsChatBar button,#nsJoin button{font:bold 13px ui-monospace,Menlo,monospace;border-radius:8px;border:1px solid #5e7793;background:#2c4c7c;color:#e8eff7;padding:0 12px}
+  #nsOnline .badge{cursor:pointer;pointer-events:auto}
+  #nsRoster{position:fixed;top:calc(max(10px,env(safe-area-inset-top)) + 34px);left:50%;transform:translateX(-50%);z-index:32;width:min(86vw,300px);max-height:50vh;overflow:auto;background:#101728f2;border:1px solid #5e7793;border-radius:10px;padding:8px 10px;font:12px ui-monospace,Menlo,monospace;color:#e8eff7}
+  #nsRoster[hidden]{display:none} #nsRoster h3{margin:0 0 6px;font-size:12px;color:#9fb3c8} #nsRoster div{display:flex;justify-content:space-between;gap:8px;padding:3px 0}
+  #nsRoster .you{color:#ffe99b} #nsRoster .pvp{color:#ff7d7d}
   #nsJoin{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:#0a1321e6;font:14px ui-monospace,Menlo,monospace;color:#e8eff7}
   #nsJoin form{display:grid;gap:10px;width:min(320px,86vw)} #nsJoin p{margin:0;color:#9fb3c8}
   `;
@@ -56,14 +60,29 @@
   const chBtn = el('button', { type: 'button' }, 'NEAR');
   const chatInput = el('input', { maxLength: 120, placeholder: 'Say something…', autocomplete: 'off', enterKeyHint: 'send' });
   chatBar.append(chBtn, chatInput, el('button', {}, 'SEND'));
-  document.body.append(bar, log, chatBar);
+  const rosterPanel = el('div', { id: 'nsRoster', hidden: true });
+  document.body.append(bar, log, chatBar, rosterPanel);
 
   // Typing in our inputs must never reach the game's movement keys.
   for (const ev of ['keydown', 'keyup', 'keypress']) {
     chatBar.addEventListener(ev, (e) => e.stopPropagation());
   }
 
-  let net = null, me = null, myId = null, others = [], chatCh = 'near';
+  let net = null, me = null, myId = null, others = [], chatCh = 'near', roster = [];
+  const meters = (px) => Math.round(px / 5) + 'm';
+  function renderRoster() {
+    if (rosterPanel.hidden) return;
+    const p = G.player;
+    rosterPanel.textContent = '';
+    rosterPanel.append(el('h3', {}, 'IN THE CITY · ' + roster.length + (roster.length === 1 ? ' player' : ' players')));
+    for (const r of roster) {
+      const row = el('div', { className: r.id === myId ? 'you' : r.pvp ? 'pvp' : '' });
+      const dist = r.id === myId || !p ? 'you' : meters(Math.hypot(r.x - p.x, r.y - p.y));
+      row.append(el('span', {}, (r.pvp ? '⚔ ' : '') + r.name), el('span', {}, dist));
+      rosterPanel.append(row);
+    }
+  }
+  badge.addEventListener('click', () => { rosterPanel.hidden = !rosterPanel.hidden; renderRoster(); });
   const tracers = [];
   // Shots are detected from the magazine count: every round that leaves the
   // magazine is one shot along the player's aim. (The game can create and
@@ -119,6 +138,7 @@
       onWelcome: (w) => { myId = w.id; store.set('nsco-online-token', w.token); addChat({ from: 'server', name: 'ONLINE', ch: 'city', text: (w.resumed ? 'Welcome back, ' : 'Welcome, ') + w.you.name + ' — you share this city with other players.' }); },
       onChat: addChat,
       onEvent,
+      onRoster: (players) => { roster = players; renderRoster(); },
       onResult: (r) => { if (r.req === 'pvp' && r.ok) G.say(r.pvp ? 'PvP ON · only other PvP players can hurt you' : 'PvP OFF'); },
       onStatus: refreshBadge,
     });
@@ -214,8 +234,37 @@
       ctx.fillStyle = '#111'; ctx.textAlign = 'center'; ctx.fillText(text, at.x, at.y - 53);
     }
     ctx.restore();
+    drawEdgeArrows(ctx, cam);
+  }
+
+  // Off-screen players: an arrow at the screen edge with name and distance.
+  function drawEdgeArrows(ctx, cam) {
+    const p = G.player;
+    if (!p || !roster.length) return;
+    const Wd = ctx.canvas.width, Ht = ctx.canvas.height, pad = 26;
+    const detailed = new Map(others.map((o) => [o.id, o]));
+    for (const r of roster) {
+      if (r.id === myId) continue;
+      const pos = detailed.get(r.id) || r;
+      const sx = (pos.x - cam.x) * cam.zoom, sy = (pos.y - cam.y) * cam.zoom;
+      if (sx >= 0 && sy >= 0 && sx <= Wd && sy <= Ht) continue; // visible on screen
+      const cx = Wd / 2, cy = Ht / 2, dx = sx - cx, dy = sy - cy;
+      const k = Math.min((Wd / 2 - pad) / Math.abs(dx || 1e-6), (Ht / 2 - pad) / Math.abs(dy || 1e-6));
+      const ax = cx + dx * k, ay = cy + dy * k, ang = Math.atan2(dy, dx);
+      const color = r.pvp ? '#ff7d7d' : colorFor(r.id);
+      ctx.save();
+      ctx.translate(ax, ay); ctx.rotate(ang);
+      ctx.fillStyle = color; ctx.strokeStyle = '#0a1321'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(12, 0); ctx.lineTo(-7, -8); ctx.lineTo(-7, 8); ctx.closePath(); ctx.stroke(); ctx.fill();
+      ctx.restore();
+      const label = r.name + ' · ' + meters(Math.hypot(pos.x - p.x, pos.y - p.y));
+      ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center';
+      const lx = Math.min(Math.max(ax - Math.cos(ang) * 22, 50), Wd - 50), ly = Math.min(Math.max(ay - Math.sin(ang) * 18, 14), Ht - 8);
+      ctx.fillStyle = '#000b'; ctx.fillText(label, lx + 1, ly + 1);
+      ctx.fillStyle = color; ctx.fillText(label, lx, ly);
+    }
   }
   requestAnimationFrame(frame);
 
-  globalThis.NightshiftOnline = { get status() { return net ? net.status : 'joining'; }, get others() { return others; }, get id() { return myId; }, stats };
+  globalThis.NightshiftOnline = { get status() { return net ? net.status : 'joining'; }, get others() { return others; }, get roster() { return roster; }, get id() { return myId; }, stats };
 })();
