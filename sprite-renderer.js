@@ -2,7 +2,7 @@
 (function(root){'use strict';
 let drawing=null;function rect(color,x,y,w,h){const ctx=drawing||g;ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
 function polygon(color,points){const ctx=drawing||g;ctx.fillStyle=color;ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fill()}
-function pose(p,isPlayer=false){const angle=Number.isFinite(p.angle)?p.angle:Math.atan2(p.dy||0,p.dx||0),moving=isPlayer?(typeof player!=='undefined'&&player.moving):p.moving===true,frame=moving?Math.floor((Number.isFinite(p.walkTicks)?Math.max(0,p.walkTicks):0)/2.5)%8:0;return {facing:((Math.round(angle/(Math.PI/4))%8)+8)%8,phase:frame,frame,stride:moving?[0,2,3,2,0,-2,-3,-2][frame]:0}}
+function pose(p,isPlayer=false){const moving=isPlayer?(typeof player!=='undefined'&&player.moving):p.moving===true,angle=moving&&Number.isFinite(p.moveAngle)?p.moveAngle:Number.isFinite(p.angle)?p.angle:Math.atan2(p.dy||0,p.dx||0),frame=moving?Math.floor((Number.isFinite(p.walkTicks)?Math.max(0,p.walkTicks):0)/2.5)%8:0;return {facing:((Math.round(angle/(Math.PI/4))%8)+8)%8,phase:frame,frame,stride:moving?[0,2,3,2,0,-2,-3,-2][frame]:0}}
 function drawCar(v){
  root.NightshiftEnvironment?.headlights(v);g.save();g.translate(Math.round(v.x),Math.round(v.y));g.rotate(v.angle||0);
  const van=v.model==='VAN',compact=v.model==='COMPACT',color=v.color||'#75a5ac';
