@@ -12,7 +12,7 @@
   /* eslint-disable no-undef */
   const P = () => { try { return player; } catch { return null; } };
   /* eslint-enable no-undef */
-  const gameSave = () => { try { const f = Function('return typeof save==="function"?save:null')(); if (f) f(); } catch { /* not ready */ } };
+  const gameSave = () => { try { const f = (typeof save === 'function' ? save : null); if (f) f(); } catch { /* not ready */ } };
   const say = (t) => { try { root.say?.(t); } catch { /* no toast */ } };
   const money = (n) => '$' + Math.round(n).toLocaleString();
 
