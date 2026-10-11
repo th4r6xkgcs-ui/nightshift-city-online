@@ -210,7 +210,7 @@
     if (!r.height) return;
     let bottom = r.bottom;
     const cs = document.querySelector('#crimeStatus');
-    if (cs && cs.textContent.trim()) { const c = cs.getBoundingClientRect(); if (c.height && c.left < r.right && c.top < r.bottom + 60) bottom = Math.max(bottom, c.bottom); }
+    if (cs && String(cs.textContent || '').trim() && typeof cs.getBoundingClientRect === 'function') { const c = cs.getBoundingClientRect() || {}; if (c.height && c.left < r.right && c.top < r.bottom + 60) bottom = Math.max(bottom, c.bottom); }
     chip.style.top = Math.round(bottom + 6) + 'px'; chip.style.left = Math.round(r.left) + 'px';
   }
   function renderPanel() {
