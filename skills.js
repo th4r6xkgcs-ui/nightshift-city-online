@@ -161,7 +161,7 @@
   // ---- UI: level-up flash, skills chip, panel ----
   const css = document.createElement('style');
   css.textContent = `
-  #skFlash{position:fixed;left:50%;top:30%;transform:translate(-50%,-50%) scale(.9);z-index:45;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;
+  #skFlash{position:fixed;left:50%;top:84%;transform:translate(-50%,-50%) scale(.9);z-index:45;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;
     background:linear-gradient(180deg,#1d2c48f2,#0f1830f2);border:1px solid #e8c873;border-radius:14px;padding:12px 18px;text-align:center;color:#f6f1e1;font:600 14px ui-monospace,Menlo,monospace;box-shadow:0 10px 30px #0008}
   #skFlash.on{opacity:1;transform:translate(-50%,-50%) scale(1)} #skFlash b{display:block;font-size:22px;color:#ffd970;margin-bottom:2px}
   #skChip{all:unset;box-sizing:border-box;position:fixed;z-index:25;left:12px;top:90px;width:auto;height:auto;min-width:0;min-height:0;cursor:pointer;
