@@ -134,10 +134,23 @@
     }
     ctx.restore();
   }
+  // Race starts are listed as encounter locations so the city map/GPS can route to them. On foot, USE
+  // there explains how to start (races begin by driving into the ring).
+  const SITES = () => R.RACES.map((r) => ({ id: 'race-' + r.id, type: 'race', x: r.points[0][0], y: r.points[0][1], ready: true, color: '#ff4fd8',
+    label: '🏁 ' + r.name.toUpperCase(), action: 'RACE', hint: `Street race · drive into the ring to start (gold ${R.fmt(R.par(r))})` }));
   const E = root.NightshiftEncounters;
   if (E && !E.__races) {
-    const draw = E.draw;
+    const draw = E.draw, locs = E.locations, use = E.use;
     E.draw = function () { const r = draw.apply(this, arguments); try { drawWorld(); } catch { /* cosmetic */ } return r; };
+    E.locations = function () { const list = locs.apply(this, arguments) || []; return run ? list : [...list, ...SITES()]; };
+    E.use = function (id) {
+      if (typeof id === 'string' && id.startsWith('race-')) {
+        const r = R.BY_ID[id.slice(5)], best = r && state.best[r.id];
+        say(`🏁 ${r ? r.name : 'Race'} · get in a car and drive into the ring to start${best ? ` · your best ${R.fmt(best)}` : ''}`);
+        return true;
+      }
+      return use.apply(this, arguments);
+    };
     E.__races = true;
   }
 

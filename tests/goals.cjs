@@ -54,3 +54,19 @@ assert.equal(dirty.stats.shots, 0);
 assert.equal(dirty.stats.escapes, 2);
 assert.deepEqual(G.clean(null).done, {});
 console.log('PASS: goals save cleaning');
+
+// Tracker: follows the NEXT goal when it has a place, or a pinned unfinished goal; save keeps a valid pin only.
+const tst = G.clean({});
+assert.equal(G.tracked(tst), null, 'first goal (walk) has no place to point at');
+tst.done.walk = 1; tst.done.shoot = 1;
+assert.equal(G.tracked(tst).id, 'car', 'NEXT goal with a place is tracked');
+tst.pin = 'casino1';
+assert.equal(G.tracked(tst).id, 'casino1', 'pinned goal wins');
+tst.done.casino1 = 2;
+assert.equal(G.tracked(tst).id, 'car', 'finished pin falls back to NEXT');
+assert.equal(G.clean({ pin: 'walk' }).pin, null, 'goals without a place cannot be pinned');
+assert.equal(G.clean({ pin: 'gun1' }).pin, 'gun1');
+assert.equal(G.clean({ pin: 'gun1', done: { gun1: 5 } }).pin, null, 'finished goals cannot stay pinned');
+assert.equal(G.clean({ track: false }).track, false); assert.equal(G.clean({}).track, true);
+for (const g of D.GOALS) if (g.place) assert.ok(['car', 'job', 'salvage', 'apartment', 'property', 'dealer', 'garage', 'casino', 'gunshop', 'race'].includes(g.place), g.id + ' place known');
+console.log('PASS: goal tracker selection, pinning and save');
