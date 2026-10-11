@@ -143,3 +143,24 @@ Verified in browser:
 - Drawn by wrapping `NightshiftEncounters.draw` (world space): start rings show only within 600 px, and the next 2 checkpoints show while racing. The HUD bar sits at top: 58px.
 - Save: `nightshift-races-v1` (best times, medals). Goals: "Street racer" and "Gold rush".
 - Tests: tests/races.cjs, 3 PASS (every leg is a straight road segment, medals, payouts, save). Browser: autopilot runs with no page errors; screenshot verified.
+
+## Home upgrades: `home-data.js` + `home-upgrades.js` (Claude-owned)
+A **LAPTOP** desk is always in the apartment at room (400,262); USE → UPGRADES opens the furniture shop (Charisma discount applies). The five items and their perks:
+
+| Item | Price | Perk |
+|---|---|---|
+| Memory-foam bed | $2,500 | REST gives "Well rested": +25% skill XP for 10 min (`NightshiftSkills.setBoost`), shown on the skills chip |
+| Ammo locker | $1,800 | REST adds +60 spare rounds (10 min cooldown) |
+| Grow tent | $3,000 | 1 weed every 4 min (max 6; faster with Farming; grows offline). HARVEST goes into the pocket and gives Farming XP |
+| Police scanner | $4,000 | REST clears all heat (5 min cooldown) |
+| Trophy shelf | $1,200 | +10% goal cash; shows race medal cups |
+
+Hooks (no game files edited):
+- wrapped `NightshiftHome.interaction` (nearest of Codex's targets and mine) and `.use` (laptop/tent intercepted; bed → Codex rest, then my perks)
+- `NightshiftInteriors.draw('home')` for room-space furniture
+- `NightshiftSprites.furniture` to draw the duvet on Codex's BED sprite
+- `NightshiftSprites.person(roomPos, true, {weapon:false})` to read the room position
+
+Verified in browser: laptop USE, buying all 5 items, the "Penthouse vibes" goal paying +$5,500 (trophy bonus), harvesting 6 weed, and a REST that gives HP 100, heat 0, +60 rounds and the 25% boost (100 XP → 125). No page errors. Tests: tests/home-upgrades.cjs, 4 PASS. Save: `nightshift-home-v1`. Goals: "Make it yours" and "Penthouse vibes".
+
+v0.42 (awnings) merged into `claude/rpg-play`; all hooks re-verified, and every browser regression passed.
