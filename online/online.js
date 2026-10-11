@@ -17,7 +17,6 @@
     get camera() { return typeof camera !== 'undefined' ? camera : null; }, // eslint-disable-line no-undef
     get ctx() { return typeof g !== 'undefined' ? g : null; }, // eslint-disable-line no-undef
     get lastDraw() { return typeof lastDraw !== 'undefined' ? lastDraw : null; }, // eslint-disable-line no-undef
-    get bullets() { return typeof bullets !== 'undefined' ? bullets : null; }, // eslint-disable-line no-undef
     say(text) { try { say(text); } catch { /* game toast unavailable */ } }, // eslint-disable-line no-undef
   };
   const store = {
@@ -66,13 +65,18 @@
 
   let net = null, me = null, myId = null, others = [], chatCh = 'near';
   const tracers = [];
-  const seenBullets = new WeakSet();
+  // Shots are detected from the magazine count: every round that leaves the
+  // magazine is one shot along the player's aim. (The game can create and
+  // remove a bullet within one simulation step, so bullets can't be watched.)
+  let lastAmmo = null;
+  const stats = { shotsSeen: 0, shotsSent: 0, hitsTaken: 0 };
   pvpBtn.addEventListener('click', () => { if (net && me) net.setPvp(!me.pvp); });
   function onEvent(e) {
     if (e.kind === 'shot') tracers.push({ x: e.x, y: e.y, aim: e.aim, len: e.len, until: performance.now() + 120 });
     else if (e.kind === 'shot-hit') {
       // Apply through the game's own damage path (safe zones, death, respawn).
       const R = globalThis.NightshiftRecovery, p = G.player;
+      stats.hitsTaken++;
       if (R && typeof R.damage === 'function') R.damage(e.damage, performance.now());
       else if (p) p.hp = Math.max(0, p.hp - e.damage);
       G.say('Shot by ' + e.byName);
@@ -151,12 +155,16 @@
     const p = G.player;
     if (net && p) {
       net.setPosition({ x: p.x, y: p.y, aim: p.angle || 0, car: p.car ? { angle: p.car.angle || 0, color: p.car.color } : null });
-      // Report the game's own new shots (the player's bullets start at the player).
-      for (const b of G.bullets || []) {
-        if (seenBullets.has(b)) continue;
-        seenBullets.add(b);
-        if (b.origin && Math.hypot(b.origin.x - p.x, b.origin.y - p.y) < 40 && Number.isFinite(b.vx) && Number.isFinite(b.vy)) net.fire(Math.atan2(b.vy, b.vx));
+      // Report the game's own shots.
+      const ammo = Number.isFinite(p.ammo) ? p.ammo : null;
+      if (ammo !== null && lastAmmo !== null && ammo < lastAmmo && !p.car && p.hp > 0) {
+        const shots = Math.min(3, lastAmmo - ammo);
+        for (let i = 0; i < shots; i++) {
+          stats.shotsSeen++;
+          if (net.fire(p.angle || 0)) stats.shotsSent++;
+        }
       }
+      lastAmmo = ammo;
       const view = net.update(dt);
       me = view.me; others = view.others;
       if (now - lastBadge > 500) {
@@ -209,5 +217,5 @@
   }
   requestAnimationFrame(frame);
 
-  globalThis.NightshiftOnline = { get status() { return net ? net.status : 'joining'; }, get others() { return others; }, get id() { return myId; } };
+  globalThis.NightshiftOnline = { get status() { return net ? net.status : 'joining'; }, get others() { return others; }, get id() { return myId; }, stats };
 })();
