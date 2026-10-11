@@ -7,7 +7,7 @@
 - P2: Claude server/protocol scaffold, authoritative inventory/economy/combat, two-client tests.
 - P2: Persistent accounts, properties, garages, safe zones and optional PvP.
 
-- P1: Improve existing police navigation, projectile feedback and last-seen search; persist NPC robbery state.
+- P1: Tune grid pursuit and projectile effects, persist remaining transient NPC loot; real-browser crime-loop QA.
 
 - P1: Persistent stable vehicle IDs; robbery and vehicle search rules; bag lifetime design.
 - P2: Server-authoritative inventory transactions and multiplayer loot ownership.
