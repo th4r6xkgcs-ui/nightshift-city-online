@@ -24,7 +24,8 @@
 
   const SNAP_ERROR_PX = 80;     // farther than this from the server: jump, don't glide
   const CORRECTION = 0.3;       // fraction of the remaining error fixed per server update
-  const HEARTBEAT_MS = 100;     // resend unchanged input this often
+  const MIN_INPUT_MS = 50;      // at most 20 input messages/s while the stick moves
+  const HEARTBEAT_MS = 250;     // keep-alive resend when nothing changes
   const MAX_HISTORY = 120;      // predicted frames kept for reconciliation
 
   function createClient(opts) {
@@ -116,7 +117,8 @@
 
     function sendInput(t) {
       const key = [input.mx.toFixed(2), input.my.toFixed(2), input.aim.toFixed(2), input.sprint].join();
-      if (key === lastKey && t - lastSentAt < HEARTBEAT_MS) return;
+      const since = t - lastSentAt;
+      if (key === lastKey ? since < HEARTBEAT_MS : since < MIN_INPUT_MS) return;
       if (send({ t: C.INPUT, seq: seq + 1, mx: input.mx, my: input.my, aim: input.aim, sprint: input.sprint })) {
         seq++; lastKey = key; lastSentAt = t;
       }

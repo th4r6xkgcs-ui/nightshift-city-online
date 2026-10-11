@@ -35,7 +35,10 @@
   function loadLayout() {
     try {
       if (typeof module === 'object' && module.exports && typeof require === 'function') {
-        const mod = require('../city-data.js');
+        // Indirect require: bundlers (Cloudflare/esbuild) must not try to
+        // resolve this at build time; hosts without the file pass a layout.
+        const load = require;
+        const mod = load('../city-data.js');
         if (mod && typeof mod.layout === 'function') return { layout: mod.layout(), source: 'city-data.js' };
       } else if (root.NightshiftCityData && typeof root.NightshiftCityData.layout === 'function') {
         return { layout: root.NightshiftCityData.layout(), source: 'city-data.js' };

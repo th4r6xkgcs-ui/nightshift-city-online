@@ -165,3 +165,20 @@ test('actions: fire is throttled locally, money actions carry tx ids, offline se
 function srvClients(srv) {
   return [...srv._wss.clients];
 }
+
+test('wiggling the stick every frame stays far under the server rate limit', async (t) => {
+  const { srv, make } = await setup(t, 10);
+  let errors = 0;
+  const c = make('Wiggle', { onError: () => { errors++; } });
+  const w = await c.welcomed();
+  const before = srv.world.players.get(w.id).lastSeq;
+  let k = 0;
+  const stop = loop(c, () => { k++; c.setInput({ mx: Math.sin(k / 3), my: Math.cos(k / 5), aim: k / 10, sprint: k % 2 === 0 }); });
+  await sleep(2000);
+  stop();
+  await sleep(100);
+  const sent = srv.world.players.get(w.id).lastSeq - before;
+  assert.equal(errors, 0, 'no rate-limit strikes');
+  assert.ok(sent <= 44, `at most ~20 inputs/s (sent ${sent} in 2s)`);
+  assert.ok(sent >= 30, `still responsive (sent ${sent} in 2s)`);
+});
