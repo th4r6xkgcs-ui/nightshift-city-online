@@ -154,6 +154,16 @@
     E.__races = true;
   }
 
+
+  // Landscape: bottom-centre between the joysticks. Portrait: under the left chip column (top is crowded).
+  function placeBar(bar) {
+    if (innerWidth > innerHeight) {
+      Object.assign(bar.style, { top: 'auto', bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))', left: '50%', transform: 'translateX(-50%)', maxWidth: 'calc(100vw - 2 * min(34vw, 300px))', whiteSpace: 'normal' });
+    } else {
+      const a = document.querySelector('#dyChip') || document.querySelector('#glCard'), r = a?.getBoundingClientRect();
+      Object.assign(bar.style, { top: Math.round((r?.bottom || 200) + 8) + 'px', bottom: 'auto', left: '12px', transform: 'none', maxWidth: 'calc(100vw - 24px)', whiteSpace: 'normal' });
+    }
+  }
   // ---- HUD ----
   const css = document.createElement('style');
   css.textContent = `#rcHud{position:fixed;left:50%;top:58px;transform:translateX(-50%);z-index:24;pointer-events:none;background:#10141cdd;border:1px solid #ff4fd8;border-radius:10px;
@@ -161,7 +171,7 @@
   document.head.appendChild(css);
   const hud = document.createElement('div'); hud.id = 'rcHud'; hud.hidden = true; document.body.append(hud);
   let hideAt = 0;
-  function hudMsg(text, hold = 0) { hud.textContent = text; hud.hidden = false; hideAt = hold ? now() + hold : 0; }
+  function hudMsg(text, hold = 0) { hud.textContent = text; hud.hidden = false; placeBar(hud); hideAt = hold ? now() + hold : 0; }
   setInterval(() => { if (hideAt && now() > hideAt && !run) { hud.hidden = true; hideAt = 0; } }, 250);
   setInterval(tick, 50);
 

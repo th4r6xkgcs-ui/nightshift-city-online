@@ -139,6 +139,16 @@
   const E = root.NightshiftEncounters;
   if (E && !E.__jobs) { const draw = E.draw; E.draw = function () { const r = draw.apply(this, arguments); try { drawWorld(); } catch { /* cosmetic */ } return r; }; E.__jobs = true; }
 
+
+  // Landscape: bottom-centre between the joysticks. Portrait: under the left chip column (top is crowded).
+  function placeBar(bar) {
+    if (innerWidth > innerHeight) {
+      Object.assign(bar.style, { top: 'auto', bottom: 'calc(14px + env(safe-area-inset-bottom, 0px))', left: '50%', transform: 'translateX(-50%)', maxWidth: 'calc(100vw - 2 * min(34vw, 300px))', whiteSpace: 'normal' });
+    } else {
+      const a = document.querySelector('#dyChip') || document.querySelector('#glCard'), r = a?.getBoundingClientRect();
+      Object.assign(bar.style, { top: Math.round((r?.bottom || 200) + 8) + 'px', bottom: 'auto', left: '12px', transform: 'none', maxWidth: 'calc(100vw - 24px)', whiteSpace: 'normal' });
+    }
+  }
   // ---- UI ----
   const css = document.createElement('style');
   css.textContent = `
@@ -164,7 +174,7 @@
     if (pill) { const r = pill.getBoundingClientRect(); if (r.height) { btn.style.top = Math.round(r.bottom + 6) + 'px'; btn.style.right = Math.max(12, Math.round(innerWidth - r.right)) + 'px'; } }
     if (!active) { hud.hidden = true; return; }
     const left = Math.max(0, active.offer.limit - (performance.now() - active.started) / 1000), obj = objective(), p = P();
-    hud.hidden = false; hud.style.top = root.NightshiftRaces?.active?.() ? '96px' : '58px';
+    hud.hidden = false; placeBar(hud); if (root.NightshiftRaces?.active?.() && innerWidth > innerHeight) hud.style.bottom = 'calc(52px + env(safe-area-inset-bottom, 0px))';
     hud.textContent = `${J.TYPES[active.offer.type].icon} ${describe(active)} · ${Math.ceil(left)}s${obj && p ? ` · ${Math.round(dist(p, obj) / 10)}m` : ''}`;
     const bar = el('i'); bar.style.width = Math.round((left / active.offer.limit) * 100) + '%'; hud.append(bar);
     if (!panel.hidden) renderPanel();

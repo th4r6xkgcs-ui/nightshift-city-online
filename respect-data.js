@@ -4,7 +4,7 @@
 (function (root) {
   'use strict';
   const RANKS = [
-    { min: 0, name: 'Nobody', icon: '·' },
+    { min: 0, name: 'Nobody', icon: '👤' },
     { min: 300, name: 'Street Rat', icon: '🐀' },
     { min: 700, name: 'Hustler', icon: '💸' },
     { min: 1300, name: 'Earner', icon: '💼' },
