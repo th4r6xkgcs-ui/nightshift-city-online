@@ -34,7 +34,7 @@ function command(state,gang,crewState,actor,cmd,now=Date.now(),escort=null){
  }
  if(cmd.action==='complete'){
   const j=state.job,job=JOBS[j?.district];if(!j||!job)return fail('No active crew job');if(now>=j.until)return fail('Escort deadline expired');if(now-j.started<10000)return fail('Escort has just started');
-  if(Math.hypot(actor.x-job.x,actor.y-job.y)>50||!escort||Math.hypot(escort.x-job.x,escort.y-job.y)>65)return fail('Bring yourself and your escort to the destination');
+  if(Math.hypot(actor.x-job.x,actor.y-job.y)>50||!escort||escort.ridingCar||Math.hypot(escort.x-job.x,escort.y-job.y)>65)return fail('Bring yourself and your escort to the destination');
   if(actor.cash+job.reward>100000000)return fail('Wallet full');actor.cash+=job.reward;state.roster[j.member].loyalty=Math.min(100,state.roster[j.member].loyalty+8);root.NightshiftCrews.change(crewState,j.district,4);state.completed=Math.min(1000000,state.completed+1);state.job=null;
   return {ok:true,message:'Escort complete · +$'+job.reward+' · +8 loyalty · +4 local trust'};
  }return fail('Unknown crew order');
@@ -50,7 +50,7 @@ function follow(actor,target,dt,now,context){
 }
 root.NightshiftCrewOps={KEY,RECRUITS,JOBS,LIMIT,clean,command,follow};if(!root.document)return;
 let state=clean();try{state=clean(JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{}
-const actors=new Map();function persist(){for(const [id,a] of actors)if(state.roster[id]){state.roster[id].x=a.x;state.roster[id].y=a.y}try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
+const actors=new Map();function persist(){for(const [id,a] of actors)if(state.roster[id]){state.roster[id].x=a.lastFoot?.x??a.x;state.roster[id].y=a.lastFoot?.y??a.y}try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
 function sync(){if(state.owner&&state.owner!==root.NightshiftGangLife.state.member){state.owner=null;state.roster={};state.job=null;actors.clear();root.NightshiftMap?.clear('crew-escort');persist()}for(const id of [...actors.keys()])if(!state.roster[id])actors.delete(id)}
 function actor(id){if(!actors.has(id)){const spec=RECRUITS.find(r=>r.id===id);if(spec){const r=state.roster[id],pos={x:r?.x??spec.x,y:r?.y??spec.y};const candidates=[pos,{x:spec.x,y:spec.y-16},{x:spec.x-20,y:spec.y-16},{x:spec.x+20,y:spec.y-16}],safe=candidates.find(p=>!root.NightshiftNavigation.trace(p,p,blocked,8)&&!root.NightshiftCitizens.occupied(p,cars));actors.set(id,{...spec,...(safe||pos),hp:40,moving:false})}}return actors.get(id)}
 function perform(cmd){
@@ -62,22 +62,23 @@ function perform(cmd){
 function tick(now,dt){
  sync();if(state.job&&Date.now()>=state.job.until){state.roster[state.job.member].loyalty=Math.max(0,state.roster[state.job.member].loyalty-5);state.job=null;persist();root.NightshiftMap.clear('crew-escort');say('Crew escort expired · −5 loyalty')}
  let index=0;for(const [id,record] of Object.entries(state.roster)){const a=actor(id),offset=++index;
+  const transportContext={cars:[...cars,...(root.NightshiftTraffic?.actors||[])],blocked,world,people:[...actors.values(),...peds,player]};const travel=root.NightshiftCrewTransport?.step(a,record,player,[...actors.values()],transportContext)||'foot';if(['boarded','riding','exit-blocked'].includes(travel))continue;if(travel==='approach'){const door=root.NightshiftCrewTransport.exits(player.car).find(p=>root.NightshiftCrewTransport.safe(p,transportContext));if(door)follow(a,door,dt,now,transportContext);continue}
   if(record.order!=='follow'||record.loyalty<40||player.car||player.hp<=0){a.moving=false;continue}
   const angle=(player.moveAngle??player.angle)+Math.PI+(offset%2?.55:-.55),target={x:Math.max(10,Math.min(world.w-10,player.x+Math.cos(angle)*(36+offset*12))),y:Math.max(10,Math.min(world.h-10,player.y+Math.sin(angle)*(36+offset*12)))};
   if(root.NightshiftNavigation.trace(target,target,blocked,8)){const alternatives=[{x:player.x,y:player.y-50},{x:player.x,y:player.y+50},{x:player.x-50,y:player.y},{x:player.x+50,y:player.y}];const safe=alternatives.find(p=>p.x>=10&&p.y>=10&&p.x<=world.w-10&&p.y<=world.h-10&&!root.NightshiftNavigation.trace(p,p,blocked,8));if(!safe){a.moving=false;continue}Object.assign(target,safe)}follow(a,target,dt,now,{cars:[...cars,...(root.NightshiftTraffic?.actors||[])],blocked,world,people:[...actors.values(),...peds]});
  }
 }
-function entries(){sync();return Object.keys(state.roster).map(id=>({kind:'crew-member',entity:actor(id)}))}
+function entries(){sync();return Object.keys(state.roster).map(id=>({kind:'crew-member',entity:actor(id)})).filter(e=>!e.entity.ridingCar)}
 function locations(){return state.job?[{id:'crew-escort',...JOBS[state.job.district],action:'FINISH',hint:'Complete crew escort · bring '+RECRUITS.find(r=>r.id===state.job.member).name}]:[]}
 function complete(){if(!state.job)return false;const result=command(state,root.NightshiftGangLife.state,root.NightshiftCrews.state,player,{action:'complete'},Date.now(),actor(state.job.member));if(result.ok){persist();root.NightshiftCrews.save();save();root.NightshiftMap.clear('crew-escort')}say(result.message||result.reason);return result.ok}
 function badge(a){const r=state.roster[a.id];if(!r)return;g.save();g.fillStyle='#102a3bcc';g.fillRect(a.x-19,a.y+22,38,14);g.font='bold 8px monospace';g.textAlign='center';g.fillStyle='#b9e3c8';g.fillText(a.name,a.x,a.y+32);g.fillStyle='#375358';g.fillRect(a.x-15,a.y+38,30,3);g.fillStyle=r.loyalty<40?'#eeb776':'#8fcead';g.fillRect(a.x-15,a.y+38,30*r.loyalty/100,3);g.restore()}
-function hud(){return state.job?'<br>Crew escort · '+Math.max(0,Math.ceil((state.job.until-Date.now())/1000))+'s · bring '+RECRUITS.find(r=>r.id===state.job.member).name:''}
+function hud(){const riders=[...actors.values()].filter(a=>a.ridingCar===player.car&&player.car).length;return (riders?'<br>Crew passengers · '+riders+'/'+root.NightshiftCrewTransport.capacity(player.car):'')+(state.job?'<br>Crew escort · '+Math.max(0,Math.ceil((state.job.until-Date.now())/1000))+'s · bring '+RECRUITS.find(r=>r.id===state.job.member).name:'')}
 function controls(parent,contact){
  sync();if(!root.NightshiftGangLife.state.member)return;const doc=root.document,add=(tag,value)=>{const n=doc.createElement(tag);n.textContent=value;parent.appendChild(n);return n},button=(label,cmd)=>{const b=add('button',label);b.type='button';b.addEventListener('click',()=>perform(cmd))};
  add('h3','CREW · '+Object.keys(state.roster).length+'/'+LIMIT);
  for(const spec of RECRUITS){const r=state.roster[spec.id];if(r){add('p',spec.name+' · '+spec.trait+' · loyalty '+r.loyalty+' · '+(r.loyalty<40?'needs support':r.order));button(r.order==='follow'?'Hold position':'Follow on foot',{action:r.order==='follow'?'hold':'follow',id:spec.id});if(contact?.crew===spec.crew)button('Support '+spec.name+' · $50 / +10 loyalty',{action:'care',id:spec.id});button('Dismiss '+spec.name,{action:'dismiss',id:spec.id})}else if(contact?.crew===spec.crew)button('Recruit '+spec.name+' · '+spec.trait+' · $150 / 10 trust',{action:'recruit',id:spec.id})}
  if(state.job){add('p',JOBS[state.job.district].name+' · '+Math.max(0,Math.ceil((state.job.until-Date.now())/1000))+'s left');const track=add('button','Track escort destination');track.addEventListener('click',()=>{const job=JOBS[state.job.district];root.NightshiftGangLife.close();root.NightshiftMap.navigate({id:'crew-escort',label:job.name,x:job.x,y:job.y})});button('Cancel escort · −5 loyalty',{action:'cancel'})}else if(contact?.crew)button('Take crew escort · $'+JOBS[contact.crew].reward,{action:'job',district:contact.crew});
- add('p','Followers walk with you and wait while you drive. Loyalty below 40 stops following. Escort success earns loyalty; cancellation or expiry loses 5. Recruitment fees are nonrefundable.');
+ add('p','Followers board nearby stopped vehicles: compact 1 passenger, other vehicles 3. Stop for boarding; exiting resumes foot following. Full seats or moving cars leave members waiting. Loyalty below 40 stops following. Escort success earns loyalty; cancellation or expiry loses 5. Recruitment fees are nonrefundable.');
 }
 Object.assign(root.NightshiftCrewOps,{state,save:persist,sync,perform,tick,entries,locations,complete,controls,badge,hud});persist();root.addEventListener('pagehide',persist);
 })(globalThis);
