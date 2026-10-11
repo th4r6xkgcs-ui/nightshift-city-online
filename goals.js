@@ -28,7 +28,7 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -103,6 +103,7 @@
     last = { x: p.x, y: p.y, ammo: p.ammo, cash: p.cash };
   }
 
+  const tuneStat = (fn) => { try { const s = root.NightshiftTuning?.state; return s ? root.NightshiftTuningData[fn](s) : 0; } catch { return 0; } };
   function snapshot() {
     const p = G.player;
     let prog = root.NightshiftProgress?.state;
@@ -123,6 +124,7 @@
       inCar: !!p?.car,
       casinoWins: root.NightshiftCasino?.state?.wins, casinoWagered: root.NightshiftCasino?.state?.wagered,
       weaponsOwned: root.NightshiftWeapons?.state?.owned?.length || 1,
+      tuneLevels: tuneStat('totalLevels'), tuneBestCar: tuneStat('bestCar'),
     });
   }
 
