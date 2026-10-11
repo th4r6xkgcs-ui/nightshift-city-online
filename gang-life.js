@@ -1,7 +1,7 @@
 /* Single-player gang choices built on existing reputation and market rules. */
 (function(root){'use strict';
 const KEY='nightshift-city-gang-life-v1',WAIT=60000;
-const CONTACTS=[{id:'south-recruiter',crew:'south',x:720,y:1080,name:'Mara · Southside Union',color:'#efbb66'},{id:'docks-recruiter',crew:'docks',x:1600,y:1420,name:'Inez · Harbor Crew',color:'#bf9feb'},{id:'west-buyer',market:'west',x:488,y:1020,name:'Sol · West End buyer',color:'#92cbb7'},{id:'docks-buyer',market:'docks',x:1808,y:1360,name:'Vee · Docks buyer',color:'#d6aad8'}];
+const CONTACTS=[{id:'south-recruiter',crew:'south',x:720,y:1080,name:'Mara · Southside Union',color:'#efbb66'},{id:'docks-recruiter',crew:'docks',x:1600,y:1420,name:'Inez · Harbor Crew',color:'#bf9feb'},{id:'west-buyer',market:'west',x:488,y:1020,name:'Sol · West End buyer',color:'#92cbb7'},{id:'docks-buyer',market:'docks',x:1808,y:1360,name:'Vee · Docks buyer',color:'#d6aad8'}].concat((root.NightshiftCustomers?.CUSTOMERS||[]).map(c=>({id:'customer-'+c.id,customer:c.id,x:c.x,y:c.y,name:c.name+' · street customer',color:c.color})));
 function name(value){return typeof value==='string'?value.trim().replace(/\s+/g,' ').slice(0,24):''}
 function validName(value){return /^[a-zA-Z0-9][a-zA-Z0-9 _-]{2,23}$/.test(value)}
 function clean(raw={},now=Date.now()){
@@ -53,7 +53,7 @@ function gangName(){return state.member==='custom'?state.name:root.NightshiftCre
 function perform(cmd){
  const contact=CONTACTS.find(c=>c.id===selected);if(panel.hidden||!contact||otherMenu()||!nearby(contact))return {ok:false,reason:'Dialogue unavailable'};
  let result;const now=Date.now();
- if(contact.market){
+ if(contact.customer){result=cmd?.action==='customer-sale'?root.NightshiftCustomers.perform(contact.customer):{ok:false,reason:'Unknown customer choice'};}else if(contact.market){
   if(!['buy','sell'].includes(cmd?.action))return {ok:false,reason:'Unknown trade'};
   const refusal=root.NightshiftCrews.marketAccess(contact.market);
   root.NightshiftBusinessRules.advance(root.NightshiftBusinesses.state,now);
@@ -74,7 +74,7 @@ function render(message=''){
   if(!state.member){button('Join '+root.NightshiftCrews.CREWS.find(c=>c.id===contact.crew).name,()=>perform({action:'join'}));const input=text('input','');input.value=state.name;input.maxLength=24;input.placeholder='Your gang name';input.setAttribute('aria-label','Your gang name');button(state.name?'Rejoin '+state.name:'Found your own gang · $500',()=>perform({action:'found',name:input.value}))}
   else{button('Secure this corner · $250',()=>perform({action:'claim'}));button('Leave gang · release corner claims',()=>perform({action:'leave'}))}
   button('Help the neighborhood · 2 scrap → +8 trust',()=>perform({action:'work'}));text('p','Deliveries and aid calls also improve the existing crew reputation. Repairs refill once a minute. Corners are local influence markers; no passive cash.');
- }else{
+ }else if(contact.customer){root.NightshiftCustomers.controls(panel,contact)}else{
   const market=root.NightshiftBusinessRules.market(contact.market),pocket=root.NightshiftInventory.state.pocket;
   text('blockquote','“Small deals. Local demand. Keep the police off this corner.”');
   for(const item of ['weed','coke']){text('p',item.toUpperCase()+' · carried '+(pocket[item]||0));button('Buy 1 '+item+' · $'+market.buy[item],()=>perform({action:'buy',item,count:1}));button('Sell 1 '+item+' · $'+market.sell[item],()=>perform({action:'sell',item,count:1}))}
@@ -83,8 +83,10 @@ function render(message=''){
  root.NightshiftRivals?.controls(panel,contact);root.NightshiftCrewOps?.controls(panel,contact);button('Close',close);
 }
 function open(id=null){if(!panel.hidden||otherMenu()||player.hp<=0)return false;const contact=CONTACTS.find(c=>c.id===id);if(id&&(!contact||!nearby(contact)))return false;root.releaseControls?.();selected=id;panel.hidden=false;render();return true}
-function locations(){return CONTACTS.map(c=>({...c,action:'TALK',hint:c.name+' · '+(c.crew?'gang choices and street work':'buy / sell carried stock')}))}
-function draw(){for(const c of CONTACTS){if(!root.NightshiftScene.visible(c,{...camera,width:W,height:H}))continue;drawPerson({...c,hp:40,moving:false});g.fillStyle=c.color;g.fillRect(c.x-10,c.y+18,20,3);if(Math.hypot(player.x-c.x,player.y-c.y)<170){g.font='bold 10px monospace';g.textAlign='center';const width=Math.min(174,c.name.length*6+12);g.fillStyle='#102839dd';g.fillRect(c.x-width/2,c.y+25,width,18);g.fillStyle=c.color;g.fillText(c.name,c.x,c.y+37);if(c.crew&&state.corners[c.crew])g.fillText(gangName()+' CORNER',c.x,c.y+55)}}}
-Object.assign(root.NightshiftGangLife,{state,save:persist,paused:()=>!panel.hidden,open,close,perform,refresh:message=>{if(!panel.hidden)render(message)},locations,draw,gangName});
+function locations(){return CONTACTS.map(c=>({...c,action:'TALK',hint:c.name+' · '+(c.crew?'gang choices and street work':c.customer?'fulfill a carried-stock request':'buy / sell carried stock')}))}
+function entries(){return CONTACTS.map(c=>({kind:'street-contact',entity:{...c,hp:40,moving:false}}))}
+function badge(c){g.save();g.fillStyle=c.color;g.fillRect(c.x-10,c.y+18,20,3);if(Math.hypot(player.x-c.x,player.y-c.y)<170){g.font='bold 10px monospace';g.textAlign='center';const width=Math.min(174,c.name.length*6+12);g.fillStyle='#102839dd';g.fillRect(c.x-width/2,c.y+25,width,18);g.fillStyle=c.color;g.fillText(c.name,c.x,c.y+37);if(c.crew&&state.corners[c.crew])g.fillText(gangName()+' CORNER',c.x,c.y+55)}g.restore()}
+function draw(){for(const entry of entries()){const c=entry.entity;if(root.NightshiftScene&&!root.NightshiftScene.visible(c,{...camera,width:W,height:H}))continue;drawPerson(c);badge(c)}}
+Object.assign(root.NightshiftGangLife,{state,save:persist,paused:()=>!panel.hidden,open,close,perform,entries,badge,refresh:message=>{if(!panel.hidden)render(message)},locations,draw,gangName});
 const chip=doc.createElement('button');chip.id='street';chip.textContent='STREET';chip.setAttribute('aria-label','Street life and gangs');chip.addEventListener('click',()=>{root.NightshiftInterface?.close();open()});doc.querySelector('#actions').appendChild(chip);root.addEventListener('keydown',e=>{if(panel.hidden)return;if(e.key==='Escape'){close();e.preventDefault?.()}e.stopImmediatePropagation?.()},true);root.addEventListener('pagehide',persist);
 })(globalThis);
