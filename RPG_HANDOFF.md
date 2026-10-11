@@ -91,3 +91,31 @@ Unit tests: tests/skill-effects.cjs, 2 PASS.
 - Also new: Shooting gets +5 XP for each bullet that lands (`skill-effects.js` hit hooks).
 - Tests: tests/casino.cjs, 4 PASS (exact RTP enumeration, payouts, validation).
 - Browser check on iPhone 13 landscape: USE shows CASINO at the door. Spins settle cash exactly. Roulette paid its win. The player didn't move while the panel was open. Escape closes the panel, entry is refused while wanted, and state persists. No page errors. Online two-player regression: OK.
+
+## Weapons: `weapons-data.js` + `weapons.js` (Claude-owned)
+| Gun | Price | Shooting Lv | Damage | Fire rate | Mag | Range | Notes |
+|---|---|---|---|---|---|---|---|
+| Street Pistol | starter | 1 | 20 | 180 ms | 30 | 450 | identical to the original game |
+| Six-Shot Magnum | $900 | 2 | 45 | 420 ms | 6 | 560 | slight spread |
+| Viper SMG | $1,500 | 4 | 13 | 85 ms | 30 | 380 | wide spread |
+| Breaker 12 | $2,600 | 7 | 6×12 | 700 ms | 6 | 230 | 6 pellets per shell |
+| Longshot DMR | $4,200 | 10 | 60 | 550 ms | 10 | 950 | pinpoint |
+| Ridgeback AR | $8,000 | 15 | 22 | 115 ms | 30 | 650 | top tier |
+
+How it works (no game files edited):
+- **Fire rate:** sets game.js `nextShot` in a microtask after each shot. The shot is detected by wrapping `NightshiftFeedback.shot`.
+- **Spread, pellets, range and speed:** the `bullets` array's `push` is patched on the instance and shapes only the player's bullet of that trigger pull.
+- **Damage:** the skill-effects hit hooks use the equipped gun's damage × the Shooting perk.
+- **Magazine:** wraps `NightshiftCombat.begin` (no reload when the mag is full) and `.finish` (returns extra rounds to the reserve). The HUD's "/30" is rewritten to the equipped magazine size.
+- **Gun shop:** at the north-east CLOTHING (door 1960,597), with a sidewalk sign and USE action GUNS through `NightshiftEncounters`. It also sells a bulk ammo crate (60 rounds for $100).
+- **Weapon button:** under the map label; tap or press Q to cycle owned guns. Owned guns persist (`nightshift-weapons-v1`), but you still need the carried pistol item to shoot, which keeps Codex's death/drop loop intact.
+- **New goals:** "Armed and dangerous" (buy a gun) and "Arsenal" (own all 6).
+
+Verified in browser:
+- Shotgun: 6 pellets per shell, 700 ms between shots, HUD shows 6/6, reload fills 6 from the reserve.
+- SMG: 85 ms; pistol: 180 ms.
+- At Shooting Lv 41 a pistol hit does 36, and the DMR one-shots a 40 HP pedestrian.
+- Buying and equipping persist. The weapon button doesn't overlap anything at 844×390 or 390×844. No page errors.
+- Tests: tests/weapons.cjs, 3 PASS.
+
+**Multiplayer note for later:** online PvP damage is server-authoritative and still uses the server's own weapon rules. When multiplayer resumes, the server sim needs this weapon table (shared/rules.js).
