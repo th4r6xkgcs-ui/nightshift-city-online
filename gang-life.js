@@ -59,7 +59,7 @@ function perform(cmd){
   root.NightshiftBusinessRules.advance(root.NightshiftBusinesses.state,now);
   result=refusal?{ok:false,reason:refusal}:root.NightshiftBusinessRules.transact(root.NightshiftBusinesses.state,player,root.NightshiftInventory.state.pocket,{...cmd,id:contact.market},now);
  }else result=resolve(state,root.NightshiftCrews.state,player,root.NightshiftInventory.state.pocket,selected,cmd,now);
- if(result.ok){persist();root.NightshiftCrews.save();root.NightshiftBusinesses.save();save();root.NightshiftAudio?.play('pickup')}
+ if(result.ok){root.NightshiftCrewOps?.sync();persist();root.NightshiftCrews.save();root.NightshiftBusinesses.save();save();root.NightshiftAudio?.play('pickup')}
  const message=result.message||result.reason;render(message);say(message);return result;
 }
 function render(message=''){
@@ -80,11 +80,11 @@ function render(message=''){
   for(const item of ['weed','coke']){text('p',item.toUpperCase()+' · carried '+(pocket[item]||0));button('Buy 1 '+item+' · $'+market.buy[item],()=>perform({action:'buy',item,count:1}));button('Sell 1 '+item+' · $'+market.sell[item],()=>perform({action:'sell',item,count:1}))}
   text('p','Uses the city’s dealer stock, demand and heat. Carried goods drop on death. Heat 2+ or hostile local reputation blocks trade.');
  }
- button('Close',close);
+ root.NightshiftCrewOps?.controls(panel,contact);button('Close',close);
 }
 function open(id=null){if(!panel.hidden||otherMenu()||player.hp<=0)return false;const contact=CONTACTS.find(c=>c.id===id);if(id&&(!contact||!nearby(contact)))return false;root.releaseControls?.();selected=id;panel.hidden=false;render();return true}
 function locations(){return CONTACTS.map(c=>({...c,action:'TALK',hint:c.name+' · '+(c.crew?'gang choices and street work':'buy / sell carried stock')}))}
 function draw(){for(const c of CONTACTS){if(!root.NightshiftScene.visible(c,{...camera,width:W,height:H}))continue;drawPerson({...c,hp:40,moving:false});g.fillStyle=c.color;g.fillRect(c.x-10,c.y+18,20,3);if(Math.hypot(player.x-c.x,player.y-c.y)<170){g.font='bold 10px monospace';g.textAlign='center';const width=Math.min(174,c.name.length*6+12);g.fillStyle='#102839dd';g.fillRect(c.x-width/2,c.y+25,width,18);g.fillStyle=c.color;g.fillText(c.name,c.x,c.y+37);if(c.crew&&state.corners[c.crew])g.fillText(gangName()+' CORNER',c.x,c.y+55)}}}
-Object.assign(root.NightshiftGangLife,{state,save:persist,paused:()=>!panel.hidden,open,close,perform,locations,draw,gangName});
+Object.assign(root.NightshiftGangLife,{state,save:persist,paused:()=>!panel.hidden,open,close,perform,refresh:message=>{if(!panel.hidden)render(message)},locations,draw,gangName});
 const chip=doc.createElement('button');chip.id='street';chip.textContent='STREET';chip.setAttribute('aria-label','Street life and gangs');chip.addEventListener('click',()=>{root.NightshiftInterface?.close();open()});doc.querySelector('#actions').appendChild(chip);root.addEventListener('keydown',e=>{if(panel.hidden)return;if(e.key==='Escape'){close();e.preventDefault?.()}e.stopImmediatePropagation?.()},true);root.addEventListener('pagehide',persist);
 })(globalThis);

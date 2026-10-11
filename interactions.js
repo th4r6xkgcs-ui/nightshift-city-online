@@ -7,6 +7,7 @@ let previousId=null;function nearby(){if(player.hp<=0){previousId=null;return nu
  for(const car of cars)if(Math.abs(car.speed||0)<=1)add(car.id||'car-'+cars.indexOf(car),'car',root.NightshiftVehicles?.canEnter(car)?'ENTER':'CAR',root.NightshiftVehicles?.canEnter(car)?'Enter vehicle':'Locked vehicle · buy or steal',car.x,car.y,75,car);
  for(const place of root.NightshiftBusinesses?.locations()||[])add(place.id,'business','BIZ',place.label,place.x,place.y,75,place);
  for(const encounter of root.NightshiftEncounters?.locations()||[])add('encounter-'+encounter.id,'encounter',encounter.action,encounter.hint,encounter.x,encounter.y,50,encounter);
+ for(const job of root.NightshiftCrewOps?.locations()||[])add(job.id,'crew-job',job.action,job.hint,job.x,job.y,50,job);
  for(const contact of root.NightshiftGangLife?.locations()||[])add('street-'+contact.id,'gang-life',contact.action,contact.hint,contact.x,contact.y,40,contact);
  for(const contact of root.NightshiftCrews?.locations()||[])add('crew-'+contact.id,'crew',contact.action,contact.hint,contact.x,contact.y,55,contact);
  for(const drop of root.NightshiftInventory?.drops||[])if(drop.expires>Date.now())add('bag-'+drop.x+'-'+drop.y,'bag','LOOT','Recover dropped bag',drop.x,drop.y,48,drop);
