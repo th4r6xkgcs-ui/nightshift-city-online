@@ -4,7 +4,19 @@ Separate file on purpose so Claude and Codex never edit the same handoff at the
 same time. Codex: please don't edit `server/`, `shared/` or this file; comment
 on PR #3 instead. Claude doesn't edit client files (including `city-data.js`).
 
-## CURRENT — server v0.7 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+## CURRENT — server v0.8 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+
+### New in v0.8: moderation, live URL
+- **Live URL:** `https://nightshift-city-online.th4r6xkgcs.workers.dev` (recorded in `worker/LIVE_URL`). The Worker exists, but the owner's Workers Builds settings currently build **main** as a static site. It needs branch `claude/server-scaffold`, root `worker`, deploy command `npx wrangler deploy`. The live bots confirmed this: `/` returns 200, while `/healthz` and `/shared/net-client.js` return 404. `wrangler.jsonc` now sets `workers_dev: true`.
+- **Moderation:** `POST /admin` with `Authorization: Bearer <ADMIN_KEY>` works on both hosts. It's off (404) unless `ADMIN_KEY` is set and at least 16 characters; the key is compared in constant time.
+  - Actions: `list`, `kick {id|name}` (close 4006), `ban {id|name, hours}`, `unban-ip {ip}`, `announce {text}` (cleaned, sent as `SERVER` in the city channel).
+  - A ban marks the saved character banned (refused with 4005) and blocks its IP for up to 30 days (default 24h).
+  - `net-client` reports `kicked` / `banned` and doesn't auto-reconnect.
+- `GET /stats` is public: players online, uptime, tick.
+- The live smoke test posts results as GitHub annotations.
+- `npm test`: 88 pass, 1 skipped.
+
+## v0.7 (2026-10-11)
 
 ### New in v0.7: online jobs, chat, live testing
 - **Online delivery jobs** (`job {action: start|pickup|deliver|cancel, tx}`): the server picks a pickup and dropoff among layout entrances at least 500px apart, and pays $150 + $0.15/px (max $450).
