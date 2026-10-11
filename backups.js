@@ -32,7 +32,7 @@ function undo(storage){
  storage.removeItem(RECOVERY_KEY);
 }
 root.NightshiftBackups={validate,KEYS,restore,undo,snapshot};if(!root.document)return;
-const panel=document.createElement('div');panel.hidden=true;panel.style.cssText='position:fixed;z-index:28;inset:15% 6% auto;max-height:75dvh;overflow:auto;background:#142139;padding:20px;border-radius:12px;border:1px solid #93b0c9;color:white';document.body.appendChild(panel);
+const panel=document.createElement('div');panel.id='backupPanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label','Save backups');panel.style.cssText='position:fixed;z-index:28;inset:15% 6% auto;max-height:75dvh;overflow:auto;background:#142139;padding:20px;border-radius:12px;border:1px solid #93b0c9;color:white';document.body.appendChild(panel);
 const title=document.createElement('p');title.textContent='LOCAL SAVES · download a backup to move progress to another browser/device';panel.appendChild(title);
 function button(label,act){const b=document.createElement('button');b.textContent=label;b.style.cssText='width:100%;height:46px;border-radius:7px;margin:5px 0';b.addEventListener('click',act);panel.appendChild(b);return b}
 button('DOWNLOAD SAVE BACKUP',()=>{
