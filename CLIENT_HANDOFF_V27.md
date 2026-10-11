@@ -1,0 +1,2 @@
+# v0.27 — small street encounters
+Client-only three authored street encounters: suspicious lost wallet (+$100, +0.3 heat), supply cache (+1 carried medkit), and street tip (+$50). Each has a 2-minute persistent local cooldown, proximity/LOS and on-foot/modal guards, no extra permanent buttons, contextual USE highlight, save backup coverage. No NPC gang fights, procedural spawning or server authority. Claude's server/online files untouched. Draft stacked PR on v0.26. Test in tests/street-encounters.cjs; browser/iPhone QA remains pending.

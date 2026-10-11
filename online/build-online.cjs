@@ -28,16 +28,26 @@ function onlineHtml(indexHtml) {
     .replace(/<\/body>/i, `${tags}</body>`);
 }
 
+// Claude's RPG layer (skills + goals). Injected before boot.js at build time so
+// Codex's index.html stays untouched; skipped for any script it already lists.
+const RPG_SCRIPTS = ['skills-data.js', 'skills.js', 'goals-data.js', 'goals.js'];
+function withRpg(html) {
+  const missing = RPG_SCRIPTS.filter((s) => fs.existsSync(path.join(ROOT, s)) && !html.includes(`src="${s}"`));
+  if (!missing.length || !/<script\s+src="boot\.js"/.test(html)) return html;
+  const tags = missing.map((s) => `<script src="${s}" defer></script>`).join('');
+  return html.replace(/<script\s+src="boot\.js"/, (m) => tags + m);
+}
+
 function readGame() {
   const file = path.join(ROOT, 'index.html');
   if (!fs.existsSync(file)) return null;
-  const html = fs.readFileSync(file, 'utf8');
+  const html = withRpg(fs.readFileSync(file, 'utf8'));
   // Only the modular game (separate script files) can be extended this way.
   if (!/<canvas id="game"/.test(html) || !/<script\s+src="/.test(html)) return null;
   return { html, ...gameAssets(html) };
 }
 
-module.exports = { gameAssets, onlineHtml, readGame, ONLINE_SCRIPTS, ROOT };
+module.exports = { gameAssets, onlineHtml, readGame, withRpg, ONLINE_SCRIPTS, RPG_SCRIPTS, ROOT };
 
 if (require.main === module) {
   const game = readGame();
@@ -45,7 +55,8 @@ if (require.main === module) {
   const out = process.argv[2] || path.join(ROOT, 'online', 'dist');
   fs.mkdirSync(path.join(out, 'shared'), { recursive: true });
   fs.writeFileSync(path.join(out, 'online.html'), onlineHtml(game.html));
-  for (const f of [...game.scripts, ...game.styles, 'index.html']) fs.copyFileSync(path.join(ROOT, f), path.join(out, f));
+  for (const f of [...game.scripts, ...game.styles]) fs.copyFileSync(path.join(ROOT, f), path.join(out, f));
+  fs.writeFileSync(path.join(out, 'index.html'), game.html);
   for (const s of ONLINE_SCRIPTS) {
     const src = s === 'online.js' ? path.join(__dirname, 'online.js') : path.join(ROOT, s);
     fs.copyFileSync(src, path.join(out, s));
