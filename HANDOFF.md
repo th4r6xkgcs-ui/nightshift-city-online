@@ -1,5 +1,9 @@
 # HANDOFF — Nightshift City Online
 
+## CURRENT — v0.8 risk inventory (2026-10-10)
+Added inventory.js: pockets (risk), secure home stash, per-car gloveboxes, validated single-item transfers, locally persisted containers, and dropped loot bags on death. BAG inspects inventory; LOOT retrieves nearby dropped bag within two minutes; BOX opens glovebox while in vehicle; apartment STORAGE opens home stash. Initial pocket items are scrap x2 and watch x1. On death, pockets drop at death coordinates, secure containers remain untouched. Loot bags exist only in current page session and expire after two minutes; refreshing loses dropped items. Cash and equipped ammunition are NOT yet included in droppable inventory; this is not the full requested 'lose everything' rule. NPCs/other players cannot loot bags yet; no multiplayer. Browser prompt UI is temporary and not touch-polished. Added tests/inventory.cjs; test authored but not executed this turn. Run node tests/inventory.cjs plus existing suites and perform actual iPhone QA. Next: full carried equipment/cash rules, loot persistence, NPC robbery and authoritative multiplayer inventory.
+
+
 ## CURRENT — v0.7 shops and recovery (2026-10-10)
 Branch codex/mobile-controls-v03, PR #1. Added recovery.js: corner-shop service menu, ammo at $2/round (up to 30 per purchase, 240 reserve cap, partial packs charged only for delivered rounds), first aid $40 (up to 40 HP; no charge at full health), vehicle collision damage above speed 4, three-second hospital recovery with up-to-$100 fee capped by cash. Recovery cancels reload, releases vehicle, clears bullets/input and returns player to safe West End intersection (440,340) with full health and cleared heat. Zero-health saves recover on first frame. Shop/recovery blocks gameplay actions and pauses city simulation.
 
