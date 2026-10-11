@@ -219,3 +219,5 @@ Also:
 - New goals: fishing ×3, jobs ×2, lab, Respect. Goals total: 45.
 
 Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,weapons,tuning,races,home-upgrades,dailies,respect,fishing,jobs-lab}.cjs`). Every browser flow (skills, guns, casino, home, tuning, fishing autoplay, taxi/hit/lab/drop) passes on v0.51 with no page errors.
+- **Weapon mods** (weapons-data.js `MODS`, `effective()`, `buyMod()`): Extended mag (+50%, capped at 30), Laser grip (spread ×0.5), Scope (range ×1.35, spread ×0.6) and Suppressor (heat per shot ×0.3 via a microtask after the game's +0.08; 80% of `Crime.report(...,'gunshot')` calls are skipped; `Citizens.alert` radius 260 → 70). Bought per gun in the gun shop; the 🔇 shows on the weapon pill. Verified: 6 pistol shots give heat 0.48 unsuppressed vs 0.144 suppressed. Hooks added: `NightshiftCrime.report` and `NightshiftCitizens.alert`.
+- **City guide** on the HUSTLE phone: every activity spot (casino, gun shop, tuning, fishing, labs, races, home, dealers, properties) with a GPS button (`NightshiftMap.navigate`).
