@@ -14,7 +14,7 @@ for (let i = 0; i < 400; i++) {
 }
 console.log('PASS: deterministic daily picks (3 distinct, sane rewards) and date keys');
 const s = D.clean({});
-const st = { delivery: 10, salvage: 5, sold: 40, batches: 2, escapes: 1, drove: 50000, walked: 9000, shots: 500, earned: 9000, casinoSpins: 3, raceRuns: 1 };
+const st = Object.fromEntries([...new Set(D.POOL.map((c) => c.stat))].map((k, i) => [k, 100 + i * 7])); // every stat any challenge uses
 let r = D.roll(s, day(2026, 10, 11), st);
 assert.ok(r.newDay && r.newWeek); assert.deepEqual(s.base, st, 'baseline = current lifetime stats (nothing retroactive)');
 assert.deepEqual(D.claim(s, day(2026, 10, 11), st), [], 'no progress, no pay');

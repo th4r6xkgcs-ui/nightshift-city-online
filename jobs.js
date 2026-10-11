@@ -227,6 +227,8 @@
     for (const s of root.NightshiftFishingData?.SPOTS || []) add('fish-' + s.id, '🎣 ' + s.name, s);
     for (const l of root.NightshiftLab?.sites?.() || []) add(l.id, l.label, l);
     for (const r of root.NightshiftRaces?.starts?.() || []) add('race-' + r.id, '🏁 ' + (root.NightshiftRacesData?.BY_ID?.[r.id]?.name || 'Race'), r);
+    for (const v of root.NightshiftHeists?.vaults?.() || []) add('bank-' + v.id, '🏦 ' + v.name + ' (heist)', v);
+    for (const v of root.NightshiftVenues?.places?.() || []) add('venue-' + v.id, (v.kind === 'gym' ? '🏋️ ' : '🪩 ') + v.name, v);
     add('home', '🏠 Your apartment', { x: 880, y: 680 });
     for (const m of root.NightshiftBusinessRules?.MARKETS || []) add('m-' + m.id, '💰 ' + m.name, m);
     for (const pr of root.NightshiftBusinessRules?.PROPERTIES || []) add('p-' + pr.id, '🏚️ ' + pr.name, pr);
