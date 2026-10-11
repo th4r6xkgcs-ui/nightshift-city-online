@@ -63,7 +63,7 @@ function perform(cmd){
  const message=result.message||result.reason;render(message);say(message);return result;
 }
 function render(message=''){
- const contact=CONTACTS.find(c=>c.id===selected);panel.textContent='';text('small','NIGHTSHIFT · STREET LIFE');text('h2',contact?contact.name:'Find your place in the city');
+ const contact=CONTACTS.find(c=>c.id===selected);panel.textContent='';const dismiss=button('×',close);dismiss.className='streetClose';dismiss.setAttribute('aria-label','Close street dialogue');text('small','NIGHTSHIFT · STREET LIFE');text('h2',contact?contact.name:'Find your place in the city');
  text('p',gangName()+' · $'+player.cash+' · Heat '+player.heat.toFixed(1));
  if(message){const status=text('p',message);status.setAttribute('role','status')}
  if(!contact){text('p','Visit Mara in Southside or Inez at the harbor to join their gang or found your own. Buyers trade the stock in your pockets.');for(const c of CONTACTS)button('Go to '+c.name,()=>{close();root.NightshiftMap.navigate({id:'street-'+c.id,label:c.name,x:c.x,y:c.y})})}
@@ -80,7 +80,7 @@ function render(message=''){
   for(const item of ['weed','coke']){text('p',item.toUpperCase()+' · carried '+(pocket[item]||0));button('Buy 1 '+item+' · $'+market.buy[item],()=>perform({action:'buy',item,count:1}));button('Sell 1 '+item+' · $'+market.sell[item],()=>perform({action:'sell',item,count:1}))}
   text('p','Uses the city’s dealer stock, demand and heat. Carried goods drop on death. Heat 2+ or hostile local reputation blocks trade.');
  }
- root.NightshiftCrewOps?.controls(panel,contact);button('Close',close);
+ root.NightshiftRivals?.controls(panel,contact);root.NightshiftCrewOps?.controls(panel,contact);button('Close',close);
 }
 function open(id=null){if(!panel.hidden||otherMenu()||player.hp<=0)return false;const contact=CONTACTS.find(c=>c.id===id);if(id&&(!contact||!nearby(contact)))return false;root.releaseControls?.();selected=id;panel.hidden=false;render();return true}
 function locations(){return CONTACTS.map(c=>({...c,action:'TALK',hint:c.name+' · '+(c.crew?'gang choices and street work':'buy / sell carried stock')}))}
