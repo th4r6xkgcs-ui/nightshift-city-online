@@ -8,7 +8,7 @@ Dependency-free Canvas client with walking, twin-stick aiming, combat, NPC crime
 ## Run and verify
 Use Node 24 or newer. No npm installation is required. `npm run build` creates a static dist bundle for hosting.
 - `python3 -m http.server 8080` serves the game at localhost:8080.
-- `npm run check` runs 32 suites and syntax-checks every root JavaScript module.
+- `npm run check` runs 33 suites and syntax-checks every root JavaScript module.
 - `npm run test:browser` is a separate harness for a configured browser environment.
 - `node tests/render.cjs /tmp/city.png` optionally renders Canvas with `@napi-rs/canvas`; this verifies neither HTML layout nor touch/audio.
 
