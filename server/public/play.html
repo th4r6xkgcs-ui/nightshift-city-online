@@ -56,9 +56,13 @@
 <script src="/shared/rules.js"></script>
 <script src="/shared/protocol.js"></script>
 <script src="/shared/city.js"></script>
+<script src="/shared/movement.js"></script>
+<script src="/shared/net-client.js"></script>
 <script>
 'use strict';
-const R = NightshiftRules, P = NightshiftProtocol, city = NightshiftCity.createCity();
+// This page uses the same drop-in client the real game can use: NightshiftNet
+// (prediction for your player, smoothing for others, auto-reconnect).
+const R = NightshiftRules, city = NightshiftCity.createCity();
 const $ = (id) => document.getElementById(id);
 const cv = $('c'), g = cv.getContext('2d');
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
@@ -66,65 +70,43 @@ const store = { get(k) { try { return localStorage.getItem(k); } catch { return 
 // token lives per tab (sessionStorage) with the name remembered globally.
 const tabStore = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch {} } };
 
-let ws = null, me = null, myId = null, others = new Map(), bags = [], seq = 0, txN = 0;
-let move = { x: 0, y: 0 }, aim = 0, firing = false, sprint = false, lastSent = '', lastFire = 0;
+let net = null, me = null, myId = null, others = new Map(), bags = [];
+let move = { x: 0, y: 0 }, aim = 0, firing = false, sprint = false;
 const keys = {};
-const draw = { x: R.spawn.x, y: R.spawn.y };
 
 function toast(text, bad) {
   const t = $('toast'); t.textContent = text; t.style.color = bad ? 'var(--bad)' : 'var(--ink)';
   t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 1600);
 }
-const send = (m) => { if (ws && ws.readyState === 1) ws.send(JSON.stringify(m)); };
-const tx = () => 't' + Date.now().toString(36) + (txN++);
+
+function onResult(m) {
+  if (m.req === 'fire') { if (m.hit) toast('Hit!'); else if (m.blocked) toast('Blocked: ' + m.blocked); }
+  else if (!m.ok) toast(m.reason, true);
+  else if (m.req === 'buy') toast('Bought ' + m.item + ' · -$' + m.cost);
+  else if (m.req === 'pickup') toast('Looted $' + m.got.cash + ' · ' + m.got.rounds + ' rounds');
+  else if (m.req === 'pvp') toast(m.pvp ? 'PvP ON (both players need it on)' : 'PvP OFF');
+  else if (m.req === 'use') toast('Healed');
+  else if (m.req === 'home') toast('Apartment bought · -$' + m.cost);
+  else if (m.req === 'stash') toast((m.dir === 'in' ? 'Stored ' : 'Took ') + (m.item === 'cash' ? '$' + m.count : m.count + ' ' + m.item));
+  else if (m.req === 'reload') toast('Reloading…');
+}
+function onEvent(m) {
+  if (m.kind === 'hit') toast('You were hit · ' + m.hp + ' HP', true);
+  else if (m.kind === 'death') toast(m.victim === myId ? 'You died · bag dropped' : 'Player down', m.victim === myId);
+  else if (m.kind === 'respawn') toast('Back at the clinic');
+  else if (m.kind === 'received') toast('Received $' + m.cash);
+}
+const STATUS = { connecting: ['connecting…', 'var(--dim)'], online: ['online', 'var(--ok)'], offline: ['offline · retrying', 'var(--bad)'],
+  replaced: ['signed in elsewhere', 'var(--bad)'], rejected: ['server refused', 'var(--bad)'], closed: ['closed', 'var(--dim)'] };
 
 function connect(name) {
-  const url = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host;
-  ws = new WebSocket(url);
-  $('conn').textContent = 'connecting…';
-  ws.onopen = () => {
-    const token = tabStore.get('nsco-token');
-    send(token ? { t: 'hello', name, v: P.VERSION, token } : { t: 'hello', name, v: P.VERSION });
-  };
-  ws.onmessage = (e) => {
-    const m = JSON.parse(e.data);
-    if (m.t === 'welcome') {
-      myId = m.id; me = m.you; tabStore.set('nsco-token', m.token);
-      draw.x = me.x; draw.y = me.y;
-      $('conn').textContent = 'online'; $('conn').style.color = 'var(--ok)';
-      toast(m.resumed ? 'Welcome back, ' + me.name : 'Joined as ' + me.name);
-    } else if (m.t === 'state') {
-      me = m.you; bags = m.bags;
-      const seen = new Set();
-      for (const o of m.others) {
-        seen.add(o.id);
-        const prev = others.get(o.id);
-        others.set(o.id, { ...o, dx: prev ? prev.dx : o.x, dy: prev ? prev.dy : o.y });
-      }
-      for (const id of others.keys()) if (!seen.has(id)) others.delete(id);
-      $('who').textContent = m.others.length ? m.others.length + ' player' + (m.others.length > 1 ? 's' : '') + ' nearby' : 'nobody nearby';
-    } else if (m.t === 'result') {
-      if (m.req === 'fire') { if (m.hit) toast('Hit!'); else if (m.blocked) toast('Blocked: ' + m.blocked); }
-      else if (!m.ok) toast(m.reason, true);
-      else if (m.req === 'buy') toast('Bought ' + m.item + ' · -$' + m.cost);
-      else if (m.req === 'pickup') toast('Looted $' + m.got.cash + ' · ' + m.got.rounds + ' rounds');
-      else if (m.req === 'pvp') toast(m.pvp ? 'PvP ON (both players need it on)' : 'PvP OFF');
-      else if (m.req === 'use') toast('Healed');
-      else if (m.req === 'home') toast('Apartment bought · -$' + m.cost);
-      else if (m.req === 'stash') toast((m.dir === 'in' ? 'Stored ' : 'Took ') + (m.item === 'cash' ? '$' + m.count : m.count + ' ' + m.item));
-      else if (m.req === 'reload') toast('Reloading…');
-    } else if (m.t === 'event') {
-      if (m.kind === 'hit') toast('You were hit · ' + m.hp + ' HP', true);
-      else if (m.kind === 'death') toast(m.victim === myId ? 'You died · bag dropped' : 'Player down', m.victim === myId);
-      else if (m.kind === 'respawn') toast('Back at the clinic');
-      else if (m.kind === 'received') toast('Received $' + m.cash);
-    } else if (m.t === 'error') toast(m.reason, true);
-  };
-  ws.onclose = (e) => {
-    $('conn').textContent = e.code === 4004 ? 'signed in elsewhere' : 'offline · retrying';
-    $('conn').style.color = 'var(--bad)';
-    if (e.code !== 4004) setTimeout(() => connect(name), 1500);
-  };
+  net = NightshiftNet.createClient({
+    url: (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host,
+    name, token: tabStore.get('nsco-token'), city,
+    onWelcome: (w) => { myId = w.id; tabStore.set('nsco-token', w.token); toast(w.resumed ? 'Welcome back, ' + w.you.name : 'Joined as ' + w.you.name); },
+    onStatus: (s) => { const [t, c] = STATUS[s] || [s, 'var(--dim)']; $('conn').textContent = t; $('conn').style.color = c; },
+    onResult, onEvent, onError: (m) => toast(m.reason, true),
+  });
 }
 
 $('joinForm').onsubmit = (e) => {
@@ -158,7 +140,7 @@ stick($('right'), (x, y) => { if (Math.hypot(x, y) > 0.25) { aim = Math.atan2(y,
 // ---- keyboard + mouse ----
 addEventListener('keydown', (e) => {
   keys[e.key.toLowerCase()] = true;
-  if (e.key === 'r') send({ t: 'reload' });
+  if (e.key === 'r') net?.reload();
   if (e.key === 'e') loot();
 });
 addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
@@ -171,37 +153,31 @@ function loot() {
   if (!me) return;
   const b = bags.map((b) => ({ b, d: Math.hypot(b.x - me.x, b.y - me.y) })).sort((a, b) => a.d - b.d)[0];
   if (!b) return toast('No bag nearby', true);
-  send({ t: 'pickup', bag: b.b.id });
+  net.pickup(b.b.id);
 }
-$('bReload').onclick = () => send({ t: 'reload' });
-$('bPvp').onclick = () => me && send({ t: 'pvp', on: !me.pvp });
+$('bReload').onclick = () => net?.reload();
+$('bPvp').onclick = () => me && net.setPvp(!me.pvp);
 $('bLoot').onclick = loot;
-$('bMed').onclick = () => send({ t: 'use', item: 'medkit' });
-$('bAmmo').onclick = () => send({ t: 'buy', item: 'ammo', tx: tx() });
-$('bKit').onclick = () => send({ t: 'buy', item: 'medkit', tx: tx() });
-$('bHome').onclick = () => send({ t: 'home', tx: tx() });
+$('bMed').onclick = () => net?.use('medkit');
+$('bAmmo').onclick = () => net?.buy('ammo');
+$('bKit').onclick = () => net?.buy('medkit');
+$('bHome').onclick = () => net?.buyHome();
 // STASH $: store all carried cash; with empty pockets, take it all back.
 $('bStash').onclick = () => {
   if (!me) return;
   const kept = me.home.stash.cash || 0;
-  if (me.cash > 0) send({ t: 'stash', dir: 'in', item: 'cash', count: me.cash, tx: tx() });
-  else if (kept > 0) send({ t: 'stash', dir: 'out', item: 'cash', count: kept, tx: tx() });
+  if (me.cash > 0) net.stash('in', 'cash', me.cash);
+  else if (kept > 0) net.stash('out', 'cash', kept);
   else toast('No cash to store', true);
 };
 
-// ---- send intent: on change, plus a 10 Hz heartbeat ----
-let lastBeat = 0;
-function sendInput(now) {
+// ---- controls -> network client (it sends on change + heartbeat) ----
+function readControls() {
   let mx = move.x, my = move.y, sp = sprint;
   const kx = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
   const ky = (keys.s || keys.arrowdown ? 1 : 0) - (keys.w || keys.arrowup ? 1 : 0);
   if (kx || ky) { mx = kx; my = ky; sp = !!keys.shift; }
-  const key = [mx.toFixed(2), my.toFixed(2), aim.toFixed(2), sp].join();
-  if (key !== lastSent || now - lastBeat > 100) {
-    send({ t: 'input', seq: ++seq, mx, my, aim, sprint: sp });
-    lastSent = key; lastBeat = now;
-  }
-  if (firing && me && !me.dead && now - lastFire >= R.combat.fireIntervalMs) { send({ t: 'fire', aim }); lastFire = now; }
+  return { mx, my, aim, sprint: sp };
 }
 
 // ---- render ----
@@ -220,9 +196,19 @@ function person(x, y, a, color, label, hp, dead) {
   g.restore();
 }
 
+let lastFrame = performance.now();
+const draw = { x: R.spawn.x, y: R.spawn.y };
 function frame(now) {
-  sendInput(now);
-  if (me) { draw.x += (me.x - draw.x) * 0.35; draw.y += (me.y - draw.y) * 0.35; }
+  const dt = now - lastFrame; lastFrame = now;
+  if (net) {
+    net.setInput(readControls());
+    if (firing && me && !me.dead) net.fire(aim);
+    const view = net.update(dt);
+    me = view.me; bags = view.bags;
+    others = new Map(view.others.map((o) => [o.id, o]));
+    if (me) { draw.x = me.x; draw.y = me.y; } // prediction already smooths: no camera lag
+    $('who').textContent = view.others.length ? view.others.length + ' player' + (view.others.length > 1 ? 's' : '') + ' nearby' : 'nobody nearby';
+  }
   const W = innerWidth, H = innerHeight;
   g.fillStyle = '#20383a'; g.fillRect(0, 0, W, H);
   g.save(); g.translate(Math.round(W / 2 - draw.x), Math.round(H / 2 - draw.y));
@@ -246,14 +232,11 @@ function frame(now) {
     g.fillStyle = '#e8d078'; g.fillText('SHOP · trade here', s.x, s.y + 4);
   }
   for (const b of bags) { g.fillStyle = '#c99a4a'; g.fillRect(b.x - 8, b.y - 8, 16, 16); g.fillStyle = '#fff'; g.fillText('BAG', b.x, b.y - 12); }
-  for (const o of others.values()) {
-    o.dx += (o.x - o.dx) * 0.3; o.dy += (o.y - o.dy) * 0.3;
-    person(o.dx, o.dy, o.aim, o.pvp ? '#e46b6b' : '#7ba7e0', o.name, o.hp, o.dead);
-  }
+  for (const o of others.values()) person(o.x, o.y, o.aim, o.pvp ? '#e46b6b' : '#7ba7e0', o.name, o.hp, o.dead);
   if (me) person(draw.x, draw.y, aim, '#e8d078', me.name + ' (you)', me.hp, me.dead);
   g.restore();
   if (me) {
-    $('hp').textContent = me.hp + ' HP'; $('cash').textContent = '$' + me.cash;
+    $('hp').textContent = me.hp + ' HP';
     $('ammo').textContent = (me.pocket.pistol ? '' : 'no pistol · ') + me.mag + '/' + R.combat.magSize + ' +' + me.reserve + (me.reloading ? ' ⏳' : '');
     $('bHome').hidden = me.home.owned;
     $('cash').textContent = '$' + me.cash + (me.home.owned ? ' · stash $' + (me.home.stash.cash || 0) : '');

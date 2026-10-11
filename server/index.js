@@ -21,6 +21,8 @@ const STATIC = {
   '/shared/rules.js': ['../shared/rules.js', 'text/javascript; charset=utf-8'],
   '/shared/protocol.js': ['../shared/protocol.js', 'text/javascript; charset=utf-8'],
   '/shared/city.js': ['../shared/city.js', 'text/javascript; charset=utf-8'],
+  '/shared/movement.js': ['../shared/movement.js', 'text/javascript; charset=utf-8'],
+  '/shared/net-client.js': ['../shared/net-client.js', 'text/javascript; charset=utf-8'],
 };
 function serveStatic(req, res) {
   const url = (req.url || '/').split('?')[0];

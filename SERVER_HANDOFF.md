@@ -4,9 +4,38 @@ Separate file on purpose so Claude and Codex never edit the same handoff at the
 same time. Codex: please don't edit `server/`, `shared/` or this file; comment
 on PR #3 instead. Claude doesn't edit client files (including `city-data.js`).
 
-## CURRENT — server v0.3 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+## CURRENT — server v0.4 (2026-10-11, branch `claude/server-scaffold`, PR #3)
 
-### New in v0.3
+### New in v0.4: drop-in network client for the game
+**`shared/net-client.js` (global `NightshiftNet`)** is the recommended way for the real game to go online. It does the hard parts so `net.js` can stay small:
+- Connect, keep the resume token, and auto-reconnect with backoff (500 ms up to 5 s). Status goes to `onStatus`: connecting / online / offline / replaced / rejected / closed.
+- **Prediction:** your player moves the same frame the stick moves, using `shared/movement.js`. That is the exact movement code the server runs, walls included. When server updates arrive, the client corrects toward server position plus not-yet-acknowledged movement: 30% of the gap per update, or an instant jump if the gap is over 80px (death, respawn, teleport).
+- **Interpolation:** other players render 100 ms in the past, blended between server updates, so they glide instead of stepping 20×/s.
+- Action helpers: `fire` (with a local cadence guard), `reload`, `use`, `pickup`, `setPvp`, `buy`, `sell`, `give`, `buyHome`, `stash`. Money actions return their `tx` id, and `retry(msg)` resends with the same id after a drop.
+
+Minimal use (browser; load `shared/rules.js`, `protocol.js`, `city.js`, `movement.js`, `net-client.js` after your own `city-data.js`):
+```js
+const net = NightshiftNet.createClient({ url: 'wss://HOST', name,
+  token: localStorage.getItem('nsco-token'),
+  onWelcome: (w) => localStorage.setItem('nsco-token', w.token),
+  onResult: (r) => { if (!r.ok) say(r.reason); }, onEvent, onStatus });
+// each frame:
+net.setInput({ mx, my, aim, sprint }); if (firing) net.fire(aim);
+const view = net.update(dtMs); // view.me (predicted x/y + server stats), view.others (smoothed), view.bags
+```
+**Global names:** mine are `NightshiftRules`, `NightshiftProtocol`, `NightshiftCity`, `NightshiftOnlineMovement` and `NightshiftNet`. I avoided `NightshiftMovement` because that's your stamina module, and a test checks I never set it.
+
+**Verified:** `npm test` gives 53 pass, 1 skipped. That includes 6 tests through a simulated **150 ms each-way** connection (stable 3/3 runs):
+- Local movement is visible before the server has even received the input.
+- After stopping, the client agrees with the server within 3px.
+- The predicted position is never inside a building.
+- Server teleports snap correctly.
+- Other players' largest per-frame jump is under 7px, versus 9px raw ticks, and they never move backwards.
+- A dropped connection reconnects to the same character.
+
+The test page now runs on this library. Browser checks pass on 4 screen sizes with no errors.
+
+### v0.3
 - **Apartment:** `home {tx}` buys the $1,200 starter apartment while standing inside `layout.apartment.radius`. Once per character, idempotent.
 - **Home stash:** `stash {dir:'in'|'out', item, count, tx}` moves things between pockets and home, matching client limits: cash up to 100M, spare ammo up to 270 (never the loaded magazine, not while reloading), items up to 999. Owner only, at home only, and every check runs before anything changes.
   - The stash survives death, is saved in the profile, is re-clamped on restore, and other players never see it.

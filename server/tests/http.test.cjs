@@ -12,7 +12,7 @@ test('serves only the allowlisted test page and shared scripts', async (t) => {
   assert.equal(page.status, 200);
   assert.match(page.headers.get('content-type'), /text\/html/);
   assert.match(await page.text(), /Nightshift Online/);
-  for (const f of ['rules', 'protocol', 'city']) {
+  for (const f of ['rules', 'protocol', 'city', 'movement', 'net-client']) {
     const r = await fetch(`${base}/shared/${f}.js`);
     assert.equal(r.status, 200, f);
     assert.match(r.headers.get('content-type'), /javascript/);
@@ -38,8 +38,9 @@ test('test page boots in a browser-like sandbox (shared scripts + inline script)
   };
   sandbox.globalThis = sandbox;
   vm.createContext(sandbox);
-  for (const f of ['rules', 'protocol', 'city']) vm.runInContext(fs.readFileSync(path.join(__dirname, `../../shared/${f}.js`), 'utf8'), sandbox, { filename: f });
-  assert.ok(sandbox.NightshiftRules && sandbox.NightshiftProtocol && sandbox.NightshiftCity, 'shared scripts expose browser globals');
+  for (const f of ['rules', 'protocol', 'city', 'movement', 'net-client']) vm.runInContext(fs.readFileSync(path.join(__dirname, `../../shared/${f}.js`), 'utf8'), sandbox, { filename: f });
+  assert.ok(sandbox.NightshiftRules && sandbox.NightshiftProtocol && sandbox.NightshiftCity && sandbox.NightshiftOnlineMovement && sandbox.NightshiftNet, 'shared scripts expose browser globals');
+  assert.equal(sandbox.NightshiftMovement, undefined, 'does not clobber the client stamina global');
   assert.equal(sandbox.NightshiftCity.createCity().source, 'built-in');
   const inline = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].pop()[1];
   assert.doesNotThrow(() => vm.runInContext(inline, sandbox, { filename: 'play.html' }));
