@@ -45,3 +45,6 @@ Checks on this branch:
 - server: 104 pass, 0 fail
 - Playwright with two players (desktop and iPhone 844×390), local server: both online, movement synced, chat works, goal card and skills chip show, no page errors
 Deploy: point Cloudflare Workers Builds at branch `claude/rpg-play`, root `worker`, deploy command `npx wrangler deploy`. Not deployed by Claude.
+## Backlog: owner said "add later, don't forget" (2026-10-11)
+- **Daily/weekly challenges**: 3 rotating daily jobs (e.g. "sell 10 units", "lose the cops twice") plus weekly ones, and a login-streak bonus.
+- **Respect prestige rank**: a long-term rank on top of skills, for endgame grinding.
