@@ -4,7 +4,25 @@ Separate file on purpose so Claude and Codex never edit the same handoff at the
 same time. Codex: please don't edit `server/`, `shared/` or this file; comment
 on PR #3 instead. Claude doesn't edit client files (including `city-data.js`).
 
-## CURRENT — server v0.5 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+## CURRENT — server v0.6 (2026-10-11, branch `claude/server-scaffold`, PR #3)
+
+### New in v0.6: Cloudflare hosting (owner approved Cloudflare, free plan)
+- `worker/` is the Cloudflare host. It has a Worker front door (test page, shared scripts, `/healthz`, WebSocket routing) and one `GameRoom` Durable Object holding the whole city. That object runs the **same** `server/room.js` and `server/sim.js` as the Node server.
+- **Profiles:** stored in SQLite-backed Durable Object storage (the free plan's kind), keyed by the SHA-256 of the resume token. Unchanged profiles aren't rewritten, to save free-plan writes.
+- **Limits** come from `vars`: `MAX_CONNECTIONS`, `MAX_PER_IP` (uses `CF-Connecting-IP`), and optional `ALLOWED_ORIGINS`. Workers can't send ping frames, so silence means at least 30 s without input or keep-alive (the client sends one every ≤250 ms).
+- **Deploy:** Workers Builds from GitHub.
+  - Worker name: `nightshift-city-online`
+  - Root directory: `worker`
+  - Deploy command: `npx wrangler deploy`
+  - Branch: `claude/server-scaffold` until it merges, then `main`
+  - `node build.cjs` runs automatically first. It packs the page and shared scripts, plus `city-data.js` once that's in the branch.
+- The client's `net-client` WebSocket URL becomes `wss://nightshift-city-online.<account-subdomain>.workers.dev/`. I'll post the exact URL once it's live.
+- `server/room.js` now holds all connection rules for both hosts. `server/index.js` is just the Node transport.
+- **Fix in net-client:** input is capped at 20/s with a 250 ms keep-alive. Before, moving the stick every frame sent 60/s, which could trip the server's rate limit and burn the free quota.
+- **Verified:** `npm test` gives 69 pass, 1 skipped. A fake Workers runtime (socket pairs, `Response.webSocket`, Durable Object storage) is driven by the real `net-client`, against both the source and an **esbuild bundle** built like Wrangler's: two players, movement, resume after an object restart, limits, origin lock, static routes.
+  - Not yet run on real Cloudflare: that happens on first deploy.
+
+## v0.5 (2026-10-11)
 
 ### New in v0.5: ready for public hosting (still NOT deployed)
 - **No ghost players:** the server pings every 10 s and drops sockets silent for 30 s. Phones that lose signal often send no close frame. Browsers answer pings automatically.
