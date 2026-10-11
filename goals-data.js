@@ -75,6 +75,8 @@
     { id: 'fish50', place: 'fishing', tier: 'Rising', title: 'Angler', hint: 'Land 50 catches.',
       progress: (c) => [Math.min(c.fishCaught, 50), 50], reward: { cash: 2000, xp: { fishing: 400 } } },
 
+    { id: 'jobs25', tier: 'Rising', title: 'Fixer', hint: 'Finish 25 Hustle phone jobs.',
+      progress: (c) => [Math.min(c.jobsDone, 25), 25], reward: { cash: 3000, xp: { charisma: 300 } } },
     { id: 'cars3', place: 'garage', tier: 'Kingpin', title: 'Collector', hint: 'Own 3 cars.',
       progress: (c) => [Math.min(c.carsOwned, 3), 3], reward: { cash: 3000 } },
     { id: 'earn100k', tier: 'Kingpin', title: 'Six figures', hint: 'Earn $100,000 in total.',
