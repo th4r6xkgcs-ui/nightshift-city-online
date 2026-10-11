@@ -32,6 +32,8 @@ class Room {
     this.tokens = new Map();  // playerId -> token
     this.online = new Map();  // token -> playerId (one session per character)
     this.state = new Map();   // conn -> per-connection state
+    this.ipBans = new Map();  // ip -> banned-until ms (temporary, in memory)
+    this.startedAt = clock();
     this.last = clock();
   }
 
@@ -41,6 +43,10 @@ class Room {
 
   open(conn) {
     const N = RULES.net;
+    if ((this.ipBans.get(conn.ip) || 0) > this.clock()) {
+      this._send(conn, { t: S.ERROR, reason: 'banned' });
+      return conn.close(4005, 'banned');
+    }
     const st = { id: null, strikes: 0, bucket: N.maxMsgsPerSec, bucketAt: this.clock(), helloing: false, queue: [] };
     st.helloTimer = setTimeout(() => { if (!st.id) conn.close(4001, 'hello timeout'); }, this.helloTimeoutMs);
     this.state.set(conn, st);
@@ -85,6 +91,11 @@ class Room {
     let saved = null;
     try { saved = token ? await this.store.load(token) : null; } catch { saved = null; }
     if (!this.state.has(conn)) return; // closed while loading
+    if (saved && saved.banned) {
+      st.helloing = false;
+      this._send(conn, { t: S.ERROR, reason: 'banned' });
+      return conn.close(4005, 'banned');
+    }
     if (!saved) token = newToken();
 
     const prior = this.online.get(token);
@@ -159,6 +170,48 @@ class Room {
   reap(idleMs, now = Date.now()) {
     for (const conn of this.state.keys()) {
       if (now - conn.lastSeen > idleMs) (conn.terminate || conn.close).call(conn, 4000, 'idle');
+    }
+  }
+
+  // ---------- moderation (called by the host's authenticated /admin route) ----------
+  stats() {
+    return { players: this.conns.size, uptimeSec: Math.round((this.clock() - this.startedAt) / 1000), tick: this.world.tick };
+  }
+
+  async admin(cmd) {
+    const c = cmd && typeof cmd === 'object' ? cmd : {};
+    const now = this.clock();
+    const find = () => this.world.players.get(String(c.id || ''))
+      || [...this.world.players.values()].find((p) => p.name.toLowerCase() === String(c.name || '').toLowerCase());
+    switch (c.action) {
+      case 'list':
+        return { ok: true, players: [...this.world.players.values()].map((p) => ({
+          id: p.id, name: p.name, x: Math.round(p.x), y: Math.round(p.y), hp: p.hp, cash: p.cash,
+          deliveries: p.stats.deliveries, ip: this.conns.get(p.id)?.ip })) };
+      case 'kick': case 'ban': {
+        const p = find();
+        if (!p) return { ok: false, reason: 'no such player' };
+        const conn = this.conns.get(p.id);
+        if (c.action === 'ban') {
+          p.banned = true;
+          await this.persist(p.id);
+          const hours = Math.min(Math.max(Number(c.hours) || 24, 1), 24 * 30);
+          if (conn?.ip) this.ipBans.set(conn.ip, now + hours * 3600000);
+        }
+        this._send(conn, { t: S.ERROR, reason: c.action === 'ban' ? 'banned' : 'kicked' });
+        conn?.close(c.action === 'ban' ? 4005 : 4006, c.action === 'ban' ? 'banned' : 'kicked');
+        return { ok: true, [c.action === 'ban' ? 'banned' : 'kicked']: { id: p.id, name: p.name } };
+      }
+      case 'unban-ip':
+        return { ok: this.ipBans.delete(String(c.ip || '')) };
+      case 'announce': {
+        const text = World.cleanChat(c.text || '');
+        if (!text) return { ok: false, reason: 'empty' };
+        for (const conn of this.conns.values()) this._send(conn, { t: S.CHAT, from: 'server', name: 'SERVER', ch: 'city', text });
+        return { ok: true, sent: this.conns.size };
+      }
+      default:
+        return { ok: false, reason: 'unknown action', actions: ['list', 'kick', 'ban', 'unban-ip', 'announce'] };
     }
   }
 

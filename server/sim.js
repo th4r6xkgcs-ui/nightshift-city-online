@@ -105,6 +105,7 @@ class World {
       mag: p.mag, reserve: p.reserve, pocket: { ...p.pocket }, pvp: p.pvp,
       home: { owned: p.home.owned, stash: { ...p.home.stash } },
       job: p.job && !dead ? structuredClone(p.job) : null, stats: { ...p.stats },
+      ...(p.banned ? { banned: true } : {}),
       x: Math.round(dead ? RULES.hospital.x : p.x), y: Math.round(dead ? RULES.hospital.y : p.y),
     };
   }

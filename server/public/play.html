@@ -119,7 +119,7 @@ function onEvent(m) {
   else if (m.kind === 'job') toast(m.status === 'expired' ? 'Job ran out of time' : 'Job failed', true);
 }
 const STATUS = { connecting: ['connecting…', 'var(--dim)'], online: ['online', 'var(--ok)'], offline: ['offline · retrying', 'var(--bad)'],
-  replaced: ['signed in elsewhere', 'var(--bad)'], rejected: ['server refused', 'var(--bad)'], closed: ['closed', 'var(--dim)'] };
+  replaced: ['signed in elsewhere', 'var(--bad)'], banned: ['banned', 'var(--bad)'], kicked: ['kicked by a moderator', 'var(--bad)'], rejected: ['server refused', 'var(--bad)'], closed: ['closed', 'var(--dim)'] };
 
 function connect(name) {
   net = NightshiftNet.createClient({

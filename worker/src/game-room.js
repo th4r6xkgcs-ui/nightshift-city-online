@@ -8,6 +8,7 @@ const { Room } = require('../../server/room.js');
 const { World } = require('../../server/sim.js');
 const { createCity, builtInLayout } = require('../../shared/city.js');
 const RULES = require('../../shared/rules.js');
+const { handleAdmin } = require('../../server/admin.js');
 
 // Profiles in Durable Object storage (SQLite-backed, free plan).
 // Keys are SHA-256 hashes of resume tokens, never the tokens themselves.
@@ -77,7 +78,15 @@ function createGameRoomClass(Base, { cityLayout = null, WebSocketPairImpl, Respo
     async fetch(request) {
       const Resp = ResponseImpl || globalThis.Response;
       const Pair = WebSocketPairImpl || globalThis.WebSocketPair;
-      if ((request.headers.get('Upgrade') || '').toLowerCase() !== 'websocket') return new Resp('expected websocket', { status: 426 });
+      if ((request.headers.get('Upgrade') || '').toLowerCase() !== 'websocket') {
+        const url = new URL(request.url);
+        const out = await handleAdmin({
+          method: request.method, path: url.pathname, authorization: request.headers.get('Authorization'),
+          bodyText: request.method === 'POST' ? (await request.text()).slice(0, 4096) : '',
+        }, this.room, this.env.ADMIN_KEY);
+        if (!out) return new Resp('expected websocket', { status: 426 });
+        return new Resp(JSON.stringify(out.body), { status: out.status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
+      }
       const L = this._limits();
       if (L.origins && !L.origins.includes(request.headers.get('Origin'))) return new Resp('forbidden', { status: 403 });
       if (this.sockets.size >= L.maxConnections) return new Resp('server full', { status: 503 });
@@ -124,7 +133,7 @@ function createGameRoomClass(Base, { cityLayout = null, WebSocketPairImpl, Respo
 async function handleHttp(request, env, files, ResponseImpl) {
   const Resp = ResponseImpl || globalThis.Response;
   const url = new URL(request.url);
-  if ((request.headers.get('Upgrade') || '').toLowerCase() === 'websocket') {
+  if ((request.headers.get('Upgrade') || '').toLowerCase() === 'websocket' || url.pathname === '/admin' || url.pathname === '/stats') {
     const stub = env.GAME.get(env.GAME.idFromName('city-1'));
     return stub.fetch(request);
   }

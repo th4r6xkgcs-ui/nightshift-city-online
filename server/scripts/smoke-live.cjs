@@ -10,7 +10,14 @@ if (!/^https?:\/\//.test(base)) { console.error('usage: smoke-live.cjs <http(s):
 const wsUrl = base.replace(/^http/, 'ws') + '/';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const results = [];
-const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  · ' + detail : ''}`); };
+const inCI = !!process.env.GITHUB_ACTIONS;
+const check = (name, ok, detail = '') => {
+  results.push({ name, ok });
+  const line = `${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  · ' + detail : ''}`;
+  console.log(line);
+  // In GitHub Actions, also publish each result as an annotation (readable via the API).
+  if (inCI) console.log(`::${ok ? 'notice' : 'error'} title=live smoke::${line.replace(/[\r\n]+/g, ' ').slice(0, 300)}`);
+};
 
 function bot(name, token) {
   const s = { name, welcome: null, chats: [], results: [], events: [] };
@@ -32,11 +39,11 @@ async function until(fn, ms = 8000) { const t0 = Date.now(); while (Date.now() -
   const run = Date.now().toString(36).slice(-4);
   // HTTP side
   try {
-    const h = await fetch(base + '/healthz');
+    const h = await fetch(base + '/healthz', { signal: AbortSignal.timeout(10000) });
     check('health endpoint', h.ok && (await h.text()).trim() === 'ok', `HTTP ${h.status}`);
-    const page = await fetch(base + '/');
+    const page = await fetch(base + '/', { signal: AbortSignal.timeout(10000) });
     check('test page served', page.ok && /Nightshift Online/.test(await page.text()), `HTTP ${page.status}`);
-    const lib = await fetch(base + '/shared/net-client.js');
+    const lib = await fetch(base + '/shared/net-client.js', { signal: AbortSignal.timeout(10000) });
     check('client library served', lib.ok, `HTTP ${lib.status}`);
   } catch (e) { check('HTTP reachable', false, e.message); }
 

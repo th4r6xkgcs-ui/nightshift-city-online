@@ -11,6 +11,7 @@ const { World } = require('./sim.js');
 const { Room } = require('./room.js');
 const { MemoryStore, FileStore } = require('./store.js');
 const { STATIC } = require('./static-files.js');
+const { handleAdmin } = require('./admin.js');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -34,8 +35,20 @@ function createServer({
   allowedOrigins = null,      // e.g. ['https://game.example'] — null allows any (local dev)
   trustProxy = false,         // true behind a hosting proxy: use X-Forwarded-For
   pingEveryMs = 10000, idleTimeoutMs = 30000,
+  adminKey = null,            // enables POST /admin when set (16+ chars)
 } = {}) {
   const room = new Room({ world, store, clock });
+  const onRequest = (req, res) => {
+    const pathOnly = (req.url || '/').split('?')[0];
+    if (pathOnly !== '/admin' && pathOnly !== '/stats') return serveStatic(req, res);
+    let body = '';
+    req.on('data', (d) => { body += d; if (body.length > 4096) req.destroy(); });
+    req.on('end', async () => {
+      const out = await handleAdmin({ method: req.method, path: pathOnly, authorization: req.headers.authorization, bodyText: body }, room, adminKey);
+      res.writeHead(out.status, { 'content-type': 'application/json', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' });
+      res.end(JSON.stringify(out.body));
+    });
+  };
   const clientIp = (req) => {
     const fwd = trustProxy && req.headers['x-forwarded-for'];
     return (fwd ? String(fwd).split(',')[0].trim() : req.socket.remoteAddress) || 'unknown';
@@ -47,7 +60,7 @@ function createServer({
     if ((perIp.get(clientIp(req)) || 0) >= maxPerIp) return [429, 'Too Many Connections'];
     return null;
   };
-  const wss = new WebSocketServer({ port, host, maxPayload: RULES.net.maxMsgBytes, onRequest: serveStatic, allowUpgrade, clientIp });
+  const wss = new WebSocketServer({ port, host, maxPayload: RULES.net.maxMsgBytes, onRequest, allowUpgrade, clientIp });
 
   wss.on('connection', (ws) => {
     perIp.set(ws.ip, (perIp.get(ws.ip) || 0) + 1);
@@ -100,6 +113,7 @@ if (require.main === module) {
     maxPerIp: Number(env.MAX_PER_IP) || 8,
     allowedOrigins: env.ALLOWED_ORIGINS ? env.ALLOWED_ORIGINS.split(',').map((s) => s.trim()).filter(Boolean) : null,
     trustProxy: env.TRUST_PROXY === '1',
+    adminKey: env.ADMIN_KEY || null,
   });
   srv.ready.then(() => console.log(`Nightshift City Online server on ws://${host}:${srv.port} · test page http://localhost:${srv.port}/`));
   for (const sig of ['SIGINT', 'SIGTERM']) process.on(sig, () => srv.close().then(() => process.exit(0)));

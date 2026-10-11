@@ -65,6 +65,8 @@
         id = null;
         if (e.code === 4004) return setStatus('replaced');         // signed in on another device
         if (e.code === 4002) return setStatus('rejected');          // bad hello / version
+        if (e.code === 4005) return setStatus('banned');
+        if (e.code === 4006) return setStatus('kicked');
         setStatus('offline');
         if (o.reconnect && !closedByUser) {
           retryTimer = setTimeout(connect, retryMs);
