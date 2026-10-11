@@ -29,12 +29,12 @@ function storefrontLight(b,night){
  // Stepped translucent pixel bands create glow without per-building blur surfaces.
  if(commercial){
   g.fillStyle=color;
-  for(let k=3;k>0;k--){g.globalAlpha=night*(.025+(3-k)*.015);g.fillRect(x+12-k*3,y+h-64-k*3,w-24+k*6,19+k*6)}
-  g.globalAlpha=night*.9;g.fillRect(x+15,y+h-62,w-30,1);g.fillRect(x+15,y+h-47,w-30,1);
+  for(let k=3;k>0;k--){g.globalAlpha=night*(.025+(3-k)*.015);g.fillRect(x+12-k*3,y+h-58-k*3,w-24+k*6,19+k*6)}
+  g.globalAlpha=night*.9;g.fillRect(x+15,y+h-56,w-30,1);g.fillRect(x+15,y+h-43,w-30,1);
   if(b.name==='CLUB'||b.name==='CLOTHING'){g.globalAlpha=night*.7;for(const xx of [x+14,x+w-68]){g.fillRect(xx,y+h-31,54,1);g.fillRect(xx,y+h-31,1,24);g.fillRect(xx+53,y+h-31,1,24)}}
   if(b.name==='CLUB'||b.name==='DINER'){
    const phase=Math.floor((typeof ticks==='number'&&Number.isFinite(ticks)?ticks:0)/18)%3;
-   for(let i=0;i<14;i++){g.globalAlpha=night*(i%3===phase?.95:.35);g.fillRect(x+20+i*15,y+h-63,3,3)}
+   for(let i=0;i<14;i++){g.globalAlpha=night*(i%3===phase?.95:.35);g.fillRect(x+20+i*15,y+h-57,3,3)}
   }
  }
  // Warm entry wash; small window light pools stay clear of the street itself.
