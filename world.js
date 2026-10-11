@@ -87,7 +87,16 @@ function building(b){
  else{rect(g,'#243840',x+w/2-17,y+h-29,34,29);rect(g,'#63808a',x+w/2-13,y+h-26,25,19);rect(g,'#dcc89e',x+w/2+8,y+h-15,2,5)}
  const sign=club?'#d291b8':b.name==='DINER'?'#d7ae70':b.name==='CLOTHING'?'#9fb5a3':'#c1c0a6';
  rect(g,'#1b3038',x+12,y+h-64,w-24,19);rect(g,sign,x+14,y+h-64,w-28,2);g.fillStyle=sign;g.font='bold 11px monospace';g.textAlign='center';g.fillText(b.name,x+w/2,y+h-50);
- if(shop){for(let xx=x+9;xx<x+w-9;xx+=14)rect(g,(xx-x)%28<14?'#b89873':'#d3c4a0',xx,y+h-38,14,7);rect(g,'#30363366',x+10,y+h-31,w-20,4)}
+ if(shop){
+  for(const xx of [x+14,x+w-68]){
+   rect(g,'#182a2f88',xx+3,y+h-27,48,19);
+   if(b.name==='CLOTHING'){for(let k=0;k<2;k++){const sx=xx+13+k*24;rect(g,'#b6b5a2',sx,y+h-24,3,15);rect(g,k?'#c09885':'#8ba49c',sx-4,y+h-22,11,8);rect(g,'#485960',sx-2,y+h-14,7,5)}}
+   else if(b.name==='DINER'){rect(g,'#8d5b50',xx+6,y+h-17,13,7);rect(g,'#8d5b50',xx+31,y+h-17,13,7);rect(g,'#d6bf93',xx+19,y+h-22,11,3);rect(g,'#66706a',xx+24,y+h-19,2,9)}
+   else{for(let shelf=0;shelf<2;shelf++){for(let item=0;item<6;item++)rect(g,['#ccaa6c','#ad7370','#90aa87'][item%3],xx+7+item*7,y+h-24+shelf*9,4,5);rect(g,'#c7bea3',xx+5,y+h-18+shelf*9,44,2)}}
+   rect(g,'#bbcbb133',xx+5,y+h-27,2,18);
+  }
+  rect(g,'#343d3d',x+w/2-24,y+h-1,48,3);rect(g,'#8b8978',x+w/2-23,y+h+2,46,3);rect(g,'#615f52',x+w/2-19,y+h+5,38,3);
+  for(let xx=x+9;xx<x+w-9;xx+=14)rect(g,(xx-x)%28<14?'#b89873':'#d3c4a0',xx,y+h-38,14,7);rect(g,'#30363366',x+10,y+h-31,w-20,4)}
 }
 root.NightshiftWorld={createBuildings,road,building,ground,hash};
 })(globalThis);
