@@ -59,12 +59,12 @@ function perform(cmd){
   root.NightshiftBusinessRules.advance(root.NightshiftBusinesses.state,now);
   result=refusal?{ok:false,reason:refusal}:root.NightshiftBusinessRules.transact(root.NightshiftBusinesses.state,player,root.NightshiftInventory.state.pocket,{...cmd,id:contact.market},now);
  }else result=resolve(state,root.NightshiftCrews.state,player,root.NightshiftInventory.state.pocket,selected,cmd,now);
- if(result.ok){root.NightshiftCrewOps?.sync();persist();root.NightshiftCrews.save();root.NightshiftBusinesses.save();save();root.NightshiftAudio?.play('pickup')}
+ if(result.ok){const kind=contact.customer||contact.market?'trade':cmd.action==='work'?'help':['join','found'].includes(cmd.action)?'gang':null;if(kind)root.NightshiftMemory?.note(contact.id,kind);root.NightshiftJournal?.record(contact.customer||contact.market?'trade':cmd.action==='claim'?'territory':'gang',result.message||'Street choice completed');root.NightshiftCrewOps?.sync();persist();root.NightshiftCrews.save();root.NightshiftBusinesses.save();save();root.NightshiftAudio?.play('pickup')}
  const message=result.message||result.reason;render(message);say(message);return result;
 }
 function render(message=''){
  const contact=CONTACTS.find(c=>c.id===selected);panel.textContent='';const dismiss=button('×',close);dismiss.className='streetClose';dismiss.setAttribute('aria-label','Close street dialogue');text('small','NIGHTSHIFT · STREET LIFE');text('h2',contact?contact.name:'Find your place in the city');
- text('p',gangName()+' · $'+player.cash+' · Heat '+player.heat.toFixed(1));
+ if(contact){text('p',root.NightshiftMemory?.describe(contact.id)||'');text('blockquote',root.NightshiftMemory?.greeting(contact.id)||'')}text('p',gangName()+' · $'+player.cash+' · Heat '+player.heat.toFixed(1));
  if(message){const status=text('p',message);status.setAttribute('role','status')}
  if(!contact){text('p','Visit Mara in Southside or Inez at the harbor to join their gang or found your own. Buyers trade the stock in your pockets.');for(const c of CONTACTS)button('Go to '+c.name,()=>{close();root.NightshiftMap.navigate({id:'street-'+c.id,label:c.name,x:c.x,y:c.y})})}
  else if(contact.crew){
@@ -82,7 +82,7 @@ function render(message=''){
  }
  root.NightshiftRivals?.controls(panel,contact);root.NightshiftCrewOps?.controls(panel,contact);button('Close',close);
 }
-function open(id=null){if(!panel.hidden||otherMenu()||player.hp<=0)return false;const contact=CONTACTS.find(c=>c.id===id);if(id&&(!contact||!nearby(contact)))return false;root.releaseControls?.();selected=id;panel.hidden=false;render();return true}
+function open(id=null){if(!panel.hidden||otherMenu()||player.hp<=0)return false;const contact=CONTACTS.find(c=>c.id===id);if(id&&(!contact||!nearby(contact)))return false;root.releaseControls?.();selected=id;if(id)root.NightshiftMemory?.meet(id);panel.hidden=false;render();return true}
 function locations(){return CONTACTS.map(c=>({...c,action:'TALK',hint:c.name+' · '+(c.crew?'gang choices and street work':c.customer?'fulfill a carried-stock request':'buy / sell carried stock')}))}
 function entries(){return CONTACTS.map(c=>({kind:'street-contact',entity:{...c,hp:40,moving:false}}))}
 function badge(c){g.save();g.fillStyle=c.color;g.fillRect(c.x-10,c.y+18,20,3);if(Math.hypot(player.x-c.x,player.y-c.y)<170){g.font='bold 10px monospace';g.textAlign='center';const width=Math.min(174,c.name.length*6+12);g.fillStyle='#102839dd';g.fillRect(c.x-width/2,c.y+25,width,18);g.fillStyle=c.color;g.fillText(c.name,c.x,c.y+37);if(c.crew&&state.corners[c.crew])g.fillText(gangName()+' CORNER',c.x,c.y+55)}g.restore()}

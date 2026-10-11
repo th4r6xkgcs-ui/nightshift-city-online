@@ -1,13 +1,14 @@
-# Next tasks after v0.52
+# Larger milestones after v0.53
 
-- P0: Real iPhone Safari and desktop DOM/audio QA: portrait/landscape, STREET/crew/customer menus, live countdowns, simultaneous controls, audio and backup export/restore.
-- P1: Crew transport art and persistence improvements; companion/rival combat is a separate tested phase.
-- P1: Generate customer requests from civilian routines and add persistent relationships without duplicating inventory/market demand.
-- P1: Expand interiors and storefront art; preserve immutable collision footprints and mobile render budgets.
-- P1: Long-session economy balance: production, dealer/customer demand, escort income and corner upkeep.
-- P2 (Claude-owned): Integrate authoritative server/economy/network modules after client contracts are agreed; current private preview remains single-player.
+Owner direction: a polished solo crime RPG on phones first, larger tested batches, MMO later. Canonical combined client: codex/city-reactions-v53; Claude completed RPG snapshot 8b6c4c3. Coordinate file ownership through PR #3 and post exact combined heads for Claude's rpg-play build.
 
-Completed latest: crew passenger boarding and safe exits. Completed prior session: recruitment/follow/hold/dismiss, loyalty/support, physical escort jobs with safe saved positions, rival corner choices, street-customer sales through shared demand/ledger, routing/spawn fixes and crowded-atlas allocation fix. 84 suites pass. Canonical branch `codex/crew-transport-v52`; see current release handoffs before implementation.
+- Codex city milestone: companion/rival consequences and combat, pedestrian-driven customer requests, persistent relationships and richer world interactions. Preserve collision, inventory and economy contracts.
+- Codex presentation milestone: storefront/interior detail, crew transport art, mobile HUD/menu polish and rendering budgets. Real iPhone/DOM/audio QA is still required.
+- Claude activity milestone: bank heists, gym, club deals, lifetime stats and RPG balance. Claude owns their new modules and backend; Codex handles agreed client wiring.
+- Joint release milestone: integrate completed snapshots, regression/soak checks and private preview deployment. No isolated feature should be described as a completed project.
+- Later: authoritative multiplayer/account integration once solo systems and mobile verification are stable.
+
+Completed combined v0.53: crew transport, exact latest RPG modules, persistent named-contact familiarity, city event journal and hard-crash loyalty consequences. 88 suites pass; 86 static assets. Crew/rival combat, dynamic customer relationships and physical iPhone verification remain outstanding.
 
 ## Historical backlog (superseded by priorities above)
 

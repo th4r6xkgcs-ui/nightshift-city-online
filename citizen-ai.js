@@ -39,6 +39,6 @@ function step(npc,now,dt,context){
   if(canStep(npc,{x:npc.x,y:to.y},blocked,cars))npc.y=to.y;else npc.dy*=-1;
  }npc.moving=distance(npc,before)>.01;if(npc.moving){npc.walkTicks=(npc.walkTicks||0)+dt;npc.moveAngle=Math.atan2(npc.y-before.y,npc.x-before.x);}
 }
-function alert(source,now,{kind='gunshot',radius=260}={}){let count=0;for(const npc of peds)if(distance(npc,source)<=radius&&react(npc,source,now,kind))count++;return count}
+function alert(source,now,{kind='gunshot',radius=260}={}){root.NightshiftMemory?.disturbance(source,kind,radius);root.NightshiftCrewOps?.disturbance(source,kind);let count=0;for(const npc of peds)if(distance(npc,source)<=radius&&react(npc,source,now,kind))count++;return count}
 root.NightshiftCitizens={react,occupied,canStep,coverGoal,step,alert};
 })(globalThis);

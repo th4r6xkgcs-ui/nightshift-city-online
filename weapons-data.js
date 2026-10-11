@@ -20,12 +20,46 @@
   ];
   const BY_ID = Object.fromEntries(WEAPONS.map((w) => [w.id, w]));
   const AMMO_CRATE = { rounds: 60, price: 100 }; // bulk ammo: $1.67/round vs $2 at the corner shop
+  // Per-gun attachments. Bought separately for each gun; stats apply through effective().
+  const MODS = [
+    { id: 'extmag', name: 'Extended mag', icon: '📦', price: 900, level: 2, desc: '+50% magazine (game cap 30)' },
+    { id: 'grip', name: 'Laser grip', icon: '🔴', price: 700, level: 4, desc: 'Spread halved' },
+    { id: 'scope', name: 'Scope', icon: '🔭', price: 800, level: 5, desc: '+35% range, tighter aim' },
+    { id: 'suppressor', name: 'Suppressor', icon: '🔇', price: 1200, level: 3, desc: '70% less heat per shot; 80% of shots go unreported' },
+  ];
+  const MOD = Object.fromEntries(MODS.map((m) => [m.id, m]));
+  // Weapon stats with its mods applied.
+  function effective(w, mods = []) {
+    const e = { ...w, mods: mods.slice() };
+    if (mods.includes('extmag')) e.mag = Math.min(30, Math.round(w.mag * 1.5));
+    if (mods.includes('grip')) e.spread = w.spread * 0.5;
+    if (mods.includes('scope')) { e.range = Math.round(w.range * 1.35); e.spread = e.spread * 0.6; }
+    e.suppressed = mods.includes('suppressor');
+    return e;
+  }
+  function buyMod(state, wallet, weaponId, modId, shootingLevel) {
+    const m = MOD[modId];
+    if (!m || !BY_ID[weaponId]) return { ok: false, reason: 'Unknown mod' };
+    if (!state.owned.includes(weaponId)) return { ok: false, reason: 'Buy the gun first' };
+    const have = state.mods[weaponId] || [];
+    if (have.includes(modId)) return { ok: false, reason: 'Already fitted' };
+    if (!(shootingLevel >= m.level)) return { ok: false, reason: `Needs Shooting level ${m.level}` };
+    if (!(wallet.cash >= m.price)) return { ok: false, reason: 'Not enough cash' };
+    wallet.cash -= m.price; state.mods[weaponId] = [...have, modId];
+    return { ok: true, price: m.price };
+  }
 
   function clean(raw) {
     const owned = ['pistol'];
     if (Array.isArray(raw?.owned)) for (const id of raw.owned) if (BY_ID[id] && !owned.includes(id)) owned.push(id);
     const equipped = owned.includes(raw?.equipped) ? raw.equipped : 'pistol';
-    return { version: 1, owned, equipped };
+    const mods = {};
+    for (const [wid, list] of Object.entries(raw?.mods || {})) {
+      if (!owned.includes(wid) || !Array.isArray(list)) continue;
+      const clean = [...new Set(list.filter((m) => typeof m === 'string' && /^[a-z]+$/.test(m)))];
+      if (clean.length) mods[wid] = clean;
+    }
+    return { version: 1, owned, equipped, mods };
   }
   // Returns '' when the purchase is allowed, otherwise the reason.
   function canBuy(state, id, cash, shootingLevel) {
@@ -65,7 +99,7 @@
   }
   const dps = (w) => (w.dmg * w.pellets * 1000) / w.rate;
 
-  const api = Object.freeze({ WEAPONS, BY_ID, AMMO_CRATE, clean, canBuy, buy, equip, cycle, pelletAngles, fitMagazine, dps });
+  const api = Object.freeze({ WEAPONS, BY_ID, AMMO_CRATE, MODS, MOD, effective, buyMod, clean, canBuy, buy, equip, cycle, pelletAngles, fitMagazine, dps });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftWeaponsData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -16,6 +16,8 @@
     { id: 'shots', text: 'Fire {n} rounds', stat: 'shots', n: [60, 100, 150], cash: 4, xp: 'shooting' },
     { id: 'casino', text: 'Place {n} casino bets', stat: 'casinoSpins', n: [5, 8, 12], cash: 35, xp: 'luck' },
     { id: 'races', text: 'Finish {n} street race(s)', stat: 'raceRuns', n: [1, 2, 3], cash: 250, xp: 'driving' },
+    { id: 'jobs', text: 'Finish {n} Hustle phone job(s)', stat: 'jobsDone', n: [1, 2, 3], cash: 200, xp: 'charisma' },
+    { id: 'fish', text: 'Land {n} catches', stat: 'fishCaught', n: [4, 6, 10], cash: 50, xp: 'fishing' },
     { id: 'earn', text: 'Earn ${n}', stat: 'earned', n: [1500, 2500, 4000], cash: 0.2, xp: 'charisma' },
   ];
   const BY_ID = Object.fromEntries(POOL.map((c) => [c.id, c]));

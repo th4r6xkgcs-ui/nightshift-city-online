@@ -21,7 +21,7 @@
   const B = () => { try { return buildings; } catch { return []; } };
   const G = () => { try { return g; } catch { return null; } };
   /* eslint-enable no-undef */
-  const gameSave = () => { try { const f = Function('return typeof save==="function"?save:null')(); if (f) f(); } catch { /* not ready */ } };
+  const gameSave = () => { try { const f = (typeof save === 'function' ? save : null); if (f) f(); } catch { /* not ready */ } };
   const say = (t) => { try { root.say?.(t); } catch { /* no toast */ } };
   const luckMod = () => { try { return root.NightshiftSkills?.mod('luck.casino') ?? 1; } catch { return 1; } };
 

@@ -36,7 +36,7 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -72,9 +72,9 @@
   let state = clean();
   try { state = clean(JSON.parse(localStorage.getItem(KEY) || '{}')); } catch { /* fresh */ }
   let dirty = false;
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); dirty = false; } catch { /* private mode */ } };
-  setInterval(() => { if (dirty) save(); }, 3000);
-  addEventListener('pagehide', () => { if (dirty) save(); });
+  const persistGoals = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); dirty = false; } catch { /* private mode */ } };
+  setInterval(() => { if (dirty) persistGoals(); }, 3000);
+  addEventListener('pagehide', () => { if (dirty) persistGoals(); });
   const toast = (t) => { try { if (typeof root.say === 'function') root.say(t); } catch { /* no toast */ } };
 
   // Game script-level globals (game.js is a classic script, so its top-level let/const are visible by name).
@@ -84,8 +84,8 @@
     get cars() { try { return Array.isArray(cars) ? cars : []; } catch { return []; } },
   };
   /* eslint-enable no-undef */
-  // NB: inside this IIFE `save` is ours; reach the game's via a separate lookup.
-  const gameSave = (() => { try { return Function('return typeof save==="function"?save:null')(); } catch { return null; } })();
+  // Our own persistence is persistGoals(); `save` here is the game's global save() (game.js).
+  const gameSave = (() => { try { return typeof save === 'function' ? save : null; } catch { return null; } })();
 
   // ---- stat tracking ----
   let last = null, wanted = false, paying = 0;
@@ -134,6 +134,9 @@
       weaponsOwned: root.NightshiftWeapons?.state?.owned?.length || 1,
       tuneLevels: tuneStat('totalLevels'), tuneBestCar: tuneStat('bestCar'),
       homeItems: root.NightshiftHomeUpgrades?.state?.owned?.length || 0,
+      respectRank: root.NightshiftRespect?.state?.reached || 0,
+      jobsDone: root.NightshiftJobs?.state?.done || 0, labCooked: root.NightshiftLab?.state?.cooked || 0,
+      fishCaught: root.NightshiftFishing?.state?.total || 0, koi: root.NightshiftFishing?.state?.caught?.koi || 0,
       raceMedals: Object.keys(root.NightshiftRaces?.state?.medals || {}).length,
       raceGolds: Object.values(root.NightshiftRaces?.state?.medals || {}).filter((m) => m === 'gold').length,
     });
@@ -152,7 +155,7 @@
   function check() {
     const g = step(state, snapshot());
     if (g) {
-      dirty = true; save(); pay(g);
+      dirty = true; persistGoals(); pay(g);
       const r = g.reward || {};
       const paid = Math.round((r.cash || 0) * cashBonus());
       toast(`🎯 GOAL COMPLETE · ${g.title}${paid ? ` · +$${paid.toLocaleString()}` : ''}`);
@@ -175,6 +178,7 @@
     garage: (p) => nearest(root.NightshiftTuning?.sites?.(), p),
     casino: () => root.NightshiftCasino?.door?.() || null,
     gunshop: () => root.NightshiftWeapons?.door?.() || null,
+    fishing: (p) => nearest(root.NightshiftFishingData?.SPOTS, p),
     race: (p) => { const medals = root.NightshiftRaces?.state?.medals || {}; const st = root.NightshiftRaces?.starts?.() || []; return nearest(st.filter((r) => medals[r.id] !== 'gold'), p) || nearest(st, p); },
   };
   function trackTarget() {
@@ -283,7 +287,7 @@
     close.onclick = () => { panel.hidden = true; };
     const trk = el('button', { className: 'close', type: 'button' }, state.track ? '📍 TRACKER ON' : '📍 TRACKER OFF');
     trk.style.marginRight = '6px';
-    trk.onclick = () => { state.track = !state.track; dirty = true; save(); lastKey = ''; render(); };
+    trk.onclick = () => { state.track = !state.track; dirty = true; persistGoals(); lastKey = ''; render(); };
     panel.append(close, trk, el('h2', {}, `GOALS · ${doneCount(state)}/${GOALS.length}`),
       el('div', { className: 'h', style: 'font-size:11px;color:#b9c8da;margin-bottom:4px' }, 'Tap a goal with 📍 to track it. The gold arrow next to you points the way.'));
     let tier = '';
@@ -295,7 +299,7 @@
       body.append(el('div', {}, g.title + (!done && pr.target > 1 ? ` · ${fmt(pr.cur)}/${fmt(pr.target)}` : '')), el('div', { className: 'h' }, g.hint));
       const pinned = tracked(state)?.id === g.id;
       row.append(el('span', { className: 'i' }, done ? '✅' : pinned ? '📍' : cur ? '🎯' : '▫️'), body, el('span', { className: 'r' }, rewardText(g.reward)));
-      if (!done && g.place) { row.style.cursor = 'pointer'; row.onclick = () => { const was = state.pin; state.pin = state.pin === g.id ? null : g.id; state.track = true; dirty = true; save(); lastKey = ''; gps(was); render(); }; }
+      if (!done && g.place) { row.style.cursor = 'pointer'; row.onclick = () => { const was = state.pin; state.pin = state.pin === g.id ? null : g.id; state.track = true; dirty = true; persistGoals(); lastKey = ''; gps(was); render(); }; }
       panel.append(row);
     }
     panel.scrollTop = scroll;

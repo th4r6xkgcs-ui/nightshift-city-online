@@ -34,10 +34,10 @@ root.NightshiftRivals={KEY,INTERVAL,WINDOW,HOLD,clean,present,advance,resolve};i
 let state=clean();try{state=clean(JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{}
 let nextTick=0,labels=[];function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
 function tick(){const now=Date.now();if(now<nextTick)return;nextTick=now+250;const events=advance(state,root.NightshiftGangLife.state,player,root.NightshiftCrewOps.entries().map(e=>e.entity),root.NightshiftCrewOps.state.roster,now);
- if(events.length){persist();root.NightshiftGangLife.save();for(const e of events){const place=e.id==='south'?'Southside':'Harbor';say(e.type==='challenge'?place+' rivals challenge your corner · STREET to respond':e.type==='lost'?place+' corner lost · rival deadline passed':e.type==='interrupted'?'Standing ground interrupted · regroup at the corner':place+' corner defended · rivals backed down')}}
+ if(events.length){persist();root.NightshiftGangLife.save();for(const e of events){root.NightshiftJournal?.record('territory',e.id+' corner · '+e.type);const place=e.id==='south'?'Southside':'Harbor';say(e.type==='challenge'?place+' rivals challenge your corner · STREET to respond':e.type==='lost'?place+' corner lost · rival deadline passed':e.type==='interrupted'?'Standing ground interrupted · regroup at the corner':place+' corner defended · rivals backed down')}}
 }
 function perform(id,action){if(!root.NightshiftGangLife.paused())return {ok:false,reason:'Open the corner dialogue first'};tick();const result=resolve(state,root.NightshiftGangLife.state,player,root.NightshiftCrewOps.entries().map(e=>e.entity),root.NightshiftCrewOps.state.roster,id,action,Date.now());
- if(result.ok){persist();root.NightshiftGangLife.save();save();if(action==='stand')root.NightshiftGangLife.close()}
+ if(result.ok){root.NightshiftJournal?.record('territory',result.message);persist();root.NightshiftGangLife.save();save();if(action==='stand')root.NightshiftGangLife.close()}
  root.NightshiftGangLife.refresh(result.message||result.reason);say(result.message||result.reason);return result;
 }
 function controls(parent,contact){
