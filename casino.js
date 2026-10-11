@@ -45,23 +45,21 @@
     E.draw = function () { const r = draw.apply(this, arguments); try { drawSign(); } catch { /* cosmetic */ } return r; };
     E.__casino = true;
   }
+  // Codex's art already gives this club a CASINO facade, so we only add a small sidewalk
+  // marquee beside the door plus a red carpet, and never draw over the building.
   function drawSign() {
-    const ctx = G(), d = door(), p = P();
+    const ctx = G(), d = door();
     if (!ctx || !building) return;
-    const t = performance.now() / 1000, x = d.x, y = building.y + building.h - 26;
+    const t = performance.now() / 1000, x = d.x + 78, y = d.y - 6;
     ctx.save();
-    // neon sign on the facade
-    ctx.fillStyle = '#1a0f22e6'; ctx.fillRect(x - 74, y - 13, 148, 26);
-    ctx.shadowColor = '#ff4fd8'; ctx.shadowBlur = 10 + 4 * Math.sin(t * 3);
-    ctx.strokeStyle = '#ff4fd8'; ctx.lineWidth = 2; ctx.strokeRect(x - 74, y - 13, 148, 26);
-    ctx.shadowColor = '#ffd970'; ctx.fillStyle = '#ffd970'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('🎰 LUCKY 7 CASINO', x, y + 1);
-    // chasing bulbs
-    ctx.shadowBlur = 0;
-    for (let i = 0; i < 12; i++) { ctx.fillStyle = (Math.floor(t * 6) + i) % 3 === 0 ? '#fff3b0' : '#7a5a20'; ctx.fillRect(x - 70 + i * 12.5, y + 15, 4, 3); }
-    // door carpet
     ctx.fillStyle = '#9b1f3a'; ctx.fillRect(d.x - 14, d.y - 16, 28, 14);
-    if (p && Math.hypot(p.x - d.x, p.y - d.y) < 160) { ctx.fillStyle = '#ffd970'; ctx.font = 'bold 10px monospace'; ctx.fillText('SLOTS · ROULETTE', d.x, d.y + 14); }
+    ctx.fillStyle = '#3a2a18'; ctx.fillRect(x - 2, y + 9, 4, 12);
+    ctx.fillStyle = '#1a0f22ee'; ctx.fillRect(x - 34, y - 11, 68, 20);
+    ctx.shadowColor = '#ff4fd8'; ctx.shadowBlur = 8 + 4 * Math.sin(t * 3);
+    ctx.strokeStyle = '#ff4fd8'; ctx.lineWidth = 2; ctx.strokeRect(x - 34, y - 11, 68, 20);
+    ctx.shadowBlur = 0; ctx.fillStyle = '#ffd970'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('LUCKY 7', x, y - 1);
+    for (let i = 0; i < 6; i++) { ctx.fillStyle = (Math.floor(t * 6) + i) % 3 === 0 ? '#fff3b0' : '#7a5a20'; ctx.fillRect(x - 30 + i * 12, y + 6, 3, 2); }
     ctx.restore();
   }
 
