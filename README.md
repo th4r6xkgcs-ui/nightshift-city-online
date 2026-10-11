@@ -1,7 +1,7 @@
 # Nightshift City Online
 Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current build: v0.7 local prototype
+## Current build: v0.9 local prototype
 Walking, touch twin-stick aiming, held fire, driving, building/parked-car collision, safe vehicle exits, NPCs, shops, loot, minimap and validated browser-local saves. Programmer-drawn placeholder art. Character colors persist locally. Owned apartments have walkable furnished interiors, bed healing and wardrobe access. Multiplayer is not implemented. No deployment.
 
 ## Run and verify
@@ -16,3 +16,5 @@ Read AGENTS.md, CLAUDE.md, HANDOFF.md and FILE_OWNERSHIP.md. Codex uses codex br
 STYLE opens customization. JOB starts/completes courier objectives. HOME buys ($1,200) or enters the starter apartment near 880,680. Indoors, USE near furniture or the bottom exit.
 
 USE near CORNER SHOP opens ammo/first aid services. High-speed crashes damage health; at zero health, recover after three seconds at the West End clinic marker with a fee up to $100. This is a local recovery spawn, not an enterable clinic.
+
+BAG shows carried inventory. BOX accesses your current vehicle glovebox; apartment STORAGE opens the home stash. Store/Take uses tap controls. On death, ALL carried items, cash, ammunition and pistols drop; stash/gloveboxes survive. LOOT recovers nearby bags. Bags persist locally through refresh for two minutes. Pistols can be replaced at corner shops for $150. No online looting or robbery yet.

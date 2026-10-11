@@ -24,14 +24,14 @@
   function saveExtras(){try{root.localStorage.setItem('nightshift-city-activities-v1',JSON.stringify({owned}))}catch{}}
   try{const d=JSON.parse(root.localStorage.getItem('nightshift-city-activities-v1')||'{}');owned=d.owned===true}catch{}
   btn.addEventListener('pointerdown',()=>{
-    if(root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused())return;
+    if(root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused()||root.NightshiftInventory?.paused())return;
     if(typeof player==='undefined'||player.car){notify('Exit your vehicle to accept or deliver jobs');return}
     if(stage==='idle'){stage='pickup';notify('Courier job started: collect parcel at the yellow marker')}
     else {const result=advance(stage,player);if(result.stage===stage){notify('Travel to the objective marker first');return}stage=result.stage;if(result.reward){player.cash+=result.reward;notify('Delivery complete! +$'+result.reward);if(typeof save==='function')save()}else notify('Parcel collected. Deliver it to the drop-off')}
   });
   propertyButton.addEventListener('pointerdown',()=>{
     if(typeof player==='undefined')return;
-    if(root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused())return;
+    if(root.NightshiftHome?.paused()||root.NightshiftRecovery?.paused()||root.NightshiftInventory?.paused())return;
     if(player.car){notify('Exit your vehicle before visiting home');return}
     if(!near(player,apartment,105)){notify('Apartment is near 880, 680 — follow HOME marker');return}
     if(owned){root.NightshiftHome?.enter();return}

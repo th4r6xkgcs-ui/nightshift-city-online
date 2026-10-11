@@ -8,3 +8,6 @@
 - P2: Persistent accounts, properties, garages, safe zones and optional PvP.
 
 - P1: Active police pursuit and cover/visibility; keep crime consequences readable.
+
+- P1: Persistent stable vehicle IDs; robbery and vehicle search rules; bag lifetime design.
+- P2: Server-authoritative inventory transactions and multiplayer loot ownership.
