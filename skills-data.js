@@ -76,15 +76,28 @@
     hit: 5,                  // bonus per bullet that lands (skill-effects.js)
     run100px: 3,             // per 100px run on foot
     drive100px: 1,           // per 100px driven
-    delivery: { driving: 40, charisma: 25 },
-    salvage: { luck: 30 },
-    batch: { farming: 45 },  // per finished grow batch
-    soldUnit: { dealing: 6, charisma: 2 },
-    damage1hp: 1.2,          // toughness per HP lost (survived)
-    escape: { stealth: 60 }, // police heat back to zero after being wanted
+    delivery: { driving: 40, charisma: 40 },
+    salvage: { luck: 40 },
+    batch: { farming: 120 }, // per finished grow batch (one batch per property at a time, so it must be meaty)
+    soldUnit: { dealing: 20, charisma: 4 },
+    damage1hp: 2,            // toughness per HP lost (survived)
+    escape: { stealth: 150 }, // police heat back to zero after being wanted
+  });
+  // Pacing guard (tests/skills.cjs): with focused play, every skill reaches level 10 in roughly 15-90 minutes.
+  // Assumed focused rates per minute (measured from game rules: market demand, batch timers, salvage cooldowns).
+  const PACE = Object.freeze({
+    shooting: 60 * 2 + 18 * 5,            // 60 shots, ~30% hits
+    athletics: (10800 / 100) * 3,          // running ~180 px/s
+    driving: (18000 / 100) * 1 + 40,      // ~300 px/s average + ~1 delivery/min
+    luck: (8 / 3) * 40 + 16,               // 8 salvage spots on a 3 min cooldown + casino bets
+    farming: 1.2 * 120,                    // ~1.2 finished batches/min with 3 properties
+    dealing: 5 * 20,                       // market demand caps sales at ~5 units/min
+    toughness: 30 * 2,                     // ~30 HP lost and survived per minute of fighting
+    stealth: 0.5 * 150,                    // an escape every ~2 minutes
+    charisma: 40 + 5 * 4 + 10,             // deliveries + sales + goal rewards
   });
 
-  const api = Object.freeze({ MAX_LEVEL, TITLES, SKILLS, xpToNext, XP });
+  const api = Object.freeze({ MAX_LEVEL, TITLES, SKILLS, xpToNext, XP, PACE });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftSkillsData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
