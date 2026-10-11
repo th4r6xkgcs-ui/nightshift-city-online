@@ -6,6 +6,9 @@
   "name": "nightshift-city-online",
   "main": "src/index.js",
   "compatibility_date": "2026-10-01",
+  // Serve on nightshift-city-online.<account>.workers.dev (players connect here).
+  "workers_dev": true,
+  "preview_urls": false,
   "build": { "command": "node build.cjs" },
   "durable_objects": {
     "bindings": [{ "name": "GAME", "class_name": "GameRoom" }]
