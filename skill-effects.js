@@ -34,6 +34,7 @@
   /* eslint-enable no-undef */
   const float = (text, color = '#ffd970') => { const p = P(); try { if (p) root.NightshiftFeedback?.floating(p.x, p.y - 44, text, color); } catch { /* cosmetic */ } };
   const installed = new Set();
+  const hitXp = () => { try { root.NightshiftSkills?.gain('shooting', root.NightshiftSkillsData?.XP?.hit ?? 5, 'hit'); } catch { /* optional */ } };
   function wrap(name, obj, fn, make) {
     if (installed.has(name) || !obj || typeof obj[fn] !== 'function') return;
     const orig = obj[fn];
@@ -86,11 +87,11 @@
 
     // Bullet hits: the game subtracts 20 right after these calls, so extra damage here still lets it kill.
     wrap('hitPed', CR, 'incident', (o) => function (target, kind) {
-      if (kind === 'violence' && target && Number.isFinite(target.hp)) target.hp -= 20 * (m('shooting.damage') - 1);
+      if (kind === 'violence' && target && Number.isFinite(target.hp)) { target.hp -= 20 * (m('shooting.damage') - 1); hitXp(); }
       return o.apply(this, arguments);
     });
     wrap('hitCop', CRIME, 'strike', (o) => function (officer) {
-      if (officer && Number.isFinite(officer.hp) && CRIME.officers?.includes?.(officer)) officer.hp -= 20 * (m('shooting.damage') - 1);
+      if (officer && Number.isFinite(officer.hp) && CRIME.officers?.includes?.(officer)) { officer.hp -= 20 * (m('shooting.damage') - 1); hitXp(); }
       return o.apply(this, arguments);
     });
 
