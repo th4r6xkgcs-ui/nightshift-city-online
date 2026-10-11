@@ -1,3 +1,6 @@
+## Current client: v0.17
+Saved crafting levels, upgraded apartment bench, six abstract recipes, finite-ammo transaction guards and crafting modal isolation. 34 automated suites pass. Browser/device QA pending; local single-player only.
+
 # Project state
 Current source version: **v0.16** (v0.15 remains deployed). Canonical GitHub branch `codex/mobile-controls-v03`, PR #1. Existing owner-private Sites preview is recorded in DEPLOYMENT.md.
 

@@ -1,5 +1,10 @@
 # HANDOFF — Nightshift City Online
 
+## CURRENT — v0.17 crafting progression and safety
+Verified external v0.16 foundation. Added persistent craft count/levels (five recipes per level), one-time $400 owned-apartment bench upgrade at level two, bulk ammunition and level-three medical pair recipes. Craft progress joins backup whitelist. Fixed reserve overflow and reload conflicts before material deductions; modal isolation across city actions; indoor movement locks during crafting; wardrobe overlap blocked. Craft items retain pocket death custody.
+Touched crafting.js, game.js, index.html, package.json, home/inventory/activities/crime/vehicles/map/backups/progression/recovery modules, README and tests. npm run check: 34 suites and all root syntax checks pass. Real Safari touch/audio QA remains pending. Durability, attachments and rare blueprints are future work.
+
+
 ## CURRENT — v0.16 crafting foundation (2026-10-11)
 Added crafting.js, loaded after inventory.js, with four fictional game recipes: Street Pistol, 15-round ammo pack, First Aid Kit and Salvage Breakdown. Pistol/ammo require owned apartment interior workbench; field recipes can be made on foot anywhere. Crafting UI uses touch-friendly buttons, reports missing materials, blocks vehicle crafting, and pauses simulation. Recipe engine validates inputs and output capacity before atomic deduction, and reuses existing pocket inventory, save and death-drop custody. Crafted ammo updates combat reserve. All materials are abstract game items; no real-world gun assembly details. Browser/iPhone validation and automated suites for this new feature remain pending; do not claim otherwise. v0.15 deployment remains unchanged until verified.
 
@@ -25,7 +30,7 @@ Touched: client JS modules, index.html, package.json, tests and shared docs. Can
 Next: actual iPhone/browser QA, scene/state modularization, authored content; backend remains Claude-owned.
 
 ## DEPLOYED — v0.13 private preview (2026-10-10)
-https://nightshift-city-online.nzs4gc8qmw.chatgpt.site — native deployment succeeded, owner-private, authorized by user. Read DEPLOYMENT.md for exact identity and update procedure; reuse this site. GitHub remains canonical code, Sites source is a deployment mirror. Eleven suites and GitHub CI pass; real iPhone touch/audio/HUD QA pending. The deployment supersedes historical "no deployment" notes below. Still single-player, no multiplayer server.
+[private preview] — native deployment succeeded, owner-private, authorized by user. Read DEPLOYMENT.md for exact identity and update procedure; reuse this site. GitHub remains canonical code, Sites source is a deployment mirror. Eleven suites and GitHub CI pass; real iPhone touch/audio/HUD QA pending. The deployment supersedes historical "no deployment" notes below. Still single-player, no multiplayer server.
 
 ## CURRENT — v0.13 traffic, audio and visual pass (2026-10-10)
 Added traffic.js with eight nonoverlapping cars on two authored rectangular road loops, forward spacing/parked-car checks and collision damage for players/vehicles. Hospital recovery now has 2.5 seconds damage protection. Audio.js adds opt-in synthesized gun/reload/impact/pickup effects and speed-based engine tone; SOUND/MUTE starts AudioContext only on user gesture, focus loss silences engine. Actual browser audio unverified.
