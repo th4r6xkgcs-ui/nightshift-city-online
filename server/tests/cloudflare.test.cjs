@@ -186,8 +186,10 @@ test('BUNDLED Worker (as Cloudflare deploys it) runs the same scenario', { skip:
   t.after(() => { globalThis.Response = realResponse; delete globalThis.WebSocketPair; fs.rmSync(dir, { recursive: true, force: true }); });
   const mod = await import(outfile);
   assert.equal(typeof mod.GameRoom, 'function', 'exports the Durable Object class');
-  const page = await mod.default.fetch(req('https://game.test/'), {});
-  assert.match(await page.text(), /Nightshift Online/, 'serves the real test page');
+  const page = await mod.default.fetch(req('https://game.test/test'), {});
+  assert.match(await page.text(), /Nightshift Online/, 'serves the real test page at /test');
+  const home = await (await mod.default.fetch(req('https://game.test/'), {})).text();
+  assert.ok(/Nightshift Online/.test(home) || /src="online\.js"/.test(home), '"/" is the test page, or the online game when the game is in the repo');
   await scenario(t, { GameRoom: mod.GameRoom, fetchFn: (r, env) => mod.default.fetch(r, env), label: 'bundle' });
 });
 
