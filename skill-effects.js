@@ -3,7 +3,7 @@
  * Load after skills.js (and after every module it wraps). Each wrap is installed once,
  * retried until its target exists, and is a no-op multiplier of 1 at level 1.
  *
- * Shooting  damage   bullet hits on civilians (Crews.incident 'violence') and police (Crime.strike)
+ * Shooting  damage   (equipped weapon dmg × perk) on bullet hits on civilians (Crews.incident 'violence') and police (Crime.strike)
  *           reload   Combat.begin reload deadline
  * Speed     speed    Movement.step on-foot speed;  stamina: sprint drain refund
  * Driving   topSpeed/handling   Vehicles.handling for the player's car;  crashDamage: Vehicles.damage
@@ -34,6 +34,10 @@
   /* eslint-enable no-undef */
   const float = (text, color = '#ffd970') => { const p = P(); try { if (p) root.NightshiftFeedback?.floating(p.x, p.y - 44, text, color); } catch { /* cosmetic */ } };
   const installed = new Set();
+  // The game always subtracts 20 per hit right after our hook; we add the difference so the real hit
+  // equals the equipped weapon's damage (weapons.js; 20 when absent) times the Shooting perk.
+  const weaponDmg = () => { try { const d = root.NightshiftWeapons?.current?.().dmg; return Number.isFinite(d) && d > 0 ? d : 20; } catch { return 20; } };
+  const extraHit = () => weaponDmg() * m('shooting.damage') - 20;
   const hitXp = () => { try { root.NightshiftSkills?.gain('shooting', root.NightshiftSkillsData?.XP?.hit ?? 5, 'hit'); } catch { /* optional */ } };
   function wrap(name, obj, fn, make) {
     if (installed.has(name) || !obj || typeof obj[fn] !== 'function') return;
@@ -87,11 +91,11 @@
 
     // Bullet hits: the game subtracts 20 right after these calls, so extra damage here still lets it kill.
     wrap('hitPed', CR, 'incident', (o) => function (target, kind) {
-      if (kind === 'violence' && target && Number.isFinite(target.hp)) { target.hp -= 20 * (m('shooting.damage') - 1); hitXp(); }
+      if (kind === 'violence' && target && Number.isFinite(target.hp)) { target.hp -= extraHit(); hitXp(); }
       return o.apply(this, arguments);
     });
     wrap('hitCop', CRIME, 'strike', (o) => function (officer) {
-      if (officer && Number.isFinite(officer.hp) && CRIME.officers?.includes?.(officer)) { officer.hp -= 20 * (m('shooting.damage') - 1); hitXp(); }
+      if (officer && Number.isFinite(officer.hp) && CRIME.officers?.includes?.(officer)) { officer.hp -= extraHit(); hitXp(); }
       return o.apply(this, arguments);
     });
 
