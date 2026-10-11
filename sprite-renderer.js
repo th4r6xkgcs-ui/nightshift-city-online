@@ -45,6 +45,20 @@ function drawPersonDirect(p,isPlayer=false,options={}){
  // Layered shoulders, jacket hem/zip and swinging sleeves rather than a box torso.
  polygon('#1b2b33',[[-8,-8],[-5,-11],[5,-11],[8,-8],[7,5],[-7,5]]);rect(shirt,-6,-9,12,12);rect(shirt,-8,-6,3,9+stride/2);rect(shirt,6,-6,3,9-stride/2);
  rect('#ffffff20',-5,-7,2,8);rect('#14232e44',4,-6,2,9);rect('#1a293444',-6,2,12,2);if(!back){rect('#c6c5b155',0,-5,1,7);rect('#1b2c36',-3,-2,2,3);rect('#1b2c36',3,-2,2,3)}
+ // Art-only cloth styling with stable per-color variation, baked into the sprite atlas.
+ const lookSeed=[...String(shirt)].reduce((n,ch)=>n+ch.charCodeAt(0),0)%4;
+ if(lookSeed===0){ // work jacket with contrasting shoulders
+  rect('#1a3545',-6,-9,12,3);rect('#d9c7a866',-1,-4,2,8);
+  rect('#243947',-8,-4,3,5+stride/2);rect('#243947',6,-4,3,5-stride/2);
+ }else if(lookSeed===1){ // streetwear top with chest print
+  rect('#142d3b',-4,-4,8,5);rect('#e9d8af',-3,-3,6,1);rect('#b9bca666',-2,-1,4,2);
+ }else if(lookSeed===2){ // layered vest
+  rect('#1f3541',-5,-8,3,11);rect('#1f3541',2,-8,3,11);rect('#ddc4a077',-1,-8,2,6);
+ }else{ // striped overshirt
+  for(let k=0;k<3;k++)rect('#d9c9aa55',-5,-6+k*3,10,1);
+ }
+ // Contrasting cuffs give walking arms a readable rhythm.
+ rect('#d1bc9c77',-8,1+stride/2,3,2);rect('#d1bc9c77',6,1-stride/2,3,2);
  rect(skin,-8,3+stride/2,3,3);rect(skin,6,3-stride/2,3,3);
  rect('#192c3455',-4,-17,10,11);rect(skin,-4+look/2,-17,9,10);rect('#f0c29444',-3+look/2,-16,3,5);
  polygon(hair,[[-5,-17],[-3,-20],[4,-20],[6,-17],[6,-13],[3,-14],[-4,-14],[-5,-12]]);
