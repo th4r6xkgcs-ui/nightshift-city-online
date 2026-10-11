@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');
+const run=boot();
+run('globalThis.view={x:0,y:0,width:2200,height:1700,zoom:1};globalThis.awnings=NightshiftWorld.awningActors(buildings,view)');
+assert.ok(run('awnings.length')>0);
+assert.ok(run('awnings.every(e=>e.kind==="awning"&&Number.isFinite(e.entity.y))'));
+assert.equal(run('NightshiftWorld.awningActors(buildings,{...view,zoom:0}).length'),0);
+assert.equal(run('NightshiftWorld.awningActors(null,view).length'),0);
+run('globalThis.a=awnings[0];globalThis.behind={entity:{x:a.entity.x,y:a.entity.y-1},kind:"ped"};globalThis.front={entity:{x:a.entity.x,y:a.entity.y+1},kind:"ped"}');
+assert.equal(run('NightshiftScene.order([a,behind,front],view).map(e=>e.kind).join(",")'),'ped,awning,ped');
+run('globalThis.snapshot=JSON.stringify({player,cars,peds,buildings});NightshiftWorld.awningTop(a.entity)');
+assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);
+console.log('PASS: storefront awning depth ordering, visibility validation, no simulation writes');
