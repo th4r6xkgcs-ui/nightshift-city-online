@@ -193,6 +193,8 @@
     const top = el('div', { className: 'top' }), x = el('button', { className: 'x', type: 'button' }, 'CLOSE'); x.onclick = () => { panel.hidden = true; };
     top.append(el('h2', {}, '📱 HUSTLE'), x);
     const next = Math.ceil((J.SLOT_MS - (Date.now() % J.SLOT_MS)) / 60000);
+    const emp = root.NightshiftEmpire, pend = emp?.pending?.() || 0;
+    if (emp) { const eb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `📈 EMPIRE${pend ? ` · ${money(pend)} to collect` : ' · front businesses & passive income'}`); eb.onclick = () => { panel.hidden = true; emp.open(); }; panel.append(eb); }
     panel.append(top, el('div', { className: 'sub' }, `New offers in ~${next} min · ${state.done} jobs done · ${money(state.earned)} earned · Respect bonus +${rank() * 5}%`));
     if (active) {
       const o = el('div', { className: 'o' }), ab = el('button', { className: 'go', type: 'button' }, 'ABANDON');

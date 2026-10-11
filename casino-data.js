@@ -69,7 +69,30 @@
     return r;
   }
 
-  const api = Object.freeze({ MIN_BET, MAX_BET, SYMBOLS, TWO_CHERRIES, validBet, spinSlots, slotsMultiplier, slotsRtp, RED, colorOf, validChoice, spinRoulette, rouletteRtp });
+  // Blackjack: infinite deck, dealer stands on all 17s, blackjack pays 3:2, double on the first two cards,
+  // no splits. Luck never applies. Cards are ranks 1..13 (1 = ace, 11-13 = face cards worth 10).
+  const draw = (rnd = Math.random) => 1 + Math.min(12, Math.floor(rnd() * 13));
+  function handValue(cards) {
+    let total = 0, aces = 0;
+    for (const c of cards) { total += Math.min(10, c); if (c === 1) aces++; }
+    const soft = aces > 0 && total + 10 <= 21;
+    return { total: soft ? total + 10 : total, soft };
+  }
+  const isBlackjack = (cards) => cards.length === 2 && handValue(cards).total === 21;
+  function dealHand(rnd = Math.random) { return { player: [draw(rnd), draw(rnd)], dealer: [draw(rnd), draw(rnd)] }; }
+  function dealerPlay(dealer, rnd = Math.random) { while (handValue(dealer).total < 17) dealer.push(draw(rnd)); return dealer; }
+  // Multiplier of the (possibly doubled) stake returned: 2.5 blackjack, 2 win, 1 push, 0 loss.
+  function bjResult(player, dealer) {
+    const p = handValue(player).total, d = handValue(dealer).total;
+    if (p > 21) return 0;
+    if (isBlackjack(player) && !isBlackjack(dealer)) return 2.5;
+    if (isBlackjack(dealer) && !isBlackjack(player)) return 0;
+    if (d > 21 || p > d) return 2;
+    return p === d ? 1 : 0;
+  }
+  const cardLabel = (c) => (c === 1 ? 'A' : c === 11 ? 'J' : c === 12 ? 'Q' : c === 13 ? 'K' : String(c));
+
+  const api = Object.freeze({ draw, handValue, isBlackjack, dealHand, dealerPlay, bjResult, cardLabel, MIN_BET, MAX_BET, SYMBOLS, TWO_CHERRIES, validBet, spinSlots, slotsMultiplier, slotsRtp, RED, colorOf, validChoice, spinRoulette, rouletteRtp });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftCasinoRules = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

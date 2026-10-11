@@ -29,6 +29,8 @@
       tuneLevels: tune,
       bestStreak: root.NightshiftDailies?.state?.best || 0,
       earned10k: (snap.earned || 0) / 10000,
+      fronts: Object.keys(root.NightshiftEmpire?.state?.fronts || {}).length,
+      heists: root.NightshiftHeists?.state?.done || 0,
     };
   }
   let current = R.points(context()), queue = [], ready = false;

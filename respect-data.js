@@ -25,6 +25,8 @@
     { key: 'tuneLevels', label: 'Car upgrades', per: 8, cap: 400 },
     { key: 'bestStreak', label: 'Best daily streak', per: 15, cap: 300 },
     { key: 'earned10k', label: 'Money earned ($10k)', per: 1, cap: 200 },
+    { key: 'fronts', label: 'Front businesses', per: 60, cap: 300 },
+    { key: 'heists', label: 'Bank heists', per: 40, cap: 400 },
   ];
   function points(c) {
     let total = 0;

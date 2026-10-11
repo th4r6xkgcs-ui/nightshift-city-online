@@ -18,7 +18,7 @@ assert.equal(W.dps(W.BY_ID.ar), Math.max(...W.WEAPONS.map(W.dps)), 'the top-tier
 console.log('PASS: weapons catalog and progression ladder');
 
 const st = W.clean({});
-assert.deepEqual(st, { version: 1, owned: ['pistol'], equipped: 'pistol', mods: {} });
+assert.deepEqual(st, { version: 1, owned: ['pistol'], equipped: 'pistol', mods: {}, armor: 0 });
 const wallet = { cash: 1000 };
 assert.equal(W.buy(st, wallet, 'smg', 3).reason, 'Needs Shooting level 4');
 assert.equal(W.buy(st, wallet, 'smg', 4).reason, 'Not enough cash');
@@ -54,3 +54,10 @@ assert.ok(Math.abs(e.spread - 0.09 * 0.5 * 0.6) < 1e-9); assert.equal(e.range, M
 assert.deepEqual(W.effective(W.BY_ID.pistol, []).mag, 30); assert.equal(W.effective(W.BY_ID.pistol).suppressed, false);
 assert.deepEqual(W.clean({ owned: ['smg'], mods: { smg: ['scope', 'scope', 'Bad!'], ar: ['scope'] } }).mods, { smg: ['scope'] });
 console.log('PASS: weapon mods (gating, stacking stats, mag cap, save cleaning)');
+
+// Armor: absorbs 70% of each hit until depleted; save clamps to 0..100.
+assert.deepEqual(W.absorb(50, 20), { armor: 36, dmg: 6 });
+assert.deepEqual(W.absorb(5, 20), { armor: 0, dmg: 15 }, 'thin armor soaks what it has');
+assert.deepEqual(W.absorb(0, 20), { armor: 0, dmg: 20 });
+assert.equal(W.clean({ armor: 999 }).armor, 100); assert.equal(W.clean({ armor: -3 }).armor, 0);
+console.log('PASS: body armor absorption and save');

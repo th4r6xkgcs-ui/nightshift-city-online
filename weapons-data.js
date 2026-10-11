@@ -20,6 +20,17 @@
   ];
   const BY_ID = Object.fromEntries(WEAPONS.map((w) => [w.id, w]));
   const AMMO_CRATE = { rounds: 60, price: 100 }; // bulk ammo: $1.67/round vs $2 at the corner shop
+  // Body armor: absorbs ABSORB of each hit until its points run out. Buying tops up to the vest's points.
+  const ARMOR = [
+    { id: 'light', name: 'Kevlar vest', icon: '🦺', price: 500, points: 50 },
+    { id: 'heavy', name: 'Heavy plate vest', icon: '🛡️', price: 1300, points: 100 },
+  ];
+  const ABSORB = 0.7;
+  function absorb(armor, dmg) {
+    if (!(armor > 0) || !(dmg > 0)) return { armor: Math.max(0, armor || 0), dmg: Math.max(0, dmg || 0) };
+    const soaked = Math.min(armor, dmg * ABSORB);
+    return { armor: armor - soaked, dmg: dmg - soaked };
+  }
   // Per-gun attachments. Bought separately for each gun; stats apply through effective().
   const MODS = [
     { id: 'extmag', name: 'Extended mag', icon: '📦', price: 900, level: 2, desc: '+50% magazine (game cap 30)' },
@@ -59,7 +70,8 @@
       const clean = [...new Set(list.filter((m) => typeof m === 'string' && /^[a-z]+$/.test(m)))];
       if (clean.length) mods[wid] = clean;
     }
-    return { version: 1, owned, equipped, mods };
+    const armor = Number.isFinite(raw?.armor) ? Math.max(0, Math.min(100, raw.armor)) : 0;
+    return { version: 1, owned, equipped, mods, armor };
   }
   // Returns '' when the purchase is allowed, otherwise the reason.
   function canBuy(state, id, cash, shootingLevel) {
@@ -99,7 +111,7 @@
   }
   const dps = (w) => (w.dmg * w.pellets * 1000) / w.rate;
 
-  const api = Object.freeze({ WEAPONS, BY_ID, AMMO_CRATE, MODS, MOD, effective, buyMod, clean, canBuy, buy, equip, cycle, pelletAngles, fitMagazine, dps });
+  const api = Object.freeze({ WEAPONS, BY_ID, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, effective, buyMod, clean, canBuy, buy, equip, cycle, pelletAngles, fitMagazine, dps });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftWeaponsData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
