@@ -188,3 +188,9 @@ v0.42 (awnings) merged into `claude/rpg-play`; all hooks re-verified, and every 
 - stealth escape 60 → 150
 
 New `PACE` table in skills-data.js and a test guarding that every skill reaches Lv 10 in 12–90 min of focused play. Current times: Speed 15, Driving 22, Shooting 23, Farming 34, Luck 40, Dealing 49, Stealth 65, Charisma 70, Toughness 81 minutes.
+
+## Goal tracker and discoverability
+- Each goal has a `place` (car, job, salvage, apartment, property, dealer, garage, casino, gunshop or race). goals.js resolves it to a live position, and a pulsing **gold arrow** around the player points there (drawn by wrapping `NightshiftEncounters.draw`). It's hidden within 110 px of the target and during races. The goal card shows "📍 171m". Tap a goal in the panel to pin it; there's a TRACKER ON/OFF toggle. `pin` and `track` are saved.
+- Race starts are now listed in `NightshiftEncounters.locations()` (type `race`), so they appear as dots on Codex's city map. USE on foot explains how to start a race.
+- Midtown Loop now starts mid-block at (1100,680), because the old start, (880,680), was the apartment door and on-foot USE picked HOME. It now finishes at (880,680): par 5.1 s, 1,340 px.
+- Tests: tests/goals.cjs adds a tracker case (5 PASS). Browser: the pin points to the casino door (1960,1277), the card shows the distance, and the arrow is visible in a screenshot. No page errors.
