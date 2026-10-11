@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs');const run=boot();
+run(`globalThis.unit={x:230,y:130,hp:60,slot:0};globalThis.suspect={x:70,y:100};globalThis.coverCar={x:180,y:100,angle:Math.PI/5,speed:0};globalThis.context={cars:[coverCar],blocked:()=>false,world:{w:600,h:600},clear:p=>p.x>10&&p.y>10&&p.x<590&&p.y<590&&!NightshiftCitizens.occupied(p,[coverCar])};globalThis.decision=NightshiftPoliceAI.tactics(unit,suspect,true,null,100,context)`);
+assert.equal(run('unit.mode'),'cover');assert.equal(run('decision.fire'),false);assert.equal(run('!!unit.tactical'),true);
+run('Object.assign(unit,unit.tactical.shelter);decision=NightshiftPoliceAI.tactics(unit,suspect,true,null,2000,context)');
+assert.equal(run('unit.mode'),'peek');assert.equal(run('decision.fire'),false);
+run('Object.assign(unit,unit.tactical.peek);decision=NightshiftPoliceAI.tactics(unit,suspect,true,null,2100,context)');assert.equal(run('decision.fire'),true);
+assert.equal(run('NightshiftVehicleGeometry.traceCover(unit,suspect,[coverCar],()=>false)'),null);
+run('decision=NightshiftPoliceAI.tactics(unit,{x:500,y:500},false,null,2200,context)');assert.equal(run('decision.fire'),false);assert.equal(run('unit.tactical'),null);assert.equal(run('unit.memory.x'),70);assert.equal(run('unit.mode'),'investigate');
+run('coverCar.speed=3;unit.nextTactic=0;decision=NightshiftPoliceAI.tactics(unit,suspect,true,null,3000,context)');assert.equal(run('unit.tactical'),null);
+run('unit.nextRoute=4000;NightshiftPoliceAI.goal(unit,suspect,false,{x:72,y:100,at:3100},3200,context.clear)');assert.equal(run('unit.nextRoute'),4000);
+const game=boot();game('peds.length=0;player.x=690;player.y=620;player.heat=4;NightshiftCrime.officers.length=0;NightshiftCrime.officers.push({x:720,y:620,hp:60,slot:0,nextAttack:1e9},{x:2000,y:1500,hp:60,slot:1,nextAttack:1e9});NightshiftCrime.report({x:440,y:340},100);NightshiftCrime.tick(2000)');
+assert.equal(game('NightshiftCrime.officers[1].memory.x'),690);
+for(const now of [6000,11000,16000])game(`NightshiftCrime.tick(${now})`);
+assert.equal(game('NightshiftCrime.officers.length'),4);game('NightshiftCrime.tick(21000)');assert.equal(game('NightshiftCrime.officers.length'),4);
+console.log('PASS: oriented police shelter, hold/peek fire gating, moving cover rejection, lost-sight memory, bounded radio route work and four-unit reinforcement cap');
