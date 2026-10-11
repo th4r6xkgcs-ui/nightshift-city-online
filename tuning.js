@@ -19,7 +19,7 @@
   const B = () => { try { return buildings; } catch { return []; } };
   const G = () => { try { return g; } catch { return null; } };
   /* eslint-enable no-undef */
-  const gameSave = () => { try { root.NightshiftVehicles?.save?.(); const f = Function('return typeof save==="function"?save:null')(); if (f) f(); } catch { /* not ready */ } };
+  const gameSave = () => { try { root.NightshiftVehicles?.save?.(); const f = (typeof save === 'function' ? save : null); if (f) f(); } catch { /* not ready */ } };
   const say = (t) => { try { root.say?.(t); } catch { /* no toast */ } };
   const discount = () => { try { return root.NightshiftSkills?.mod('charisma.shopPrice') ?? 1; } catch { return 1; } };
   const money = (n) => '$' + Math.round(n).toLocaleString();

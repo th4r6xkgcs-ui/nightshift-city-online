@@ -26,7 +26,7 @@
   const CS = () => { try { return combatState; } catch { return null; } };
   const setNextShot = (t) => { try { nextShot = t; } catch { /* game not loaded */ } };
   /* eslint-enable no-undef */
-  const gameSave = () => { try { const f = Function('return typeof save==="function"?save:null')(); if (f) f(); } catch { /* not ready */ } };
+  const gameSave = () => { try { const f = (typeof save === 'function' ? save : null); if (f) f(); } catch { /* not ready */ } };
   const say = (t) => { try { root.say?.(t); } catch { /* no toast */ } };
   const shootingLevel = () => root.NightshiftSkills?.level('shooting') ?? 1;
   const money = (n) => '$' + Math.round(n).toLocaleString();
