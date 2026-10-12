@@ -36,8 +36,8 @@
   const MALL = { x: 640, y: 720, w: 560, h: 140 }, SHOW = { x: 1300, y: 722, w: 430, h: 150 }, LOT = { x: 1300, y: 890, w: 680, h: 150 };
   const DREAM = { x: 1450, y: 1160, w: 330, h: 150, face: 'n' }, PARK = { x: 30, y: 1110, w: 500, h: 270 };
   const backDoor = (h) => (h.face === 's' ? { x: h.x + h.w / 2, y: h.y - 14 } : { x: h.x + h.w / 2, y: h.y + h.h + 14 });
-  const TREES = []; { const r = rng(9); for (let i = 0; i < 60; i++) { const x = 20 + r() * 1960, y = 20 + r() * 1360; if (ROADS.some((q) => x > q.x - 40 && x < q.x + q.w + 40 && y > q.y - 40 && y < q.y + q.h + 40)) continue; if ([...HOUSES, MALL, SHOW, LOT, DREAM].some((b) => x > b.x - 40 && x < b.x + b.w + 40 && y > b.y - 60 && y < b.y + b.h + 40)) continue; if (x > MANSION.wallX - 20 && x < MANSION.wallX + MANSION.wallW + 20 && y > MANSION.wallY - 20 && y < MANSION.wallY + MANSION.wallH + 20) continue; if (HOUSES.some((h) => h.pool && x > h.pool.x - 30 && x < h.pool.x + h.pool.w + 30 && y > h.pool.y - 30 && y < h.pool.y + h.pool.h + 30)) continue; TREES.push({ x, y, palm: r() < 0.55, s: 0.85 + r() * 0.4 }); } }
-  for (let x = 60; x < MAP.w; x += 150) { if (x > 540 && x < 640) continue; if (x > 1200 && x < 1290) continue; TREES.push({ x, y: 628, palm: true, s: 1 }); TREES.push({ x: x + 70, y: 722, palm: true, s: 0.95 }); }
+  const TREES = []; { const r = rng(9); for (let i = 0; i < 60; i++) { const x = 20 + r() * 1960, y = 20 + r() * 1360; if (ROADS.some((q) => x > q.x - 40 && x < q.x + q.w + 40 && y > q.y - 40 && y < q.y + q.h + 110)) continue; if (HOUSES.some((h) => h.drive && x > h.drive.x - 30 && x < h.drive.x + h.drive.w + 30 && y > h.drive.y - 20 && y < h.drive.y + h.drive.h + 60)) continue; if ([...HOUSES, MALL, SHOW, LOT, DREAM].some((b) => x > b.x - 40 && x < b.x + b.w + 40 && y > b.y - 60 && y < b.y + b.h + 40)) continue; if (x > MANSION.wallX - 20 && x < MANSION.wallX + MANSION.wallW + 20 && y > MANSION.wallY - 20 && y < MANSION.wallY + MANSION.wallH + 20) continue; if (HOUSES.some((h) => h.pool && x > h.pool.x - 30 && x < h.pool.x + h.pool.w + 30 && y > h.pool.y - 30 && y < h.pool.y + h.pool.h + 30)) continue; TREES.push({ x, y, palm: r() < 0.55, s: 0.85 + r() * 0.4 }); } }
+  for (let x = 60; x < MAP.w; x += 150) { if (x > 540 && x < 640) continue; if (x > 1200 && x < 1290) continue; if (HOUSES.some((h) => h.drive && x > h.drive.x - 34 && x < h.drive.x + h.drive.w + 34)) continue; TREES.push({ x, y: 628, palm: true, s: 1 }); }
 
   // ---------------- sprites ----------------
   function houseSprite(h, lit) {
@@ -218,7 +218,7 @@
   function ownedCars() { return CARS().filter((c) => c && c.owned); }
   function openShowroom() {
     const p = P(), mine = ownedCars(), kits = root.NightshiftPets?.state?.kits || {};
-    head('🏎️ PRESTIGE MOTORS', `Body kits for the cars you own: real stat boosts plus parts you can see. Fitted at the city garage of your choice the moment you pay. Cash ${money(p?.cash || 0)}`);
+    head('🏎️ PRESTIGE MOTORS', `Body kits for the cars you own: real stat boosts plus parts you can see. Fitted on the spot. Cash ${money(p?.cash || 0)}`);
     if (!mine.length) { pnl.append(el('div', { className: 'sub' }, 'You don\'t own a car yet. Buy one in the city (MORE → CAR near a garage), then come back.')); return; }
     for (const car of mine) {
       pnl.append(el('h3', {}, `${car.id.toUpperCase()} · ${(car.model || root.NightshiftVehicles?.model?.(car)?.name || 'CAR')}${kits[car.id] ? ' · ' + PD.KIT[kits[car.id]].name.toUpperCase() : ''}`));
