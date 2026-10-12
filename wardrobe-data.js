@@ -111,8 +111,8 @@
   function cleanOutfit(raw) {
     const o = { skin: int(raw?.skin, 0, SKINS.length - 1, DEFAULT.skin), build: BUILDS.some((b) => b.id === raw?.build) ? raw.build : DEFAULT.build,
       hair: HAIRSTYLES.some((h) => h[0] === raw?.hair) ? raw.hair : DEFAULT.hair, hairColor: int(raw?.hairColor, 0, HAIR_COLORS.length - 1, 0), facial: FACIAL.some((f) => f[0] === raw?.facial) ? raw.facial : 'none' };
-    for (const s of SLOTS) o[s] = raw && s in raw ? cleanPiece(s, raw[s]) : (DEFAULT[s] ? { ...DEFAULT[s] } : null);
-    if (!o.top) o.top = { ...DEFAULT.top }; if (!o.bottom) o.bottom = { ...DEFAULT.bottom }; if (!o.shoes) o.shoes = { ...DEFAULT.shoes }; // never naked
+    for (const s of SLOTS) o[s] = cleanPiece(s, raw && s in raw ? raw[s] : DEFAULT[s]);
+    for (const s of ['top', 'bottom', 'shoes']) if (!o[s]) o[s] = cleanPiece(s, DEFAULT[s]); // never naked
     return o;
   }
   function clean(raw) {
@@ -121,7 +121,7 @@
     for (const sv of Array.isArray(raw?.saved) ? raw.saved.slice(0, 5) : []) if (sv && typeof sv.name === 'string') s.saved.push({ name: sv.name.slice(0, 18) || 'Outfit', outfit: cleanOutfit(sv.outfit) });
     for (const [id, v] of Object.entries(raw?.cond || {})) if (ITEM[id] && Number.isFinite(v)) s.cond[id] = Math.max(0, Math.min(100, Math.round(v)));
     // wearing something you don't own (old save / tampering) falls back to the default piece
-    for (const sl of SLOTS) { const p = s.outfit[sl]; if (p && !s.owned.includes(p.id)) s.outfit[sl] = sl === 'top' || sl === 'bottom' || sl === 'shoes' ? { ...DEFAULT[sl] } : null; }
+    for (const sl of SLOTS) { const p = s.outfit[sl]; if (p && !s.owned.includes(p.id)) s.outfit[sl] = sl === 'top' || sl === 'bottom' || sl === 'shoes' ? cleanPiece(sl, DEFAULT[sl]) : null; }
     return s;
   }
   const owns = (s, id) => s.owned.includes(id);
