@@ -26,7 +26,7 @@
   // Your Midtown apartment shares the same furniture collection (buy once, place in either home). Room space 640×420.
   const APT_SLOTS = [
     { id: 'art', name: 'Wall art', x: 86, y: 30, wall: true }, { id: 'plant', name: 'Plant', x: 380, y: 112 }, { id: 'lamp', name: 'Lighting', x: 282, y: 214 },
-    { id: 'petbed', name: 'Pet bed', x: 252, y: 140 }, { id: 'music', name: 'Music', x: 108, y: 346 }, { id: 'aquarium', name: 'Aquarium', x: 470, y: 334 },
+    { id: 'petbed', name: 'Pet bed', x: 252, y: 140 }, { id: 'music', name: 'Music', x: 108, y: 346 }, { id: 'aquarium', name: 'Aquarium', x: 584, y: 328 },
   ];
   const APT_SLOT = Object.fromEntries(APT_SLOTS.map((s) => [s.id, s]));
   const APT_TIERS = [{ name: 'Bare', at: 0 }, { name: 'Lived-in', at: 6 }, { name: 'Cozy', at: 16 }, { name: 'Sharp', at: 30 }];
