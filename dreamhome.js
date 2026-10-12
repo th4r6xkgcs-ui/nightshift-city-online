@@ -396,7 +396,7 @@
       HM.interaction = function () {
         const t = interaction.apply(this, arguments), pos = UP()?.roomPos?.(); if (!pos || !inApt()) return t;
         const d = (o) => Math.hypot(pos.x - o.x, pos.y - o.y); let best = null;
-        for (const m of aptTargets()) if (d(m) < 44 && (!best || d(m) < d(best))) best = m;
+        for (const m of aptTargets()) if (d(m) < 38 && (!best || d(m) < d(best))) best = m;
         if (!best) return t; if (t && Number.isFinite(t.x) && d(t) <= d(best)) return t; return best;
       };
       HM.use = function () { const t = inApt() ? HM.interaction() : null; if (t?.kind === 'decor') { openSlot(t.slot, 'apt'); return true; } return use.apply(this, arguments); };
