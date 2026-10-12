@@ -11,7 +11,7 @@
   const W = root.NightshiftWardrobeData;
   if (!W || !root.document) return;
   const CELL = { w: 44, h: 56, ax: 22, ay: 36 }; // world px; anchor = body centre (feet at +14)
-  const ANIMS = { idle: 4, walk: 8, run: 8 };
+  const ANIMS = { idle: 4, walk: 8, run: 8, crouch: 4, sneak: 8, sit: 4 };
   const INK = '#11151c';
   function shade(hex, amt) { const n = parseInt(String(hex).slice(1, 7), 16); if (!Number.isFinite(n)) return hex; let r = n >> 16 & 255, gg = n >> 8 & 255, b = n & 255; const f = amt < 0 ? (v) => Math.round(v * (1 + amt)) : (v) => Math.round(v + (255 - v) * amt); return '#' + ((1 << 24) | (f(r) << 16) | (f(gg) << 8) | f(b)).toString(16).slice(1); }
   const lum = (h) => { const n = parseInt(String(h).slice(1, 7), 16); return ((n >> 16 & 255) * 0.3 + (n >> 8 & 255) * 0.59 + (n & 255) * 0.11) / 255; };
@@ -21,7 +21,10 @@
     const a = dir * Math.PI / 4, sx = Math.cos(a), sy = Math.sin(a), side = Math.abs(sx), bw = (W.BUILDS.find((b) => b.id === o.build) || W.BUILDS[1]).w;
     const n = ANIMS[anim] || 1, k = ((f % n) + n) % n;
     let stride = 0, bob = 0, arm = 0, lean = 0;
-    if (anim === 'walk') { stride = [0, 2, 3, 2, 0, -2, -3, -2][k]; bob = [0, -0.5, -1, -0.5, 0, -0.5, -1, -0.5][k]; arm = -stride * 0.8; }
+    if (anim === 'sneak') { stride = [0, 1.4, 2.2, 1.4, 0, -1.4, -2.2, -1.4][k]; bob = [0, -0.3, -0.5, -0.3, 0, -0.3, -0.5, -0.3][k]; arm = -stride * 0.4; lean = 0.8; }
+    else if (anim === 'crouch') { bob = [0, -0.2, -0.3, -0.2][k]; }
+    else if (anim === 'sit') { bob = [0, -0.2, -0.3, -0.2][k]; }
+    else if (anim === 'walk') { stride = [0, 2, 3, 2, 0, -2, -3, -2][k]; bob = [0, -0.5, -1, -0.5, 0, -0.5, -1, -0.5][k]; arm = -stride * 0.8; }
     else if (anim === 'run') { stride = [0, 3, 5, 3, 0, -3, -5, -3][k]; bob = [-1, -2, -1.5, 0, -1, -2, -1.5, 0][k]; arm = -stride * 1.1; lean = 1.4; }
     else { bob = [0, -0.3, -0.5, -0.3][k]; }
     const SW = (12.5 - 4 * side * (1 - Math.abs(sy))) * bw, cx = sx * lean * 0.6;
@@ -31,6 +34,22 @@
     g.legs = [-1, 1].map((s) => { const st = s * stride; return { s, hx: cx * 0.5 + s * spread, hy: g.hipY, fx: s * spread + sx * st * 0.9, fy: g.footY + sy * st * 0.35 - (anim !== 'idle' && st > 0 ? Math.min(1.5, st * 0.3) : 0), near: s * sx * -1 + sy * 0.01 }; });
     g.arms = [-1, 1].map((s) => { const sw = s * arm, spreadA = 1 - side * 0.8 * (1 - Math.abs(sy) * 0.6); return { s, x: cx + s * (g.SW / 2 - 0.6) * spreadA, y: g.shY + 1.2, hx: cx + s * (g.SW / 2 + 0.2) * spreadA + sx * sw * 0.7 - (anim === 'run' ? s * 0.6 : 0), hy: g.shY + (anim === 'run' ? 8.5 : 11.5) + sy * sw * 0.25 }; });
     // which arm is nearer the viewer (drawn after the torso in profile)
+    // crouch / sneak / sit: drop the upper body, bend the knees (hip → knee → foot)
+    const low = anim === 'crouch' || anim === 'sneak' ? 4.5 : anim === 'sit' ? 6.5 : 0;
+    if (low) {
+      g.shY += low; g.waY += low; g.hipY += low; g.headY += low; g.low = low;
+      for (const L of g.legs) {
+        L.hy = g.hipY;
+        const out = L.s * (1 - side);
+        if (anim === 'sit') { L.kx = L.hx + sx * 5.5 + out * 1.8; L.ky = g.hipY + 2.2 + sy * 2.2; L.fx = L.kx + sx * 1 + out * 0.4; L.fy = Math.max(L.ky + 3.5, g.footY - 0.5 + sy * 1.5); }
+        else { L.fx += out * 1.4; L.kx = (L.hx + L.fx) / 2 + sx * 3.2 + out * 2.6; L.ky = (L.hy + L.fy) / 2 - 1.6 + sy * 1.4; }
+      }
+      const knee = (s0) => g.legs.find((L) => L.s === s0) || g.legs[0];
+      g.arms = g.arms.map((A) => { const K = knee(A.s);
+        if (anim === 'sit') return { ...A, y: A.y + low, hx: K.kx * 0.7 + A.hx * 0.3, hy: K.ky - 0.8 };
+        if (anim === 'crouch') return { ...A, y: A.y + low, hx: K.kx, hy: K.ky - 1.2 }; // hands resting on the knees
+        return { ...A, y: A.y + low, hx: A.hx * 0.8 + sx * 2.5, hy: A.hy + low - 2.5 }; });
+    }
     // holding a gun: hands come up to chest height in front of the body (long guns: support hand further out on the handguard)
     if (hold) { const F = [cx + sx * 6.5, g.shY + 7 + sy * 1.2];
       g.hold = hold; g.arms = g.arms.map((A) => { let hx, hy;
@@ -55,7 +74,7 @@
 
   // ---------------- body ----------------
   function torsoPts(g, top, bot, widen = 0) { const w1 = g.SW / 2 + widen, w2 = g.SW / 2 - 1.2 * g.bw + widen; return [[g.cx - w1, top], [g.cx + w1, top], [g.cx + w2, bot], [g.cx - w2, bot]]; }
-  function drawLeg(g, L, col, w = 4.2) { limb(col, g.cx * 0.5 + L.hx, L.hy, L.fx, L.fy - 1.5, w * g.bw, w * 0.85 * g.bw); }
+  function drawLeg(g, L, col, w = 4.2) { const hx = g.cx * 0.5 + L.hx; if (Number.isFinite(L.kx)) { limb(col, hx, L.hy, L.kx, L.ky, w * g.bw, w * 0.95 * g.bw); O(col, L.kx, L.ky, w * 0.47 * g.bw, w * 0.47 * g.bw); limb(col, L.kx, L.ky, L.fx, L.fy - 1.5, w * 0.92 * g.bw, w * 0.85 * g.bw); return; } limb(col, hx, L.hy, L.fx, L.fy - 1.5, w * g.bw, w * 0.85 * g.bw); }
   function drawArm(g, A, col, wTop = 3.4, upto = 1) { const e = at([A.x, A.y], [A.hx, A.hy], upto); limb(col, A.x, A.y, e[0], e[1], wTop, wTop * 0.88); }
   function hand(g, A, col) { O(col, A.hx, A.hy + 0.5, 1.3, 1.25); O(shade(col, 0.18), A.hx - 0.4, A.hy + 0.1, 0.5, 0.4); }
   function head(g, o, skin) {
@@ -299,7 +318,35 @@
     const k = r ? r + (hash(p?.id || p?.name || '') % 6) : 'n' + (hash(p?.id || p?.name || p?.color || 'npc') % NPC_POOL);
     let o = npc.get(k); if (!o) { o = W.npcOutfit(hash(k) + 7, r); npc.set(k, o); } return o;
   }
+  // ---- pose state from the game: sneaking in break-ins, seats, getting in/out of cars ----
+  /* eslint-disable no-undef */
+  const sprinting = () => { try { return !!(run || keys?.shift || Math.hypot(joy?.x || 0, joy?.y || 0) >= 0.85); } catch { return false; } };
+  /* eslint-enable no-undef */
+  function stance(p, isPlayer) {
+    const now = performance.now();
+    if (p.seated) return 'sit';
+    if (isPlayer) {
+      if (now - carT.exitAt < 260) return 'crouch'; // ducking out of the car door
+      if (root.NightshiftZones?.active?.() === 'breakin' && !sprinting()) return 'sneak';
+    } else if (p.activity === 'shelter' && !p.moving && (hash(p.id || '') % 3 === 0)) return 'crouch';
+    return '';
+  }
   function animOf(p, isPlayer) {
+    const st = stance(p, isPlayer), mv = isPlayer ? (() => { try { return player.moving || p.moving; } catch { return p.moving; } })() : p.moving === true; // eslint-disable-line no-undef
+    if (st === 'sit') return { anim: 'sit', f: Math.floor(performance.now() / 420 + (hash(p.id || '') % 4)) };
+    if (st === 'crouch') return { anim: 'crouch', f: Math.floor(performance.now() / 420) };
+    if (st === 'sneak') return mv ? { anim: 'sneak', f: Math.floor((Number.isFinite(p.walkTicks) ? p.walkTicks : 0) / 3.2) } : { anim: 'crouch', f: Math.floor(performance.now() / 420) };
+    return animOf0(p, isPlayer);
+  }
+  // Smooth turning: step through the in-between directions (45 ms each) instead of snapping.
+  const turn = new WeakMap();
+  function smoothDir(p, target) {
+    const now = performance.now(); let t = turn.get(p); if (!t) { t = { d: target, at: now }; turn.set(p, t); return target; }
+    if (t.d !== target && now - t.at >= 45) { const diff = ((target - t.d + 12) % 8) - 4; t.d = (t.d + (diff === 0 ? 0 : diff > 0 ? 1 : -1) + 8) % 8; t.at = now; if (Math.abs(diff) >= 4) t.d = target; }
+    return t.d;
+  }
+  const carT = { last: null, enterAt: -1e9, exitAt: -1e9, from: null };
+  function animOf0(p, isPlayer) {
     /* eslint-disable no-undef */
     const moving = isPlayer ? (typeof player !== 'undefined' && (player.moving || p.moving)) : p.moving === true;
     const running = isPlayer && moving && (() => { try { return typeof run !== 'undefined' && run; } catch { return false; } })();
@@ -310,26 +357,46 @@
   }
   const dirOfAngle = (a) => ((Math.round(a / (Math.PI / 4)) % 8) + 8) % 8;
   // where the hands are when holding a gun (world offset from the anchor) — weapon-art puts the gun here
-  const holdHand = (dir, hold) => { const gg = geom(W.DEFAULT, dir, 'idle', 0, hold), A = gg.arms.find((a) => a.s === -1) || gg.arms[0]; return { x: A.hx, y: A.hy, back: gg.back }; };
+  const holdHand = (dir, hold, anim = 'idle') => { const gg = geom(W.DEFAULT, dir, anim, 0, hold), A = gg.arms.find((a) => a.s === -1) || gg.arms[0]; return { x: A.hx, y: A.hy, back: gg.back }; };
   const dirOf = (p, isPlayer) => {
     /* eslint-disable-next-line no-undef */
     const moving = isPlayer ? (typeof player !== 'undefined' && player.moving) : p.moving === true;
     const a = moving && Number.isFinite(p.moveAngle) ? p.moveAngle : Number.isFinite(p.angle) ? p.angle : Math.atan2(p.dy || 0, p.dx || 0);
     return ((Math.round(a / (Math.PI / 4)) % 8) + 8) % 8;
   };
-  const api = { enabled: true, CELL, ANIMS, frame, draw, compose, geom, outfitFor, dirOfAngle, holdHand, frames: () => frames.size, clear: () => frames.clear() };
+  const api = { enabled: true, CELL, ANIMS, frame, draw, compose, geom, outfitFor, dirOfAngle, holdHand, stance, smoothDir, frames: () => frames.size, clear: () => frames.clear() };
   function install() {
     const S = root.NightshiftSprites; if (!S || S.__chars || typeof S.person !== 'function') return !!S?.__chars;
     const person = S.person, personTo = S.personTo;
     const ours = (ctx, p, isPlayer, options = {}) => {
       if (!api.enabled || !p) return false;
-      const o = outfitFor(p, isPlayer, options.role), hold = options.hold || '', d = hold && Number.isFinite(p.angle) ? dirOfAngle(p.angle) : dirOf(p, isPlayer), { anim, f } = animOf(p, isPlayer);
+      const o = outfitFor(p, isPlayer, options.role), hold = options.hold || '', d0 = hold && Number.isFinite(p.angle) ? dirOfAngle(p.angle) : dirOf(p, isPlayer), d = hold ? d0 : smoothDir(p, d0), { anim, f } = animOf(p, isPlayer);
       draw(ctx, o, p.x, p.y, d, anim, f, 2, hold);
       if (!isPlayer && !options.hideHealth && Number.isFinite(p.hp) && p.hp < (p.maxHp || 40) && p.hp > 0) { ctx.fillStyle = '#182832'; ctx.fillRect(p.x - 13, p.y - 33, 26, 4); ctx.fillStyle = '#dd9884'; ctx.fillRect(p.x - 13, p.y - 33, 26 * Math.max(0, p.hp / (p.maxHp || 40)), 3); }
       return true;
     };
     S.person = function (p, isPlayer, options = {}) { /* eslint-disable-next-line no-undef */ const ctx = (() => { try { return g; } catch { return null; } })(); if (ctx) { try { if (ours(ctx, p, isPlayer, options)) return; } catch (e) { console.error(e); } } return person.apply(this, arguments); };
     if (typeof personTo === 'function') S.personTo = function (ctx, p, isPlayer, options = {}) { try { if (ctx && ours(ctx, p, isPlayer, options)) return; } catch (e) { console.error(e); } return personTo.apply(this, arguments); };
+    // getting into a car: the player ducks into the driver's door over ~0.38 s (the game switches instantly)
+    if (typeof S.car === 'function' && !S.__charsCar) {
+      const car = S.car;
+      S.car = function (v) {
+        const r = car.apply(this, arguments);
+        try { /* eslint-disable no-undef */
+          const pl = player, now = performance.now();
+          if (pl.car !== carT.last) { if (pl.car && !carT.last) { carT.enterAt = now; carT.from = { x: carT.px ?? pl.x, y: carT.py ?? pl.y }; } else if (!pl.car && carT.last) carT.exitAt = now; carT.last = pl.car; }
+          if (!pl.car) { carT.px = pl.x; carT.py = pl.y; }
+          const t = (now - carT.enterAt) / 380, ctx = g;
+          if (api.enabled && v === pl.car && t >= 0 && t < 1 && carT.from) {
+            const a = v.angle || 0, door = { x: v.x + Math.cos(a - Math.PI / 2) * 14 - Math.cos(a) * 4, y: v.y + Math.sin(a - Math.PI / 2) * 14 - Math.sin(a) * 4 };
+            const e = t * t * (3 - 2 * t), x = carT.from.x + (door.x - carT.from.x) * e, y = carT.from.y + (door.y - carT.from.y) * e;
+            ctx.save(); ctx.globalAlpha = Math.max(0, 1 - t * t); draw(ctx, outfitFor(pl, true), x, y, dirOfAngle(Math.atan2(door.y - carT.from.y, door.x - carT.from.x)), t < 0.5 ? 'walk' : 'crouch', Math.floor(t * 8)); ctx.restore();
+          } /* eslint-enable no-undef */
+        } catch { /* cosmetic */ }
+        return r;
+      };
+      S.__charsCar = true;
+    }
     S.__chars = true; return true;
   }
   if (!install()) { const t = setInterval(() => { if (install()) clearInterval(t); }, 200); }

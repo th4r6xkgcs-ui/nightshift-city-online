@@ -223,18 +223,22 @@
   /* global S, g */
   function installHeld() {
     const Sx = root.NightshiftSprites; if (!Sx || !root.NightshiftDetailedArt || Sx.__weaponArt) return !!(Sx && Sx.__weaponArt);
-    const person = Sx.person;
+    const person = Sx.person, eq = { id: null, at: -1e9 };
     Sx.person = function (p, isPlayer, options = {}) {
       const armed = isPlayer && options.weapon !== false && !options.noWeapon && root.NightshiftInventory?.state?.pocket?.pistol > 0;
-      if (!armed || !p || !Number.isFinite(p.x)) return person.call(this, p, isPlayer, options);
+      if (!armed || !p || !Number.isFinite(p.x)) { if (isPlayer && !armed) eq.id = null; return person.call(this, p, isPlayer, options); }
       const WS = root.NightshiftWeapons, id = WS?.state?.equipped || 'pistol', ang = p.angle || 0, ctx = g, C = root.NightshiftCharacters;
       const skin = WS?.state?.skins?.[id] || null, mods = WS?.state?.mods?.[id] || [], sp = sprite(id), hold = sp && sp.box.w > 34 ? 'long' : 'short';
       // hands come from the character's holding pose for this facing, so arms and gun line up
       let hx = p.x + Math.cos(ang) * 6.5, hy = p.y - 5.5 + Math.sin(ang) * 1.2, behind = Math.sin(ang) < -0.38;
-      if (C?.enabled && C.holdHand) { const d = C.dirOfAngle(ang), hh = C.holdHand(d, hold); behind = hh.back; hx = p.x + (behind ? 4.5 : hh.x); hy = p.y + (behind ? -9 : hh.y); }
-      if (behind) drawHeld(ctx, id, hx, hy, ang, skin, mods, { laser: true });
+      const st = C?.stance?.(p, true) || '', low = st === 'sneak' || st === 'crouch' ? 'crouch' : 'idle';
+      if (C?.enabled && C.holdHand) { const d = C.dirOfAngle(ang), hh = C.holdHand(d, hold, low); behind = hh.back; hx = p.x + (behind ? 4.5 : hh.x); hy = p.y + (behind ? -9 + (low === 'crouch' ? 4.5 : 0) : hh.y); }
+      // equipping: the gun swings up from the hip over ~0.22 s whenever you draw or switch
+      const now = performance.now(); if (eq.id !== id) { eq.id = id; eq.at = now; }
+      const k = Math.min(1, (now - eq.at) / 220), ease = 1 - (1 - k) * (1 - k), da = (1 - ease) * (Math.cos(ang) >= 0 ? 1.1 : -1.1), ga = ang + da; hy += (1 - ease) * 4;
+      if (behind) drawHeld(ctx, id, hx, hy, ga, skin, mods, { laser: k >= 1 });
       const r = person.call(this, p, isPlayer, { ...options, noWeapon: true, hold });
-      if (!behind) drawHeld(ctx, id, hx, hy, ang, skin, mods, { laser: true });
+      if (!behind) drawHeld(ctx, id, hx, hy, ga, skin, mods, { laser: k >= 1 });
       return r;
     };
     Sx.__weaponArt = true; return true;
