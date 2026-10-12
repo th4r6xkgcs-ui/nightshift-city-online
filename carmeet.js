@@ -38,7 +38,8 @@
   function myCar() { const p = P(), c = p?.car; return c && c.owned ? c : null; }
   function carInfo(c) {
     const tune = root.NightshiftTuning?.state?.cars?.[c.id] || {}, kit = root.NightshiftPets?.state?.kits?.[c.id] || null;
-    return { model: c.model || root.NightshiftVehicles?.model?.(c)?.name || 'SEDAN', color: c.color, kit, tune, condition: c.condition ?? 100 };
+    const st = root.NightshiftCarStyle?.of?.(c.id), flair = st ? root.NightshiftCarStyleData?.flair?.(st) || 0 : 0;
+    return { model: c.model || root.NightshiftVehicles?.model?.(c)?.name || 'SEDAN', color: c.color, kit, tune, flair, condition: c.condition ?? 100 };
   }
   const nameOf = (c) => root.NightshiftCarsData?.fromModel?.(c.model)?.name || (c.model || 'Car').toLowerCase();
 

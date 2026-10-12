@@ -27,9 +27,10 @@
     const t = car?.tune || {}, tune = ((t.engine | 0) + (t.handling | 0) + (t.armor | 0)) * 5;
     const cond = Math.max(0, Math.min(100, Number.isFinite(car?.condition) ? car.condition : 100));
     const paint = spec && car.color && car.color !== spec.colors[0] ? 4 : 0;
-    const raw = base + kit + tune + paint;
+    const flair = Math.max(0, Math.min(30, car?.flair | 0)); // visual build (carstyle-data.js)
+    const raw = base + kit + tune + paint + flair;
     const total = Math.round(raw * (0.55 + 0.45 * cond / 100));
-    return { total, parts: { model: base, kit, tune, paint, condition: Math.round(0.55 * 100 + 0.45 * cond) } };
+    return { total, parts: { model: base, kit, tune, paint, flair, condition: Math.round(0.55 * 100 + 0.45 * cond) } };
   }
   // Five rivals for a night: name, model, paint, score (deterministic per night).
   function rivals(key) {
