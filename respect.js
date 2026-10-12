@@ -24,7 +24,7 @@
       skillLevels: snap.totalLevel || 0,
       goals: Object.keys(root.NightshiftGoals?.state?.done || {}).length,
       gold: medals.filter((m) => m === 'gold').length, silver: medals.filter((m) => m === 'silver').length, bronze: medals.filter((m) => m === 'bronze').length,
-      weapons: Math.max(0, (root.NightshiftWeapons?.state?.owned?.length || 1) - 1),
+      weapons: root.NightshiftWeapons?.state?.owned?.length || 0,
       homeItems: root.NightshiftHomeUpgrades?.state?.owned?.length || 0,
       tuneLevels: tune,
       bestStreak: root.NightshiftDailies?.state?.best || 0,

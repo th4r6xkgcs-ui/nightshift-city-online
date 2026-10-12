@@ -26,13 +26,13 @@ assert.equal(G.step(st, ctx, 1).id, 'walk');
 assert.equal(G.step(st, ctx, 2).id, 'shoot');
 assert.equal(G.step(st, ctx, 3).id, 'car');
 assert.equal(G.step(st, ctx, 4), null);
-assert.equal(G.next(st, ctx).goal.id, 'delivery1');
+assert.equal(G.next(st, ctx).goal.id, 'scav1', 'unarmed start: scavenge for your first gun next');
 // Out-of-order goals still complete (an unmet goal never blocks later ones).
 assert.equal(G.step(st, { ...ctx, salvage: 3 }, 5).id, 'salvage1');
-assert.equal(G.next(st, ctx).goal.id, 'delivery1', 'NEXT stays on the first unfinished goal');
+assert.equal(G.next(st, ctx).goal.id, 'scav1', 'NEXT stays on the first unfinished goal');
 // A veteran save catches up one goal at a time without double-paying.
 const vet = G.clean({}), big = { walked: 1e6, shots: 1e4, inCar: 1, delivery: 30, salvage: 20, home: 1, batches: 9, sold: 80,
-  earned: 2e6, carsOwned: 4, maxSkill: 50, totalLevel: 300, escapes: 9, properties: 3, casinoWins: 5, casinoWagered: 30000, weaponsOwned: 6, tuneLevels: 12, tuneBestCar: 9, raceMedals: 3, raceGolds: 3, homeItems: 5, respectRank: 7, fishCaught: 60, koi: 1, jobsDone: 30, labCooked: 5, heists: 10, gymSessions: 2, clubSold: 3, fronts: 5, eventsDone: 30, stashes: 30, fightWins: 5, fightLadder: 5, modsFitted: 10, marketProfit: 1e5 };
+  earned: 2e6, carsOwned: 4, maxSkill: 50, totalLevel: 300, escapes: 9, properties: 3, casinoWins: 5, casinoWagered: 30000, weaponsOwned: 10, scrapGathered: 50, leafPicked: 50, trimmed: 9, cooked: 9, pressed: 9, gunsCrafted: 20, gunsSold: 9, pillsSold: 30, lockup: 3, bagLevel: 4, realGuns: 5, tuneLevels: 12, tuneBestCar: 9, raceMedals: 3, raceGolds: 3, homeItems: 5, respectRank: 7, fishCaught: 60, koi: 1, jobsDone: 30, labCooked: 5, heists: 10, gymSessions: 2, clubSold: 3, fronts: 5, eventsDone: 30, stashes: 30, fightWins: 5, fightLadder: 5, modsFitted: 10, marketProfit: 1e5 };
 const order = []; let g; while ((g = G.step(vet, big))) order.push(g.id);
 assert.deepEqual(order, D.GOALS.map((x) => x.id), 'every goal completes exactly once, in order');
 assert.equal(G.next(vet, big), null);
@@ -59,14 +59,14 @@ console.log('PASS: goals save cleaning');
 const tst = G.clean({});
 assert.equal(G.tracked(tst), null, 'first goal (walk) has no place to point at');
 tst.done.walk = 1; tst.done.shoot = 1;
-assert.equal(G.tracked(tst).id, 'car', 'NEXT goal with a place is tracked');
+assert.equal(G.tracked(tst).id, 'scav1', 'NEXT goal with a place is tracked');
 tst.pin = 'casino1';
 assert.equal(G.tracked(tst).id, 'casino1', 'pinned goal wins');
 tst.done.casino1 = 2;
-assert.equal(G.tracked(tst).id, 'car', 'finished pin falls back to NEXT');
+assert.equal(G.tracked(tst).id, 'scav1', 'finished pin falls back to NEXT');
 assert.equal(G.clean({ pin: 'walk' }).pin, null, 'goals without a place cannot be pinned');
 assert.equal(G.clean({ pin: 'gun1' }).pin, 'gun1');
 assert.equal(G.clean({ pin: 'gun1', done: { gun1: 5 } }).pin, null, 'finished goals cannot stay pinned');
 assert.equal(G.clean({ track: false }).track, false); assert.equal(G.clean({}).track, true);
-for (const g of D.GOALS) if (g.place) assert.ok(['car', 'job', 'salvage', 'apartment', 'property', 'dealer', 'garage', 'casino', 'gunshop', 'race', 'fishing', 'bank', 'gym', 'club'].includes(g.place), g.id + ' place known');
+for (const g of D.GOALS) if (g.place) assert.ok(['car', 'job', 'salvage', 'apartment', 'property', 'dealer', 'garage', 'casino', 'gunshop', 'race', 'fishing', 'bank', 'gym', 'club', 'scrapyard', 'plots', 'trim', 'kitchen', 'lockup', 'promoter', 'armsbuyer', 'bags', 'bench'].includes(g.place), g.id + ' place known');
 console.log('PASS: goal tracker selection, pinning and save');

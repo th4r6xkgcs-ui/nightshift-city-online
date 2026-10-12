@@ -36,7 +36,8 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked', 'heists', 'gymSessions', 'clubSold', 'fronts', 'eventsDone', 'stashes', 'fightWins', 'fightLadder', 'modsFitted', 'marketProfit'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked', 'heists', 'gymSessions', 'clubSold', 'fronts', 'eventsDone', 'stashes', 'fightWins', 'fightLadder', 'modsFitted', 'marketProfit',
+    'scrapGathered', 'leafPicked', 'trimmed', 'cooked', 'pressed', 'gunsCrafted', 'gunsSold', 'pillsSold', 'lockup', 'bagLevel', 'realGuns'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -131,7 +132,9 @@
       totalLevel: levels.reduce((a, b) => a + b, 0), maxSkill: levels.length ? Math.max(...levels) : 0,
       inCar: !!p?.car,
       casinoWins: root.NightshiftCasino?.state?.wins, casinoWagered: root.NightshiftCasino?.state?.wagered,
-      weaponsOwned: root.NightshiftWeapons?.state?.owned?.length || 1,
+      weaponsOwned: (root.NightshiftWeapons?.state?.owned || []).filter((id) => !(root.NightshiftWeapons?.state?.broken || []).includes(id)).length,
+      realGuns: (root.NightshiftWeapons?.state?.owned || []).filter((id) => (root.NightshiftWeaponsData?.BY_ID?.[id]?.tier || 0) >= 1).length,
+      ...(() => { const su = root.NightshiftSupply?.state; if (!su) return {}; return { scrapGathered: su.by?.scrapyard, leafPicked: su.by?.plots, trimmed: su.by?.trim, cooked: su.by?.kitchen, pressed: su.by?.trailer, gunsCrafted: su.stats?.gunsCrafted, gunsSold: su.stats?.gunsSold, pillsSold: su.stats?.pillsSold, lockup: su.lockup, bagLevel: su.bagLevel }; })(),
       tuneLevels: tuneStat('totalLevels'), tuneBestCar: tuneStat('bestCar'),
       homeItems: root.NightshiftHomeUpgrades?.state?.owned?.length || 0,
       respectRank: root.NightshiftRespect?.state?.reached || 0,
@@ -186,6 +189,15 @@
     bank: (p) => nearest(root.NightshiftHeists?.vaults?.(), p),
     gym: (p) => nearest((root.NightshiftVenues?.places?.() || []).filter((v) => v.kind === 'gym'), p),
     club: (p) => nearest((root.NightshiftVenues?.places?.() || []).filter((v) => v.kind === 'club'), p),
+    scrapyard: () => root.NightshiftSupplyData?.GBY?.scrapyard || null,
+    plots: () => root.NightshiftSupplyData?.GBY?.plots || null,
+    trim: () => root.NightshiftSupplyData?.PBY?.trim || null,
+    kitchen: () => root.NightshiftSupplyData?.PBY?.kitchen || null,
+    lockup: () => root.NightshiftSupplyData?.LOCKUP || null,
+    promoter: () => root.NightshiftSupplyData?.PROMOTER || null,
+    armsbuyer: () => root.NightshiftSupplyData?.ARMS_BUYER || null,
+    bags: (p) => nearest(root.NightshiftSupplyData?.BAG_SHOPS, p),
+    bench: () => ({ x: 950, y: 735 }),
     race: (p) => { const medals = root.NightshiftRaces?.state?.medals || {}; const st = root.NightshiftRaces?.starts?.() || []; return nearest(st.filter((r) => medals[r.id] !== 'gold'), p) || nearest(st, p); },
   };
   function trackTarget() {

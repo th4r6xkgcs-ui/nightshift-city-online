@@ -3,6 +3,9 @@
 (function (root) {
   'use strict';
   const FRONTS = [
+    { id: 'shoeshine', name: 'Shoeshine stand', icon: '👞', price: 800, perHour: 24, capHours: 6 },
+    { id: 'hotdog', name: 'Hot dog cart', icon: '🌭', price: 2500, perHour: 75, capHours: 6 },
+    { id: 'arcade', name: 'Corner arcade', icon: '🕹️', price: 6000, perHour: 180, capHours: 8 },
     { id: 'laundromat', name: 'Suds Laundromat', icon: '🧺', price: 15000, perHour: 450, capHours: 8 },
     { id: 'carwash', name: 'Shine Car Wash', icon: '🚿', price: 30000, perHour: 900, capHours: 8 },
     { id: 'cabs', name: 'Night Cab Co.', icon: '🚕', price: 55000, perHour: 1600, capHours: 8 },

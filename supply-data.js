@@ -52,49 +52,42 @@
   // loot: [item, chance per cycle, min, max]; stock = cycles before the spot runs dry; regen = seconds per +1 stock.
   // hours: [from, to) game hours when open (wraps midnight); heat added per cycle (illegal spots).
   const GATHER = [
-    { id: 'scrapyard', name: 'Scrapyard', icon: '🔩', x: 250, y: 1520, r: 70, seconds: 4.5, stock: 14, regen: 25,
+    { id: 'scrapyard', name: 'Scrapyard', icon: '🔩', x: 240, y: 1585, r: 70, seconds: 4.5, stock: 14, regen: 25,
       loot: [['metal', 1, 1, 2], ['pipe', 0.22, 1, 1], ['spring', 0.24, 1, 1], ['wood', 0.1, 1, 1], ['trigger', 0.015, 1, 1]],
       xp: { luck: 6 }, desc: 'Dig through the junk piles: scrap metal, pipe, springs, the odd wood offcut.' },
-    { id: 'construction', name: 'Construction site', icon: '🚧', x: 1150, y: 190, r: 70, seconds: 5, stock: 12, regen: 30, hours: [6, 20],
+    { id: 'construction', name: 'Construction site', icon: '🚧', x: 1080, y: 225, r: 70, seconds: 5, stock: 12, regen: 30, hours: [6, 20],
       loot: [['metal', 0.55, 1, 2], ['pipe', 0.35, 1, 1], ['wood', 0.45, 1, 2], ['tape', 0.2, 1, 1]],
       xp: { luck: 6 }, desc: 'Skips full of offcuts. Daytime only: security locks it at 8 PM.' },
-    { id: 'plots', name: 'Grow plots', icon: '🌿', x: 230, y: 820, r: 75, seconds: 6, stock: 10, regen: 40, heat: 0.03,
+    { id: 'plots', name: 'Grow plots', icon: '🌿', x: 228, y: 895, r: 75, seconds: 6, stock: 10, regen: 40, heat: 0.03,
       loot: [['leaf', 1, 1, 2]], xp: { farming: 10 }, desc: 'Guerrilla plants in the park beds. Pick raw leaf; neighbours call it in if you linger.' },
     { id: 'boat', name: 'Smuggler boat', icon: '🚤', x: 2120, y: 1545, r: 70, seconds: 8, stock: 6, regen: 150, hours: [20, 5], heat: 0.1,
       loot: [['snow', 1, 1, 1], ['chem', 0.15, 1, 1]], xp: { stealth: 14 }, desc: 'A speedboat ties up at the east docks after dark. Unload raw snow bricks fast.' },
-    { id: 'pharmacy', name: 'Pharmacy dumpster', icon: '⚗️', x: 300, y: 235, r: 65, seconds: 6.5, stock: 9, regen: 45, heat: 0.02,
+    { id: 'pharmacy', name: 'Pharmacy dumpster', icon: '⚗️', x: 228, y: 232, r: 65, seconds: 6.5, stock: 9, regen: 45, heat: 0.02,
       loot: [['chem', 0.65, 1, 1], ['baggie', 0.35, 2, 4], ['lens', 0.02, 1, 1]], xp: { stealth: 8 }, desc: 'Behind the clinic. Expired chemicals and packaging get tossed here.' },
-    { id: 'container', name: 'Arms container', icon: '📦', x: 2140, y: 1170, r: 65, seconds: 9, stock: 5, regen: 140, hours: [21, 4], heat: 0.12,
+    { id: 'container', name: 'Arms container', icon: '📦', x: 2140, y: 1250, r: 65, seconds: 9, stock: 5, regen: 140, hours: [21, 4], heat: 0.12,
       loot: [['spring', 0.5, 1, 2], ['trigger', 0.18, 1, 1], ['barrel', 0.14, 1, 1], ['bolt', 0.08, 1, 1], ['frame', 0.06, 1, 1], ['lens', 0.06, 1, 1]],
       xp: { stealth: 18, luck: 6 }, desc: 'A cracked shipping container of gun parts. Only unguarded late at night. Hot.' },
   ];
   // in/out per cycle; pocket = goes to the game's pocket (weed/coke for Codex dealers); seconds per cycle.
   const PROCESS = [
-    { id: 'trim', name: 'Trim house', icon: '✂️', x: 250, y: 1150, r: 65, seconds: 6, in: { leaf: 3, baggie: 1 }, out: { weed: 1 }, pocket: true, heat: 0.02,
+    { id: 'trim', name: 'Trim house', icon: '✂️', x: 228, y: 1235, r: 65, seconds: 6, in: { leaf: 3, baggie: 1 }, out: { weed: 1 }, pocket: true, heat: 0.02,
       xp: { farming: 18, dealing: 6 }, desc: 'A boarded-up shack. Dry, trim and bag raw leaf into weed.' },
-    { id: 'kitchen', name: 'Motel kitchen', icon: '🍳', x: 1800, y: 200, r: 65, seconds: 12, in: { snow: 1, chem: 1, baggie: 2 }, out: { coke: 2 }, pocket: true, heat: 0.06,
+    { id: 'kitchen', name: 'Motel kitchen', icon: '🍳', x: 1958, y: 228, r: 65, seconds: 12, in: { snow: 1, chem: 1, baggie: 2 }, out: { coke: 2 }, pocket: true, heat: 0.06,
       xp: { dealing: 30, stealth: 6 }, desc: 'Room 6 at the Starlite Motel. Cut a snow brick into bagged product.' },
-    { id: 'trailer', name: 'Trailer lab', icon: '🚐', x: 700, y: 200, r: 65, seconds: 10, in: { chem: 2, baggie: 1 }, out: { pills: 3 }, heat: 0.05,
+    { id: 'trailer', name: 'Trailer lab', icon: '🚐', x: 640, y: 228, r: 65, seconds: 10, in: { chem: 2, baggie: 1 }, out: { pills: 3 }, heat: 0.05,
       xp: { dealing: 20, farming: 6 }, desc: 'A rusted camper on blocks. Press chemicals into party pills.' },
   ];
   // Selling: weed/coke go to Codex dealers + customers. Pills sell to the party promoter (demand refills).
-  const PROMOTER = { id: 'promoter', name: 'Party promoter', icon: '🎟️', x: 1240, y: 640, r: 60, price: 48, demand: 12, refill: 600, hours: [19, 5],
+  const PROMOTER = { id: 'promoter', name: 'Party promoter', icon: '🎟️', x: 1150, y: 612, r: 60, price: 48, demand: 12, refill: 600, hours: [19, 5],
     desc: 'Works the line outside the Neon Room at night. Buys party pills.' };
   // Sells crafted guns (spares) and buys them back; open at night.
   const ARMS_BUYER = { id: 'armsbuyer', name: 'Arms buyer', icon: '🚚', x: 2140, y: 380, r: 60, hours: [20, 6], demand: 4, refill: 900, desc: 'A van with the engine running. Buys guns, a few a night. Spares pay full value.' };
-  const HARDWARE_SITE = { id: 'hardware', name: 'Hardware counter', icon: '🧰', x: 1180, y: 1290, r: 55, desc: 'Tape, baggies, scrap and wood.' };
-  const BAG_SHOPS = [{ id: 'bags-west', x: 560, y: 940 }, { id: 'bags-docks', x: 1480, y: 1622 }];
+  const HARDWARE_SITE = { id: 'hardware', name: 'Hardware counter', icon: '🧰', x: 1150, y: 1302, r: 55, desc: 'Tape, baggies, scrap and wood.' };
+  const BAG_SHOPS = [{ id: 'bags-west', x: 565, y: 958 }, { id: 'bags-docks', x: 1590, y: 1640 }];
   // Your lockup workshop (buy, then upgrade). Real guns need it.
-  const LOCKUP = { id: 'lockup', name: 'Lockup workshop', icon: '🔧', x: 1480, y: 195, r: 65,
+  const LOCKUP = { id: 'lockup', name: 'Lockup workshop', icon: '🔧', x: 1520, y: 232, r: 65,
     levels: [{ price: 6000, name: 'Lockup' }, { price: 18000, name: 'Machine shop' }, { price: 45000, name: 'Arms factory' }] };
   const HOME_BENCH = { id: 'home', name: 'Home workbench', icon: '🛠️' };
-
-  // ---- starter income properties (cheap; the Empire fronts take over later) ----
-  const STARTER_FRONTS = [
-    { id: 'shoeshine', name: 'Shoeshine stand', icon: '👞', price: 800, perHour: 30, capHours: 6 },
-    { id: 'hotdog', name: 'Hot dog cart', icon: '🌭', price: 2500, perHour: 95, capHours: 6 },
-    { id: 'arcade', name: 'Corner arcade', icon: '🕹️', price: 6000, perHour: 220, capHours: 8 },
-  ];
 
   // ---- state ----
   const int = (v, max, d = 0) => (Number.isSafeInteger(v) && v >= 0 ? Math.min(max, v) : d);
@@ -105,19 +98,16 @@
   }
   function clean(raw, now = Date.now()) {
     const s = { version: 1, bag: cleanBag(raw?.bag), locker: cleanBag(raw?.locker), bagLevel: int(raw?.bagLevel, BAGS.length - 1),
-      lockup: int(raw?.lockup, LOCKUP.levels.length), stock: {}, promoter: { sold: 0, at: 0 }, arms: { sold: 0, at: 0 }, fronts: {},
-      stats: { gathered: 0, processed: 0, crafted: 0, gunsSold: 0, earned: 0, pillsSold: 0 }, newLife: raw?.newLife === true, started: Number.isFinite(raw?.started) ? raw.started : now };
+      lockup: int(raw?.lockup, LOCKUP.levels.length), stock: {}, promoter: { sold: 0, at: 0 }, arms: { sold: 0, at: 0 },
+      stats: { gathered: 0, processed: 0, crafted: 0, gunsCrafted: 0, gunsSold: 0, earned: 0, pillsSold: 0 }, by: {}, newLife: raw?.newLife === true, started: Number.isFinite(raw?.started) ? raw.started : now };
     for (const sp of GATHER) {
       const r = raw?.stock?.[sp.id];
       s.stock[sp.id] = { n: int(r?.n, sp.stock, sp.stock), at: Number.isFinite(r?.at) && r.at <= now ? r.at : now };
     }
     s.promoter = { sold: int(raw?.promoter?.sold, PROMOTER.demand), at: Number.isFinite(raw?.promoter?.at) && raw.promoter.at <= now ? raw.promoter.at : now };
     s.arms = { sold: int(raw?.arms?.sold, ARMS_BUYER.demand), at: Number.isFinite(raw?.arms?.at) && raw.arms.at <= now ? raw.arms.at : now };
-    for (const f of STARTER_FRONTS) {
-      const r = raw?.fronts?.[f.id];
-      if (r?.owned === true) s.fronts[f.id] = { owned: true, since: Number.isFinite(r.since) && r.since <= now ? r.since : now };
-    }
     for (const k of Object.keys(s.stats)) s.stats[k] = int(raw?.stats?.[k], 1e12);
+    for (const id of [...GATHER, ...PROCESS].map((x) => x.id)) { const n = int(raw?.by?.[id], 1e9); if (n) s.by[id] = n; }
     return s;
   }
 
@@ -180,7 +170,8 @@
     if (!Object.keys(r.added).length) return { ok: false, reason: 'Backpack full', full: true, lost: r.lost };
     if (s.stock[id].n >= sp.stock) s.stock[id].at = now;
     s.stock[id].n -= 1;
-    s.stats.gathered += Object.values(r.added).reduce((a, b) => a + b, 0);
+    const got = Object.values(r.added).reduce((a, b) => a + b, 0);
+    s.stats.gathered += got; s.by[id] = (s.by[id] || 0) + got;
     return { ok: true, added: r.added, lost: r.lost, heat: sp.heat || 0, xp: sp.xp || {} };
   }
 
@@ -199,7 +190,7 @@
     }
     take(s.bag, sp.in);
     for (const [k, n] of Object.entries(sp.out)) { if (sp.pocket) pocket[k] = (pocket[k] || 0) + n; else s.bag[k] = (s.bag[k] || 0) + n; }
-    s.stats.processed += 1;
+    s.stats.processed += 1; s.by[id] = (s.by[id] || 0) + 1;
     return { ok: true, out: sp.out, heat: sp.heat || 0, xp: sp.xp || {} };
   }
   // How many batches the bag can feed right now.
@@ -277,27 +268,9 @@
     return true;
   }
 
-  // ---- starter fronts ----
-  const FBY = Object.fromEntries(STARTER_FRONTS.map((f) => [f.id, f]));
-  function frontPending(s, id, now = Date.now()) { const f = FBY[id], r = s.fronts[id]; if (!f || !r) return 0; return Math.floor(f.perHour * Math.min(f.capHours, Math.max(0, now - r.since) / 3600000)); }
-  function buyFront(s, wallet, id, now = Date.now()) {
-    const f = FBY[id];
-    if (!f) return { ok: false, reason: 'Unknown' };
-    if (s.fronts[id]) return { ok: false, reason: 'Already yours' };
-    if (!(wallet.cash >= f.price)) return { ok: false, reason: 'Not enough cash' };
-    wallet.cash -= f.price; s.fronts[id] = { owned: true, since: now };
-    return { ok: true };
-  }
-  function collectFront(s, wallet, id, now = Date.now()) {
-    const n = frontPending(s, id, now);
-    if (n <= 0) return { ok: false, reason: 'Nothing to collect yet' };
-    wallet.cash += n; s.fronts[id].since = now; s.stats.earned += n;
-    return { ok: true, cash: n };
-  }
-
   const api = Object.freeze({ MATERIALS, IDS, HARDWARE, PARTS_COUNTER, BAGS, LOCKER_CAP, GATHER, PROCESS, PROMOTER, ARMS_BUYER, HARDWARE_SITE, BAG_SHOPS, LOCKUP, HOME_BENCH,
-    STARTER_FRONTS, GBY, PBY, clean, cleanBag, weightOf, cap, room, fits, has, take, give, costText, missing, openAt, hoursText, stockNow, refillIn, gather,
-    process, batches, promoterLeft, sellPills, armsLeft, armsSold, buy, buyBag, buyLockup, store, withdraw, combined, spendBoth, frontPending, buyFront, collectFront });
+    GBY, PBY, clean, cleanBag, weightOf, cap, room, fits, has, take, give, costText, missing, openAt, hoursText, stockNow, refillIn, gather,
+    process, batches, promoterLeft, sellPills, armsLeft, armsSold, buy, buyBag, buyLockup, store, withdraw, combined, spendBoth });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftSupplyData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

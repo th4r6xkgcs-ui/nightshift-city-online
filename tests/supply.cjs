@@ -52,17 +52,13 @@ const rich = { cash: 70000 }; for (let i = 0; i < 3; i++) assert.ok(S.buyLockup(
 shop.bag = { metal: 10 }; assert.equal(S.store(shop, 'metal', 6), 6); assert.deepEqual([shop.bag.metal, shop.locker.metal], [4, 6]);
 assert.ok(S.spendBoth(shop, { metal: 9 })); assert.deepEqual([shop.bag.metal, shop.locker.metal], [undefined, 1]);
 assert.equal(S.withdraw(shop, 'metal', 5), 1);
-const fr = S.clean({}, 0), fw = { cash: 1000 };
-assert.ok(S.buyFront(fr, fw, 'shoeshine', 0).ok); assert.equal(S.frontPending(fr, 'shoeshine', 3600000), 30);
-assert.equal(S.frontPending(fr, 'shoeshine', 99 * 3600000), 30 * 6, 'income caps until you collect');
-assert.equal(S.collectFront(fr, fw, 'shoeshine', 2 * 3600000).cash, 60);
 const arms = S.clean({}, 0); for (let i = 0; i < S.ARMS_BUYER.demand; i++) S.armsSold(arms, 100, 0); assert.equal(S.armsLeft(arms, 1000), 0); assert.equal(S.armsLeft(arms, S.ARMS_BUYER.refill * 1000), S.ARMS_BUYER.demand);
-console.log('PASS: promoter, counters, bags, lockup levels, home locker, starter fronts, arms-buyer demand');
+console.log('PASS: promoter, counters, bags, lockup levels, home locker, arms-buyer demand');
 
 // Save cleaning.
-const dirty = S.clean({ bag: { metal: 5, nuke: 3, pipe: -2 }, bagLevel: 99, lockup: 7, stock: { scrapyard: { n: 999, at: 5 } }, fronts: { hotdog: { owned: true, since: 9e15 } } }, 1000);
+const dirty = S.clean({ bag: { metal: 5, nuke: 3, pipe: -2 }, bagLevel: 99, lockup: 7, stock: { scrapyard: { n: 999, at: 5 } } }, 1000);
 assert.deepEqual(dirty.bag, { metal: 5 }); assert.equal(dirty.bagLevel, S.BAGS.length - 1); assert.equal(dirty.lockup, 3);
-assert.equal(dirty.stock.scrapyard.n, S.GBY.scrapyard.stock); assert.equal(dirty.fronts.hotdog.since, 1000);
+assert.equal(dirty.stock.scrapyard.n, S.GBY.scrapyard.stock);
 console.log('PASS: save cleaning');
 
 // ---- economy simulation ----
