@@ -229,7 +229,25 @@
     xp({ crafting: Math.round(job.seconds * 4) }, 'craft');
     try { root.NightshiftAudio?.play('pickup'); root.NightshiftFeedback?.floating(p.x, p.y - 34, '🛠️ ' + job.label, '#ffb347'); } catch { /* cosmetic */ }
     say(job.done(r));
+    if (job.gun && r.weapon && !r.spare) reveal(r.weapon);
     renderBench(); refresh();
+  }
+
+  // ---- new-gun reveal card ----
+  let revealT = 0;
+  function reveal(w) {
+    const card = document.getElementById('spReveal') || (() => { const d = el('div', { id: 'spReveal' }); document.body.append(d); d.onclick = () => d.classList.remove('on'); return d; })();
+    card.textContent = '';
+    const tierName = w.crude ? 'CRUDE' : ['', 'STREET', 'PRO', 'MILITARY'][w.tier] || '';
+    card.dataset.tier = w.crude ? 0 : w.tier;
+    card.append(el('div', { className: 'k' }, `NEW GUN · ${tierName}`));
+    const ic = gunIcon(w.id, 240, 94); if (ic) card.append(ic);
+    card.append(el('div', { className: 'n' }, w.name));
+    const st = el('div', { className: 'stats' });
+    for (const [k, v] of [['DMG', w.pellets > 1 ? `${w.pellets}×${w.dmg}` : w.dmg], ['MAG', w.mag], ['RPM', Math.round(60000 / w.rate)], ['LASTS', w.dur + ' shots']]) { const d = el('div'); d.append(el('b', {}, String(v)), document.createTextNode(k)); st.append(d); }
+    card.append(st, el('div', { className: 's' }, w.desc));
+    card.classList.remove('on'); void card.offsetWidth; card.classList.add('on');
+    clearTimeout(revealT); revealT = setTimeout(() => card.classList.remove('on'), 3600);
   }
 
   // ---- UI ----
@@ -245,7 +263,7 @@
   .spP .mats{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px}
   .spP .mat{display:flex;align-items:center;gap:7px;background:#ffffff08;border:1px solid #ffffff14;border-radius:10px;padding:5px 7px;font-size:11.5px}
   .spP .mat b{font:700 14px var(--disp,system-ui);color:#fff} .spP .mat span{color:#a9b8ca;font-size:10px;display:block;line-height:1.1}
-  .spP canvas{image-rendering:pixelated;flex:none} .spP canvas.gun,#gsPanel canvas.gun{background:linear-gradient(#b7c4d3,#8e9db0);border-radius:9px;padding:4px 6px;box-shadow:inset 0 0 0 1px #ffffff55,0 2px 6px #0006}
+  .spP canvas{image-rendering:pixelated;flex:none} .spP canvas.gun,#gsPanel canvas.gun,#spReveal canvas.gun{background:linear-gradient(#b7c4d3,#8e9db0);border-radius:9px;padding:4px 6px;box-shadow:inset 0 0 0 1px #ffffff55,0 2px 6px #0006}
   .spP .tabs{display:flex;gap:6px;margin:6px 0 8px;flex-wrap:wrap} .spP .tab{padding:7px 12px;background:#ffffff0c;border:1px solid #ffffff1c} .spP .tab.on{background:#ffd97022;border-color:#ffd970;color:#ffd970}
   .spP .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
   .spP .card{background:#ffffff07;border:1px solid #ffffff16;border-radius:14px;padding:9px 10px;position:relative}
@@ -271,7 +289,17 @@
   #spAct small{font-weight:400;color:#a9b8ca} #spAct .cap{position:relative} #spAct .win{position:absolute;top:0;bottom:0;background:#ffd97088;border-left:1px solid #ffd970;border-right:1px solid #ffd970}
   #spAct .win.off{background:#ff5a6a33;border-color:#ff5a6a66} #spAct.hot{border-color:#ffd970;box-shadow:0 0 0 2px #ffd97066,0 10px 26px #0009} #spAct .tip{display:block;font-size:10.5px;color:#ffd970;margin-top:3px}
   @media (orientation:landscape){#spAct{bottom:calc(14px + env(safe-area-inset-bottom))}}
-  body.ns-menu #spAct{display:none}`;
+  body.ns-menu #spAct{display:none}
+  #spReveal{position:fixed;left:50%;top:50%;z-index:90;transform:translate(-50%,-50%) scale(.85);opacity:0;pointer-events:none;transition:opacity .25s,transform .35s cubic-bezier(.2,1.4,.4,1);
+    width:min(340px,86vw);padding:16px 16px 14px;border-radius:20px;text-align:center;color:#eef3f9;font:13px var(--body,system-ui);
+    background:radial-gradient(120% 90% at 50% 0%,#2b3546,#0d1118 70%);border:1px solid #ffffff2a;box-shadow:0 30px 80px #000d,0 0 0 1px #000}
+  #spReveal.on{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+  #spReveal .k{font:700 11px var(--disp,system-ui);letter-spacing:.2em;color:#9fb3c8;margin-bottom:8px}
+  #spReveal[data-tier="1"] .k{color:#7cdeb5} #spReveal[data-tier="2"] .k{color:#7cc7ff} #spReveal[data-tier="3"] .k{color:#ffb347}
+  #spReveal[data-tier="3"]{box-shadow:0 30px 80px #000d,0 0 40px #ffb34755} #spReveal[data-tier="2"]{box-shadow:0 30px 80px #000d,0 0 34px #7cc7ff44}
+  #spReveal canvas{display:block;margin:0 auto 8px;image-rendering:pixelated} #spReveal .n{font:700 22px var(--disp,system-ui);color:#ffd970}
+  #spReveal .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:10px 0 6px;font-size:10px;color:#8fa6c0} #spReveal .stats b{display:block;color:#fff;font:700 15px var(--disp,system-ui)}
+  #spReveal .s{color:#a9b8ca;font-size:12px;line-height:1.35}`;
   document.head.appendChild(css);
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const btn = (cls, txt, fn, dis) => { const b = el('button', { className: cls, type: 'button', disabled: !!dis }, txt); b.onclick = fn; return b; };

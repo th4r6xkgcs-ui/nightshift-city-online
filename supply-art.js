@@ -310,10 +310,29 @@
 
   // ---------------- icons ----------------
   const iconCache = new Map();
+  // Pixel-art finishing pass: 1px dark outline around the silhouette, a light rim on top edges, shade on bottom edges.
+  function finish(c, w, h) {
+    try {
+      const img = c.getImageData(0, 0, w, h), d = img.data, a = (x, y) => (x < 0 || y < 0 || x >= w || y >= h ? 0 : d[(y * w + x) * 4 + 3]);
+      const out = new Uint8ClampedArray(d);
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4;
+        if (d[i + 3] > 0) {
+          if (!a(x, y - 1)) { out[i] = Math.min(255, d[i] + 46); out[i + 1] = Math.min(255, d[i + 1] + 46); out[i + 2] = Math.min(255, d[i + 2] + 46); }
+          else if (!a(x, y + 1)) { out[i] = d[i] * 0.72; out[i + 1] = d[i + 1] * 0.72; out[i + 2] = d[i + 2] * 0.72; }
+        } else if (a(x - 1, y) || a(x + 1, y) || a(x, y - 1) || a(x, y + 1)) { out[i] = 10; out[i + 1] = 13; out[i + 2] = 18; out[i + 3] = 235; }
+      }
+      img.data.set(out); c.putImageData(img, 0, 0);
+    } catch { /* tainted/stub canvas: skip */ }
+  }
   function pixCanvas(key, w, h, scale, paint) {
     const k = `${key}:${w}:${h}:${scale}`;
     let src = iconCache.get(k);
-    if (!src) { src = document.createElement('canvas'); src.width = w; src.height = h; const c = src.getContext('2d'); c.imageSmoothingEnabled = false; paint(c); iconCache.set(k, src); }
+    if (!src) {
+      src = document.createElement('canvas'); src.width = w + 2; src.height = h + 2; const c = src.getContext('2d'); c.imageSmoothingEnabled = false;
+      c.save(); c.translate(1, 1); paint(c); c.restore(); finish(c, w + 2, h + 2); iconCache.set(k, src);
+    }
+    w += 2; h += 2;
     const out = document.createElement('canvas'); out.width = w * scale; out.height = h * scale; out.style.width = w * scale / 2 + 'px'; out.style.height = h * scale / 2 + 'px';
     const o = out.getContext('2d'); o.imageSmoothingEnabled = false; o.drawImage(src, 0, 0, w * scale, h * scale);
     return out;
@@ -357,7 +376,7 @@
     rifle: (c) => { P(c, K.sl, 12, 5, 23, 2); P(c, K.hi, 12, 5, 23, 1); P(c, K.st, 6, 4, 9, 5); P(c, K.st, 1, 5, 6, 3); P(c, K.st, 1, 7, 3, 4); P(c, K.st, 14, 8, 3, 4); P(c, K.bk, 10, 1, 12, 3); P(c, '#4f9dd6', 21, 1, 1, 3); P(c, K.hi, 10, 1, 12, 1); P(c, K.st, 11, 8, 2, 3); },
     ar: (c) => { P(c, K.st, 9, 4, 18, 4); P(c, K.hi, 9, 4, 18, 1); P(c, '#3a4148', 18, 4, 9, 4); for (let i = 19; i < 27; i += 2) P(c, K.bk, i, 5, 1, 2); P(c, K.sl, 27, 5, 7, 2); P(c, K.st, 15, 8, 3, 6); P(c, K.hi, 15, 8, 1, 6); P(c, K.st, 11, 8, 3, 4); P(c, K.st, 1, 4, 9, 3); P(c, K.st, 1, 7, 3, 3); P(c, K.st, 12, 2, 5, 2); P(c, K.rd, 13, 2, 1, 1); },
   };
-  function gunIcon(id, w = 72, h = 28) { const f = GUN[id]; if (!f) return null; const scale = Math.max(2, Math.round(w / 18)); const cv = pixCanvas('g-' + id, 36, 14, scale, f); cv.style.width = w + 'px'; cv.style.height = Math.round(w * 14 / 36) + 'px'; return cv; }
+  function gunIcon(id, w = 72, h = 28) { const f = GUN[id]; if (!f) return null; const scale = Math.max(2, Math.round(w / 18)); const cv = pixCanvas('g-' + id, 36, 14, scale, f); cv.style.width = w + 'px'; cv.style.height = Math.round(w * 16 / 38) + 'px'; return cv; }
 
   root.NightshiftSupplyArt = Object.freeze({ drawSite, signLift, drawBench, matIcon, gunIcon, GUN_SHAPES: Object.keys(GUN) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
