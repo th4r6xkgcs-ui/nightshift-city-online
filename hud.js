@@ -81,6 +81,7 @@
   #actions>#more{border-color:#ffffff55!important}
   /* toast */
   #toast{font-family:var(--body)!important;font-weight:600}
+  @media (orientation:portrait){body.ns-home:not(.ns-panel) #toast{top:auto!important;left:auto!important;right:12px!important;transform:none!important;bottom:calc(34px + env(safe-area-inset-bottom))!important;font-size:13px!important;max-width:calc(100vw - 172px)!important;text-align:left!important;padding:8px 12px!important}}
   body.ns-panel #toast{z-index:80!important;top:auto!important;bottom:calc(16px + env(safe-area-inset-bottom))!important;box-shadow:0 10px 30px #000c!important}
   /* every menu: one look */
   ${PANELS.join(',')}{font-family:var(--body)!important;border-radius:18px!important;box-shadow:0 30px 80px #000d,inset 0 1px 0 #ffffff14!important;border-color:#ffffff24!important}
@@ -137,6 +138,7 @@
     adopt();
     const ms = menuState(), b = document.body;
     b.classList.toggle('ns-menu', ms.panel || ms.more); b.classList.toggle('ns-panel', ms.panel);
+    let home = false; try { home = !!root.NightshiftHome?.kind?.(); } catch { /* n/a */ } b.classList.toggle('ns-home', home);
     const p = P(); if (!p) return;
     const hp = Math.max(0, Math.min(100, p.hp || 0)), armor = root.NightshiftWeapons?.state?.armor || 0;
     hpFill.style.width = hp + '%'; hpNum.textContent = Math.round(hp); arFill.style.width = Math.min(100, armor) + '%'; arBar.style.display = armor > 0 ? '' : 'none';
