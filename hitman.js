@@ -111,7 +111,7 @@
       m.append(acts); d.append(portrait(c), m); pnl.append(d);
     }
     pnl.append(el('h3', {}, c ? 'ON THE BOARD (finish yours first)' : 'ON THE BOARD'));
-    const offers = D.offers(state).filter((o) => !state.taken.includes(o.id));
+    const offers = D.offers(state).filter((o) => !state.taken.includes(o.id) && !root.NightshiftSafehouse?.owns?.(o.loc.id));
     if (!offers.length) pnl.append(el('div', { className: 'sub' }, 'Nothing right now.'));
     for (const o of offers) {
       const row = el('div', { className: 'offer' }), m = el('div', { className: 'meta' });

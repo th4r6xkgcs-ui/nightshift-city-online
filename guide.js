@@ -105,6 +105,7 @@
         ['🔦', 'Break-ins', 'Suburb houses, the gated estate, and two city warehouses (nights). Pick the back-door lock (tap in the gold) or kick it in (instant alarm). Dark inside: guards show as red echoes. Crack safes for +30% or drill them (loud). Loot is only yours once you walk out. Unaware guards take 2.5× damage.', 'GPS', () => gps(nearest(R.NightshiftBreakin?.WAREHOUSES), 'Warehouse back door')],
         ['🎯', 'Hitman contracts', 'After your first break-in the Broker texts you. Take a contract, find the mark (gold ▼) inside a house, warehouse or the estate, walk out. Quiet pays +50%.', 'OPEN', open2(() => R.NightshiftHitman.open())],
         ['🏚️', 'Trap houses', 'Rival crews\' stash houses in the city, open any hour: armed crew, product, piles of cash. Counting rooms and gun lockers can hold legendary 📜 blueprints.', 'GPS', () => gps(nearest(R.NightshiftBreakin?.STASHES), 'Trap house')],
+        ['🏠', 'Your stash house', 'Clear out a trap house completely, then TAKE IT OVER ($12k). Store product + cash; your crew sells it for you. Raids come: cameras warn you to rush back and defend it.', null],
         ['💍', 'Golden Pawn', 'In Palm Grove. Fences the jewellery, electronics and art you steal.', null],
         ['🐕', 'Pets', 'Paws & Claws in Palm Grove. Pets follow you everywhere and give a perk while fed. Dogs sniff out stashes.', null],
         ['🏡', 'Dream house', 'Palm Grove, $85,000. Furnish 15 slots, raise your Style tier: deals pay more. Sleep for an XP boost.', null],
