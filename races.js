@@ -110,10 +110,8 @@
         ctx.beginPath(); ctx.arc(x, y, R.START_RADIUS, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash?.([]);
         // chequered strip
         for (let i = 0; i < 8; i++) { ctx.fillStyle = i % 2 ? '#111' : '#f3f3f3'; ctx.fillRect(x - 32 + i * 8, y - 4, 8, 8); }
-        ctx.fillStyle = '#10141ccc'; ctx.fillRect(x - 70, y - R.START_RADIUS - 26, 140, 20);
-        ctx.fillStyle = '#ffd970'; ctx.font = 'bold 11px monospace';
         const medal = state.medals[race.id] ? R.MEDALS.find((m) => m.id === state.medals[race.id]).icon + ' ' : '';
-        ctx.fillText(cd ? `${race.name} · ${Math.ceil(cd / 1000)}s` : `🏁 ${medal}${race.name}`, x, y - R.START_RADIUS - 16);
+        root.NightshiftSign?.(ctx, x, y - R.START_RADIUS - 16, '🏁', cd ? `${race.name.toUpperCase()} · ${Math.ceil(cd / 1000)}s` : `${medal}${race.name.toUpperCase()}`, '#ffcf5a');
         ctx.globalAlpha = 1;
       }
     }

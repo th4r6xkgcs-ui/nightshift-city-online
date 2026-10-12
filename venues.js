@@ -44,9 +44,7 @@
     for (const s of places()) {
       if (dist(p, s) > 600) continue;
       const gym = s.kind === 'gym', x = s.x + (gym ? 0 : 78), y = s.y - 6;
-      ctx.fillStyle = '#0f1416e8'; ctx.fillRect(x - 40, y - 11, 80, 20);
-      ctx.strokeStyle = gym ? '#7cdeb5' : `hsl(${(t * 60) % 360},90%,65%)`; ctx.lineWidth = 2; ctx.strokeRect(x - 40, y - 11, 80, 20);
-      ctx.fillStyle = gym ? '#c8ffe9' : '#ffd6f6'; ctx.font = 'bold 10px monospace'; ctx.fillText(gym ? '🏋️ IRON GYM' : '🪩 ' + s.name.toUpperCase(), x, y - 1);
+      root.NightshiftSign?.(ctx, x, y - 1, gym ? '🏋️' : '🪩', gym ? 'IRON WORKS GYM' : s.name.toUpperCase(), gym ? '#58e0a0' : '#ff4fd8', { glow: gym ? 6 : 8 + 4 * Math.sin(t * 4) });
     }
     ctx.restore();
   }

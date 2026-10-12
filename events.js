@@ -99,11 +99,8 @@
       ctx.arc(ev.x, ev.y, V.RADIUS.truck + 10, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (ev.progress / T.hold)); ctx.stroke();
     }
     if (!(ev.type === 'sprint' && ev.stage === 'run')) {
-      const label = ev.type === 'package' && ev.stage === 'carry' ? '📍 DROP' : ev.type === 'sprint' ? '🏁 START' : T.icon + ' ' + T.name.split(' ').pop().toUpperCase();
-      ctx.font = 'bold 11px monospace'; const w = ctx.measureText ? ctx.measureText(label).width + 14 : 90;
-      ctx.fillStyle = '#06222ae8'; ctx.fillRect(tgt.x - w / 2, tgt.y - r - 26, w, 18);
-      ctx.strokeStyle = COLOR; ctx.lineWidth = 1.5; ctx.strokeRect(tgt.x - w / 2, tgt.y - r - 26, w, 18);
-      ctx.fillStyle = '#e8fbff'; ctx.fillText(label, tgt.x, tgt.y - r - 17);
+      const carry = ev.type === 'package' && ev.stage === 'carry';
+      root.NightshiftSign?.(ctx, tgt.x, tgt.y - r - 17, carry ? '📍' : ev.type === 'sprint' ? '🏁' : T.icon, carry ? 'DROP OFF' : ev.type === 'sprint' ? 'SPRINT START' : T.name.toUpperCase(), COLOR, { glow: 8 + 4 * Math.sin(t * 5) });
       if (ev.type === 'truck') drawTruck(ctx, ev.x, ev.y, t, ev.stage === 'crack' ? ev.progress / T.hold : 0);
       if (ev.type === 'briefcase') drawBriefcase(ctx, ev.x, ev.y + Math.sin(t * 4) * 2);
       if (ev.type === 'package' && ev.stage === 'open') drawPackage(ctx, ev.x, ev.y + Math.sin(t * 4) * 2);

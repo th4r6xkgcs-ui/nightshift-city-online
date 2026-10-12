@@ -87,9 +87,7 @@
     for (const v of vaults()) {
       if (dist(p, v) > 650) continue;
       const active = run && run.bank.id === v.id, cd = !H.ready(state, v.id);
-      ctx.fillStyle = '#1d1608e8'; ctx.fillRect(v.x - 34, v.y - 46, 68, 20);
-      ctx.strokeStyle = active ? (Math.sin(t * 10) > 0 ? '#ff5161' : '#5161ff') : cd ? '#6b5a2a' : '#ffcf4a'; ctx.lineWidth = 2; ctx.strokeRect(v.x - 34, v.y - 46, 68, 20);
-      ctx.fillStyle = cd && !active ? '#9a8a5a' : '#ffe9a8'; ctx.font = 'bold 10px monospace'; ctx.fillText(active ? '🚨 VAULT' : '🏦 VAULT', v.x, v.y - 36);
+      root.NightshiftSign?.(ctx, v.x, v.y - 36, active ? '🚨' : '🏦', active ? 'ROBBING' : cd ? 'VAULT · LOCKED' : 'BANK VAULT', active ? (Math.sin(t * 10) > 0 ? '#ff5161' : '#5161ff') : cd ? '#6b5a2a' : '#ffcf4a');
       if (active && run.stage === 'drill') { ctx.strokeStyle = '#ffcf4a55'; ctx.setLineDash?.([6, 6]); ctx.beginPath(); ctx.arc(v.x, v.y, H.REACH, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash?.([]); }
     }
     if (run && run.stage === 'escape') { // arrow to the apartment stash
