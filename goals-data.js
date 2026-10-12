@@ -138,6 +138,8 @@
       progress: (c) => [Math.min(c.silentContracts, 3), 3], reward: { cash: 6000, xp: { stealth: 300 } } },
     { id: 'ride1', tier: 'Rising', title: 'Fresh wheels', hint: 'Buy a car at Prestige Motors in Palm Grove (🚌 bus, from $5,200) or re-VIN a rare one at Rusty\'s. 📱 → 🚗 MY CARS shows your collection.',
       progress: (c) => [Math.min(c.carModels, 1), 1], reward: { cash: 500, xp: { driving: 80 } } },
+    { id: 'meet1', place: 'meet', tier: 'Rising', title: 'Show and shine', hint: 'Win a trophy at the 🏁 night car meet on the Westside Courts (21:00–03:00): stop a car you own in the ring and SHOW it. Kits and tuning score points.',
+      progress: (c) => [Math.min(c.meetTrophies, 1), 1], reward: { cash: 700, xp: { driving: 80, charisma: 60 } } },
     { id: 'exotic1', tier: 'Kingpin', title: 'Exotic taste', hint: 'Own an Exotic, Super or Hyper car: Aurora GT, Vortex R or Phantom Zero. Rare ones get parked on the street sometimes...',
       progress: (c) => [Math.min(c.exotics, 1), 1], reward: { cash: 8000, xp: { driving: 300 } } },
     { id: 'legend1', place: 'lockup', tier: 'Kingpin', title: 'Legendary', hint: 'Find a 📜 blueprint (safes, gun lockers, trap-house counting rooms, Broker bonuses) and craft that legendary gun at your Lockup.',
