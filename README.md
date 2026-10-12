@@ -1,16 +1,16 @@
 # Nightshift City Online
 Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current build: v0.54 combined local client
-Private preview hosted separately. Latest combined batch includes respect ranks, fishing, Hustle phone jobs, labs, weapon mods, persistent named-contact memory and a city journal. See CLIENT_HANDOFF_V53.md.
-Dependency-free Canvas client with walking, combat, police pursuit, traffic, vehicles, apartments/shops, production businesses, RPG skills/weapons/goals/dailies and browser-local inventory/progress. Join an NPC gang or found a custom gang, recruit passive followers, build loyalty, escort members, claim local corners and respond to noncombat rival pressure. Street customers request carried stock using shared dealer demand, prices, heat and sales ledgers. This private static preview is single-player; Claude’s separate backend work is not deployed here. Art/audio are procedural. Real iPhone and DOM/audio QA remain pending.
+## Current build: v0.55 Living Streets
+Private preview hosted separately. Latest release adds detailed pixel guns, pets, architecture and street props, smoother camera, readable crossings and exact current Claude RPG/art integration. Read [v0.55 handoff](CLIENT_HANDOFF_V55.md). Latest combined batch includes respect ranks, fishing, Hustle phone jobs, labs, weapon mods, persistent named-contact memory and a city journal. See CLIENT_HANDOFF_V53.md.
+Dependency-free Canvas client with walking, combat, police pursuit, traffic, vehicles, apartments/shops, production businesses, RPG skills/weapons/goals/dailies and browser-local inventory/progress. Join an NPC gang or found a custom gang, recruit passive followers, build loyalty, escort members, claim local corners and respond to noncombat rival pressure. Street customers request carried stock using shared dealer demand, prices, heat and sales ledgers. This private static preview is single-player; Claude’s separate backend work is not deployed here. Art/audio are procedural. Real iPhone and audio QA remain pending; Edge DOM/viewport checks pass.
 
-Canonical combined branch: `codex/visual-overhaul-v54`, based on v0.52. Crew members can now board nearby stopped vehicles and exit safely; compacts seat one passenger, sedans/vans three. [Transport handoff](CLIENT_HANDOFF_V52.md). Start at **MORE → STREET**, track a contact, then press **TALK**. Detailed contracts and validation: [CLIENT_HANDOFF_V51.md](CLIENT_HANDOFF_V51.md), [CLIENT_HANDOFF_V50_1.md](CLIENT_HANDOFF_V50_1.md), [CLIENT_HANDOFF_V50.md](CLIENT_HANDOFF_V50.md). Historical gameplay notes below describe older foundations.
+Canonical combined branch: `codex/living-streets-v55`, based on v0.52. Crew members can now board nearby stopped vehicles and exit safely; compacts seat one passenger, sedans/vans three. [Transport handoff](CLIENT_HANDOFF_V52.md). Start at **MORE → STREET**, track a contact, then press **TALK**. Detailed contracts and validation: [CLIENT_HANDOFF_V51.md](CLIENT_HANDOFF_V51.md), [CLIENT_HANDOFF_V50_1.md](CLIENT_HANDOFF_V50_1.md), [CLIENT_HANDOFF_V50.md](CLIENT_HANDOFF_V50.md). Historical gameplay notes below describe older foundations.
 
 ## Run and verify
 Use Node 24 or newer. No npm installation is required. `npm run build` creates a static dist bundle for hosting.
 - `python3 -m http.server 8080` serves the game at localhost:8080.
-- `npm run check` runs 89 suites and syntax-checks every root JavaScript module.
+- `npm run check` runs 107 suites and syntax-checks every root JavaScript module.
 - `npm run test:browser` is a separate harness for a configured browser environment.
 - `node tests/render.cjs /tmp/city.png` optionally renders Canvas with `@napi-rs/canvas`; this verifies neither HTML layout nor touch/audio.
 
@@ -23,7 +23,7 @@ MORE opens secondary actions: CRAFT, STYLE, JOB, HOME, STATS, SEARCH, BAG, BOX, 
 
 - STYLE offers skin, shirt, hair, pants, shoes, hat and bag choices with a preview.
 - JOB rotates through three $225/$275/$300 courier deliveries, routes GPS to pickup then destination. Tap JOB at each objective. Parcels are carried items at risk of loss. Stages persist through refresh.
-- HOME routes to the apartment near 880,680. Purchase for $1,200; enter and use the bed, wardrobe or storage. Apartments have collision-aware furniture and an exit at the bottom.
+- HOME routes to the owned starter apartment near 880,680. Enter and use the bed, wardrobe, kitchen, workbench or storage. Fresh players begin with $200 and craft their first gun; legacy saves keep their migration rules. Apartments have collision-aware furniture and an exit at the bottom.
 - USE at a CORNER SHOP entrance opens a walkable shop. USE near the counter trades ammunition, pistols, first aid, medkits and carried valuables. A medkit in BAG heals up to 40 HP when used.
 - BAG shows carried items; BOX accesses a nearby/current vehicle glovebox. Apartment STORAGE opens the home stash. Store/Take uses buttons. Death drops all carried cash, ammunition, weapons and items; stash/gloveboxes survive. LOOT recovers nearby bags, which expire after two minutes.
 - ROB threatens an unrobbed NPC with a carried pistol. Police dispatch after a delay, route around buildings and fire visible projectiles stopped by walls. Lose sight to escape, or GIVE UP to pay up to $150. Heat, NPC wallet/death state and ground cash persist locally.
@@ -40,4 +40,4 @@ MORE opens secondary actions: CRAFT, STYLE, JOB, HOME, STATS, SEARCH, BAG, BOX, 
 Menus/interiors pause this single-player simulation. Real Safari dual-touch, HUD layout and browser audio/file-picker QA remain pending. Save data is trusted local prototype state, not a secure economy. No account server, database or multiplayer exists.
 Read AGENTS.md, CLAUDE.md, HANDOFF.md, FILE_OWNERSHIP.md and DEPLOYMENT.md. GitHub is canonical; Sites hosts a private deployment mirror. Codex owns the client; Claude owns future backend work. No credentials or Garage assets belong here.
 
-Current art pass: high-density Canvas rendering (2× DPR, four-million-pixel budget), smoother sprite sampling, vehicle paint/glass highlights, clothing shading, rooftop glass, storefront planters/signs and restrained mobile HUD finishes. See CLIENT_HANDOFF_V54.md. Further recruitment/follower/gang-management expansion is deferred until multiplayer. Existing crew saves and gameplay remain intact. Imported Claude RPG snapshot remains 8b6c4c3; newer refs 8495bd7 / 24d1749 were observed but are not integrated.
+Current art and gameplay integration: v0.55 Living Streets, including exact Claude rpg-play c31e4976. See CLIENT_HANDOFF_V55.md for the current release, imported systems, detailed art and browser verification. Further recruitment/follower/gang-management expansion is deferred until multiplayer.

@@ -1,90 +1,313 @@
 /* Weapons catalog + rules (Claude-owned). Pure and Node-testable; weapons.js applies them in game.
  * dmg = damage per bullet/pellet before the Shooting perk; rate = ms between shots; mag = rounds per
  * magazine (<= 30, the game's save cap); range in px; speed in px per frame; spread = max radians off aim.
- * Ammo is shared (the game's single reserve). The Street Pistol matches the original game exactly. */
+ * Ammo is shared (the game's single reserve).
+ *
+ * Guns are CRAFTED, not bought (fictional game recipes, no real-world guidance):
+ *   tier 0 = home workbench (crude guns from scrap; they fall apart and cannot be repaired),
+ *   tier 1-3 = your Lockup workshop level (supply-data.js LOCKUP). `level` = Shooting level needed to craft.
+ *   dur = shots before the gun wears out. Crude guns break for good; real guns break and need a repair.
+ *   value = what the arms buyer pays for a brand-new one (spares); used guns sell for less.
+ * Crafting a gun you already own makes a SPARE: it swaps in automatically when yours breaks, or you sell it. */
 (function (root) {
   'use strict';
+  const C = (mats, seconds) => ({ mats, seconds });
   const WEAPONS = [
-    { id: 'pistol', name: 'Street Pistol', icon: '🔫', price: 0, level: 1, dmg: 20, pellets: 1, rate: 180, mag: 30, spread: 0, range: 450, speed: 10,
-      desc: 'Your starter sidearm. Reliable, nothing special.' },
-    { id: 'revolver', name: 'Six-Shot Magnum', icon: '🤠', price: 900, level: 2, dmg: 45, pellets: 1, rate: 420, mag: 6, spread: 0.015, range: 560, speed: 12,
-      desc: 'Slow and loud, but drops most people in one shot.' },
-    { id: 'smg', name: 'Viper SMG', icon: '💨', price: 1500, level: 4, dmg: 13, pellets: 1, rate: 85, mag: 30, spread: 0.09, range: 380, speed: 11,
-      desc: 'Sprays fast at close range. Eats ammo.' },
-    { id: 'shotgun', name: 'Breaker 12', icon: '💥', price: 2600, level: 7, dmg: 12, pellets: 6, rate: 700, mag: 6, spread: 0.28, range: 230, speed: 10,
-      desc: 'Six pellets per shell. Brutal up close, useless far away.' },
-    { id: 'rifle', name: 'Longshot DMR', icon: '🎯', price: 4200, level: 10, dmg: 60, pellets: 1, rate: 550, mag: 10, spread: 0.004, range: 950, speed: 14,
-      desc: 'Pinpoint and long range. One hit, one down.' },
-    { id: 'ar', name: 'Ridgeback AR', icon: '⚡', price: 8000, level: 15, dmg: 22, pellets: 1, rate: 115, mag: 30, spread: 0.045, range: 650, speed: 13,
-      desc: 'Top-tier all-rounder: fast, accurate, hard-hitting.' },
+    { id: 'pipe', name: 'Pipe Pistol', icon: '🪈', cls: 'crude', tier: 0, level: 1, crude: true, dmg: 24, pellets: 1, rate: 700, mag: 1, spread: 0.07, range: 300, speed: 9, dur: 10, value: 60,
+      craft: C({ pipe: 1, metal: 3, spring: 1, tape: 1 }, 8), desc: 'A pipe, a spring and a prayer. One shot, then reload. Falls apart after ~10 shots.' },
+    { id: 'zip', name: 'Zip .22', icon: '🩹', cls: 'crude', tier: 0, level: 1, crude: true, dmg: 14, pellets: 1, rate: 420, mag: 5, spread: 0.06, range: 330, speed: 9, dur: 40, value: 150,
+      craft: C({ pipe: 1, metal: 5, spring: 2, tape: 2, wood: 1 }, 12), desc: 'Taped-together five-shot. Weak, but it holds together for a while.' },
+    { id: 'sawnoff', name: 'Sawn-off', icon: '🪚', cls: 'crude', tier: 0, level: 2, crude: true, dmg: 10, pellets: 5, rate: 900, mag: 2, spread: 0.32, range: 200, speed: 9, dur: 24, value: 190,
+      craft: C({ pipe: 2, metal: 6, spring: 2, wood: 2, tape: 1 }, 15), desc: 'Two barrels of spray. Devastating at arm\'s length, useless past it.' },
+    { id: 'pistol', name: 'Street Pistol', icon: '🔫', cls: 'pistol', tier: 1, level: 2, dmg: 20, pellets: 1, rate: 180, mag: 30, spread: 0, range: 450, speed: 10, dur: 500, value: 1050,
+      craft: C({ frame: 1, barrel: 1, trigger: 1, spring: 2, metal: 4 }, 20), desc: 'A proper sidearm with a long stick magazine. Reliable, accurate, lasts.' },
+    { id: 'compact', name: 'Compact 9', icon: '🔹', cls: 'pistol', tier: 1, level: 3, dmg: 18, pellets: 1, rate: 150, mag: 15, spread: 0.035, range: 420, speed: 10, dur: 450, value: 1150,
+      craft: C({ frame: 1, barrel: 1, trigger: 1, spring: 3, metal: 3 }, 22), desc: 'Small and quick-firing. Hits a little harder than the street pistol, shorter magazine.' },
+    { id: 'revolver', name: 'Six-Shot Magnum', icon: '🤠', cls: 'pistol', tier: 1, level: 3, dmg: 45, pellets: 1, rate: 420, mag: 6, spread: 0.015, range: 560, speed: 12, dur: 650, value: 1300,
+      craft: C({ frame: 1, barrel: 1, trigger: 1, spring: 2, metal: 8 }, 25), desc: 'Slow and loud, but drops most people in one shot.' },
+    { id: 'pump', name: 'Pump Shotgun', icon: '🦆', cls: 'shotgun', tier: 1, level: 4, dmg: 11, pellets: 6, rate: 850, mag: 5, spread: 0.26, range: 240, speed: 10, dur: 420, value: 1650,
+      craft: C({ frame: 1, barrel: 2, trigger: 1, wood: 3, spring: 3 }, 30), desc: 'Rack and blast. The street-level crowd clearer.' },
+    { id: 'machine', name: 'Machine Pistol', icon: '🌪️', cls: 'smg', tier: 2, level: 5, dmg: 11, pellets: 1, rate: 70, mag: 20, spread: 0.12, range: 330, speed: 11, dur: 600, value: 2100,
+      craft: C({ frame: 1, barrel: 1, trigger: 2, bolt: 1, spring: 4, metal: 5 }, 35), desc: 'A pistol that thinks it\'s an SMG. Wild spray.' },
+    { id: 'smg', name: 'Viper SMG', icon: '💨', cls: 'smg', tier: 2, level: 5, dmg: 13, pellets: 1, rate: 85, mag: 30, spread: 0.09, range: 380, speed: 11, dur: 800, value: 2400,
+      craft: C({ frame: 2, barrel: 1, trigger: 1, bolt: 1, spring: 4, metal: 6 }, 40), desc: 'Sprays fast at close range. Eats ammo.' },
+    { id: 'hawk', name: 'Desert Hawk', icon: '🦅', cls: 'pistol', tier: 2, level: 6, dmg: 55, pellets: 1, rate: 520, mag: 7, spread: 0.02, range: 600, speed: 13, dur: 500, value: 2050,
+      craft: C({ frame: 1, barrel: 2, trigger: 1, spring: 2, metal: 12 }, 35), desc: 'A hand cannon. Kicks like a mule.' },
+    { id: 'hunting', name: 'Hunting Rifle', icon: '🦌', cls: 'rifle', tier: 2, level: 6, dmg: 70, pellets: 1, rate: 1100, mag: 5, spread: 0.006, range: 900, speed: 14, dur: 600, value: 2300,
+      craft: C({ frame: 1, barrel: 2, trigger: 1, bolt: 1, wood: 4 }, 40), desc: 'Bolt action. One careful shot at a time, from very far.' },
+    { id: 'shotgun', name: 'Breaker 12', icon: '💥', cls: 'shotgun', tier: 3, level: 8, dmg: 12, pellets: 6, rate: 700, mag: 6, spread: 0.28, range: 230, speed: 10, dur: 700, value: 3400,
+      craft: C({ frame: 2, barrel: 2, trigger: 1, bolt: 1, spring: 4, metal: 8 }, 45), desc: 'Semi-auto, six pellets per shell. Brutal up close.' },
+    { id: 'carbine', name: 'Carbine', icon: '🎖️', cls: 'rifle', tier: 3, level: 9, dmg: 18, pellets: 1, rate: 105, mag: 30, spread: 0.055, range: 560, speed: 13, dur: 900, value: 4200,
+      craft: C({ frame: 2, barrel: 2, trigger: 2, bolt: 1, spring: 4, metal: 10 }, 55), desc: 'Short rifle, fast and steady.' },
+    { id: 'rifle', name: 'Longshot DMR', icon: '🎯', cls: 'rifle', tier: 3, level: 10, dmg: 60, pellets: 1, rate: 550, mag: 10, spread: 0.004, range: 950, speed: 14, dur: 700, value: 4600,
+      craft: C({ frame: 2, barrel: 2, trigger: 1, bolt: 1, lens: 2, metal: 10 }, 55), desc: 'Pinpoint and long range. One hit, one down.' },
+    { id: 'ar', name: 'Ridgeback AR', icon: '⚡', cls: 'rifle', tier: 3, level: 13, dmg: 22, pellets: 1, rate: 115, mag: 30, spread: 0.045, range: 650, speed: 13, dur: 1200, value: 7500,
+      craft: C({ frame: 3, barrel: 2, trigger: 2, bolt: 2, spring: 5, metal: 14 }, 70), desc: 'Top-tier all-rounder: fast, accurate, hard-hitting.' },
+    // ---- Legendary: craftable only once you've found the BLUEPRINT (safes, gun lockers, stash-house vaults, the Broker). ----
+    { id: 'goldhawk', name: 'Gilded Hawk', icon: '👑', cls: 'pistol', tier: 2, level: 8, legend: true, dmg: 66, pellets: 1, rate: 470, mag: 8, spread: 0.015, range: 650, speed: 14, dur: 1000, value: 9500,
+      craft: C({ frame: 1, barrel: 2, trigger: 1, spring: 3, metal: 12, jewels: 3 }, 60), desc: 'A hand cannon plated in melted-down jewellery. Hits like a truck, never jams.' },
+    { id: 'whisper', name: 'Whisper SMG', icon: '🤫', cls: 'smg', tier: 2, level: 7, legend: true, silent: true, dmg: 15, pellets: 1, rate: 80, mag: 30, spread: 0.07, range: 400, speed: 12, dur: 1100, value: 8000,
+      craft: C({ frame: 2, barrel: 1, trigger: 1, bolt: 1, spring: 4, metal: 8, pipe: 2, tape: 4 }, 60), desc: 'Integrally suppressed. Barely a cough per shot: built for break-ins and contracts.' },
+    { id: 'dragon', name: 'Dragonbreath 12', icon: '🐉', cls: 'shotgun', tier: 3, level: 10, legend: true, dmg: 13, pellets: 8, rate: 620, mag: 8, spread: 0.3, range: 250, speed: 11, dur: 1000, value: 11000,
+      craft: C({ frame: 2, barrel: 2, trigger: 1, bolt: 1, spring: 5, metal: 12, chem: 4 }, 75), desc: 'Semi-auto, eight hot pellets a shell. Rooms empty themselves.' },
+    { id: 'reaper', name: 'Reaper .50', icon: '💀', cls: 'rifle', tier: 3, level: 12, legend: true, dmg: 150, pellets: 1, rate: 1350, mag: 5, spread: 0.002, range: 1150, speed: 16, dur: 800, value: 14000,
+      craft: C({ frame: 2, barrel: 3, trigger: 1, bolt: 2, lens: 3, metal: 16 }, 90), desc: 'Anti-materiel rifle. Anything it hits stays down.' },
+    { id: 'tiger', name: 'Tigerstripe AR', icon: '🐯', cls: 'rifle', tier: 3, level: 15, legend: true, dmg: 26, pellets: 1, rate: 100, mag: 30, spread: 0.035, range: 700, speed: 14, dur: 2000, value: 18000,
+      craft: C({ frame: 3, barrel: 2, trigger: 2, bolt: 2, spring: 6, metal: 16, gadgets: 2 }, 100), desc: 'Hand-finished tiger-stripe furniture, smart optic, match barrel. The best rifle in the city.' },
   ];
+  const LEGENDS = WEAPONS.filter((w) => w.legend).map((w) => w.id);
+  // Paint jobs: cosmetic finishes for any gun you own (applied at a workbench). pal: body / slide / highlight colours
+  // used by the icons (supply-art.js) and the held sprite (sprite-renderer.js).
+  const SKINS = [
+    { id: 'stock', name: 'Factory finish', price: 0, mats: {}, pal: null },
+    { id: 'desert', name: 'Desert tan', price: 350, mats: { tape: 1 }, pal: { st: '#9a8460', sl: '#b8a07a', hi: '#e0cfa8' } },
+    { id: 'olive', name: 'Olive drab', price: 450, mats: { tape: 1 }, pal: { st: '#4a5232', sl: '#5e6a40', hi: '#8f9a68' } },
+    { id: 'urban', name: 'Urban camo', price: 900, mats: { tape: 2 }, pal: { st: '#4a5058', sl: '#6e7680', hi: '#b8c0c8' }, camo: ['#2b2f33', '#9aa3ab'] },
+    { id: 'carbon', name: 'Carbon fibre', price: 1500, mats: { metal: 2 }, pal: { st: '#15171a', sl: '#2a2e33', hi: '#5a6068' }, camo: ['#2a2e33', '#1b1e22'] },
+    { id: 'tiger', name: 'Tiger stripe', price: 2500, mats: { tape: 2 }, pal: { st: '#c8742a', sl: '#e8833a', hi: '#ffc070' }, camo: ['#1b1410', '#1b1410'] },
+    { id: 'neon', name: 'Neon pink', price: 3000, mats: { chem: 1 }, pal: { st: '#b0306a', sl: '#ff4ad8', hi: '#ffb0ec' } },
+    { id: 'chrome', name: 'Mirror chrome', price: 4000, mats: { metal: 4 }, pal: { st: '#8a939b', sl: '#c9d1d6', hi: '#ffffff' } },
+    { id: 'gold', name: '24k gold', price: 9000, mats: { jewels: 2 }, pal: { st: '#a8781e', sl: '#d8a83a', hi: '#ffe9a0' } },
+  ];
+  const SKIN = Object.fromEntries(SKINS.map((s) => [s.id, s]));
+  // ctx: { have(cost), spend(cost) } for materials; wallet for cash.
+  function paint(state, wallet, gunId, skinId, ctx) {
+    const s = SKIN[skinId]; if (!s) return { ok: false, reason: 'Unknown finish' };
+    if (!state.owned.includes(gunId)) return { ok: false, reason: 'You don\'t own that gun' };
+    if ((state.skins?.[gunId] || 'stock') === skinId) return { ok: false, reason: 'Already painted' };
+    if (!(wallet.cash >= s.price)) return { ok: false, reason: `Needs $${s.price.toLocaleString()}` };
+    if (Object.keys(s.mats).length && !(ctx?.have?.(s.mats))) return { ok: false, reason: 'Missing materials' };
+    if (Object.keys(s.mats).length && !ctx.spend(s.mats)) return { ok: false, reason: 'Missing materials' };
+    wallet.cash -= s.price; if (!state.skins) state.skins = {}; if (skinId === 'stock') delete state.skins[gunId]; else state.skins[gunId] = skinId;
+    return { ok: true, skin: s };
+  }
+  // Blueprint drops: pick one you haven't learned (rarer guns less often). chance is per roll.
+  const BP_WEIGHT = { whisper: 5, goldhawk: 4, dragon: 3, reaper: 2, tiger: 1 };
+  function rollBlueprint(state, rnd = Math.random, chance = 0.05) {
+    if (!(rnd() < chance)) return null;
+    const left = LEGENDS.filter((id) => !(state.learned || []).includes(id)); if (!left.length) return null;
+    const tot = left.reduce((t, id) => t + (BP_WEIGHT[id] || 1), 0); let x = rnd() * tot;
+    for (const id of left) { if ((x -= BP_WEIGHT[id] || 1) <= 0) return id; }
+    return left[left.length - 1];
+  }
+  function learn(state, id) { if (!BY_LEGEND(id)) return false; if (!state.learned) state.learned = []; if (state.learned.includes(id)) return false; state.learned.push(id); return true; }
+  const BY_LEGEND = (id) => WEAPONS.find((w) => w.id === id && w.legend) || null;
   const BY_ID = Object.fromEntries(WEAPONS.map((w) => [w.id, w]));
-  const AMMO_CRATE = { rounds: 60, price: 100 }; // bulk ammo: $1.67/round vs $2 at the corner shop
-  // Per-gun attachments. Bought separately for each gun; stats apply through effective().
+  // Shown when you have no working gun (the game blocks firing; see weapons.js pocket sync).
+  const NONE = Object.freeze({ id: 'none', name: 'Unarmed', icon: '✊', cls: 'none', tier: 0, level: 1, dmg: 0, pellets: 1, rate: 400, mag: 30, spread: 0, range: 1, speed: 1, dur: 1, value: 0, desc: 'No gun. Craft one at your home workbench.' });
+  const AMMO_CRATE = { rounds: 30, price: 75 }; // $2.50/round in bulk (the corner shop charges $2 a round but only sells small amounts)
+  // Body armor: absorbs ABSORB of each hit until its points run out. Buying tops up to the vest's points.
+  const ARMOR = [
+    { id: 'light', name: 'Kevlar vest', icon: '🦺', price: 600, points: 50 },
+    { id: 'heavy', name: 'Heavy plate vest', icon: '🛡️', price: 1600, points: 100 },
+  ];
+  const ABSORB = 0.7;
+  function absorb(armor, dmg) {
+    if (!(armor > 0) || !(dmg > 0)) return { armor: Math.max(0, armor || 0), dmg: Math.max(0, dmg || 0) };
+    const soaked = Math.min(armor, dmg * ABSORB);
+    return { armor: armor - soaked, dmg: dmg - soaked };
+  }
+  // Attachments: crafted at a bench of at least `tier`, per gun. crude:false = won't fit a crude gun.
   const MODS = [
-    { id: 'extmag', name: 'Extended mag', icon: '📦', price: 900, level: 2, desc: '+50% magazine (game cap 30)' },
-    { id: 'grip', name: 'Laser grip', icon: '🔴', price: 700, level: 4, desc: 'Spread halved' },
-    { id: 'scope', name: 'Scope', icon: '🔭', price: 800, level: 5, desc: '+35% range, tighter aim' },
-    { id: 'suppressor', name: 'Suppressor', icon: '🔇', price: 1200, level: 3, desc: '70% less heat per shot; 80% of shots go unreported' },
+    { id: 'reinforce', name: 'Reinforced parts', icon: '🧷', tier: 0, level: 1, crude: true, mats: { metal: 8, spring: 2 }, seconds: 10, desc: '+60% durability' },
+    { id: 'extmag', name: 'Extended mag', icon: '📦', tier: 1, level: 2, crude: false, mats: { spring: 3, metal: 4 }, seconds: 12, desc: '+50% magazine (game cap 30)' },
+    { id: 'grip', name: 'Laser grip', icon: '🔴', tier: 1, level: 4, crude: false, mats: { lens: 1, metal: 2, tape: 1 }, seconds: 12, desc: 'Spread halved' },
+    { id: 'suppressor', name: 'Suppressor', icon: '🔇', tier: 2, level: 3, crude: false, mats: { pipe: 1, metal: 6, tape: 2, spring: 1 }, seconds: 15, desc: '70% less heat per shot; 80% of shots go unreported' },
+    { id: 'scope', name: 'Scope', icon: '🔭', tier: 2, level: 5, crude: false, mats: { lens: 2, metal: 3 }, seconds: 15, desc: '+35% range, tighter aim' },
   ];
   const MOD = Object.fromEntries(MODS.map((m) => [m.id, m]));
+  const SPARE_MAX = 20;
+  // Craft quality: rolled for each gun you craft (Crafting skill shifts the odds). Spares are Standard.
+  const QUALITY = [
+    { id: 'rough', name: 'Rough', dur: 0.8, dmg: 0.95, val: 0.8, color: '#9fb3c8' },
+    { id: 'standard', name: 'Standard', dur: 1, dmg: 1, val: 1, color: '#e8eff7' },
+    { id: 'fine', name: 'Fine', dur: 1.2, dmg: 1.05, val: 1.25, color: '#7cc7ff' },
+    { id: 'master', name: 'Masterwork', dur: 1.5, dmg: 1.1, val: 1.6, color: '#ffb347' },
+  ];
+  // Odds by Crafting level (1..50): rough fades out, fine/masterwork grow. rnd in [0,1).
+  function rollQuality(craftLevel = 1, rnd = Math.random) {
+    const L = Math.max(1, Math.min(50, craftLevel)), r = rnd();
+    const rough = Math.max(0.03, 0.3 - L * 0.012), master = Math.min(0.2, 0.02 + L * 0.004), fine = Math.min(0.4, 0.12 + L * 0.01);
+    if (r < rough) return 0; if (r < rough + fine) return 2; if (r < rough + fine + master) return 3; return 1;
+  }
+  // Armor plate: crafted at any bench, tops body armor up by `points` (max 100).
+  const PLATE = { mats: { metal: 10, tape: 2 }, points: 25, max: 100, seconds: 12 };
+  function buildPlate(state, ctx) {
+    if ((state.armor || 0) >= PLATE.max) return { ok: false, reason: 'Armor is full' };
+    if (!ctx.spend(PLATE.mats)) return { ok: false, reason: 'Missing materials' };
+    state.armor = Math.min(PLATE.max, (state.armor || 0) + PLATE.points);
+    return { ok: true, armor: state.armor };
+  }
+
   // Weapon stats with its mods applied.
-  function effective(w, mods = []) {
-    const e = { ...w, mods: mods.slice() };
+  function effective(w, mods = [], q = 1) {
+    const e = { ...w, mods: mods.slice(), quality: q };
+    if (q !== 1 && QUALITY[q]) e.dmg = Math.max(1, Math.round(w.dmg * QUALITY[q].dmg));
     if (mods.includes('extmag')) e.mag = Math.min(30, Math.round(w.mag * 1.5));
     if (mods.includes('grip')) e.spread = w.spread * 0.5;
     if (mods.includes('scope')) { e.range = Math.round(w.range * 1.35); e.spread = e.spread * 0.6; }
-    e.suppressed = mods.includes('suppressor');
+    e.suppressed = mods.includes('suppressor') || !!w.silent;
     return e;
   }
-  function buyMod(state, wallet, weaponId, modId, shootingLevel) {
-    const m = MOD[modId];
-    if (!m || !BY_ID[weaponId]) return { ok: false, reason: 'Unknown mod' };
-    if (!state.owned.includes(weaponId)) return { ok: false, reason: 'Buy the gun first' };
-    const have = state.mods[weaponId] || [];
-    if (have.includes(modId)) return { ok: false, reason: 'Already fitted' };
-    if (!(shootingLevel >= m.level)) return { ok: false, reason: `Needs Shooting level ${m.level}` };
-    if (!(wallet.cash >= m.price)) return { ok: false, reason: 'Not enough cash' };
-    wallet.cash -= m.price; state.mods[weaponId] = [...have, modId];
-    return { ok: true, price: m.price };
-  }
+  // Max shots for a gun (reinforce +60%; durMul = Crafting skill bonus, 1..1.5).
+  const maxDur = (w, mods = [], durMul = 1, q = 1) => Math.max(1, Math.round(w.dur * (mods.includes('reinforce') ? 1.6 : 1) * Math.max(1, Math.min(1.5, durMul)) * (QUALITY[q]?.dur ?? 1)));
+  const qOf = (state, id) => (Number.isInteger(state?.quality?.[id]) ? state.quality[id] : 1);
 
+  const okId = (id) => typeof id === 'string' && !!BY_ID[id];
   function clean(raw) {
-    const owned = ['pistol'];
-    if (Array.isArray(raw?.owned)) for (const id of raw.owned) if (BY_ID[id] && !owned.includes(id)) owned.push(id);
-    const equipped = owned.includes(raw?.equipped) ? raw.equipped : 'pistol';
+    const legacy = raw && typeof raw === 'object' && raw.version === 1; // saves from before crafting: keep what you had
+    const owned = [];
+    if (legacy) owned.push('pistol');
+    if (Array.isArray(raw?.owned)) for (const id of raw.owned) if (okId(id) && !owned.includes(id)) owned.push(id);
+    const broken = Array.isArray(raw?.broken) ? [...new Set(raw.broken.filter((id) => owned.includes(id) && !BY_ID[id].crude))] : [];
+    const usable = owned.filter((id) => !broken.includes(id));
+    const equipped = usable.includes(raw?.equipped) ? raw.equipped : (usable[0] || null);
     const mods = {};
     for (const [wid, list] of Object.entries(raw?.mods || {})) {
       if (!owned.includes(wid) || !Array.isArray(list)) continue;
-      const clean = [...new Set(list.filter((m) => typeof m === 'string' && /^[a-z]+$/.test(m)))];
-      if (clean.length) mods[wid] = clean;
+      const c = [...new Set(list.filter((m) => typeof m === 'string' && MOD[m] && (MOD[m].crude || !BY_ID[wid].crude)))];
+      if (c.length) mods[wid] = c;
     }
-    return { version: 1, owned, equipped, mods };
+    const quality = {};
+    for (const id of owned) { const q = raw?.quality?.[id]; if (Number.isInteger(q) && q >= 0 && q < QUALITY.length && q !== 1) quality[id] = q; }
+    const cond = {};
+    for (const id of owned) {
+      const q = Number.isInteger(quality[id]) ? quality[id] : 1, mx = maxDur(BY_ID[id], mods[id] || [], 1.5, q), v = raw?.cond?.[id];
+      cond[id] = broken.includes(id) ? 0 : Number.isFinite(v) && v >= 0 ? Math.min(mx, Math.round(v)) : maxDur(BY_ID[id], mods[id] || [], 1, q);
+      if (cond[id] <= 0 && !broken.includes(id)) cond[id] = 1;
+    }
+    const spare = {};
+    for (const [id, n] of Object.entries(raw?.spare || {})) if (okId(id) && Number.isSafeInteger(n) && n > 0) spare[id] = Math.min(SPARE_MAX, n);
+    const armor = Number.isFinite(raw?.armor) ? Math.max(0, Math.min(100, raw.armor)) : 0;
+    const learned = Array.isArray(raw?.learned) ? [...new Set(raw.learned.filter((id) => BY_ID[id]?.legend))] : [];
+    for (const id of owned) if (BY_ID[id].legend && !learned.includes(id)) learned.push(id);
+    const skins = {}; for (const [id, sk] of Object.entries(raw?.skins || {})) if (owned.includes(id) && SKIN[sk] && sk !== 'stock') skins[id] = sk;
+    return { version: 2, owned, equipped, mods, armor, cond, broken, spare, quality, learned, skins };
   }
-  // Returns '' when the purchase is allowed, otherwise the reason.
-  function canBuy(state, id, cash, shootingLevel) {
-    const w = BY_ID[id];
-    if (!w) return 'Unknown weapon';
-    if (state.owned.includes(id)) return 'Already owned';
-    if (!(shootingLevel >= w.level)) return `Needs Shooting level ${w.level}`;
-    if (!(cash >= w.price)) return 'Not enough cash';
-    return '';
-  }
-  function buy(state, wallet, id, shootingLevel) {
-    const why = canBuy(state, id, wallet.cash, shootingLevel);
-    if (why) return { ok: false, reason: why };
-    wallet.cash -= BY_ID[id].price;
-    state.owned.push(id);
-    state.equipped = id;
-    return { ok: true };
-  }
-  function equip(state, id) { if (!state.owned.includes(id)) return false; state.equipped = id; return true; }
+  const usable = (state) => WEAPONS.filter((w) => state.owned.includes(w.id) && !state.broken.includes(w.id)).map((w) => w.id);
+  function equip(state, id) { if (!usable(state).includes(id)) return false; state.equipped = id; return true; }
   function cycle(state, dir = 1) {
-    const list = WEAPONS.filter((w) => state.owned.includes(w.id)).map((w) => w.id);
+    const list = usable(state);
+    if (!list.length) { state.equipped = null; return null; }
     const i = list.indexOf(state.equipped);
     state.equipped = list[(i + dir + list.length) % list.length];
     return state.equipped;
   }
+
+  // '' when craftable, else the reason. ctx: { bench (0 home | 1-3 lockup), shooting (level), have(cost) -> bool }
+  function craftBlock(state, id, ctx) {
+    const w = BY_ID[id];
+    if (!w) return 'Unknown weapon';
+    if (w.tier > ctx.bench) return w.tier === 1 && ctx.bench === 0 ? 'Needs your Lockup workshop' : `Needs a level ${w.tier} workshop`;
+    if (w.legend && !(state.learned || []).includes(id)) return 'Needs the blueprint · safes, gun lockers, stash-house vaults, the Broker';
+    if (!(ctx.shooting >= w.level)) return `Needs Shooting level ${w.level}`;
+    if ((state.spare[id] || 0) >= SPARE_MAX && state.owned.includes(id)) return 'Spare rack is full';
+    if (!ctx.have(w.craft.mats)) return 'Missing materials';
+    return '';
+  }
+  const setQ = (state, id, q) => { if (!state.quality) state.quality = {}; if (q === 1) delete state.quality[id]; else state.quality[id] = q; };
+  // ctx.spend(cost) must take the materials (bag/locker); durMul = crafting skill bonus; quality = rolled tier.
+  function craft(state, id, ctx) {
+    const why = craftBlock(state, id, ctx);
+    if (why) return { ok: false, reason: why };
+    const w = BY_ID[id], q = Number.isInteger(ctx.quality) ? Math.max(0, Math.min(QUALITY.length - 1, ctx.quality)) : 1;
+    if (!ctx.spend(w.craft.mats)) return { ok: false, reason: 'Missing materials' };
+    if (state.owned.includes(id) && !state.broken.includes(id)) {
+      // A better copy replaces the one you carry (fresh condition); the old one becomes a spare.
+      if (q > qOf(state, id)) { state.spare[id] = Math.min(SPARE_MAX, (state.spare[id] || 0) + 1); setQ(state, id, q); state.cond[id] = maxDur(w, state.mods[id] || [], ctx.durMul, q); return { ok: true, spare: false, upgraded: true, quality: q, weapon: w }; }
+      state.spare[id] = (state.spare[id] || 0) + 1; return { ok: true, spare: true, quality: q, weapon: w };
+    }
+    if (!state.owned.includes(id)) state.owned.push(id);
+    state.broken = state.broken.filter((b) => b !== id);
+    setQ(state, id, q);
+    state.cond[id] = maxDur(w, state.mods[id] || [], ctx.durMul, q);
+    if (!state.equipped) state.equipped = id;
+    return { ok: true, spare: false, quality: q, weapon: w };
+  }
+  function modBlock(state, weaponId, modId, ctx) {
+    const m = MOD[modId], w = BY_ID[weaponId];
+    if (!m || !w) return 'Unknown mod';
+    if (!state.owned.includes(weaponId)) return 'Craft the gun first';
+    if (w.crude && !m.crude) return 'Won\'t fit a crude gun';
+    if ((state.mods[weaponId] || []).includes(modId)) return 'Already fitted';
+    if (m.tier > ctx.bench) return m.tier === 1 && ctx.bench === 0 ? 'Needs your Lockup workshop' : `Needs a level ${m.tier} workshop`;
+    if (!(ctx.shooting >= m.level)) return `Needs Shooting level ${m.level}`;
+    if (!ctx.have(m.mats)) return 'Missing materials';
+    return '';
+  }
+  function craftMod(state, weaponId, modId, ctx) {
+    const why = modBlock(state, weaponId, modId, ctx);
+    if (why) return { ok: false, reason: why };
+    const m = MOD[modId];
+    if (!ctx.spend(m.mats)) return { ok: false, reason: 'Missing materials' };
+    state.mods[weaponId] = [...(state.mods[weaponId] || []), modId];
+    if (modId === 'reinforce') state.cond[weaponId] = Math.round((state.cond[weaponId] || 0) * 1.6);
+    return { ok: true, mod: m };
+  }
+
+  // One trigger pull wears the equipped gun. Returns what happened so the game can react.
+  function wear(state, durMul = 1) {
+    const id = state.equipped, w = BY_ID[id];
+    if (!w) return { none: true };
+    state.cond[id] = Math.max(0, (state.cond[id] ?? maxDur(w, state.mods[id] || [], durMul, qOf(state, id))) - 1);
+    if (state.cond[id] > 0) return { ok: true, left: state.cond[id] };
+    if ((state.spare[id] || 0) > 0) { // a fresh spare (Standard) swaps in
+      state.spare[id] -= 1; if (!state.spare[id]) delete state.spare[id];
+      setQ(state, id, 1);
+      state.cond[id] = maxDur(w, state.mods[id] || [], durMul);
+      return { broke: true, swapped: true, weapon: w };
+    }
+    if (w.crude) { state.owned = state.owned.filter((x) => x !== id); delete state.mods[id]; delete state.cond[id]; if (state.quality) delete state.quality[id]; }
+    else state.broken.push(id);
+    state.equipped = usable(state)[0] || null;
+    return { broke: true, destroyed: !!w.crude, weapon: w, next: state.equipped };
+  }
+  // Repair cost scales with wear; a broken gun also needs a new trigger group. Crude guns can't be repaired.
+  function repairCost(state, id, durMul = 1) {
+    const w = BY_ID[id];
+    if (!w || w.crude || !state.owned.includes(id)) return null;
+    const mx = maxDur(w, state.mods[id] || [], durMul, qOf(state, id)), f = 1 - Math.min(1, (state.cond[id] || 0) / mx);
+    if (f <= 0.02) return null;
+    const k = 1 + w.tier * 0.5, cost = { metal: Math.ceil(6 * k * f), spring: Math.ceil(2 * f) };
+    if (state.broken.includes(id)) cost.trigger = 1;
+    return cost;
+  }
+  function repair(state, id, ctx) {
+    const w = BY_ID[id], cost = repairCost(state, id, ctx.durMul);
+    if (!cost) return { ok: false, reason: w?.crude ? 'Crude guns can\'t be repaired' : 'Nothing to repair' };
+    if (w.tier > ctx.bench) return { ok: false, reason: w.tier === 1 && ctx.bench === 0 ? 'Repair it at your Lockup workshop' : `Needs a level ${w.tier} workshop` };
+    if (!ctx.spend(cost)) return { ok: false, reason: 'Missing materials' };
+    state.broken = state.broken.filter((b) => b !== id);
+    state.cond[id] = maxDur(w, state.mods[id] || [], ctx.durMul, qOf(state, id));
+    if (!state.equipped) state.equipped = id;
+    return { ok: true, cost };
+  }
+  // What the arms buyer pays: spares at full value; a used gun scales with condition (broken = 20%).
+  function usedValue(state, id, durMul = 1) {
+    const w = BY_ID[id];
+    if (!w) return 0;
+    const qv = QUALITY[qOf(state, id)].val;
+    if (state.broken.includes(id)) return Math.round(w.value * 0.2 * qv);
+    const mx = maxDur(w, state.mods[id] || [], durMul, qOf(state, id));
+    return Math.round(w.value * qv * (0.35 + 0.65 * Math.min(1, (state.cond[id] || 0) / mx)));
+  }
+  // kind: 'spare' | 'owned'. price multiplier (Dealing skill), buyer demand handled by the caller.
+  function sell(state, wallet, id, kind = 'spare', price = 1, durMul = 1) {
+    const w = BY_ID[id];
+    if (!w) return { ok: false, reason: 'Unknown weapon' };
+    if (kind === 'spare') {
+      if (!(state.spare[id] > 0)) return { ok: false, reason: 'No spare to sell' };
+      state.spare[id] -= 1; if (!state.spare[id]) delete state.spare[id];
+      const cash = Math.round(w.value * price); wallet.cash += cash; return { ok: true, cash };
+    }
+    if (!state.owned.includes(id)) return { ok: false, reason: 'Not yours' };
+    const cash = Math.round(usedValue(state, id, durMul) * price);
+    state.owned = state.owned.filter((x) => x !== id); state.broken = state.broken.filter((x) => x !== id);
+    delete state.mods[id]; delete state.cond[id]; if (state.quality) delete state.quality[id];
+    if (state.equipped === id) state.equipped = usable(state)[0] || null;
+    wallet.cash += cash; return { ok: true, cash };
+  }
+
   // Angles for every projectile of one trigger pull.
   function pelletAngles(aim, w, rnd = Math.random) {
     const out = [];
@@ -98,8 +321,10 @@
     return { ammo: mag, reserve: Math.min(maxReserve, reserve + back) };
   }
   const dps = (w) => (w.dmg * w.pellets * 1000) / w.rate;
+  const costText = (cost) => Object.entries(cost).map(([k, n]) => `${n} ${k}`).join(' + ');
 
-  const api = Object.freeze({ WEAPONS, BY_ID, AMMO_CRATE, MODS, MOD, effective, buyMod, clean, canBuy, buy, equip, cycle, pelletAngles, fitMagazine, dps });
+  const api = Object.freeze({ SKINS, SKIN, paint, WEAPONS, BY_ID, NONE, LEGENDS, BP_WEIGHT, rollBlueprint, learn, PLATE, buildPlate, QUALITY, rollQuality, qOf, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, maxDur, clean, usable, equip, cycle,
+    craftBlock, craft, modBlock, craftMod, wear, repairCost, repair, usedValue, sell, pelletAngles, fitMagazine, dps, costText });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftWeaponsData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

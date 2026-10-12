@@ -36,7 +36,9 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked', 'heists', 'gymSessions', 'clubSold', 'fronts', 'eventsDone', 'stashes', 'fightWins', 'fightLadder', 'modsFitted', 'marketProfit',
+    'scrapGathered', 'leafPicked', 'trimmed', 'cooked', 'pressed', 'gunsCrafted', 'gunsSold', 'pillsSold', 'lockup', 'bagLevel', 'realGuns',
+    'chopped', 'hotChops', 'breakins', 'cleanJobs', 'lootHauled', 'harvested', 'mealsCooked', 'mealsSold', 'pets', 'kits', 'dream', 'style', 'garageCars', 'contracts', 'silentContracts', 'carModels', 'exotics', 'trapJobs', 'legends', 'aptStyle', 'meetTrophies', 'stashOwned'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -131,14 +133,22 @@
       totalLevel: levels.reduce((a, b) => a + b, 0), maxSkill: levels.length ? Math.max(...levels) : 0,
       inCar: !!p?.car,
       casinoWins: root.NightshiftCasino?.state?.wins, casinoWagered: root.NightshiftCasino?.state?.wagered,
-      weaponsOwned: root.NightshiftWeapons?.state?.owned?.length || 1,
+      weaponsOwned: (root.NightshiftWeapons?.state?.owned || []).filter((id) => !(root.NightshiftWeapons?.state?.broken || []).includes(id)).length,
+      ...(() => { const su = root.NightshiftSupply?.state; if (!su) return {}; return { scrapGathered: su.by?.scrapyard, leafPicked: su.by?.plots, trimmed: su.by?.trim, cooked: su.by?.kitchen, pressed: su.by?.trailer, gunsCrafted: su.stats?.gunsCrafted, realGuns: su.stats?.realCrafted, gunsSold: su.stats?.gunsSold, pillsSold: su.stats?.pillsSold, lockup: su.lockup, bagLevel: su.bagLevel }; })(),
       tuneLevels: tuneStat('totalLevels'), tuneBestCar: tuneStat('bestCar'),
       homeItems: root.NightshiftHomeUpgrades?.state?.owned?.length || 0,
       respectRank: root.NightshiftRespect?.state?.reached || 0,
+      fronts: Object.keys(root.NightshiftEmpire?.state?.fronts || {}).length,
+      heists: root.NightshiftHeists?.state?.done || 0, gymSessions: root.NightshiftVenues?.state?.sessions || 0, clubSold: root.NightshiftVenues?.state?.sold || 0, eventsDone: root.NightshiftEvents?.state?.done || 0,
+      stashes: root.NightshiftStashes?.count?.() || 0, fightWins: root.NightshiftVenues?.state?.wins || 0, fightLadder: root.NightshiftVenues?.state?.ladder || 0,
+      modsFitted: Object.values(root.NightshiftWeapons?.state?.mods || {}).reduce((t, l) => t + l.length, 0), marketProfit: Math.max(0, root.NightshiftMarket?.state?.realized || 0),
       jobsDone: root.NightshiftJobs?.state?.done || 0, labCooked: root.NightshiftLab?.state?.cooked || 0,
       fishCaught: root.NightshiftFishing?.state?.total || 0, koi: root.NightshiftFishing?.state?.caught?.koi || 0,
       raceMedals: Object.keys(root.NightshiftRaces?.state?.medals || {}).length,
       raceGolds: Object.values(root.NightshiftRaces?.state?.medals || {}).filter((m) => m === 'gold').length,
+      ...(() => { const ch = root.NightshiftChop?.state?.stats || {}, bi = root.NightshiftBreakin?.state?.stats || {}, fd = root.NightshiftFood?.state || {}, pt = root.NightshiftPets?.state || {}, dh = root.NightshiftDreamHome?.state;
+        return { chopped: (ch.chopped || 0) + (ch.stripped || 0) + (ch.revin || 0), hotChops: ch.hot || 0, breakins: bi.jobs || 0, cleanJobs: bi.clean || 0, lootHauled: bi.loot || 0, harvested: fd.harvested || 0, mealsCooked: fd.cooked || 0, mealsSold: fd.sold || 0,
+          pets: (pt.pets || []).length, kits: Object.keys(pt.kits || {}).length, dream: pt.dream ? 1 : 0, style: dh && root.NightshiftDecorData ? root.NightshiftDecorData.style(dh) : 0, garageCars: Math.min(4, G.cars.filter((c) => c?.owned === true).length), contracts: root.NightshiftHitman?.state?.done || 0, silentContracts: root.NightshiftHitman?.state?.silent || 0, trapJobs: bi.trap || 0, stashOwned: Object.keys(root.NightshiftSafehouse?.state?.houses || {}).length, meetTrophies: (() => { const t = root.NightshiftCarMeet?.state?.trophies; return t ? t.gold + t.silver + t.bronze : 0; })(), aptStyle: dh && root.NightshiftDecorData?.aptStyle ? root.NightshiftDecorData.aptStyle(dh) : 0, legends: (root.NightshiftWeapons?.state?.owned || []).filter((id) => root.NightshiftWeaponsData?.BY_ID?.[id]?.legend).length, carModels: root.NightshiftCars ? root.NightshiftCarsData.models(root.NightshiftCars.state).size : 0, exotics: root.NightshiftCars ? root.NightshiftCars.state.owned.filter((o) => ['Exotic', 'Super', 'Hyper'].includes(root.NightshiftCarsData.BY[o.id]?.tier)).length : 0 }; })(),
     });
   }
 
@@ -147,6 +157,7 @@
   function pay(goal) {
     const p = G.player, r = goal.reward || {};
     const cash = Math.round((r.cash || 0) * cashBonus());
+    try { root.NightshiftLedger?.tag('goals'); } catch { /* optional */ } 
     if (p && cash > 0 && Number.isFinite(p.cash)) { p.cash = Math.min(100000000, p.cash + cash); paying += cash; if (last) last.cash = p.cash; }
     for (const [sk, xp] of Object.entries(r.xp || {})) root.NightshiftSkills?.gain(sk, xp, 'goal:' + goal.id);
     if (gameSave) { try { gameSave(); } catch { /* ignore */ } }
@@ -179,6 +190,23 @@
     casino: () => root.NightshiftCasino?.door?.() || null,
     gunshop: () => root.NightshiftWeapons?.door?.() || null,
     fishing: (p) => nearest(root.NightshiftFishingData?.SPOTS, p),
+    bank: (p) => nearest(root.NightshiftHeists?.vaults?.(), p),
+    gym: (p) => nearest((root.NightshiftVenues?.places?.() || []).filter((v) => v.kind === 'gym'), p),
+    club: (p) => nearest((root.NightshiftVenues?.places?.() || []).filter((v) => v.kind === 'club'), p),
+    scrapyard: () => root.NightshiftSupplyData?.GBY?.scrapyard || null,
+    plots: () => root.NightshiftSupplyData?.GBY?.plots || null,
+    trim: () => root.NightshiftSupplyData?.PBY?.trim || null,
+    kitchen: () => root.NightshiftSupplyData?.PBY?.kitchen || null,
+    lockup: () => root.NightshiftSupplyData?.LOCKUP || null,
+    promoter: () => root.NightshiftSupplyData?.PROMOTER || null,
+    armsbuyer: () => root.NightshiftSupplyData?.ARMS_BUYER || null,
+    bags: (p) => nearest(root.NightshiftSupplyData?.BAG_SHOPS, p),
+    bench: () => ({ x: 950, y: 735 }),
+    chop: () => root.NightshiftChop?.BAY || null,
+    busstop: (p) => nearest(root.NightshiftZones?.CITY_STOPS, p),
+    warehouse: (p) => nearest(root.NightshiftBreakin?.WAREHOUSES, p),
+    trap: (p) => nearest(root.NightshiftBreakin?.STASHES, p),
+    meet: () => root.NightshiftCarMeet?.ring || null,
     race: (p) => { const medals = root.NightshiftRaces?.state?.medals || {}; const st = root.NightshiftRaces?.starts?.() || []; return nearest(st.filter((r) => medals[r.id] !== 'gold'), p) || nearest(st, p); },
   };
   function trackTarget() {
@@ -211,6 +239,13 @@
     ctx.fillStyle = '#ffd970'; ctx.strokeStyle = '#1a1300'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(-6, -8); ctx.lineTo(-2, 0); ctx.lineTo(-6, 8); ctx.closePath(); ctx.stroke(); ctx.fill();
     ctx.restore();
+    // distance tag just past the arrow (10 px ≈ 1 m), so "which way and how far" is readable at a glance
+    const lx = p.x + Math.cos(a) * (r + 24), ly = p.y + Math.sin(a) * (r + 18), label = `${Math.max(1, Math.round(t.dist / 10))}m`;
+    ctx.save(); ctx.font = '700 9px "Chakra Petch",ui-monospace,monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const w = (ctx.measureText ? ctx.measureText(label).width : label.length * 5) + 10;
+    ctx.fillStyle = '#0c111ee6'; ctx.strokeStyle = '#ffd970'; ctx.lineWidth = 1;
+    if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(lx - w / 2, ly - 7, w, 14, 7); ctx.fill(); ctx.stroke(); } else ctx.fillRect(lx - w / 2, ly - 7, w, 14);
+    ctx.fillStyle = '#ffd970'; ctx.fillText(label, lx, ly + 0.5); ctx.restore();
   }
   const E = root.NightshiftEncounters;
   if (E && !E.__goals) {
@@ -237,7 +272,8 @@
   #glPanel .g.done{opacity:.55} #glPanel .g.cur{border-color:#ffd970} #glPanel .g .i{font-size:15px;width:20px;text-align:center}
   #glPanel .g .b{flex:1;min-width:0} #glPanel .g .h{font-size:11px;color:#b9c8da} #glPanel .g .r{font-size:11px;color:#7cdeb5;white-space:nowrap}
   #glPanel .close{all:unset;box-sizing:border-box;cursor:pointer;position:sticky;top:0;float:right;font:700 13px ui-monospace,Menlo,monospace;background:#2c4c7c;color:#fff;border:1px solid #6f8db3;border-radius:8px;padding:6px 10px}
-  @media (max-height:430px){#glCard .h{display:none}}`;
+  @media (max-height:430px){#glCard .h{display:none}}
+  #glCard:not(.fresh) .h{display:none}`;
   document.head.appendChild(css);
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const card = el('button', { id: 'glCard', type: 'button', ariaLabel: 'Next goal' });
@@ -259,12 +295,14 @@
   const skillName = (k) => root.NightshiftSkillsData?.SKILLS.find((s) => s.id === k)?.name || k;
   const rewardText = (r = {}) => [r.cash ? `$${r.cash.toLocaleString()}` : '', ...Object.keys(r.xp || {}).map((k) => `${skillName(k)} XP`)].filter(Boolean).join(' + ');
   const fmt = (n) => (n >= 10000 ? Math.round(n / 1000) + 'k' : String(n));
-  let lastKey = '';
+  let lastKey = '', hintGoal = '', hintUntil = 0;
   function render() {
     const ctx = snapshot();
     const n = next(state, ctx);
     const tt = trackTarget(), dist = tt ? Math.round(tt.dist / 10) : -1;
     const key = n ? `${n.goal.id}|${n.cur}|${tt?.goal.id}|${dist >= 0 ? Math.round(dist / 5) : -1}` : 'all';
+    if (n && n.goal.id !== hintGoal) { hintGoal = n.goal.id; hintUntil = performance.now() + 15000; }
+    card.classList.toggle('fresh', performance.now() < hintUntil);
     if (key !== lastKey) {
       lastKey = key;
       card.textContent = '';

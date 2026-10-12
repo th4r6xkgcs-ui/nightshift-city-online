@@ -44,9 +44,7 @@
     for (const s of sites()) {
       if (Math.hypot(p.x - s.x, p.y - s.y) > 600) continue;
       const busy = !!state.batches[s.lab];
-      ctx.fillStyle = '#1c1430e8'; ctx.fillRect(s.x - 30, s.y - 22, 60, 20);
-      ctx.strokeStyle = busy ? `hsl(${280 + 30 * Math.sin(t * 3)},80%,70%)` : '#c9a2ff'; ctx.lineWidth = 2; ctx.strokeRect(s.x - 30, s.y - 22, 60, 20);
-      ctx.fillStyle = '#efe3ff'; ctx.font = 'bold 10px monospace'; ctx.fillText(busy ? '⚗️ COOKING' : '⚗️ LAB', s.x, s.y - 12);
+      root.NightshiftSign?.(ctx, s.x, s.y - 12, '⚗️', busy ? 'COOKING' : 'LAB', '#c9a2ff', { glow: busy ? 8 + 4 * Math.sin(t * 3) : 6 });
       if (busy) { ctx.fillStyle = '#c9a2ff66'; for (let i = 0; i < 3; i++) { const yy = s.y - 30 - ((t * 20 + i * 8) % 24); ctx.beginPath(); ctx.arc(s.x - 8 + i * 8, yy, 2.5, 0, Math.PI * 2); ctx.fill(); } }
     }
     ctx.restore();

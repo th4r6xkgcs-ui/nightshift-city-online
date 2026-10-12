@@ -30,6 +30,8 @@ function paint(ctx,kind){
  }
  rect(ctx,'#44524d',8,396,624,16);rect(ctx,'#a8ad96',12,396,616,3);rect(ctx,'#263d40',278,396,84,16);
  // Wall-mounted art and shop sign do not occupy walkable floor.
+ const plant=(px,py)=>{rect(ctx,'#0a0f1a44',px-7,py+6,16,4);rect(ctx,'#7a4b2f',px-6,py-2,12,9);rect(ctx,'#94603e',px-6,py-2,12,2);for(const [dx,dy,c] of [[-8,-10,'#3f7a4a'],[0,-14,'#4f9a5a'],[4,-8,'#2f6a3e'],[-4,-6,'#5aab66']])rect(ctx,c,px+dx,py+dy,8,8)};
+ if(kind==='home'){plant(48,372);plant(592,372);rect(ctx,'#2b2733',300,2,40,6)}else{plant(48,372);plant(592,372)}
  rect(ctx,'#354544',252,9,135,14);ctx.fillStyle='#e3d2a7';ctx.font='bold 9px monospace';ctx.textAlign='center';ctx.fillText(kind==='home'?'YOUR APARTMENT':'CORNER SHOP',320,19);
  ctx.restore();return true;
 }
@@ -39,5 +41,21 @@ function draw(kind,ctx){
  if(!canvas){const candidate=root.document?.createElement?.('canvas'),surface=candidate?.getContext?.('2d');if(surface){candidate.width=640;candidate.height=420;surface.imageSmoothingEnabled=false;paint(surface,kind);caches.set(kind,candidate);canvas=candidate}}
  if(canvas)ctx.drawImage(canvas,0,0);else paint(ctx,kind);return true;
 }
-root.NightshiftInteriors={draw,paint,cacheStats:()=>({surfaces:caches.size,maxSurfaces:2,width:640,height:420})};
+// Art pass (Claude): time-of-day light for rooms, drawn after furniture and the player.
+function light(kind,ctx){
+ if(!valid(kind)||!ctx||typeof ctx.createRadialGradient!=='function'||!ctx.createRadialGradient(0,0,0,0,0,1)?.addColorStop)return false;
+ const env=root.NightshiftEnvironment,night=env?.darkness?.(env?.state?.minute??720)||0;
+ ctx.save();
+ if(night>0){ctx.fillStyle=`rgba(8,12,34,${.42*night})`;ctx.fillRect(0,0,640,420);
+  ctx.globalCompositeOperation='lighter';
+  const glow=(x,y,r,c,a)=>{const gr=ctx.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,`rgba(${c},${a})`);gr.addColorStop(1,`rgba(${c},0)`);ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,r*2,r*2)};
+  if(kind==='home'){glow(226,78,90,'255,200,120',.32*night);glow(320,220,190,'255,214,150',.12*night);glow(490,250,70,'120,170,255',.08*night)}
+  else{glow(320,200,260,'200,255,235',.14*night);glow(490,290,80,'255,230,160',.18*night)}
+  for(const x of [72,429]){ctx.fillStyle=`rgba(120,150,255,${.18*night})`;ctx.fillRect(x+3,13,117,8)}
+ }else{
+  ctx.globalCompositeOperation='lighter';
+  for(const x of [72,429]){const gr=ctx.createLinearGradient(0,29,0,200);gr.addColorStop(0,'rgba(255,236,190,.10)');gr.addColorStop(1,'rgba(255,236,190,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.moveTo(x+3,29);ctx.lineTo(x+120,29);ctx.lineTo(x+160,200);ctx.lineTo(x-20,200);ctx.closePath();ctx.fill()}
+ }
+ ctx.restore();return true}
+root.NightshiftInteriors={draw,paint,light,cacheStats:()=>({surfaces:caches.size,maxSurfaces:2,width:640,height:420})};
 })(globalThis);

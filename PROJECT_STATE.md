@@ -1,4 +1,12 @@
-# Current project state — v0.54
+## CURRENT — v0.55 Living Streets (2026-10-12)
+
+Canonical branch: codex/living-streets-v55, built from verified v0.54 a2750326 and exact Claude rpg-play c31e4976 (rpg-core 556cec53 / art-pass fdc3c36d). Read CLIENT_HANDOFF_V55.md for file ownership, imported module provenance, save contracts and verification limits.
+
+Full art layer: 20 distinct held guns, 11 pet species, baked collectible cars, deeper building materials, clear intersections, readable street props, animated neighborhoods, smoother camera and unified mobile HUD/notice queue. Gameplay modules imported intact; no new crew/follower/gang-management expansion. Preview remains local single-player, owner-private Sites; no backend deployment, merges or access changes.
+
+Validation: 107 suites and root syntax; 137-asset static build; real Edge profile/home checks and 390/844/320 viewport, dual-touch cancellation, city/day/night/countryside/suburbs/apartment renders; zero page errors. Physical iPhone and sustained device/audio QA pending.
+
+# Historical project state — v0.54
 
 Canonical combined client: `codex/visual-overhaul-v54`, based on v0.52. Dependency-free Canvas/localStorage, mobile-first, separate from Nightshift Garage. Private static preview includes exact Claude RPG rpg-core 8b6c4c3 modules; no multiplayer backend is deployed in this preview.
 

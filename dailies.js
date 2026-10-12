@@ -22,7 +22,7 @@
     if (!s) return null;
     return { delivery: s.delivery, salvage: s.salvage, sold: s.sold, batches: s.batches, escapes: s.escapes, drove: s.drove, walked: s.walked,
       shots: s.shots, earned: s.earned, casinoSpins: root.NightshiftCasino?.state?.spins || 0, raceRuns: root.NightshiftRaces?.state?.runs || 0,
-      fishCaught: root.NightshiftFishing?.state?.total || 0, jobsDone: root.NightshiftJobs?.state?.done || 0 };
+      fishCaught: root.NightshiftFishing?.state?.total || 0, jobsDone: root.NightshiftJobs?.state?.done || 0, gymSessions: root.NightshiftVenues?.state?.sessions || 0, eventsDone: root.NightshiftEvents?.state?.done || 0, fightWins: root.NightshiftVenues?.state?.wins || 0, marketTrades: root.NightshiftMarket?.state?.trades || 0 };
   }
 
   const queue = []; // pays one reward at a time so toasts stay readable
@@ -40,6 +40,7 @@
     const pay = queue.shift(), p = P();
     if (!pay || !p) return;
     try { root.NightshiftGoals?.notePayout?.(pay.cash); } catch { /* optional */ }
+    try { root.NightshiftLedger?.tag('goals'); } catch { /* optional */ } 
     p.cash = Math.min(100000000, p.cash + pay.cash);
     if (pay.xp) try { root.NightshiftSkills?.gain(pay.xp, pay.xpAmount, 'daily'); } catch { /* optional */ }
     gameSave();

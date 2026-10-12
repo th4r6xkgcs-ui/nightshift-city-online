@@ -73,10 +73,7 @@
     ctx.save();
     for (const s of garageSites()) {
       ctx.fillStyle = '#3a2a18'; ctx.fillRect(s.x - 2, s.y - 2, 4, 12);
-      ctx.fillStyle = '#0f1a18e8'; ctx.fillRect(s.x - 30, s.y - 22, 60, 20);
-      ctx.strokeStyle = '#7cdeb5'; ctx.lineWidth = 2; ctx.strokeRect(s.x - 30, s.y - 22, 60, 20);
-      ctx.fillStyle = '#c8ffe9'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('🔧 TUNING', s.x, s.y - 12);
+      root.NightshiftSign?.(ctx, s.x, s.y - 12, '🔧', 'TUNING', '#58e0a0');
     }
     ctx.restore();
   }
