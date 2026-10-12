@@ -70,8 +70,8 @@
   const near = (p, s, r) => Math.hypot(p.x - s.x, p.y - s.y) <= r;
   function sites() {
     const out = [];
-    for (const sp of S.GATHER) out.push({ id: 'sp-g-' + sp.id, kind: 'gather', spot: sp, x: sp.x, y: sp.y, action: 'COLLECT', label: `${sp.icon} ${sp.name.toUpperCase()}`, color: '#7cdeb5', hint: `${sp.name} · ${S.hoursText(sp.hours)}` });
-    for (const sp of S.PROCESS) out.push({ id: 'sp-p-' + sp.id, kind: 'process', spot: sp, x: sp.x, y: sp.y, action: 'PROCESS', label: `${sp.icon} ${sp.name.toUpperCase()}`, color: '#c49bff', hint: `${sp.name} · ${S.costText(sp.in)} → ${Object.entries(sp.out).map(([k, n]) => n + ' ' + k).join(', ')}` });
+    for (const sp of S.GATHER.filter((g2) => !g2.zone)) out.push({ id: 'sp-g-' + sp.id, kind: 'gather', spot: sp, x: sp.x, y: sp.y, action: 'COLLECT', label: `${sp.icon} ${sp.name.toUpperCase()}`, color: '#7cdeb5', hint: `${sp.name} · ${S.hoursText(sp.hours)}` });
+    for (const sp of S.PROCESS.filter((p2) => !p2.zone)) out.push({ id: 'sp-p-' + sp.id, kind: 'process', spot: sp, x: sp.x, y: sp.y, action: 'PROCESS', label: `${sp.icon} ${sp.name.toUpperCase()}`, color: '#c49bff', hint: `${sp.name} · ${S.costText(sp.in)} → ${Object.entries(sp.out).map(([k, n]) => n + ' ' + k).join(', ')}` });
     const pr = S.PROMOTER; out.push({ id: 'sp-promoter', kind: 'promoter', spot: pr, x: pr.x, y: pr.y, action: 'SELL', label: `${pr.icon} PROMOTER`, color: '#ff7fd0', hint: 'Sells party pills · nights' });
     const ab = S.ARMS_BUYER; out.push({ id: 'sp-arms', kind: 'arms', spot: ab, x: ab.x, y: ab.y, action: 'SELL GUNS', label: `${ab.icon} ARMS BUYER`, color: '#ffb347', hint: 'Buys guns · nights' });
     const hw = S.HARDWARE_SITE; out.push({ id: 'sp-hardware', kind: 'hardware', spot: hw, x: hw.x, y: hw.y, action: 'SHOP', label: `${hw.icon} HARDWARE`, color: '#ffd970', hint: 'Tape, baggies, scrap, wood' });
@@ -112,10 +112,10 @@
 
   // ---- the sit-and-collect loop ----
   let act = null; // { site, kind, spot, t0, dur, paused }
-  function start(s) {
+  function start(s, opts = {}) {
     const p = P();
     if (!p || p.hp <= 0) return;
-    if (p.car) { say('Get out of the car first'); return; }
+    if (p.car && !opts.near) { say('Get out of the car first'); return; }
     const sp = s.spot, m = minute();
     if (sp.hours && !S.openAt(sp.hours, m)) { say(`${sp.icon} ${sp.name} is closed · ${S.hoursText(sp.hours)}`); return; }
     if (s.kind === 'gather') {
@@ -123,7 +123,7 @@
       if (S.room(state) <= 0) { say('🎒 Backpack full · stash it at home or buy a bigger bag'); return; }
     } else if (S.batches(state, sp.id) <= 0) { say(`${sp.icon} ${sp.name} needs ${S.costText(sp.in)} per batch`); return; }
     const speed = s.kind === 'process' ? (sp.id === 'trim' ? mod('farming.growTime') : 1) : 1;
-    act = { site: s.id, kind: s.kind, spot: sp, t0: performance.now(), dur: sp.seconds * 1000 * speed, done: 0, perfects: 0 };
+    act = { site: s.id, kind: s.kind, spot: sp, t0: performance.now(), dur: sp.seconds * 1000 * speed, done: 0, perfects: 0, near: opts.near || null, zone: !!opts.near };
     newWindow();
     say(`${sp.icon} ${s.kind === 'gather' ? 'Collecting' : 'Processing'} at the ${sp.name} · stay close · tap ${s.kind === 'gather' ? 'COLLECT' : 'PROCESS'} again to stop`);
     renderAct();
@@ -177,7 +177,7 @@
     const p = P();
     if (!p || p.hp <= 0) { stop(); return; }
     if (act.kind === 'craft') { craftTick(p); return; }
-    if (p.car || !near(p, act.spot, act.spot.r + 15)) { stop(`${act.spot.icon} You walked away`); return; }
+    if (act.near ? !act.near() : (p.car || !near(p, act.spot, act.spot.r + 15))) { stop(`${act.spot.icon} You walked away`); return; }
     if (act.spot.hours && !S.openAt(act.spot.hours, minute())) { stop(`${act.spot.icon} ${act.spot.name} just closed`); return; }
     const busy = document.body.classList.contains('ns-menu');
     if (busy) { act.t0 += 100; return; } // menus pause the timer
@@ -194,7 +194,7 @@
   }
   function drawRing() {
     const ctx = G(), p = P();
-    if (!act || !ctx || !p || (act.kind === 'craft' && home())) return;
+    if (!act || !ctx || !p || act.zone || (act.kind === 'craft' && home())) return;
     const f = Math.min(1, (performance.now() - act.t0) / act.dur), x = p.x, y = p.y - 46;
     ctx.save();
     ctx.fillStyle = '#05080fcc'; ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
@@ -368,7 +368,9 @@
     const ids = S.IDS.filter((id) => state.bag[id] > 0);
     for (const id of ids) {
       const m2 = S.MATERIALS[id], c = el('div', { className: 'mat' }); const ic = matIcon(id, 26); if (ic) c.append(ic);
-      const t = el('div'); t.append(el('b', {}, String(state.bag[id])), el('span', {}, m2.name)); c.append(t); c.title = 'From: ' + (whereFrom(id).join(', ') || '—'); mats.append(c);
+      const t = el('div'); t.append(el('b', {}, String(state.bag[id])), el('span', {}, m2.name)); c.append(t); c.title = 'From: ' + (whereFrom(id).join(', ') || '—');
+      if (m2.kind === 'meal' && root.NightshiftFood) { const eb = btn('go', 'EAT', () => { root.NightshiftFood.eat(id); renderBag(); }); eb.style.cssText = 'padding:4px 8px;margin-left:auto;font-size:10px'; c.append(eb); }
+      mats.append(c);
     }
     for (const [k, icon, name] of [['weed', '🌿', 'Weed bags'], ['coke', '❄️', 'Coke bags']]) if (pocket[k] > 0) { const c = el('div', { className: 'mat' }); c.append(el('div', { className: 'pi' }, icon)); const t = el('div'); t.append(el('b', {}, String(pocket[k])), el('span', {}, name + ' · sell to dealers')); c.append(t); mats.append(c); }
     if (!mats.children.length) mats.append(el('div', { className: 'sub' }, 'Empty. Head to the 🔩 Scrapyard to start.'));
@@ -387,12 +389,14 @@
       else { const g2 = el('div', { className: 'cards' }); for (const w of W.WEAPONS) if (ws.owned.includes(w.id)) g2.append(WS().armoryCard(w.id, { compact: true })); bagP.append(g2); }
     }
     bagP.append(el('h3', {}, 'COLLECT · raw materials'));
+    const busFor = (sp) => (sp.zone ? (root.NightshiftZones?.active?.() === sp.zone ? null : root.NightshiftZones?.CITY_STOPS?.[0]) : sp);
+    const zoneTag = (sp) => (sp.zone ? ' · 🚌 countryside' : '');
     for (const sp of S.GATHER) {
       const open = S.openAt(sp.hours, m), stock = S.stockNow(state, sp.id);
-      bagP.append(placeRow(sp.icon, sp.name, `${sp.loot.map(([it]) => S.MATERIALS[it].icon).join(' ')} · ${sp.desc}`, open ? `${stock}/${sp.stock}` : 'CLOSED', open && stock > 0, sp));
+      bagP.append(placeRow(sp.icon, sp.name + zoneTag(sp), `${sp.loot.map(([it]) => S.MATERIALS[it].icon).join(' ')} · ${sp.desc}`, open ? `${stock}/${sp.stock}` : 'CLOSED', open && stock > 0, busFor(sp)));
     }
     bagP.append(el('h3', {}, 'PROCESS · turn raw into product'));
-    for (const sp of S.PROCESS) bagP.append(placeRow(sp.icon, sp.name, `${S.costText(sp.in)} → ${Object.entries(sp.out).map(([k, n]) => `${n} ${S.MATERIALS[k]?.icon || (k === 'weed' ? '🌿 weed' : '❄️ coke')}`).join(' ')} · ${sp.desc}`, `${S.batches(state, sp.id)}×`, S.batches(state, sp.id) > 0, sp));
+    for (const sp of S.PROCESS) bagP.append(placeRow(sp.icon, sp.name + zoneTag(sp), `${S.costText(sp.in)} → ${Object.entries(sp.out).map(([k, n]) => `${n} ${S.MATERIALS[k]?.icon || (k === 'weed' ? '🌿 weed' : '❄️ coke')}`).join(' ')} · ${sp.desc}`, `${S.batches(state, sp.id)}×`, S.batches(state, sp.id) > 0, busFor(sp)));
     bagP.append(el('h3', {}, 'SELL'));
     const D = root.NightshiftBusinessRules?.MARKETS || [];
     for (const d of D) bagP.append(placeRow('💰', d.name, `Buys 🌿 weed ~$${d.sell?.weed ?? '?'} · ❄️ coke ~$${d.sell?.coke ?? '?'}`, '', true, d));
@@ -613,7 +617,16 @@
   const hi = setInterval(() => { installHome(); if (root.NightshiftHome?.__supply && root.NightshiftInteriors?.__supply && root.NightshiftSprites?.__supplyPos) clearInterval(hi); }, 800);
 
   function refresh() { renderBag(); renderBench(); renderShop(); }
-  root.NightshiftSupply = Object.freeze({ get state() { return state; }, openBag, openBench, openShop, gpsTo, buy, count, space, refresh, matIcon, gunIcon, sites, useSite, newLife,
+  // Zones (zones.js) start the same loop at spots in their own maps; near() says whether you're still there.
+  function startZone(spotId, kind, nearFn) {
+    const sp = kind === 'gather' ? S.GBY[spotId] : S.PBY[spotId];
+    if (!sp) return;
+    const id = (kind === 'gather' ? 'sp-g-' : 'sp-p-') + spotId;
+    if (act && act.site === id) { stop('Stopped'); return; }
+    start({ id, kind, spot: sp }, { near: nearFn });
+  }
+  const progress = () => (act ? { kind: act.kind, site: act.site, f: Math.min(1, (performance.now() - act.t0) / act.dur), icon: act.spot.icon, win: act.win, missed: act.missed } : null);
+  root.NightshiftSupply = Object.freeze({ get state() { return state; }, openBag, openBench, openShop, gpsTo, buy, count, space, refresh, matIcon, gunIcon, sites, useSite, newLife, startZone, progress, tap: () => tapAct(), give: (items) => { const r = S.give(state, items); persist(); gameSave(); return r; }, take: (cost) => { if (!S.has(state.bag, cost)) return false; S.take(state.bag, cost); persist(); gameSave(); return true; },
     activity: () => (act ? { kind: act.kind, site: act.site, done: act.done } : null), stop: () => stop(), save: () => persist(), BENCH_POS,
     paused: () => !bagP.hidden || !benchP.hidden || !shopP.hidden });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

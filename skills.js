@@ -80,7 +80,9 @@
 
   // Temporary XP boost (e.g. "Well rested" from home-upgrades.js). Not saved: it is a session buff.
   let boost = { mult: 1, until: 0, label: '' };
-  const boostMult = () => (performance.now() < boost.until ? boost.mult : 1);
+  const modifiers = [], xpMods = [];
+  const extraXp = () => { let m = 1; for (const f of xpMods) { try { const k = f(); if (Number.isFinite(k) && k > 0) m = Math.max(m, k); } catch { /* ignore */ } } return m; };
+  const boostMult = () => Math.max(performance.now() < boost.until ? boost.mult : 1, 1) * extraXp();
   function setBoost(mult, ms, label = 'Boost') {
     if (!Number.isFinite(mult) || mult < 1 || mult > 3 || !Number.isFinite(ms) || ms <= 0) return false;
     boost = { mult, until: performance.now() + Math.min(ms, 3600000), label };
@@ -249,7 +251,10 @@
     ...core,
     gain: (skill, xp, reason) => award(skill, xp, reason),
     level: (skill) => levelInfo(state.xp[skill] || 0).level,
-    mod: (key) => mod(state, key),
+    // External multipliers (food buffs, pets…): addModifier(fn) where fn(key) returns a factor (1 = none).
+    mod: (key) => { let m = mod(state, key); for (const f of modifiers) { try { const k = f(key); if (Number.isFinite(k) && k > 0) m *= k; } catch { /* ignore */ } } return m; },
+    addModifier: (fn) => { if (typeof fn === 'function') modifiers.push(fn); },
+    xpMultiplier: (fn) => { if (typeof fn === 'function') xpMods.push(fn); },
     open,
     onLevelUp: (fn) => { if (typeof fn === 'function') listeners.push(fn); },
     setBoost,

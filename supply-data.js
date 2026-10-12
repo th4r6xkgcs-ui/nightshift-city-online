@@ -29,6 +29,32 @@
     chem: { name: 'Chemicals', icon: '⚗️', w: 2, price: 0, kind: 'drug' },
     baggie: { name: 'Baggies', icon: '🛍️', w: 0, price: 1, kind: 'drug' },
     pills: { name: 'Party pills', icon: '💊', w: 0, price: 0, kind: 'product' },
+    // farm produce (countryside) — sold at the co-op, cooked into meals
+    wheat: { name: 'Wheat', icon: '🌾', w: 1, price: 0, kind: 'food' },
+    corn: { name: 'Corn', icon: '🌽', w: 1, price: 0, kind: 'food' },
+    potato: { name: 'Potatoes', icon: '🥔', w: 1, price: 0, kind: 'food' },
+    tomato: { name: 'Tomatoes', icon: '🍅', w: 1, price: 0, kind: 'food' },
+    strawberry: { name: 'Strawberries', icon: '🍓', w: 1, price: 0, kind: 'food' },
+    chili: { name: 'Chili peppers', icon: '🌶️', w: 1, price: 0, kind: 'food' },
+    pumpkin: { name: 'Pumpkin', icon: '🎃', w: 3, price: 0, kind: 'food' },
+    apple: { name: 'Apples', icon: '🍎', w: 1, price: 0, kind: 'food' },
+    egg: { name: 'Eggs', icon: '🥚', w: 1, price: 0, kind: 'food' },
+    milk: { name: 'Milk', icon: '🥛', w: 2, price: 0, kind: 'food' },
+    flour: { name: 'Flour', icon: '🫓', w: 1, price: 0, kind: 'food' },
+    // cooked meals (food.js) — eat for buffs, or sell at the Diner
+    burrito: { name: 'Breakfast burrito', icon: '🌯', w: 1, price: 0, kind: 'meal' },
+    soup: { name: 'Tomato soup', icon: '🍲', w: 1, price: 0, kind: 'meal' },
+    cornbread: { name: 'Cornbread', icon: '🍞', w: 1, price: 0, kind: 'meal' },
+    wings: { name: 'Ghost-pepper wings', icon: '🍗', w: 1, price: 0, kind: 'meal' },
+    shake: { name: 'Strawberry shake', icon: '🥤', w: 1, price: 0, kind: 'meal' },
+    applepie: { name: 'Apple pie', icon: '🥧', w: 1, price: 0, kind: 'meal' },
+    pumpkinpie: { name: 'Pumpkin pie', icon: '🍰', w: 1, price: 0, kind: 'meal' },
+    breakfast: { name: 'Farmer\'s breakfast', icon: '🍳', w: 1, price: 0, kind: 'meal' },
+    energybar: { name: 'Energy bar', icon: '🍫', w: 0, price: 0, kind: 'meal' },
+    // break-in loot — sold to the fence
+    jewels: { name: 'Jewellery', icon: '💍', w: 0, price: 0, kind: 'loot' },
+    gadgets: { name: 'Electronics', icon: '📺', w: 3, price: 0, kind: 'loot' },
+    art: { name: 'Small artwork', icon: '🖼️', w: 4, price: 0, kind: 'loot' },
   };
   const IDS = Object.keys(MATERIALS);
   // Things the hardware counter (next to the corner shop) sells, in packs.
@@ -67,6 +93,11 @@
     { id: 'container', name: 'Arms container', icon: '📦', x: 2140, y: 1250, r: 65, seconds: 9, stock: 5, regen: 140, hours: [21, 4], heat: 0.12,
       loot: [['spring', 0.5, 1, 2], ['trigger', 0.18, 1, 1], ['barrel', 0.14, 1, 1], ['bolt', 0.08, 1, 1], ['frame', 0.06, 1, 1], ['lens', 0.06, 1, 1]],
       xp: { stealth: 18, luck: 6 }, desc: 'A cracked shipping container of gun parts. Only unguarded late at night. Hot.' },
+    // countryside (zone: 'farm') — positions are in the zone's own map
+    { id: 'field', zone: 'farm', name: 'Hidden field', icon: '🌿', x: 1645, y: 310, r: 120, seconds: 6, stock: 16, regen: 30, heat: 0.01,
+      loot: [['leaf', 1, 2, 3]], xp: { farming: 14 }, desc: 'Behind the tall corn, a whole field of it. Bigger yields, barely any heat out here.' },
+    { id: 'orchard', zone: 'farm', name: 'Orchard', icon: '🍎', x: 300, y: 1040, r: 90, seconds: 4, stock: 12, regen: 50,
+      loot: [['apple', 1, 1, 2]], xp: { farming: 6 }, desc: 'Old apple trees by the creek. Free fruit for whoever picks it.' },
   ];
   // in/out per cycle; pocket = goes to the game's pocket (weed/coke for Codex dealers); seconds per cycle.
   const PROCESS = [
@@ -76,6 +107,8 @@
       xp: { dealing: 30, stealth: 6 }, desc: 'Room 6 at the Starlite Motel. Cut a snow brick into bagged product.' },
     { id: 'trailer', name: 'Trailer lab', icon: '🚐', x: 640, y: 228, r: 65, seconds: 10, in: { chem: 2, baggie: 1 }, out: { pills: 3 }, heat: 0.05,
       xp: { dealing: 20, farming: 6 }, desc: 'A rusted camper on blocks. Press chemicals into party pills.' },
+    { id: 'mill', zone: 'farm', name: 'Windmill', icon: '🌾', x: 1330, y: 516, r: 58, seconds: 5, in: { wheat: 3 }, out: { flour: 1 },
+      xp: { farming: 10 }, desc: 'Grind wheat into flour for baking.' },
   ];
   // Selling: weed/coke go to Codex dealers + customers. Pills sell to the party promoter (demand refills).
   const PROMOTER = { id: 'promoter', name: 'Party promoter', icon: '🎟️', x: 1150, y: 612, r: 60, price: 48, demand: 12, refill: 600, hours: [19, 5],
