@@ -325,3 +325,16 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
   - Art branch: `NightshiftMap.target()` and `NightshiftMap.path()` are read-only. New: `NightshiftJobs.target()`.
   - `starter-home.js` now also polyfills `Array/String#at`, `Object.hasOwn`, `findLast`, canvas `roundRect` and `ellipse` for older iPhones.
   - Portrait toasts sit at 58% height (below the player).
+- **New HUD** (`hud.js`, Claude, loads last)
+  - **Old widgets:** Codex `#hud` and `#map`, plus the RPG chips `#skChip`, `#rsBadge`, `#dyChip` and `#jbBtn`, are hidden. They still exist and update; the HUD reads the same data.
+  - **Left stack `#nsL`:**
+    - Status card: HP bar, armor bar, cash, ammo or car speed, district · clock, and crew/rival lines.
+    - A dock of 4 icon buttons (Skills with total level, Rank icon, Daily n/3, Phone with an unread/job badge).
+    - `#glCard`, then `#crimeStatus`, then `#jobPanel`.
+  - **Right stack `#nsR`:** minimap with a district/clock caption, `#wpPill`, and `#lfRadio` (portrait only).
+  - **Bottom `#nsBars`:** holds `#hsHud`, `#jbHud` and `#evHud`. In landscape it sits between the sticks; in portrait, above the action buttons.
+  - **While a menu is open:** any panel open (Claude or Codex), or the MORE grid open, sets body class `ns-menu` and hides the HUD and sticks. Codex panels also set `ns-panel`, which hides `#actions`. Toasts then float above menus at the bottom.
+  - **Panel styling:** Claude panels share one geometry (portrait almost full-screen; landscape centred, max width about 760). All panels get the same radius and font; headings use Chakra Petch from Google Fonts with a system-font fallback.
+  - Escape closes Claude panels.
+  - **Phone:** header first, then a 4-tile app home screen (Empire, Messages, Market, Stashes), then jobs and the city guide.
+  - Regression scripts open the phone with `NightshiftJobs.open()` and click `.app` tiles.
