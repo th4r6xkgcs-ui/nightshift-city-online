@@ -54,11 +54,13 @@
   function head(g, o, skin) {
     const x = g.headX, y = g.headY, hw = 4.8 - g.side * 0.5;
     R(shade(skin, -0.12), x - 1.5, y + 3.5, 3, 3.5); // neck
-    O(skin, x, y, hw, 5.2); O(shade(skin, -0.18), x + (g.sx > 0 ? -1 : 1) * hw * 0.55, y + 1.2, hw * 0.45, 3.6); // jaw shade
+    O(skin, x, y, hw, 5.2);
+    if (g.side > 0.3 && !g.back) { c.save(); c.globalAlpha = 0.45; O(shade(skin, -0.2), x - g.sx * hw * 0.62, y + 0.8, hw * 0.34, 3.8); c.restore(); } // far-cheek shade
+    c.save(); c.globalAlpha = 0.5; R(shade(skin, -0.22), x - hw * 0.6, y + 3.6, hw * 1.2, 0.8); c.restore(); // under-chin
     O(shade(skin, 0.12), x - g.sx * 1.2 - 1, y - 1.8, 1.6, 1.2); // forehead light (top-left)
     if (!g.back) {
       // ears
-      if (g.side > 0.3) O(shade(skin, -0.08), x - g.sx * 3.3, y + 0.4, 1, 1.5); else { O(shade(skin, -0.08), x - hw, y + 0.6, 0.9, 1.4); O(shade(skin, -0.08), x + hw, y + 0.6, 0.9, 1.4); }
+      if (g.side > 0.3) O(shade(skin, -0.06), x - g.sx * (hw - 0.8), y + 0.5, 0.8, 1.2); else { O(shade(skin, -0.06), x - hw + 0.2, y + 0.6, 0.8, 1.2); O(shade(skin, -0.06), x + hw - 0.2, y + 0.6, 0.8, 1.2); }
       // eyes, brows, nose, mouth
       const fv = Math.max(0.15, g.sy), eyes = g.profile ? [g.sx > 0 ? 1 : -1] : [-1, 1];
       for (const e of eyes) { const ex = x + g.sx * 2.4 + (g.profile ? 0.6 * g.sx : e * 2.0 * fv), ey = y - 0.4; if (!g.blink) { R('#f4efe6', ex - 0.8, ey - 0.5, 1.6, 1.1); R('#1b1410', ex - 0.35 + g.sx * 0.35, ey - 0.5, 0.8, 1.1); } else R(shade(skin, -0.35), ex - 0.8, ey, 1.6, 0.4); R(shade(W.HAIR_COLORS[o.hairColor], -0.1), ex - 0.9, ey - 1.6, 1.8, 0.5); }
@@ -257,8 +259,8 @@
     const x = cv.getContext('2d'), w = cv.width, h = cv.height, img = x.getImageData(0, 0, w, h), d = img.data, out = new Uint8ClampedArray(d);
     const ink = [0x11, 0x15, 0x1c];
     for (let y = 1; y < h - 1; y++) for (let xx = 1; xx < w - 1; xx++) {
-      const i = (y * w + xx) * 4; if (d[i + 3] > 40) continue;
-      if (d[i + 7] > 120 || d[i - 1] > 120 || d[i + w * 4 + 3] > 120 || d[i - w * 4 + 3] > 120) { out[i] = ink[0]; out[i + 1] = ink[1]; out[i + 2] = ink[2]; out[i + 3] = 235; }
+      const i = (y * w + xx) * 4; if (d[i + 3] >= 128) { out[i + 3] = 255; continue; }
+      if (d[i + 7] >= 128 || d[i - 1] >= 128 || d[i + w * 4 + 3] >= 128 || d[i - w * 4 + 3] >= 128) { out[i] = ink[0]; out[i + 1] = ink[1]; out[i + 2] = ink[2]; out[i + 3] = 240; } else out[i + 3] = 0;
     }
     img.data.set(out); x.putImageData(img, 0, 0);
   }
