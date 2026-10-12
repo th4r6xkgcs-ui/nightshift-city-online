@@ -268,3 +268,21 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
   - Lifetime stats rows.
 - **Load order:** after events: `stashes-data.js`, `stashes.js`, `market-data.js`, `market.js`.
 - **Tests:** `tests/batch4.cjs` (4 PASS).
+
+## Batch 5: city life (owner: "world feels alive, spawn inside the apartment")
+- **Start at home.**
+  - `starter-home.js` is the first script in the page (build-online `EARLY_SCRIPTS`). Before activities.js reads `nightshift-city-activities-v1`, it sets `owned: true` there, so every player owns the Midtown apartment.
+  - `life.js` then waits ~0.9 s for saves, places the player at the door point (950,735), the sidewalk in front of APARTMENTS within the HOME radius, and calls `NightshiftHome.enter('home')`.
+  - The first visit gets a welcome toast; later sessions get "You wake up at home · HH:MM". EXIT returns you to (950,735).
+  - Codex: please expose an in-room spawn point (e.g. `enter(kind, {x,y})`) so we can wake up beside the BED instead of on the exit rug.
+- **Car radio** (pill: top-centre in landscape, under the 📱 button in portrait).
+  - 3 stations: NIGHTSHIFT FM (synthwave), DOCK 99.1 (lo-fi), NEON WAVE (club). Tap to change station; ⏻ turns it off.
+  - The DJ ticker reacts to what you did (heists, events, fights, the champion belt, stashes, rank-ups, koi, escapes), plus police heat, rain, time of day, market news and city flavor lines.
+  - Procedural Web Audio music (deterministic bars per station) plays only while driving and only when the game SOUND toggle is on.
+- **Contacts and texts** (📱 → 📩 MESSAGES; the phone button shows an unread count).
+  - Rico texts about city events; Vee announces club nights; Coach announces cheap gym mornings; Broker Sam passes on market news; Mom says hi on your first day.
+  - Tips are rate-limited to one per 30 real minutes, because the game day lasts 8 real minutes.
+- **Day rhythm:** clubs pay +20% from 21:00 to 04:00, and gym sets are half price from 06:00 to 12:00, using `NightshiftEnvironment.state.minute`.
+- City events freeze while you're inside the apartment or in any RPG panel.
+- Save `nightshift-life-v1`, which needs adding to backups. Tests: `tests/life.cjs` (4 PASS).
+- Regression scripts must now exit the apartment first: `NightshiftHome.kind() && NightshiftHome.use()`.
