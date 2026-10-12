@@ -9,5 +9,17 @@ function stop(actor,now){
  return false;
 }
 root.NightshiftSignals={phase,stop};if(!root.document)return;
-root.NightshiftSignals.draw=now=>{const lights=phase(now),color={green:'#79e3ac',amber:'#f1c46d',red:'#ed7684'};g.save();for(let x=440;x<2200;x+=440)for(let y=340;y<1700;y+=340){g.fillStyle='#18232f';g.fillRect(x+68,y-82,11,27);g.fillRect(x-82,y+68,27,11);g.fillStyle=color[lights.vertical];g.fillRect(x+71,y-78,5,5);g.fillStyle=color[lights.horizontal];g.fillRect(x-78,y+71,5,5)}g.restore()};
+root.NightshiftSignals.draw=now=>{
+ const lights=phase(now),colors={red:'#f47e86',amber:'#f3c86d',green:'#89e2b4'};
+ g.save();
+ for(let x=440;x<2200;x+=440)for(let y=340;y<1700;y+=340){
+  if(typeof camera!=='undefined'&&(x+110<camera.x||y+110<camera.y||x-110>camera.x+W/camera.zoom||y-110>camera.y+H/camera.zoom))continue;
+  // Paired three-lamp heads: positions communicate state as well as color.
+  for(const [dx,dy,axis] of [[72,-91,'vertical'],[-91,72,'horizontal']]){
+   const xx=x+dx,yy=y+dy;g.fillStyle='#101e2b88';g.fillRect(xx+3,yy+4,15,35);g.fillStyle='#b2baa5';g.fillRect(xx+6,yy+28,3,14);g.fillStyle='#152a36';g.fillRect(xx,yy,15,32);
+   for(const [i,key] of ['red','amber','green'].entries()){g.fillStyle=lights[axis]===key?colors[key]:'#30434a';g.fillRect(xx+4,yy+4+i*9,7,6);if(lights[axis]===key){g.fillStyle='#fff6cf';g.fillRect(xx+5,yy+4+i*9,2,1)}}
+  }
+ }
+ g.restore();
+};
 })(globalThis);
