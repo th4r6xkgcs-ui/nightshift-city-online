@@ -144,7 +144,7 @@
       progress: (c) => [Math.min(c.exotics, 1), 1], reward: { cash: 8000, xp: { driving: 300 } } },
     { id: 'legend1', place: 'lockup', tier: 'Kingpin', title: 'Legendary', hint: 'Find a 📜 blueprint (safes, gun lockers, trap-house counting rooms, Broker bonuses) and craft that legendary gun at your Lockup.',
       progress: (c) => [Math.min(c.legends, 1), 1], reward: { cash: 10000, xp: { crafting: 400 } } },
-    { id: 'stash1', place: 'trap', tier: 'Kingpin', title: 'Under new management', hint: 'Take every crew member down in a 🏚️ trap house, then TAKE IT OVER at the door: your own stash house. Stock it, lock it down, let your crew sell.',
+    { id: 'takeover1', place: 'trap', tier: 'Kingpin', title: 'Under new management', hint: 'Take every crew member down in a 🏚️ trap house, then TAKE IT OVER at the door: your own stash house. Stock it, lock it down, let your crew sell.',
       progress: (c) => [Math.min(c.stashOwned, 1), 1], reward: { cash: 5000, xp: { dealing: 200, toughness: 100 } } },
     { id: 'kit1', tier: 'Kingpin', title: 'Car guy', hint: 'Fit a body kit to one of your cars at Prestige Motors (Palm Grove).',
       progress: (c) => [Math.min(c.kits, 1), 1], reward: { cash: 2000, xp: { driving: 150 } } },
