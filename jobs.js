@@ -64,6 +64,7 @@
   function finish(pay, note) {
     const o = active.offer, p = P();
     const total = J.scale(pay, rank());
+    try { root.NightshiftLedger?.tag('jobs'); } catch { /* optional */ } 
     if (p) p.cash = Math.min(100000000, p.cash + total);
     for (const [sk, xp] of Object.entries(J.TYPES[o.type].xp)) try { root.NightshiftSkills?.gain(sk, xp, 'job'); } catch { /* optional */ }
     state.done++; state.earned += total; state.byType[o.type] = (state.byType[o.type] || 0) + 1; persist(); gameSave();
@@ -208,6 +209,7 @@
     const sh = root.NightshiftStashes;
     if (sh && sh.count() < sh.total) tile('📦', 'STASHES', sh.state.rumor ? 'GPS rumor' : `Rumor ${money(root.NightshiftStashesData.RUMOR_PRICE)}`, () => { if (sh.buyRumor()) panel.hidden = true; });
     const su = root.NightshiftSupply, sd = root.NightshiftSupplyData;
+    { const lg = root.NightshiftLedger; if (lg) { const s = lg.session(), net = Object.values(s.earned).reduce((a, b) => a + b, 0) - Object.values(s.spent).reduce((a, b) => a + b, 0); tile('📊', 'LEDGER', `${net >= 0 ? '+' : '-'}${money(Math.abs(net))} today`, () => { panel.hidden = true; lg.open(); }); } }
     { const cx = root.NightshiftCars; if (cx) tile('🚗', 'MY CARS', cx.rare() && !cx.rare().stolen ? '⭐ rare spotted' : `${root.NightshiftCarsData.models(cx.state).size}/${root.NightshiftCarsData.CARS.length} collected`, () => { panel.hidden = true; cx.open(); }); }
     { const hm = root.NightshiftHitman; if (hm) { const a = hm.state.active; tile('🎯', 'CONTRACTS', !hm.unlocked() ? 'Locked' : a ? `${a.name.split(' ')[0]} · active` : root.NightshiftHitmanData.rankOf(hm.state.done).name, () => { panel.hidden = true; hm.open(); }); } }
     if (su && sd) tile('🎒', 'BACKPACK', `${sd.weightOf(su.state.bag)}/${sd.cap(su.state)} · map`, () => { panel.hidden = true; su.openBag(); });

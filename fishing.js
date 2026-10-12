@@ -97,7 +97,7 @@
   }
   function landFish() {
     const f = game.fish, r = F.land(state, f), p = P();
-    if (r.cash && p) { p.cash = Math.min(100000000, p.cash + r.cash); gameSave(); }
+    try { root.NightshiftLedger?.tag('fishing'); } catch { /* optional */ } if (r.cash && p) { p.cash = Math.min(100000000, p.cash + r.cash); gameSave(); }
     try { root.NightshiftSkills?.gain('fishing', F.XP(f), 'fish'); } catch { /* optional */ }
     persist();
     game.phase = 'idle'; game.last = f;

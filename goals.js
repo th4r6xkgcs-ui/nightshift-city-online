@@ -157,6 +157,7 @@
   function pay(goal) {
     const p = G.player, r = goal.reward || {};
     const cash = Math.round((r.cash || 0) * cashBonus());
+    try { root.NightshiftLedger?.tag('goals'); } catch { /* optional */ } 
     if (p && cash > 0 && Number.isFinite(p.cash)) { p.cash = Math.min(100000000, p.cash + cash); paying += cash; if (last) last.cash = p.cash; }
     for (const [sk, xp] of Object.entries(r.xp || {})) root.NightshiftSkills?.gain(sk, xp, 'goal:' + goal.id);
     if (gameSave) { try { gameSave(); } catch { /* ignore */ } }

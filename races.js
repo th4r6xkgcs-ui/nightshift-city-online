@@ -78,7 +78,7 @@
     const bm = R.medal(race, state.best[race.id]); if (bm) state.medals[race.id] = bm.id;
     persist();
     const p = P();
-    if (pay && p) { p.cash = Math.min(100000000, p.cash + pay); gameSave(); }
+    try { root.NightshiftLedger?.tag('races'); } catch { /* optional */ } if (pay && p) { p.cash = Math.min(100000000, p.cash + pay); gameSave(); }
     if (m) try { root.NightshiftSkills?.gain('driving', Math.round(race.xp * (m.id === 'gold' ? 1 : m.id === 'silver' ? 0.7 : 0.45)), 'race'); } catch { /* optional */ }
     const record = !before || secs < before;
     const text = m ? `${m.icon} ${race.name} · ${R.fmt(secs)}${record ? ' · NEW BEST' : ''} · +${money(pay)}` : `🏁 ${race.name} · ${R.fmt(secs)} · no medal (bronze ${R.fmt(R.par(race) * 1.6)})`;

@@ -576,7 +576,7 @@
       const open = S.openAt(S.PROMOTER.hours, m), left = S.promoterLeft(state), have = state.bag.pills || 0, price = Math.round(S.PROMOTER.price * mod('dealing.price'));
       header(shopP, '🎟️ PARTY PROMOTER', open ? `"Got any party favours?" Buys up to ${left} more pills right now at ${money(price)} each.` : `Only works the club line at night (${S.hoursText(S.PROMOTER.hours)}).`);
       shopP.append(el('div', { className: 'sub' }, `You have ${have} 💊`));
-      for (const n of [1, 5, 99]) shopP.append(btn('go', n === 99 ? 'SELL ALL' : `SELL ${n}`, () => { const r = S.sellPills(state, P(), n, { minute: minute(), price: mod('dealing.price') }); if (r.ok) { xp({ dealing: 20 * r.n, charisma: 4 * r.n }, 'sale'); } say(r.ok ? `💊 Sold ${r.n} pills · +${money(r.cash)}` : r.reason); persist(); gameSave(); renderShop(); }, !open || !have || left <= 0));
+      for (const n of [1, 5, 99]) shopP.append(btn('go', n === 99 ? 'SELL ALL' : `SELL ${n}`, () => { try { root.NightshiftLedger?.tag('product'); } catch { /* optional */ } const r = S.sellPills(state, P(), n, { minute: minute(), price: mod('dealing.price') }); if (r.ok) { xp({ dealing: 20 * r.n, charisma: 4 * r.n }, 'sale'); } say(r.ok ? `💊 Sold ${r.n} pills · +${money(r.cash)}` : r.reason); persist(); gameSave(); renderShop(); }, !open || !have || left <= 0));
       shopP.querySelectorAll('button.go').forEach((b) => { b.style.margin = '4px'; });
     } else if (shopKind === 'arms') {
       const open = S.openAt(S.ARMS_BUYER.hours, m), left = S.armsLeft(state), ws = WS(), wst = ws?.state, price = mod('dealing.price');
@@ -598,6 +598,7 @@
   }
   function sellGun(id, kind) {
     if (S.armsLeft(state) <= 0) { say('The buyer has enough for tonight'); return; }
+    try { root.NightshiftLedger?.tag('guns'); } catch { /* optional */ } 
     const r = WS().sell(id, kind, mod('dealing.price'));
     if (r.ok) { S.armsSold(state, r.cash); xp({ dealing: 60, charisma: 10 }, 'sale'); persist(); gameSave(); say(`🚚 Sold ${W.BY_ID[id].name} · +${money(r.cash)}`); } else say(r.reason);
     renderShop();

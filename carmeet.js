@@ -78,6 +78,7 @@
     if (!open()) { openPanel(); return; }
     if (!car) { say('🏁 Drive a car you OWN into the ring and stop to show it'); openPanel(); return; }
     if (Math.abs(car.speed || 0) > 0.3) { say('🏁 Stop in the ring first'); return; }
+    try { root.NightshiftLedger?.tag('meet'); } catch { /* optional */ } 
     const r = D.show(state, p, key(), car.id, carInfo(car)); if (!r.ok) { say(r.reason); return; }
     persist(); gameSave();
     try { root.NightshiftSkills?.gain('charisma', 30 + (r.prize ? 40 : 0), 'meet'); root.NightshiftSkills?.gain('driving', 20, 'meet'); if (r.prize) root.NightshiftAudio?.play('pickup'); } catch { /* optional */ }

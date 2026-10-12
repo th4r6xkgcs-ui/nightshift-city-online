@@ -78,6 +78,7 @@
         ['💊', 'Pills', 'Chemicals from the PHARMACY DUMPSTER → TRAILER LAB → the PROMOTER at the Neon Room (nights).', 'GPS', () => gps(sp('pharmacy'), 'Pharmacy dumpster')],
       ]],
       ['💵 MAKE MONEY', [
+        ['📊', 'Ledger', 'Where your money comes from and where it goes, $ per hour, and rough rates for every hustle you haven\'t tried. Phone → LEDGER.', 'OPEN', open2(() => R.NightshiftLedger.open())],
         ['📱', 'Phone jobs', 'Taxi fares, repos, hits and VIP drops. Open the 📱 phone.', 'OPEN', open2(() => R.NightshiftJobs.open())],
         ['🌆', 'City events', 'Every few minutes something pops up. Rico texts you; follow the cyan arrow.', null],
         ['📦', 'Courier deliveries', 'MORE → JOB, then follow the GPS to pickup and drop-off.', null],
