@@ -31,7 +31,7 @@
   const hk = setInterval(() => { const SK = root.NightshiftSkills; if (!hooked && SK?.addModifier) { SK.addModifier((k) => D.perk(state, k)); hooked = true; } if (hooked) clearInterval(hk); }, 300);
 
   // ---- following ----
-  const pet = { x: 0, y: 0, angle: 0, moving: false, walk: 0, where: '', sit: 0, bark: 0, sniffAt: 0, hop: 0 };
+  const pet = { x: 0, y: 0, angle: 0, moving: false, walk: 0, where: '', sit: 0, bark: 0, sniffAt: 0, hop: 0 }, PET0 = pet;
   function leader() {
     const z = root.NightshiftZones?.active?.();
     if (z) { const pos = root.NightshiftZones.pos(); return pos ? { x: pos.x, y: pos.y, angle: pos.moveAngle ?? pos.angle, where: 'zone:' + z, moving: pos.moving } : null; }
@@ -55,8 +55,8 @@
     }
   }
   const nameOf = () => state.pets.find((p) => p.id === state.active)?.name || 'Your pet';
-  function drawPet(c, t) {
-    const D2 = D.PET[state.active]; if (!D2) return;
+  function drawPet(c, t, id = state.active, pet = PET0) {
+    const D2 = D.PET[id]; if (!D2) return;
     const [main, second] = D2.colors, dir = Math.cos(pet.angle) >= 0 ? 1 : -1, x = pet.x, y = pet.y, mv = pet.moving, sitting = !mv && performance.now() - pet.sit > 1500;
     const bob = mv ? Math.sin(pet.walk * 0.9) * 1.2 : 0, wag = Math.sin(t * (sitting ? 6 : 14)) * 3;
     if (D2.kind === 'bird') {
@@ -114,6 +114,22 @@
     if (!L) return null; step(L, dt, now);
     return { y: pet.y + (D.PET[state.active]?.kind === 'bird' ? 30 : 0), draw: (c, t) => drawPet(c, t) };
   });
+
+  // ---- roaming pets (apartment, dream house): wander between floor points, sit a while, wander again ----
+  function roamer(id, x, y) { return { id, x, y, angle: 0, moving: false, walk: 0, sit: 0, bark: 0, tx: x, ty: y, wait: 0 }; }
+  function roam(o, dt, now, points) {
+    if (!points?.length) return;
+    const d = Math.hypot(o.tx - o.x, o.ty - o.y);
+    if (d < 2) { o.moving = false; if (!o.wait) o.wait = now + 2500 + Math.random() * 5000; if (now > o.wait) { const q = points[(Math.random() * points.length) | 0]; o.tx = q[0] + (Math.random() - 0.5) * 30; o.ty = q[1] + (Math.random() - 0.5) * 20; o.wait = 0; } return; }
+    const sp = (D.PET[o.id]?.kind === 'cat' ? 1.1 : 1.5) * dt; o.x += (o.tx - o.x) / d * Math.min(sp, d); o.y += (o.ty - o.y) / d * Math.min(sp, d); o.angle = Math.atan2(o.ty - o.y, o.tx - o.x); o.moving = true; o.walk += dt; o.sit = now;
+  }
+  const APT = [[310, 225], [160, 330], [470, 300], [330, 300], [560, 290], [250, 250], [420, 235], [90, 300]];
+  const homeRoam = {}; let homeLast = performance.now();
+  function apartmentPets(ctx) {
+    const now = performance.now(), dt = Math.min(2, (now - homeLast) / 16.67); homeLast = now;
+    for (const q of state.pets) { const o = homeRoam[q.id] || (homeRoam[q.id] = roamer(q.id, ...APT[(Math.random() * APT.length) | 0])); roam(o, dt, now, APT); drawPet(ctx, now / 1000, q.id, o); }
+  }
+  const hookHome = setInterval(() => { const I = root.NightshiftInteriors; if (!I || typeof I.draw !== 'function') return; if (!I.__pets) { const draw = I.draw; try { I.draw = function (kind, ctx) { const r = draw.apply(this, arguments); if (kind === 'home' && ctx) { try { apartmentPets(ctx); } catch { /* cosmetic */ } } return r; }; } catch { /* frozen */ } I.__pets = true; } clearInterval(hookHome); }, 500);
 
   // ---- pets panel ----
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
@@ -185,7 +201,7 @@
     S.car(v); if (kit) decals(ctx, v, kit);
   }
 
-  root.NightshiftPets = Object.freeze({ get state() { return state; }, save: () => { persist(); gameSave(); }, openPets, previewCar, decals,
+  root.NightshiftPets = Object.freeze({ get state() { return state; }, drawPet, roamer, roam, save: () => { persist(); gameSave(); }, openPets, previewCar, decals,
     adopt: (id) => { const r = D.adopt(state, P(), id); if (r.ok) { persist(); gameSave(); } return r; },
     buyKit: (carId, kitId, owned) => { const r = D.buyKit(state, P(), carId, kitId, owned); if (r.ok) { persist(); gameSave(); } return r; },
     buyDream: () => { const r = D.buyDream(state, P()); if (r.ok) { persist(); gameSave(); } return r; },
