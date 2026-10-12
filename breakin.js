@@ -195,18 +195,37 @@
   }
 
   // ---------------- searching ----------------
+  // Safes: crack the dial (quiet, instant, +30% cash) or drill it (slow and loud). Everything else is a timed search.
+  const SAFES = { safe: 'safe', gunsafe: 'gunsafe' };
   function startSearch(l) {
-    if (job.search?.id === l.id) return;
-    job.search = { id: l.id, t0: performance.now(), ms: l.seconds * 1000 * (l.kind === 'safe' || l.kind === 'gunsafe' ? mod('crafting.speed') : 1) };
-    hear(l.x, l.y, l.kind === 'safe' ? 110 : 60, Z.api, 'step');
+    if (job.search?.id === l.id || job.picking) return;
+    const PK = root.NightshiftPicks;
+    if (SAFES[l.kind] && PK && !job.tried?.[l.id]) {
+      job.tried = job.tried || {}; job.tried[l.id] = true; job.picking = l.id;
+      PK.start({ type: SAFES[l.kind], title: l.kind === 'gunsafe' ? 'CRACK THE GUN SAFE' : 'CRACK THE SAFE', sub: 'Tap when the notch hits each number · misses make noise',
+        onMiss: () => { if (job) hear(l.x, l.y, 120, Z.api, 'step'); },
+        onDone: (ok, p) => { if (!job) return; job.picking = null; if (p?.cancelled) { job.tried[l.id] = false; return; } if (ok) { giveLoot(l, Z.api, 1.3); Z.api.float(l.x, l.y - 34, 'CRACKED · +30%', '#7cdeb5'); try { root.NightshiftSkills?.gain('stealth', 30, 'safe'); } catch { /* optional */ } } else { say('🔩 Dial jammed · drilling it instead (loud)'); drill(l, 1.35); } },
+        alt: { label: 'DRILL IT', fn: () => { if (job) { job.picking = null; drill(l, 1); } } } });
+      return;
+    }
+    drill(l, 1);
+  }
+  function drill(l, loud) {
+    job.search = { id: l.id, t0: performance.now(), ms: l.seconds * 1000 * (SAFES[l.kind] ? mod('crafting.speed') : 1) };
+    hear(l.x, l.y, (SAFES[l.kind] ? 140 : 60) * loud, Z.api, 'step');
   }
   function searchTick(now, api) {
+    if (job.picking) { const l = job.L.loot.find((q) => q.id === job.picking); if (!l || dist(api.pos, l) > 54) { job.picking = null; root.NightshiftPicks?.cancel?.(); if (l) job.tried[l.id] = false; } return; }
     const s = job.search; if (!s) return;
     const l = job.L.loot.find((q) => q.id === s.id);
     if (!l || dist(api.pos, l) > 42) { job.search = null; return; }
+    if (SAFES[l.kind] && now - (s.lastNoise || s.t0) > 1600) { s.lastNoise = now; hear(l.x, l.y, 150, api, 'step'); api.echo(l.x, l.y, '#9fd0ff', 'step'); }
     if (now - s.t0 < s.ms) return;
-    job.search = null; job.looted[l.id] = true;
-    const got = B.rollLoot(l.kind, Math.random, mod('luck.rare'));
+    job.search = null; giveLoot(l, api, 1);
+  }
+  function giveLoot(l, api, cashMult) {
+    job.looted[l.id] = true;
+    const got = B.rollLoot(l.kind, Math.random, mod('luck.rare')); got.cash = Math.round(got.cash * cashMult);
     job.bag.cash += got.cash; for (const [k, n] of Object.entries(got.items)) job.bag.items[k] = (job.bag.items[k] || 0) + n;
     const txt = [got.cash ? `+${money(got.cash)}` : '', ...Object.entries(got.items).map(([k, n]) => `+${n} ${k === 'ammo' ? '🔹' : root.NightshiftSupplyData?.MATERIALS?.[k]?.icon || k}`)].filter(Boolean).join(' ') || 'empty';
     api.float(l.x, l.y - 16, txt, got.cash || Object.keys(got.items).length ? '#ffe9a8' : '#9fb3c8');
@@ -239,8 +258,17 @@
     job = null;
     if (j.from === 'suburbs' && root.NightshiftZones.zones().suburbs) Z.enter('suburbs', { x: j.door.x, y: j.door.y + 30, angle: Math.PI / 2 }); else Z.leave(j.door ? { x: j.door.x, y: j.door.y + 30 } : undefined);
   }
+  // The back door: pick the lock (quiet) or kick it in (alarm from the first second).
   function start(target) {
     const p = P(); if (!p) return false;
+    if (!target.picked && !target.kicked && root.NightshiftPicks && !job) {
+      const contract = HM()?.contractFor?.(target.id) || null, left = contract ? 0 : B.cooldownLeft(state, target.id, target.type);
+      if (left > 0) { say(`🔒 They've beefed up security since last time · try again in ${Math.ceil(left / 60000)} min`); return false; }
+      const watch = setInterval(() => { if (!root.NightshiftPicks.active()) { clearInterval(watch); return; } const pos = target.from === 'suburbs' ? Z.pos() : P(); if (pos && target.door && Math.hypot(pos.x - target.door.x, pos.y - target.door.y) > 100) { root.NightshiftPicks.cancel(); clearInterval(watch); say('You walked away from the door'); } }, 300);
+      return root.NightshiftPicks.start({ type: target.type, seed: (hashStr(target.id) + Math.floor(Date.now() / 600000)) >>> 0, title: `PICK THE LOCK · ${String(target.name).toUpperCase()}`, sub: 'Tap in the gold · each pin takes one tap',
+        onDone: (ok, pk) => { if (pk?.cancelled) return; if (ok) { try { root.NightshiftSkills?.gain('stealth', 20, 'lockpick'); } catch { /* optional */ } start({ ...target, picked: true }); } else { say('🔩 Pick snapped. You shoulder the door in · the alarm is going!'); start({ ...target, kicked: true }); } },
+        alt: { label: 'KICK IT IN', fn: () => start({ ...target, kicked: true }) } });
+    }
     const contract = HM()?.contractFor?.(target.id) || null;
     const left = contract ? 0 : B.cooldownLeft(state, target.id, target.type);
     if (left > 0) { say(`🔒 They've beefed up security since last time · try again in ${Math.ceil(left / 60000)} min`); return false; }
@@ -251,6 +279,7 @@
     const def = makeZone(job, target);
     Z.register(def);
     Z.enter('breakin', L.spawn, {});
+    if (target.kicked) { const now = performance.now(); setTimeout(() => { if (job) { alarm(performance.now()); hear(L.exit.x, L.exit.y - 40, 420, Z.api, 'shot'); } }, 400); void now; }
     say(contract ? `🎯 Contract: ${contract.name} is inside with ${contract.guards} bodyguard${contract.guards === 1 ? '' : 's'}. Find the gold ▼, take them down, walk out the back door. Quiet pays +50%.`
       : `🤫 ${target.name}: sneak in, search for loot (gold glints), and get out the back door. Sprinting and gunfire are loud.`);
     return true;
@@ -283,7 +312,7 @@
       },
       targets(api) {
         const out = [];
-        for (const l of L.loot) if (!j.looted[l.id] && dist(api.pos, l) < 60) out.push({ x: l.x, y: l.y, r: 40, action: j.search?.id === l.id ? '…' : 'SEARCH', label: `Search the ${({ cashjar: 'cash jar', jewelbox: 'jewellery box', gunsafe: 'gun safe', gunlocker: 'gun locker', cashbox: 'cash box', tv: 'TV', art: 'painting', product: 'product stash', chemcrate: 'chemical crate', cashpile: 'counting table' })[l.kind] || l.kind}`, use: () => startSearch(l) });
+        for (const l of L.loot) if (!j.looted[l.id] && dist(api.pos, l) < 60) out.push({ x: l.x, y: l.y, r: 40, action: j.search?.id === l.id || j.picking === l.id ? '…' : SAFES[l.kind] ? (j.tried?.[l.id] ? 'DRILL' : 'CRACK') : 'SEARCH', label: `Search the ${({ cashjar: 'cash jar', jewelbox: 'jewellery box', gunsafe: 'gun safe', gunlocker: 'gun locker', cashbox: 'cash box', tv: 'TV', art: 'painting', product: 'product stash', chemcrate: 'chemical crate', cashpile: 'counting table' })[l.kind] || l.kind}`, use: () => startSearch(l) });
         return out;
       },
       exits: [{ x: L.exit.x, y: L.exit.y, r: 44, action: 'ESCAPE', label: 'Back door · leave with your loot', sign: 'EXIT', icon: '🚪', color: '#7cdeb5', lift: 6, use: (api) => finish(api) }],
