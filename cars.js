@@ -71,7 +71,7 @@
     // wheels under the body
     const fx = L * B0.wb, rx = -L * B0.wb, [tw, th] = B0.tire, wide = spec.body === 'super' || spec.body === 'hyper';
     const rim = spec.body === 'lowrider' ? '#e8c45a' : wide ? '#c9cfd6' : spec.body === 'classic' ? '#f1efe8' : '#8f979f';
-    for (const s of [-1, 1]) { wheel(c, fx, s * (hw - th / 2 + 1.6), tw, th, rim, spec.body === 'lowrider'); wheel(c, rx, s * (hw - th / 2 + (wide ? 2.4 : 1.6)), tw + (wide ? 1 : 0), th + (wide ? 1.2 : 0), rim, spec.body === 'lowrider'); }
+    for (const s of [-1, 1]) { wheel(c, fx, s * (hw - th / 2 + 2.3), tw, th, rim, spec.body === 'lowrider'); wheel(c, rx, s * (hw - th / 2 + (wide ? 3 : 2.3)), tw + (wide ? 1 : 0), th + (wide ? 1.2 : 0), rim, spec.body === 'lowrider'); }
     // body: outline, paint, form shading, sheen
     c.save(); c.lineJoin = 'round'; c.strokeStyle = dark; c.lineWidth = 1.6; poly(c, pts); c.stroke(); poly(c, pts, color); c.clip();
     const sh = c.createLinearGradient(0, -hw, 0, hw); sh.addColorStop(0, '#ffffff3a'); sh.addColorStop(0.3, '#ffffff08'); sh.addColorStop(0.62, '#00000010'); sh.addColorStop(1, '#00000066'); c.fillStyle = sh; c.fillRect(-hl - 2, -hw - 2, L + 4, W + 4);
