@@ -52,8 +52,11 @@
     const [w, h] = SIZE[kind], b = X.Buf(null, w, h);
     b.Pm = (mat, mask, o) => { const T = mat, set = new Set(mask.map(([x, y]) => x + ',' + y)), has = (x, y) => set.has(x + ',' + y); let minX = 1e9, maxX = -1e9; for (const [x] of mask) { minX = Math.min(minX, x); maxX = Math.max(maxX, x); }
       for (const [x, y] of mask) { let t = 1; if (!has(x, y - 1)) t = !o?.matte && (x - minX) < (maxX - minX) * 0.7 ? 3 : 2; else if (!has(x, y + 1) || !has(x + 1, y)) t = 0; else if (!has(x - 1, y)) t = 2; b.put(x, y, T[t]); } };
-    fn(b); X.outline(b, '#0b1018');
-    return { px: b.px, w, h };
+    fn(b);
+    const PAD = 2, W2 = w + PAD * 2, H2 = h + PAD * 2, px = new Array(W2 * H2).fill(null); // room for the outline on every side
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) px[(y + PAD) * W2 + x + PAD] = b.px[y * w + x];
+    const o = { px, w: W2, h: H2 }; X.outline(o, '#0b1018');
+    return o;
   }
   const cache = new Map();
   function sprite(kind) {
@@ -64,9 +67,9 @@
   }
   // Same call shape as Codex: prop(ctx, kind, x, y) with (x, y) on the ground under the prop.
   function draw(c, kind, x, y) {
-    const s = sprite(kind); if (!s) return false; const [w, h] = SIZE[kind];
+    const s = sprite(kind); if (!s) return false; const w = s.width, h = s.height;
     c.save(); c.fillStyle = '#07152144'; c.beginPath(); c.ellipse(x + 3, y + 3, w * K * 0.5, Math.max(3, h * K * 0.12), 0, 0, Math.PI * 2); c.fill();
-    const prev = c.imageSmoothingEnabled; c.imageSmoothingEnabled = false; c.drawImage(s, Math.round(x - w * K / 2), Math.round(y + 4 - h * K), w * K, h * K); c.imageSmoothingEnabled = prev; c.restore();
+    const prev = c.imageSmoothingEnabled; c.imageSmoothingEnabled = false; c.drawImage(s, Math.round(x - w * K / 2), Math.round(y + 4 + 2 * K - h * K), w * K, h * K); c.imageSmoothingEnabled = prev; c.restore();
     return true;
   }
 
@@ -77,22 +80,24 @@
     if (benchList) return benchList; benchList = [];
     /* eslint-disable no-undef */ let W0 = null, B = []; try { W0 = world; B = buildings; } catch { return benchList; } /* eslint-enable no-undef */
     const inside = (x, y) => B.some((b) => x > b.x - 6 && x < b.x + b.w + 6 && y > b.y - 6 && y < b.y + b.h + 6);
+    let pts = []; try { pts = root.NightshiftEncounters?.locations?.() || []; } catch { /* n/a */ } // keep doors and prompts clear
+    const busy = (x, y) => pts.some((q) => Math.abs(q.x - x) < 56 && Math.abs(q.y - y) < 44);
     for (let bx = 0; bx * 440 < W0.w; bx++) for (let by = 0; by * 340 < W0.h; by++) for (const dx of [182, 238]) {
-      const x = bx * 440 + dx, y = by * 340 + 262; if (x > W0.w - 30 || y > W0.h - 30 || inside(x, y) || inside(x - 22, y) || inside(x + 22, y)) continue;
+      const x = bx * 440 + dx, y = by * 340 + 262; if (x > W0.w - 30 || y > W0.h - 30 || busy(x, y) || inside(x, y) || inside(x - 22, y) || inside(x + 22, y)) continue;
       let bad = false; try { bad = blocked(x, y) || blocked(x - 20, y) || blocked(x + 20, y); } catch { /* no game */ } // eslint-disable-line no-undef
       if (!bad) benchList.push({ x, y, seats: [x - 11, x + 11] });
     }
     return benchList;
   }
-  const seatNear = (p, r = 16) => { for (const b of benches()) for (const sx of b.seats) if (Math.abs(p.x - sx) < r && Math.abs(p.y - (b.y + 6)) < 12) return { x: sx, y: b.y + 6 }; return null; };
+  const seatNear = (p, r = 16) => { for (const b of benches()) for (const sx of b.seats) if (Math.abs(p.x - sx) < r && Math.abs(p.y - (b.y + 6)) < 12) return { x: sx, y: b.y - 6 }; return null; }; // y = where the sitter is drawn (hips on the slats)
   let still = 0, lastX = 0, lastY = 0;
   function seatTick() {
     /* eslint-disable no-undef */ let pl = null, list = []; try { pl = player; list = peds; } catch { return; } /* eslint-enable no-undef */
-    for (const p of list) { if (!p) continue; if (p.moving) { p.seated = false; continue; } if (p.seated === undefined || p.seatCheck !== Math.round(p.x) + ',' + Math.round(p.y)) { p.seatCheck = Math.round(p.x) + ',' + Math.round(p.y); p.seated = !!seatNear(p, 14); } }
+    for (const p of list) { if (!p) continue; if (p.moving) { p.seated = false; continue; } if (p.seated === undefined || p.seatCheck !== Math.round(p.x) + ',' + Math.round(p.y)) { p.seatCheck = Math.round(p.x) + ',' + Math.round(p.y); const st = seatNear(p, 14); p.seated = !!st; p.seat = st; } }
     if (!pl || pl.car) { if (pl) pl.seated = false; return; }
     if (Math.hypot(pl.x - lastX, pl.y - lastY) > 0.5 || pl.moving) { still = 0; pl.seated = false; } else still += 1;
     lastX = pl.x; lastY = pl.y;
-    if (still >= 10 && !pl.seated && !root.NightshiftZones?.active?.()) { const s = seatNear(pl, 18); if (s) { pl.seated = true; } }
+    if (still >= 10 && !pl.seated && !root.NightshiftZones?.active?.()) { const s = seatNear(pl, 18); if (s) { pl.seated = true; pl.seat = s; } }
   }
   // street benches are drawn live (not into Codex's cached street layer), under people
   function drawBenches(ctx) {
