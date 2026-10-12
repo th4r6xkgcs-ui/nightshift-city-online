@@ -12,7 +12,7 @@
     { id: 'art', room: 'Living room', name: 'Wall art', x: 130, y: 30 },
     { id: 'plant', room: 'Living room', name: 'Plant', x: 590, y: 372 },
     { id: 'aquarium', room: 'Living room', name: 'Aquarium', x: 610, y: 96 },
-    { id: 'bar', room: 'Kitchen & bar', name: 'Bar', x: 930, y: 56 },
+    { id: 'bar', room: 'Kitchen & bar', name: 'Bar', x: 930, y: 74 },
     { id: 'game', room: 'Kitchen & bar', name: 'Game corner', x: 900, y: 290 },
     { id: 'music', room: 'Kitchen & bar', name: 'Music', x: 1130, y: 300 },
     { id: 'bed', room: 'Bedroom', name: 'Bed', x: 220, y: 580 },

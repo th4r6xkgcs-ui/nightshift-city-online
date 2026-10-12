@@ -49,9 +49,9 @@
   // ---------------- static ground (cached) ----------------
   function ground(c) {
     R(c, '#0a0d14', 0, 0, W, H);
-    // living room: herringbone oak
+    // living room: wide oak planks, staggered joints, grain
     { const r = ROOMS.living; R(c, '#8a6440', r.x, r.y, r.w, r.h); const g = rng(3);
-      for (let y = r.y; y < r.y + r.h; y += 10) for (let x = r.x + ((y / 10) % 2) * 15; x < r.x + r.w; x += 30) { const sh = ['#94704a', '#7f5b39', '#8a6440', '#9a7650'][(g() * 4) | 0]; R(c, sh, x, y, 28, 9); R(c, '#6d4c2e', x, y + 9, 28, 1); R(c, '#a88257', x, y, 28, 1); } }
+      for (let y = r.y; y < r.y + r.h; y += 12) { let x = r.x - g() * 80; while (x < r.x + r.w) { const len = 70 + g() * 70, sh = ['#94704a', '#86603c', '#8e6842', '#9a7650', '#80593a'][(g() * 5) | 0]; R(c, sh, x, y, len - 1, 11); R(c, '#a88257', x, y, len - 1, 1); for (let k = 0; k < 2; k++) R(c, '#7a5534', x + g() * len * 0.8, y + 3 + g() * 6, 10 + g() * 18, 1); R(c, '#5e4128', x + len - 1, y, 1, 11); x += len; } R(c, '#6a4a2c', r.x, y + 11, r.w, 1); } }
     // kitchen: marble tiles
     { const r = ROOMS.kitchen; const g = rng(5); for (let y = r.y; y < r.y + r.h; y += 32) for (let x = r.x; x < r.x + r.w; x += 32) { R(c, ((x + y) / 32) % 2 ? '#e9e6df' : '#dcd8cf', x, y, 32, 32); for (let k = 0; k < 3; k++) { c.strokeStyle = '#b9b3a866'; c.lineWidth = 1; c.beginPath(); const sx = x + g() * 32, sy = y + g() * 32; c.moveTo(sx, sy); c.lineTo(sx + (g() - 0.5) * 22, sy + (g() - 0.5) * 22); c.stroke(); } R(c, '#c9c3b7', x, y, 32, 1); R(c, '#c9c3b7', x, y, 1, 32); } }
     // bedroom: plush carpet
@@ -83,7 +83,12 @@
     { R(c, '#00000033', 30, 452, 120, 40); R(c, '#5a3b22', 26, 446, 120, 40); R(c, '#7a5532', 26, 446, 120, 4); R(c, '#4a301c', 85, 450, 2, 34); C(c, '#c9b14a', 80, 468, 1.5); C(c, '#c9b14a', 92, 468, 1.5); }
     // garage: workbench + tool chest + oil drum along the left wall
     { R(c, '#00000033', 490, 560, 40, 120); R(c, '#4a505b', 486, 556, 40, 120); R(c, '#6f7880', 486, 556, 40, 3); for (let k = 0; k < 6; k++) { R(c, '#3a3f45', 488, 562 + k * 19, 36, 1); R(c, '#cfd6db', 500, 568 + k * 19, 12, 2); }
-      O(c, '#2f5d8a', 506, 712, 13, 9); O(c, '#3d7fd0', 506, 710, 13, 9); O(c, '#244a6e', 506, 710, 8, 5); R(c, '#e8e2d0', 498, 708, 16, 3); }
+      O(c, '#2f5d8a', 506, 712, 13, 9); O(c, '#3d7fd0', 506, 710, 13, 9); O(c, '#244a6e', 506, 710, 8, 5); R(c, '#e8e2d0', 498, 708, 16, 3);
+      // red roll cab, tyre stack, jerry cans, fire extinguisher in the far corner
+      R(c, '#00000033', 1132, 708, 40, 60); R(c, '#b3322b', 1128, 704, 40, 60); R(c, '#d24a3f', 1128, 704, 40, 4); for (let k = 0; k < 6; k++) { R(c, '#8a2420', 1130, 712 + k * 8, 36, 1); R(c, '#cfd6db', 1142, 714 + k * 8, 12, 2); }
+      for (let k = 0; k < 4; k++) { O(c, '#111', 1090, 760 - k * 6, 15, 10); O(c, '#2a2a2a', 1090, 760 - k * 6, 9, 6); O(c, '#0a0a0a', 1090, 760 - k * 6, 4, 2.5); }
+      for (const jx of [500, 516]) { R(c, '#00000033', jx + 2, 744, 13, 20); R(c, '#c0473f', jx, 740, 13, 20); R(c, '#e06a5f', jx, 740, 13, 3); R(c, '#2b2f33', jx + 4, 736, 5, 4); }
+      R(c, '#c0473f', 532, 742, 7, 18); R(c, '#2b2f33', 533, 738, 4, 5); R(c, '#e8e2d0', 532, 748, 7, 3); }
   }
 
   // ---------------- per-frame floor layer (rugs, garage floor, windows, flat decor) ----------------
@@ -218,7 +223,7 @@
     for (const [slot, f] of Object.entries(FOOT)) { const id = placed(slot); if (EMPTY.has(id)) continue; const s = D.SLOT[slot]; out.push({ x: s.x + f[0], y: s.y + f[1], w: f[2], h: f[3] }); }
     { const s = D.SLOT.sofa; out.push({ x: s.x - 50, y: s.y - 80, w: 100, h: 40 }); } // coffee table
     for (const [i] of garageCars().entries()) out.push({ x: BAYS[i] - 18, y: 600, w: 36, h: 80 });
-    out.push({ x: 756, y: 162, w: 170, h: 52 }, { x: W - T - 50, y: 56, w: 50, h: 306 }, { x: 26, y: 446, w: 120, h: 40 }, { x: 486, y: 556, w: 40, h: 120 });
+    out.push({ x: 756, y: 162, w: 170, h: 52 }, { x: W - T - 50, y: 56, w: 50, h: 306 }, { x: 26, y: 446, w: 120, h: 40 }, { x: 486, y: 556, w: 40, h: 120 }, { x: 1126, y: 700, w: 44, h: 66 }, { x: 1074, y: 736, w: 32, h: 30 });
     return out;
   }
 
@@ -252,7 +257,7 @@
 
   // ---------------- zone ----------------
   const def = Z.register({
-    id: 'dreamhome', name: 'Your Dream House', tagline: '1 PRESTIGE ROW · PALM GROVE', w: W, h: H, bg: '#05070d', zoom: 1.05, indoor: true,
+    id: 'dreamhome', name: 'Your Dream House', tagline: '1 PRESTIGE ROW · PALM GROVE', w: W, h: H, bg: '#05070d', zoom: 0.8, indoor: true,
     get dark() { return nightish() ? 0.42 : 0.06; },
     spawn: { x: 70, y: 210, angle: 0 }, solids: [...WALLS, GARAGE_DOOR],
     dynamicSolids,
@@ -287,6 +292,7 @@
       if (!p('lamp', 'lamp-none')) L.push({ x: 380, y: 470, r: 120, a: 0.8 });
       if (p('bar', 'bar-gold') || p('bar', 'bar-home')) L.push({ x: 930, y: 40, r: 150, a: 0.7 });
       if (p('gwall', 'gwall-tires') || p('gwall', 'gwall-trophy')) L.push({ x: 830, y: 470, r: 180, a: 0.6 });
+      garageCars().forEach((_, i) => L.push({ x: BAYS[i], y: 640, r: 90, a: 0.55 }));
       return L;
     },
     targets(api) {
