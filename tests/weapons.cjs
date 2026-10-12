@@ -128,3 +128,13 @@ assert.deepEqual(W.clean(JSON.parse(JSON.stringify(qs))).quality, { pistol: 3 },
 assert.deepEqual(W.clean({ version: 2, owned: ['pistol'], quality: { pistol: 9, ar: 3 } }).quality, {}, 'bad quality dropped');
 qs.cond.pistol = 1; W.wear(qs); assert.equal(W.qOf(qs, 'pistol'), 1, 'a swapped-in spare is Standard');
 console.log('PASS: craft quality (odds by skill, upgrades swap in, damage/durability/value, save)');
+{ // paint jobs
+  const st = W.clean({ owned: ['pistol'] }), w = { cash: 10000 }, ctx = { have: () => true, spend: () => true };
+  assert.ok(W.paint(st, w, 'pistol', 'gold', ctx).ok); assert.equal(st.skins.pistol, 'gold'); assert.equal(w.cash, 1000);
+  assert.ok(!W.paint(st, w, 'pistol', 'gold', ctx).ok, 'already painted'); assert.ok(!W.paint(st, w, 'ar', 'desert', ctx).ok, 'not owned');
+  assert.ok(!W.paint(st, { cash: 0 }, 'pistol', 'chrome', ctx).ok, 'costs cash'); assert.ok(!W.paint(st, w, 'pistol', 'carbon', { have: () => false, spend: () => false }).ok, 'needs materials');
+  assert.ok(W.paint(st, w, 'pistol', 'stock', ctx).ok); assert.equal(st.skins.pistol, undefined);
+  assert.deepEqual(W.clean({ owned: ['zip'], skins: { zip: 'neon', pistol: 'gold', x: 'y' } }).skins, { zip: 'neon' });
+  for (const s of W.SKINS) if (s.pal) for (const k of ['st', 'sl', 'hi']) assert.ok(/^#[0-9a-f]{6}$/i.test(s.pal[k]));
+  console.log('PASS: weapon paint jobs');
+}
