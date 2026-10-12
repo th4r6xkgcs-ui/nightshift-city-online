@@ -33,11 +33,13 @@
 
   const BAY = { x: 300, y: 1640, r: 78 }, RUSTY = { x: 176, y: 1646 };
   const modelOf = (car) => car?.model || root.NightshiftVehicles?.model?.(car)?.name || 'SEDAN';
+  const nameOf = (car) => root.NightshiftCarsData?.fromModel(modelOf(car))?.name || modelOf(car).toLowerCase();
   function carInBay() { const p = P(); return CARS().find((c) => c && c.stolen && !c.owned && p?.car !== c && Math.hypot(c.x - BAY.x, c.y - BAY.y) < BAY.r) || null; }
 
   // --- respawn a chopped car somewhere else, as a fresh locked car parked on a city road
   const XS = [440, 880, 1320, 1760], YS = [340, 680, 1020, 1360];
   function respawn(car) {
+    if (car?.cx && root.NightshiftCars?.retire?.(car)) return true; // collection models don't come back
     const p = P(), list = CARS();
     for (let i = 0; i < 40; i++) {
       const vertical = Math.random() < 0.5, side = Math.random() < 0.5 ? -22 : 22;
@@ -69,6 +71,7 @@
     return wrap;
   }
   function carCanvas(car) {
+    if (root.NightshiftCarsData?.fromModel(car.model) && root.NightshiftCars) { const cv = root.NightshiftCars.portrait(root.NightshiftCarsData.fromModel(car.model).id, car.color, 120, 70); return cv; }
     const cv = el('canvas', { width: 120, height: 70 }); cv.style.cssText = 'width:120px;height:70px;border-radius:12px;background:radial-gradient(#3a3f47,#15181d);flex:none';
     try {
       // A clean top-down pixel portrait in the car's paint.
@@ -109,7 +112,7 @@
     const model = modelOf(car), v = D.value(model, car.condition, car.color, now, price), mult = D.hotMult(model, car.color, now);
     const card = el('div', { style: 'display:flex;gap:12px;align-items:center;padding:10px;border-radius:14px;background:#ffffff07;border:1px solid #ffffff14;margin-bottom:8px' });
     card.append(carCanvas(car));
-    const info = el('div', { style: 'flex:1' }); info.append(el('b', { style: 'font:800 15px var(--disp,system-ui)' }, `${FAM[D.family(car.color)]} ${model}${mult > 1 ? ' · 🔥 ×' + mult : ''}`), el('div', { style: 'color:#a9b8ca;font-size:12px' }, `Body ${Math.round(car.condition)}% · fuel ${Math.round(car.fuel ?? 0)}% · ${car.id}`)); card.append(info); pnl.append(card);
+    const info = el('div', { style: 'flex:1' }); info.append(el('b', { style: 'font:800 15px var(--disp,system-ui)' }, `${FAM[D.family(car.color)]} ${root.NightshiftCarsData?.fromModel(model)?.name || model}${mult > 1 ? ' · 🔥 ×' + mult : ''}`), el('div', { style: 'color:#a9b8ca;font-size:12px' }, `Body ${Math.round(car.condition)}% · fuel ${Math.round(car.fuel ?? 0)}% · ${car.id}`)); card.append(info); pnl.append(card);
     const full = !D.liftFree(state, now), wait = Math.ceil(D.liftWait(state, now) / 60000);
     const opt = (icon, title, line, extra, b) => { const r = el('div', { style: 'display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:#ffffff07;border:1px solid #ffffff12;margin-bottom:6px' }); r.append(el('div', { style: 'font-size:26px;width:36px;text-align:center' }, icon)); const tt = el('div', { style: 'flex:1' }); tt.append(el('b', { style: 'font:800 13px var(--disp,system-ui)' }, title), el('div', { style: 'color:#a9b8ca;font-size:11px' }, line)); if (extra) tt.append(extra); r.append(tt, b); pnl.append(r); };
     const preview = D.strip(model, car.condition, 1);
@@ -122,7 +125,7 @@
     const p = P(); if (!p || !car) return;
     const r = D.deal(state, p, { model: modelOf(car), condition: car.condition, color: car.color, stolen: car.stolen }, kind, Date.now(), mod('dealing.price'), (Math.random() * 1e9) | 0);
     if (!r.ok) { say(r.reason); open(); return; }
-    if (r.keep) { car.stolen = false; car.owned = true; say(`🪪 Re-VINned · the ${modelOf(car).toLowerCase()} is yours now`); try { root.NightshiftSkills?.gain('driving', 30, 'revin'); } catch { /* optional */ } }
+    if (r.keep) { car.stolen = false; car.owned = true; say(`🪪 Re-VINned · the ${nameOf(car)} is yours now${car.cx ? ' · added to 🚗 MY CARS' : ''}`); try { root.NightshiftCars?.adopt?.(car); } catch { /* optional */ } try { root.NightshiftSkills?.gain('driving', 30, 'revin'); } catch { /* optional */ } }
     else {
       let lost = '';
       if (Object.keys(r.items).length) { const got = root.NightshiftSupply?.give?.(r.items); const added = got?.added || r.items, left = Object.entries(r.items).filter(([k, n]) => (added[k] || 0) < n).length; if (left) lost = ' · 🎒 bag full, some parts left behind'; }
