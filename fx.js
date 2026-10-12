@@ -156,7 +156,13 @@
   }
   setInterval(() => {
     const cops = root.NightshiftCrime?.officers || [], p = P(), now = performance.now();
-    for (const o of cops) if (o && !seenCops.has(o)) { seenCops.add(o); if (Number.isFinite(o.x)) { const r = roadSpot(o); cruisers.push({ ...r, t: now }); } }
+    for (const o of cops) if (o && !seenCops.has(o)) {
+      seenCops.add(o); if (!Number.isFinite(o.x)) continue;
+      const r = roadSpot(o), vertical = r.angle !== 0;
+      // park nose-to-tail along the road instead of stacking on the same spot
+      for (let k = 0; k < 6 && cruisers.some((c) => Math.hypot(c.x - r.x, c.y - r.y) < 64); k++) { if (vertical) r.y += 70; else r.x += 70; }
+      if (!cruisers.some((c) => Math.hypot(c.x - r.x, c.y - r.y) < 64)) cruisers.push({ ...r, t: now });
+    }
     for (let i = cruisers.length - 1; i >= 0; i--) { const c = cruisers[i]; if ((p && (p.heat || 0) < 0.05 && now - c.t > 15000) || now - c.t > 120000) cruisers.splice(i, 1); }
     if (cruisers.length > 6) cruisers.splice(0, cruisers.length - 6);
   }, 500);
@@ -258,5 +264,5 @@
     ctx.restore();
   };
 
-  root.NightshiftFx = Object.freeze({ shake, stats: () => ({ marks: marks.length, smoke: smoke.length, trauma, birds: birds.length }) });
+  root.NightshiftFx = Object.freeze({ shake, stats: () => ({ marks: marks.length, smoke: smoke.length, trauma, birds: birds.length, cruisers: cruisers.map((c) => [Math.round(c.x), Math.round(c.y)]) }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
