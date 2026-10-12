@@ -53,10 +53,10 @@ function facade(c,b){const {x,y,w,h,name}=b;const district=root.NightshiftWorld.
  box(c,'#3c5a68',x+w-47,y+71,23,14);R(c,'#acc0b8',x+w-44,y+73,17,1);for(let i=0;i<3;i++)R(c,'#152d3c',x+w-42+i*5,y+76,2,6);
  R(c,'#18323f',x+w-7,y+23,3,h-31);R(c,'#92a7a1',x+w-7,y+23,1,h-31);
  if(name==='APARTMENTS'){for(let i=0;i<3;i++){box(c,'#a27c5b',x+22+i*28,y+57,22,13);R(c,'#427758',x+24+i*28,y+54,18,5);R(c,'#93b384',x+25+i*28,y+53,6,3)}R(c,'#f1d2a4',x+w/2-13,y+h-26,1,20);R(c,'#c5a06b',x+w/2-21,y+h+6,42,1)}
- if(name==='BANK'){prop(c,'atm',x+w-36,y+h+14);for(const xx of [x+83,x+w-92])R(c,paper,xx+1,y+h-29,2,24);R(c,'#a9c5c1',x+w/2-8,y+h-24,16,14);R(c,'#172f3a',x+w/2-1,y+h-24,2,14)}
- if(name==='DINER'){prop(c,'flowercart',x+w+17,y+h-13);box(c,'#d78a53',x+20,y+30,25,22);R(c,'#f5dfb5',x+25,y+34,12,9);R(c,'#f5dfb5',x+36,y+36,5,4);R(c,'#644234',x+23,y+45,18,2)}
- if(name==='CORNER SHOP'){prop(c,'vending',x+w+17,y+h-10);R(c,'#c86359',x+16,y+h-14,12,7);R(c,'#ebcf8d',x+31,y+h-17,8,10)}
- if(name==='GARAGE'||name==='WAREHOUSE'){prop(c,'barrel',x+w+20,y+h-7);prop(c,'crate',x+w+42,y+h-15);for(let i=0;i<5;i++)R(c,'#eee1bf',x+14+i*7,y+h-30,2,20)}
+ if(name==='BANK'){api.prop(c,'atm',x+w-36,y+h+14);for(const xx of [x+83,x+w-92])R(c,paper,xx+1,y+h-29,2,24);R(c,'#a9c5c1',x+w/2-8,y+h-24,16,14);R(c,'#172f3a',x+w/2-1,y+h-24,2,14)}
+ if(name==='DINER'){api.prop(c,'flowercart',x+w+17,y+h-13);box(c,'#d78a53',x+20,y+30,25,22);R(c,'#f5dfb5',x+25,y+34,12,9);R(c,'#f5dfb5',x+36,y+36,5,4);R(c,'#644234',x+23,y+45,18,2)}
+ if(name==='CORNER SHOP'){api.prop(c,'vending',x+w+17,y+h-10);R(c,'#c86359',x+16,y+h-14,12,7);R(c,'#ebcf8d',x+31,y+h-17,8,10)}
+ if(name==='GARAGE'||name==='WAREHOUSE'){api.prop(c,'barrel',x+w+20,y+h-7);api.prop(c,'crate',x+w+42,y+h-15);for(let i=0;i<5;i++)R(c,'#eee1bf',x+14+i*7,y+h-30,2,20)}
  if(name==='CLUB'){box(c,'#c563a0',x+20,y+25,35,27);R(c,'#eed6b9',x+24,y+30,27,2);R(c,'#512d63',x+24,y+35,27,12);R(c,'#d999c0',x+26,y+38,5,6);R(c,'#89c6c4',x+35,y+36,5,8);R(c,'#ead49f',x+44,y+40,5,4)}
  c.restore();
 }
@@ -76,9 +76,9 @@ const W0=root.NightshiftWorld,S=root.NightshiftSprites;
 const building=W0.building;W0.building=function(b){const r=building.apply(this,arguments);if(root.NightshiftScene?.visible({x:b.x+b.w/2,y:b.y+b.h/2},{...camera,width:W,height:H},250))facade(g,b);return r};
 const person=S.person;S.person=function(p,isPlayer,options={}){const armed=isPlayer&&options.weapon!==false&&!options.noWeapon&&(root.NightshiftInventory?.state.pocket.pistol>0);const r=person.call(this,p,isPlayer,armed?{...options,weapon:false}:options);if(armed){const id=root.NightshiftWeapons?.state.equipped||'pistol';g.save();g.translate(Math.round(p.x),Math.round(p.y));g.rotate(p.angle||0);box(g,root.NightshiftHome?.profile?.shirt||'#669baa',4,-3,8,5);box(g,root.NightshiftHome?.profile?.skin||'#ca9873',10,-2,4,4);g.restore();weapon(g,id,p.x+Math.cos(p.angle||0)*13,p.y+Math.sin(p.angle||0)*13,p.angle||0,root.NightshiftWeapons?.skinPalette?.(id)||{},root.NightshiftWeapons?.state.mods?.[id]||[])}return r};
 const car=S.car;S.car=function(v){const r=car.apply(this,arguments);carDetail(g,v);return r};
-let streets=null;const road=W0.road;W0.road=function(){const r=road.apply(this,arguments);if(!streets){streets=document.createElement('canvas');streets.width=world.w;streets.height=world.h;const ctx=streets.getContext('2d');if(ctx)for(let x=0;x<world.w;x+=440)for(let y=0;y<world.h;y+=340){const district=W0.districtStyle(x+100,y+100);prop(ctx,'hydrant',x+73,y+127);prop(ctx,district==='docks'?'barrel':'mailbox',x+74,y+223);if(district==='south')prop(ctx,'dumpster',x+300,y+285);if(district==='west')prop(ctx,'flowercart',x+151,y+292)}}if(streets)g.drawImage(streets,0,0);return r};
+let streets=null;const road=W0.road;W0.road=function(){const r=road.apply(this,arguments);if(!streets){streets=document.createElement('canvas');streets.width=world.w;streets.height=world.h;const ctx=streets.getContext('2d');if(ctx)for(let x=0;x<world.w;x+=440)for(let y=0;y<world.h;y+=340){const district=W0.districtStyle(x+100,y+100);api.prop(ctx,'hydrant',x+73,y+127);api.prop(ctx,district==='docks'?'barrel':'mailbox',x+74,y+223);if(district==='south')api.prop(ctx,'dumpster',x+300,y+285);if(district==='west')api.prop(ctx,'flowercart',x+151,y+292)}}if(streets)g.drawImage(streets,0,0);return r};
 // Use public pet position/state; retain Claude adoption, feeding, movement, perks and zone logic.
-function activePet(ctx,t){const pets=root.NightshiftPets;if(pets?.state.active)pet(ctx,pets.state.active,pets.petPos(),t)}
+function activePet(ctx,t){const pets=root.NightshiftPets;if(pets?.state.active)api.pet(ctx,pets.state.active,pets.petPos(),t)}
 const encounter=root.NightshiftEncounters?.draw;if(encounter)root.NightshiftEncounters.draw=function(){const r=encounter.apply(this,arguments);if(!player.car)activePet(g,performance.now()/1000);return r};
 root.NightshiftZones?.addCompanion(()=>root.NightshiftPets?.state.active?{y:root.NightshiftPets.petPos().y,draw:(ctx,t)=>activePet(ctx,t)}:null);
 // Present simultaneous toast/goal/level notices one at a time, without touching awards.
