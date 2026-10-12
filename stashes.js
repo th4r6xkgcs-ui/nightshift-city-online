@@ -77,11 +77,26 @@
       ctx.globalAlpha = Math.min(1, 0.25 + k * 0.9) * (0.6 + 0.4 * pulse);
       ctx.fillStyle = '#5a3d17'; ctx.fillRect(s.x - 8, s.y - 6, 16, 12);
       ctx.fillStyle = '#c99a4a'; ctx.fillRect(s.x - 8, s.y - 2, 16, 3);
-      ctx.strokeStyle = '#ffe9a8'; ctx.lineWidth = 2; const r = 4 + pulse * 6;
+    }
+    ctx.restore();
+  }
+  // The glint draws on the top world layer (after trees, awnings and people) so a stash under a canopy still sparkles.
+  function drawGlints() {
+    const ctx = G(), p = P(); if (!ctx || !p) return;
+    const t = performance.now() / 1000;
+    ctx.save();
+    for (const s of S.SPOTS) {
+      if (state.found[s.id]) continue;
+      const d = dist(p, s); if (d > S.GLINT) continue;
+      const k = 1 - d / S.GLINT, pulse = 0.5 + 0.5 * Math.sin(t * 6 + s.x), r = 4 + pulse * 6;
+      ctx.globalAlpha = Math.min(1, 0.3 + k) * (0.5 + 0.5 * pulse);
+      ctx.strokeStyle = '#ffe9a8'; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(s.x + 10, s.y - 12 - r); ctx.lineTo(s.x + 10, s.y - 12 + r); ctx.moveTo(s.x + 10 - r, s.y - 12); ctx.lineTo(s.x + 10 + r, s.y - 12); ctx.stroke();
     }
     ctx.restore();
   }
+  const I = root.NightshiftFeedback; // draw() runs after the scene layer, still in world space
+  if (I && typeof I.draw === 'function' && !I.__stashes) { try { const d2 = I.draw; I.draw = function () { const r = d2.apply(this, arguments); try { drawGlints(); } catch { /* cosmetic */ } return r; }; I.__stashes = true; } catch { /* frozen: no glint layer */ } }
   const E = root.NightshiftEncounters;
   if (E && !E.__stashes) { const draw = E.draw; E.draw = function () { const r = draw.apply(this, arguments); try { drawWorld(); } catch { /* cosmetic */ } return r; }; E.__stashes = true; }
 

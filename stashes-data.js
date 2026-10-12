@@ -28,7 +28,8 @@
     const left = SPOTS.filter((s) => !state.found[s.id]);
     if (!left.length) return null;
     const s = left[Math.floor(rnd() * left.length)], a = rnd() * Math.PI * 2, d = rnd() * RUMOR_FUZZ;
-    return { id: s.id, x: Math.round(s.x + Math.cos(a) * d), y: Math.round(s.y + Math.sin(a) * d), r: RUMOR_FUZZ + 40 };
+    const cl = (v, hi) => Math.max(20, Math.min(hi, Math.round(v)));
+    return { id: s.id, x: cl(s.x + Math.cos(a) * d, 2180), y: cl(s.y + Math.sin(a) * d, 1680), r: RUMOR_FUZZ + 40 };
   }
   function clean(raw) {
     const s = { version: 1, found: {}, rumor: null, earned: 0 };

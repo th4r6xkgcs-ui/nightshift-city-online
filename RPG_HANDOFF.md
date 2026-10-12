@@ -242,3 +242,29 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
   - Wiring: goals `event1` "Opportunist" and `event25`; daily "Finish n city event(s)"; Respect source "City events" (10/event, cap 300); a lifetime stats row; a 🌆 LIVE entry at the top of the city guide.
   - Load order: `events-data.js`, `events.js` after `empire.js`.
   - Tests: `tests/events.cjs` (3 PASS). Browser: all 4 types complete at 844×390 and 390×844 with no page errors.
+
+## Batch 4: secrets, street exchange, fight club, workbench
+- **Hidden stashes** (`stashes*.js`): 30 packages at walkable off-road points. Each was checked with `blocked()` in-browser and they're spread more than 200 px apart.
+  - Walk within 34 px to grab fixed cash ($150–600) plus pocket items: 2–4 scrap, often parts, sometimes a watch or jewelry. Items go into `NightshiftInventory.state.pocket` (cap 999), followed by `NightshiftInventory.save()`.
+  - The box draws on the encounters layer, so canopies can hide it. A gold sparkle within 150 px draws via a `NightshiftFeedback.draw` wrap, so it shows above trees.
+  - Milestones: 5 → $1k, 10 → $2.5k, 20 → $6k, 30 → $20k.
+  - 📱 phone: "BUY A STASH RUMOR" ($250) draws a gold circle around a random unfound stash and sets the GPS.
+  - Save: `nightshift-stashes-v1`.
+- **Street exchange** (`market*.js`, 📱 → 💹 MARKET): 5 fictional tickers (NCOIN, DOCK, NEON, CABS, GOLD).
+  - Price is a pure function of the minute slot (sines + smooth value noise), so it moves offline and is identical on every device. That makes it server-friendly for multiplayer later.
+  - A news line every 10 min names the ticker with the biggest slow-wave move over the next 20 min. In simulation, following it wins about 59% of the time.
+  - 1% fee. Position limit is $20k per ticker, +$15k per Respect rank. Only profit counts as "earned" (notePayout).
+  - Save: `nightshift-market-v1`.
+- **Fight club** (gym panel → 🥊 FIGHT CLUB): a 5-opponent ladder (Kid Knuckles … Iron Mara).
+  - Each beat the cue is OPENING (STRIKE), SWINGS (BLOCK) or FEINT (press nothing). The answer window is 1100 ms down to 600 ms; fast answers crit.
+  - Toughness adds HP and damage and reduces damage taken. Athletics widens the window.
+  - Simulated win rates: a level-1 player at 85% accuracy beats the champ ~19% of the time; at level 10 ~45%.
+  - Entry $50–800, purse $250–7,500, 90 s cooldown. A loss costs 15 HP. Keys J/K.
+- **Workbench** (gun shop): build any mod from salvage via 🔧 (6–10 scrap + 1–3 parts), or an armor plate (+25, max 100) for 6 scrap + 1 part. This gives salvage and stashes a purpose.
+- **Wiring:**
+  - Goals: stash1, fight1, gunsmith, trader, stash15, champ, stash30 (55 goals total).
+  - Dailies: fight wins, market trades.
+  - Respect: stashes 10 each (cap 300), ladder 60 per rung (cap 300).
+  - Lifetime stats rows.
+- **Load order:** after events: `stashes-data.js`, `stashes.js`, `market-data.js`, `market.js`.
+- **Tests:** `tests/batch4.cjs` (4 PASS).
