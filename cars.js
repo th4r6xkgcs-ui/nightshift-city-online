@@ -43,6 +43,10 @@
     lowrider: { shape: [[-33, -11], [-32.5, -13.8], [-26, -14.5], [24, -14.5], [30, -13.5], [33, -10], [33, 0]], xr: -14, xf: 2, wsh: 6, rgl: 6, ins: 3, tire: [10, 4], wb: 0.31 },
     gt: { shape: [[-30, -11], [-29, -13.5], [-22, -14.5], [6, -14.5], [20, -13.8], [27, -11.5], [30, -7], [30.5, 0]], xr: -16, xf: -2, wsh: 8, rgl: 9, ins: 3.5, tire: [11, 5.5], wb: 0.3 },
     super: { shape: [[-30, -13], [-29, -15.5], [-12, -15.5], [6, -14.5], [20, -12.5], [28, -9], [30, -5], [30.5, 0]], xr: -8, xf: 3, wsh: 9, rgl: 3, ins: 4, tire: [11, 6.5], wb: 0.29 },
+    // the city's everyday cars (Codex models COMPACT / SEDAN / VAN), restyled with the same renderer
+    sedan: { shape: [[-28, -11], [-27, -14], [-20, -15], [16, -15], [24, -13], [27.5, -9], [28, 0]], xr: -13, xf: 5, wsh: 7, rgl: 6, ins: 3, tire: [10, 5], wb: 0.3, doors: 2 },
+    compact: { shape: [[-25, -11], [-24.5, -13.5], [-19, -14], [14, -14], [21, -12.5], [24.5, -9], [25, 0]], xr: -13, xf: 4, wsh: 6, rgl: 4, ins: 2.8, tire: [9, 5], wb: 0.3 },
+    van: { shape: [[-28, -14], [-27.5, -16], [20, -16], [25, -14.5], [28, -11], [28, 0]], xr: -26, xf: 12, wsh: 6, rgl: 0, ins: 2, tire: [11, 6], wb: 0.33 },
     hyper: { shape: [[-31, -12], [-30, -15], [-16, -15.5], [2, -14.5], [18, -12], [27, -8], [31, -3], [31.5, 0]], xr: -10, xf: 12, wsh: 0, rgl: 0, ins: 7, tire: [11, 6.5], wb: 0.29 },
   };
   const full = (half) => [...half, ...half.slice(0, -1).reverse().map(([x, y]) => [x, -y])];
@@ -61,8 +65,11 @@
     const side = y < 0 ? -1 : 1; R(c, rim, x - tw / 2 + 2, y + side * (th / 2 - 1.3) - 0.6, tw - 4, 1.2);
     if (wire) for (let k = -tw / 2 + 2.5; k < tw / 2 - 2; k += 1.5) R(c, '#fff2b0', x + k, y + side * (th / 2 - 1.3) - 0.6, 0.5, 1.2);
   }
+  // Everyday city cars (no catalog entry): same renderer, Codex's model names.
+  const BASE = { COMPACT: { id: 'COMPACT', body: 'compact', len: 50, wid: 29, colors: [] }, SEDAN: { id: 'SEDAN', body: 'sedan', len: 56, wid: 31, colors: [] }, VAN: { id: 'VAN', body: 'van', len: 56, wid: 32, colors: [] } };
+  let styleBase = true;
   function bake(id, color) {
-    const spec = D.BY[id], B0 = BODY[spec.body], L = spec.len, W = spec.wid, S = 4, pad = 6;
+    const spec = D.BY[id] || BASE[id], B0 = BODY[spec.body], L = spec.len, W = spec.wid, S = BASE[id] ? 3 : 4, pad = 6;
     const cv = document.createElement('canvas'); cv.width = (L + pad * 2) * S; cv.height = (W + pad * 2) * S;
     const c = cv.getContext('2d'); c.scale(S, S); c.translate(L / 2 + pad, W / 2 + pad);
     const sx = L / ((B0.shape.at(-1)[0]) * 2), sy = W / (Math.abs(Math.min(...B0.shape.map((p) => p[1]))) * 2); // normalise shape to len/wid
@@ -152,17 +159,20 @@
       R(c, '#0c0e11', hl - 0.8, -hw + 4, 1.4, W - 8); // splitter
     }
     if (spec.body === 'hyper') { RR(c, '#0c0e11', -hl - 0.8, -hw - 0.8, 3, W + 1.6, 0.8); R(c, '#3a3f45', -hl - 0.5, -hw - 0.4, 0.6, W + 0.8); for (let k = -2; k <= 2; k++) R(c, '#0c0e11', -hl + 3, k * 3 - 0.4, 6, 0.8); }
+    if (spec.body === 'sedan') { c.strokeStyle = shade(color, -0.4) + 'aa'; c.lineWidth = 0.45; for (const s of [-1, 1]) { c.beginPath(); c.moveTo(xr + 2, s * (hw - 0.4)); c.lineTo(xr + 2, s * (rw + 0.4)); c.stroke(); } for (const s of [-1, 1]) for (const x0 of [(xr + xf) / 2 - 3, xr - 1]) R(c, '#d9dee3', x0, s * (hw - 1.4) - 0.3, 2, 0.6); RR(c, black, hl - 1.2, -hw + 3, 1.6, W - 6, 0.8); RR(c, black, -hl - 0.4, -hw + 3, 1.6, W - 6, 0.8); }
+    if (spec.body === 'compact') { RR(c, black, hl - 1, -hw + 3, 1.4, W - 6, 0.7); RR(c, black, -hl - 0.4, -hw + 3, 1.4, W - 6, 0.7); for (const s of [-1, 1]) R(c, '#d9dee3', (xr + xf) / 2 - 2, s * (hw - 1.4) - 0.3, 2, 0.6); }
+    if (spec.body === 'van') { for (let k = 0; k < 3; k++) RR(c, shade(color, -0.12), xr + 6 + k * 9, -3, 5, 6, 1); c.strokeStyle = shade(color, -0.45); c.lineWidth = 0.5; for (const s of [-1, 1]) { c.beginPath(); c.moveTo(-4, s * (hw - 0.3)); c.lineTo(-4, s * (rw + 0.3)); c.moveTo(-14, s * (hw - 0.3)); c.lineTo(-14, s * (rw + 0.3)); c.stroke(); R(c, '#2a2e33', -12, s * (hw - 0.6) - 0.3, 6, 0.6); } c.beginPath(); c.moveTo(-hl + 0.5, 0); c.lineTo(-hl + 3, 0); c.stroke(); RR(c, black, hl - 1.4, -hw + 2.5, 2.2, W - 5, 1); RR(c, black, -hl - 0.8, -hw + 2.5, 2.2, W - 5, 1); }
     if (spec.body === 'hatch') { R(c, '#0c0e11', xr - 0.6, -rw + 0.5, 1.2, rw * 2 - 1); RR(c, black, hl - 1.2, -hw + 2.5, 1.8, W - 5, 0.8); RR(c, black, -hl - 0.6, -hw + 2.5, 1.8, W - 5, 0.8); }
     return { cv, w: L + pad * 2, h: W + pad * 2, L, W };
   }
   const cache = new Map();
-  function sprite(id, color) { const k = id + color; let s = cache.get(k); if (!s) { if (cache.size > 40) cache.clear(); s = bake(id, color); cache.set(k, s); } return s; }
+  function sprite(id, color) { const k = id + color; let s = cache.get(k); if (!s) { if (cache.size > 60) cache.clear(); s = bake(id, color); cache.set(k, s); } return s; }
 
   // Live draw on the game context (car faces +x like the base game).
   const prevSpeed = new WeakMap();
   function draw(v, ctx = G()) {
-    const spec = D.fromModel(v.model); if (!spec || !ctx) return false;
-    const sp = sprite(spec.id, v.color || spec.colors[0]), t = performance.now() / 1000;
+    const spec = D.fromModel(v.model) || (styleBase && typeof v.model !== 'string' || styleBase && BASE[v.model] ? BASE[v.model] || BASE.SEDAN : null); if (!spec || !ctx) return false;
+    const sp = sprite(spec.id, /^#[0-9a-f]{6}$/i.test(v.color || '') ? v.color : spec.colors[0] || '#8a9aa8'), t = performance.now() / 1000;
     const p = P(), active = p?.car === v, ps = prevSpeed.get(v) ?? 0, sp0 = v.speed || 0; prevSpeed.set(v, sp0);
     const braking = active && Math.abs(sp0) < Math.abs(ps) - 0.04, night = (root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment?.state?.minute ?? 720) || 0) > 0.35;
     try { if (ctx === G()) root.NightshiftEnvironment?.headlights?.(v); } catch { /* optional */ }
@@ -267,7 +277,7 @@
   }
   function wrapSprites() {
     const S = root.NightshiftSprites; if (!S || S.__cars || typeof S.car !== 'function') return !!S?.__cars;
-    const car = S.car; S.car = function (v) { if (v && typeof v.model === 'string' && v.model.startsWith(D.MODEL_PREFIX)) { try { if (draw(v)) return; } catch (e) { console.error(e); } } return car.apply(this, arguments); };
+    const car = S.car; S.car = function (v) { if (v && ((typeof v.model === 'string' && v.model.startsWith(D.MODEL_PREFIX)) || styleBase)) { try { if (draw(v)) return; } catch (e) { console.error(e); } } return car.apply(this, arguments); };
     S.__cars = true; return true;
   }
   wrapSprites();
@@ -345,5 +355,5 @@
     pnl.append(grid);
   }
 
-  root.NightshiftCars = Object.freeze({ get state() { return state; }, open, openDealer, draw, portrait, sprite, retire, adopt, rare: () => rare?.car || null, live: () => [...live.values()], paused: () => !pnl.hidden, sync });
+  root.NightshiftCars = Object.freeze({ setStyleBase: (on) => { styleBase = !!on; }, get styleBase() { return styleBase; }, get state() { return state; }, open, openDealer, draw, portrait, sprite, retire, adopt, rare: () => rare?.car || null, live: () => [...live.values()], paused: () => !pnl.hidden, sync });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
