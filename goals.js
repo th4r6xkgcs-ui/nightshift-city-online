@@ -37,7 +37,8 @@
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
     'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked', 'heists', 'gymSessions', 'clubSold', 'fronts', 'eventsDone', 'stashes', 'fightWins', 'fightLadder', 'modsFitted', 'marketProfit',
-    'scrapGathered', 'leafPicked', 'trimmed', 'cooked', 'pressed', 'gunsCrafted', 'gunsSold', 'pillsSold', 'lockup', 'bagLevel', 'realGuns'];
+    'scrapGathered', 'leafPicked', 'trimmed', 'cooked', 'pressed', 'gunsCrafted', 'gunsSold', 'pillsSold', 'lockup', 'bagLevel', 'realGuns',
+    'chopped', 'hotChops', 'breakins', 'cleanJobs', 'lootHauled', 'harvested', 'mealsCooked', 'mealsSold', 'pets', 'kits', 'dream', 'style', 'garageCars'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -145,6 +146,9 @@
       fishCaught: root.NightshiftFishing?.state?.total || 0, koi: root.NightshiftFishing?.state?.caught?.koi || 0,
       raceMedals: Object.keys(root.NightshiftRaces?.state?.medals || {}).length,
       raceGolds: Object.values(root.NightshiftRaces?.state?.medals || {}).filter((m) => m === 'gold').length,
+      ...(() => { const ch = root.NightshiftChop?.state?.stats || {}, bi = root.NightshiftBreakin?.state?.stats || {}, fd = root.NightshiftFood?.state || {}, pt = root.NightshiftPets?.state || {}, dh = root.NightshiftDreamHome?.state;
+        return { chopped: (ch.chopped || 0) + (ch.stripped || 0) + (ch.revin || 0), hotChops: ch.hot || 0, breakins: bi.jobs || 0, cleanJobs: bi.clean || 0, lootHauled: bi.loot || 0, harvested: fd.harvested || 0, mealsCooked: fd.cooked || 0, mealsSold: fd.sold || 0,
+          pets: (pt.pets || []).length, kits: Object.keys(pt.kits || {}).length, dream: pt.dream ? 1 : 0, style: dh && root.NightshiftDecorData ? root.NightshiftDecorData.style(dh) : 0, garageCars: Math.min(4, G.cars.filter((c) => c?.owned === true).length) }; })(),
     });
   }
 
@@ -197,6 +201,9 @@
     armsbuyer: () => root.NightshiftSupplyData?.ARMS_BUYER || null,
     bags: (p) => nearest(root.NightshiftSupplyData?.BAG_SHOPS, p),
     bench: () => ({ x: 950, y: 735 }),
+    chop: () => root.NightshiftChop?.BAY || null,
+    busstop: (p) => nearest(root.NightshiftZones?.CITY_STOPS, p),
+    warehouse: (p) => nearest(root.NightshiftBreakin?.WAREHOUSES, p),
     race: (p) => { const medals = root.NightshiftRaces?.state?.medals || {}; const st = root.NightshiftRaces?.starts?.() || []; return nearest(st.filter((r) => medals[r.id] !== 'gold'), p) || nearest(st, p); },
   };
   function trackTarget() {

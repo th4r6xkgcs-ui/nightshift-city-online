@@ -87,6 +87,22 @@
         ['💹', 'Stock market', 'Buy low, sell high. Read the news. Phone → MARKET.', 'OPEN', open2(() => R.NightshiftMarket.open())],
         ['📈', 'Front businesses', 'Passive income while you are away, from an $800 shoeshine stand up. Phone → EMPIRE.', 'OPEN', open2(() => R.NightshiftEmpire.open())],
       ]],
+      ['🚗 CARS', [
+        ['🔓', 'Steal a car', 'Stand next to any locked car and hold USE until the lock pops. Cops notice.', null],
+        ['🔧', "Rusty's chop shop", 'Drive a stolen car into the striped bay behind the scrapyard: chop it for cash, strip it for parts, or re-VIN it and keep it. Check his 🔥 hot list.', 'GPS', () => gps(R.NightshiftChop?.BAY, "Rusty's chop shop")],
+        ['🏁', 'Body kits', 'Prestige Motors in Palm Grove (suburbs) fits GT, muscle, rally and luxury kits to cars you own.', null],
+        ['🏎️', 'Show-off garage', 'Buy the dream house in Palm Grove: up to four of your cars park inside, with a show-off score.', null],
+      ]],
+      ['🗺️ BEYOND THE CITY (bus 🚌)', [
+        ['🚌', 'Bus stops', 'Midtown and West End. Ride to the countryside or the suburbs for a few dollars.', 'GPS', () => gps(nearest(R.NightshiftZones?.CITY_STOPS), 'Bus stop')],
+        ['🌾', 'Harlow Fields farm', 'Lease plots, plant, water and harvest crops. Keep hens and cows. Grind flour at the mill.', null],
+        ['🍳', 'Cooking & buffs', 'Cook at your kitchen (or the farmhouse): meals give buffs like faster running or more XP. Eat from the 🎒.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
+        ['🍽️', 'Diner back door', 'The diner buys your cooked meals and fresh produce.', 'GPS', () => gps({ x: 1600, y: 948 }, 'Diner back door')],
+        ['🔦', 'Break-ins', 'Suburb houses, the gated estate, and two city warehouses (nights). Dark inside: guards show as red echoes. Loot is only yours once you walk out.', 'GPS', () => gps(nearest(R.NightshiftBreakin?.WAREHOUSES), 'Warehouse back door')],
+        ['💍', 'Golden Pawn', 'In Palm Grove. Fences the jewellery, electronics and art you steal.', null],
+        ['🐕', 'Pets', 'Paws & Claws in Palm Grove. Pets follow you everywhere and give a perk while fed. Dogs sniff out stashes.', null],
+        ['🏡', 'Dream house', 'Palm Grove, $85,000. Furnish 15 slots, raise your Style tier: deals pay more. Sleep for an XP boost.', null],
+      ]],
       ['💪 GET STRONGER', [
         ['⭐', 'Skills', 'Everything you do levels a skill. Tap ⭐ to see perks.', 'OPEN', open2(() => R.NightshiftSkills.open())],
         ['🏋️', 'Gym', 'Timing reps for Speed and Toughness. Half price in the morning.', 'GPS', () => gps(nearest(ven.filter((v) => v.kind === 'gym')), 'Iron Works Gym')],
