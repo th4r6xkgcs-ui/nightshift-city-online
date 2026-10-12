@@ -9,7 +9,7 @@
 (function (root) {
   'use strict';
   if (!root.document) return;
-  const ZONES = {};
+  const ZONES = {}, COMPANIONS = [];
   let cur = null;
   /* eslint-disable no-undef */
   const P = () => { try { return player; } catch { return null; } };
@@ -251,6 +251,7 @@
     for (const pr of d.props?.(api, view) || []) items.push(pr);
     const hideActor = (a) => d.fog && !a.always && !visible(a.x, a.y);
     for (const a of d.actors?.(api) || []) if (!hideActor(a)) items.push({ y: a.y, draw: () => drawActor(ctx, a) });
+    for (const fn of COMPANIONS) { try { const a = fn(api, d); if (a) items.push({ y: a.y, draw: () => a.draw(ctx, t) }); } catch { /* optional */ } }
     items.push({ y: pos.y, draw: () => drawPlayer(ctx) });
     items.sort((a, b) => a.y - b.y);
     for (const it of items) { try { it.draw(ctx, t, api); } catch (e) { console.error(e); } }
@@ -445,6 +446,6 @@
     busStop: (x, y, r = 60) => ({ x, y, r, action: 'BUS', label: 'Bus stop · ride home or elsewhere', sign: 'BUS', icon: '🚌', color: '#7cc7ff', lift: 62, use: () => openTravel() }),
     busStopArt,
   };
-  root.NightshiftZones = Object.freeze({ register, enter, leave, active: () => (cur ? cur.def.id : null), openTravel, api, CITY_STOPS, zones: () => ZONES,
+  root.NightshiftZones = Object.freeze({ register, enter, leave, active: () => (cur ? cur.def.id : null), openTravel, api, CITY_STOPS, zones: () => ZONES, addCompanion: (fn) => { if (typeof fn === 'function') COMPANIONS.push(fn); },
     paused: () => !travelEl.hidden, pos: () => (cur ? { ...cur.pos } : null) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -222,7 +222,7 @@
   function makeZone(j, target) {
     const L = j.L, solids = [...L.walls, ...L.furniture.filter((f) => !f.flat).map((f) => ({ x: f.x, y: f.y, w: f.w, h: f.h, low: true }))];
     return {
-      id: 'breakin', name: target.name, tagline: `${L.T.name.toUpperCase()} · STAY QUIET · LOOT IS HOT UNTIL YOU'RE OUT`, indoor: true, combat: true, fog: { cone: 1.3, len: 320, around: 64, dark: 0.94 }, w: L.w, h: L.h, bg: '#05070b', zoom: 1.05, solids,
+      id: 'breakin', name: target.name, tagline: `${L.T.name.toUpperCase()} · STAY QUIET · LOOT IS HOT UNTIL YOU'RE OUT`, indoor: true, combat: true, fog: { cone: 1.35, len: 360, around: 66, dark: 0.82 }, w: L.w, h: L.h, bg: '#05070b', zoom: 1.05, solids,
       ground(c) {
         const r = B.rngOf(L.seed);
         const outside = L.type === 'warehouse' ? '#2b2f33' : '#2f4a2c'; R(c, outside, 0, 0, L.w, L.h);
@@ -307,5 +307,5 @@
     }
   }
 
-  root.NightshiftBreakin = Object.freeze({ start, get state() { return state; }, active: () => !!job, WAREHOUSES, cooldownLeft: (id, type) => B.cooldownLeft(state, id, type) });
+  root.NightshiftBreakin = Object.freeze({ start, get state() { return state; }, active: () => !!job, debug: () => job, WAREHOUSES, cooldownLeft: (id, type) => B.cooldownLeft(state, id, type) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
