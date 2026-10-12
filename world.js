@@ -213,6 +213,8 @@ function building(b){
  // One light direction, deeper south facade, and a restrained dark outline.
  g.fillStyle='#101b2c55';g.beginPath();g.moveTo(x+12,y+15);g.lineTo(x+w+28,y+27);g.lineTo(x+w+28,y+h+24);g.lineTo(x+19,y+h+24);g.closePath();g.fill();
  rect(g,'#172735',x-2,y-2,w+4,h+4);wash(g,face,x,y,w,h,'#ffffff12','#13263855');wash(g,roof,x+5,y+5,w-10,h-68,'#ffffff0d','#0e243a66');
+ // Broad rooftop forms: raised stairwell and continuous skylight reflections.
+ if(!industrial&&!residential&&!club){rect(g,'#14293666',x+w-75,y+19,57,46);wash(g,'#496978',x+w-80,y+13,57,46,'#dae4cc33','#102a3e66');rect(g,trim,x+w-80,y+13,57,3);rect(g,'#263e4a',x+w-75,y+21,47,28);wash(g,'#668997',x+w-73,y+23,43,24,'#c9e6dc44','#193b5266');rect(g,'#cedbd655',x+w-66,y+24,3,21);rect(g,'#abc8c333',x+w-48,y+24,9,21)}
  rect(g,'#ffffff18',x+6,y+6,w-12,3);rect(g,'#10253677',x+w-11,y+9,6,h-71);rect(g,trim,x,y,w,5);rect(g,'#d6d5bf44',x,y+5,5,h-66);
  if(industrial){
   for(let yy=y+10;yy<front-5;yy+=16){rect(g,'#a6bbb222',x+10,yy,w-20,1);rect(g,'#10273444',x+10,yy+3,w-20,1)}
@@ -266,6 +268,8 @@ function building(b){
   for(const xx of [x+83,x+w-92]){rect(g,'#273d49',xx+2,front+23,10,37);rect(g,'#d8c7a5',xx,front+22,9,35);rect(g,'#f0dec0',xx-2,front+21,13,3);rect(g,'#978e7a',xx-2,y+h-5,13,4)}
  }
  rect(g,'#1a334066',x+3,y+h-1,w-6,5);rect(g,trim,x+w/2-23,y+h+1,46,3);rect(g,'#677f82',x+w/2-19,y+h+4,38,3);
+ // Frontage fittings add readable larger shapes, rather than noisy speckles.
+ if(shop){const bx=x+w-43,by=y+h+10;rect(g,'#152d3966',bx+4,by+5,25,25);wash(g,'#42695d',bx,by,24,22,'#a9cbbf33','#173c3455');oval(g,'#446e55',bx+12,by-1,13,7);oval(g,'#76966a',bx+9,by-4,8,4);rect(g,'#c3b58c',x+28,y+h+10,20,23);rect(g,'#253e48',x+31,y+h+12,14,16);g.fillStyle='#d8d0ac';g.font='7px system-ui';g.textAlign='center';g.fillText(name==='DINER'?'MENU':'OPEN',x+38,y+h+23)}
  storefrontLight(b,night);g.restore();
 }
 root.NightshiftWorld={createBuildings,road,building,ground,cafeActors,cafeCanopy,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop,signActors,signTop};

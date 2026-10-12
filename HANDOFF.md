@@ -1,20 +1,23 @@
 # HANDOFF — Nightshift City Online
 
-## CURRENT — v0.53 combined Street Life client (2026-10-11)
+## CURRENT — v0.54 combined Street Life client (2026-10-11)
 
 Current batch: exact Claude RPG 8b6c4c3 integration, persistent contact memory, city journal and crash loyalty consequences. See CLIENT_HANDOFF_V53.md.
 
 Prior increment: crew passenger boarding, model seat limits and safe exit/follow resumption. See CLIENT_HANDOFF_V52.md.
 
-Canonical branch: `codex/city-reactions-v53`, based on combined v0.52. Read CLIENT_HANDOFF_V51.md, CLIENT_HANDOFF_V50_1.md and CLIENT_HANDOFF_V50.md for changed files, saved-state contracts, gameplay limits and verification.
+Canonical branch: `codex/visual-overhaul-v54`, based on combined v0.52. Read CLIENT_HANDOFF_V51.md, CLIENT_HANDOFF_V50_1.md and CLIENT_HANDOFF_V50.md for changed files, saved-state contracts, gameplay limits and verification.
 
 This session added both NPC/custom gang support, bounded recruitment, physical followers, loyalty, escort jobs, rival corner challenges and premium street-customer requests sharing existing dealer demand and ledger. Fixed follower vehicle routing/spawn clearance and crowded sprite-atlas rebuilding. Root README/PROJECT_STATE/NEXT_TASKS now point to the current combined client rather than v0.17.
 
-Validation: 88 suites and root syntax pass; ten simulated minute follower soak; physical contact-to-clinic escort handoff; once-only crew/rival/customer effects; production-to-customer sale; crowded-atlas allocation regression; 86 playable build assets. Canvas portrait/landscape inspections cover followers, rival envoys and customer depth. Physical iPhone and real DOM/audio checks remain pending.
+Validation: 89 suites and root syntax pass; ten simulated minute follower soak; physical contact-to-clinic escort handoff; once-only crew/rival/customer effects; production-to-customer sale; crowded-atlas allocation regression; 87 playable build assets. Canvas portrait/landscape inspections cover followers, rival envoys and customer depth. Physical iPhone and real DOM/audio checks remain pending.
 
 Claude's latest RPG modules imported unchanged from rpg-core 8b6c4c3; latest rpg-play is 12dc902. No Claude-owned RPG/backend internals edited. Coordinate through PR #3 before reserving files. Never merge or force-push shared/main branches without authorization. Static preview remains local single-player; server/shared/online/worker are excluded.
 
-Next: device QA, crew vehicle seating/combat, deeper customer requests/relationships and authoritative backend integration. Detailed release handoffs are authoritative; older notes below are historical.
+Next: art refinement and device QA; additional crew systems deferred until multiplayer. Detailed release handoffs are authoritative; older notes below are historical.
+
+
+Current art pass: high-density Canvas rendering (2× DPR, four-million-pixel budget), smoother sprite sampling, vehicle paint/glass highlights, clothing shading, rooftop glass, storefront planters/signs and restrained mobile HUD finishes. See CLIENT_HANDOFF_V54.md. Further recruitment/follower/gang-management expansion is deferred until multiplayer. Existing crew saves and gameplay remain intact. Imported Claude RPG snapshot remains 8b6c4c3; newer refs 8495bd7 / 24d1749 were observed but are not integrated.
 
 ## HISTORICAL — v0.17 crafting progression and safety
 Verified external v0.16 foundation. Added persistent craft count/levels (five recipes per level), one-time $400 owned-apartment bench upgrade at level two, bulk ammunition and level-three medical pair recipes. Craft progress joins backup whitelist. Fixed reserve overflow and reload conflicts before material deductions; modal isolation across city actions; indoor movement locks during crafting; wardrobe overlap blocked. Craft items retain pocket death custody.

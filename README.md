@@ -1,16 +1,16 @@
 # Nightshift City Online
 Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current build: v0.53 combined local client
+## Current build: v0.54 combined local client
 Private preview hosted separately. Latest combined batch includes respect ranks, fishing, Hustle phone jobs, labs, weapon mods, persistent named-contact memory and a city journal. See CLIENT_HANDOFF_V53.md.
 Dependency-free Canvas client with walking, combat, police pursuit, traffic, vehicles, apartments/shops, production businesses, RPG skills/weapons/goals/dailies and browser-local inventory/progress. Join an NPC gang or found a custom gang, recruit passive followers, build loyalty, escort members, claim local corners and respond to noncombat rival pressure. Street customers request carried stock using shared dealer demand, prices, heat and sales ledgers. This private static preview is single-player; Claude’s separate backend work is not deployed here. Art/audio are procedural. Real iPhone and DOM/audio QA remain pending.
 
-Canonical combined branch: `codex/city-reactions-v53`, based on v0.52. Crew members can now board nearby stopped vehicles and exit safely; compacts seat one passenger, sedans/vans three. [Transport handoff](CLIENT_HANDOFF_V52.md). Start at **MORE → STREET**, track a contact, then press **TALK**. Detailed contracts and validation: [CLIENT_HANDOFF_V51.md](CLIENT_HANDOFF_V51.md), [CLIENT_HANDOFF_V50_1.md](CLIENT_HANDOFF_V50_1.md), [CLIENT_HANDOFF_V50.md](CLIENT_HANDOFF_V50.md). Historical gameplay notes below describe older foundations.
+Canonical combined branch: `codex/visual-overhaul-v54`, based on v0.52. Crew members can now board nearby stopped vehicles and exit safely; compacts seat one passenger, sedans/vans three. [Transport handoff](CLIENT_HANDOFF_V52.md). Start at **MORE → STREET**, track a contact, then press **TALK**. Detailed contracts and validation: [CLIENT_HANDOFF_V51.md](CLIENT_HANDOFF_V51.md), [CLIENT_HANDOFF_V50_1.md](CLIENT_HANDOFF_V50_1.md), [CLIENT_HANDOFF_V50.md](CLIENT_HANDOFF_V50.md). Historical gameplay notes below describe older foundations.
 
 ## Run and verify
 Use Node 24 or newer. No npm installation is required. `npm run build` creates a static dist bundle for hosting.
 - `python3 -m http.server 8080` serves the game at localhost:8080.
-- `npm run check` runs 88 suites and syntax-checks every root JavaScript module.
+- `npm run check` runs 89 suites and syntax-checks every root JavaScript module.
 - `npm run test:browser` is a separate harness for a configured browser environment.
 - `node tests/render.cjs /tmp/city.png` optionally renders Canvas with `@napi-rs/canvas`; this verifies neither HTML layout nor touch/audio.
 
@@ -39,3 +39,5 @@ MORE opens secondary actions: CRAFT, STYLE, JOB, HOME, STATS, SEARCH, BAG, BOX, 
 ## Limits and collaboration
 Menus/interiors pause this single-player simulation. Real Safari dual-touch, HUD layout and browser audio/file-picker QA remain pending. Save data is trusted local prototype state, not a secure economy. No account server, database or multiplayer exists.
 Read AGENTS.md, CLAUDE.md, HANDOFF.md, FILE_OWNERSHIP.md and DEPLOYMENT.md. GitHub is canonical; Sites hosts a private deployment mirror. Codex owns the client; Claude owns future backend work. No credentials or Garage assets belong here.
+
+Current art pass: high-density Canvas rendering (2× DPR, four-million-pixel budget), smoother sprite sampling, vehicle paint/glass highlights, clothing shading, rooftop glass, storefront planters/signs and restrained mobile HUD finishes. See CLIENT_HANDOFF_V54.md. Further recruitment/follower/gang-management expansion is deferred until multiplayer. Existing crew saves and gameplay remain intact. Imported Claude RPG snapshot remains 8b6c4c3; newer refs 8495bd7 / 24d1749 were observed but are not integrated.
