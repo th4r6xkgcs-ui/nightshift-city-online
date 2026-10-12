@@ -31,8 +31,8 @@
   const C = (c, col, x, y, r) => { c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); };
   const { RING } = D;
   // Where tonight's rivals park (around the court), and the crowd.
-  const SPOTS = [[118, 470, 0.5], [338, 470, Math.PI - 0.5], [118, 652, -0.5], [338, 652, Math.PI + 0.5], [228, 700, -Math.PI / 2]];
-  const CROWD = [[160, 520], [172, 600], [290, 512], [298, 608], [200, 448], [256, 452], [150, 560], [306, 560], [210, 650], [250, 652], [176, 690], [282, 694]];
+  const SPOTS = [[78, 448, 0.35], [376, 448, Math.PI - 0.35], [78, 578, -0.35], [376, 578, Math.PI + 0.35], [228, 612, Math.PI]];
+  const CROWD = [[150, 470], [140, 520], [152, 572], [306, 470], [316, 520], [304, 572], [196, 446], [262, 446], [176, 600], [282, 600], [120, 610], [338, 612]];
   const UNDERGLOW = ['#3ad0ff', '#ff4ad8', '#7cdeb5', '#ffb33a', '#9a5aff'];
 
   function myCar() { const p = P(), c = p?.car; return c && c.owned ? c : null; }
@@ -108,8 +108,8 @@
     c.save(); c.font = '800 11px "Chakra Petch",system-ui'; c.textAlign = 'center'; c.fillStyle = live ? '#ffd970' : '#9fb3c8'; c.fillText(live ? 'NIGHT MEET · LIVE' : 'NIGHT MEET · 21:00–03:00', RING.x, RING.y - RING.r - 71); c.restore();
     if (!live) return;
     // string lights across the court
-    c.save(); c.strokeStyle = '#2a2e33'; c.lineWidth = 1; c.beginPath(); c.moveTo(98, 440); c.quadraticCurveTo(228, 470, 358, 440); c.moveTo(98, 690); c.quadraticCurveTo(228, 720, 358, 690); c.stroke(); c.restore();
-    for (let k = 0; k <= 12; k++) { const u = k / 12; for (const [y0, y1] of [[440, 470], [690, 720]]) { const x = 98 + 260 * u, y = (1 - u) * (1 - u) * y0 + 2 * u * (1 - u) * y1 + u * u * y0; C(c, ['#ffd970', '#ff4ad8', '#3ad0ff'][k % 3], x, y + 2, 2); } }
+    c.save(); c.strokeStyle = '#2a2e33'; c.lineWidth = 1; c.beginPath(); c.moveTo(60, 400); c.quadraticCurveTo(228, 428, 396, 400); c.moveTo(60, 632); c.quadraticCurveTo(228, 652, 396, 632); c.stroke(); c.restore();
+    for (let k = 0; k <= 14; k++) { const u = k / 14; for (const [y0, y1] of [[400, 428], [632, 652]]) { const x = 60 + 336 * u, y = (1 - u) * (1 - u) * y0 + 2 * u * (1 - u) * y1 + u * u * y0; C(c, ['#ffd970', '#ff4ad8', '#3ad0ff'][k % 3], x, y + 2, 2); } }
     // rival cars with underglow
     const field = D.rivals(key());
     field.forEach((rv, i) => {
@@ -118,9 +118,9 @@
       try { root.NightshiftSprites?.car?.({ x, y, angle: a, color: rv.color, model: rv.model, speed: 0, condition: 100, id: 'meet-' + i }); if (rv.kit) root.NightshiftPets?.decals?.(c, { x, y, angle: a }, rv.kit); } catch { /* sprite optional */ }
     });
     // DJ table + speakers + judges' table
-    R(c, '#1d2126', 180, 424, 96, 18); R(c, '#2b3036', 180, 424, 96, 3); for (const dx of [196, 252]) { C(c, '#0c0e11', dx, 433, 6); C(c, '#3a3f45', dx, 433, 2); } R(c, '#ff4ad8', 222, 430, 12, 2);
-    for (const sx of [168, 280]) { R(c, '#111317', sx, 418, 14, 24); C(c, '#2b3036', sx + 7, 426, 4); C(c, '#2b3036', sx + 7, 436, 3); }
-    R(c, '#3a2a1a', 330, 540, 18, 44); R(c, '#e8e2d0', 332, 548, 14, 4); R(c, '#e8e2d0', 332, 560, 14, 4); R(c, '#e8e2d0', 332, 572, 14, 4);
+    R(c, '#1d2126', 180, 404, 96, 18); R(c, '#2b3036', 180, 404, 96, 3); for (const dx of [196, 252]) { C(c, '#0c0e11', dx, 413, 6); C(c, '#3a3f45', dx, 413, 2); } R(c, '#ff4ad8', 222, 410, 12, 2);
+    for (const sx of [164, 284]) { R(c, '#111317', sx, 398, 14, 24); C(c, '#2b3036', sx + 7, 406, 4); C(c, '#2b3036', sx + 7, 416, 3); }
+    R(c, '#3a2a1a', 116, 486, 18, 44); R(c, '#e8e2d0', 118, 494, 14, 4); R(c, '#e8e2d0', 118, 506, 14, 4); R(c, '#e8e2d0', 118, 518, 14, 4);
     // crowd + phone flashes
     const S = root.NightshiftSprites;
     CROWD.forEach(([x, y], i) => { const face = Math.atan2(RING.y - y, RING.x - x); try { S?.person?.({ x, y, angle: face, moving: false, walkTicks: 0, hp: 40, id: 'meet-crowd-' + i, color: ['#c84659', '#3d7fc6', '#e2b75c', '#6d73be', '#2f8f6a', '#e4e0d6'][i % 6] }, false, { weapon: false, role: 'ped' }); } catch { /* sprite optional */ } });
