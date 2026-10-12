@@ -76,9 +76,9 @@
     if (!night) { const sp = c.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, R0 * 1.3); sp.addColorStop(0, '#fff3d81c'); sp.addColorStop(1, '#0000'); c.fillStyle = sp; c.fillRect(0, 0, w, h); }
     if (car) {
       const C = root.NightshiftCars;
-      const len = 70, k = (Math.min(w, h) * 0.86 / len) * zoom; // world px → device px
+      const spec = specOf(car), len = (spec?.len || 56) + 14, k = (Math.min(w, h) * 0.8 / len) * zoom; // world px → device px
       c.save(); c.translate(w / 2, h / 2); c.scale(k, k);
-      if (night) { c.save(); c.rotate(angle); c.globalCompositeOperation = 'lighter'; const L = (preview && (car.len || 56)) || 56; for (const s of [-1, 1]) { const gr = c.createRadialGradient(L / 2, s * 8, 2, L / 2 + 60, s * 14, 70); const col = { stock: '#fff4c8', xenon: '#eaf6ff', amber: '#ffc46b', ice: '#9fdcff' }[(comparing ? SD.styleOf(state, car.id) : preview).lights] || '#fff4c8'; gr.addColorStop(0, col + '55'); gr.addColorStop(1, col + '00'); c.fillStyle = gr; c.beginPath(); c.moveTo(L / 2 - 2, s * 8); c.lineTo(L / 2 + 90, s * 36); c.lineTo(L / 2 + 90, s * -14); c.closePath(); c.fill(); } c.restore(); }
+      if (night) { c.save(); c.rotate(angle); c.globalCompositeOperation = 'lighter'; const L = spec?.len || 56; for (const s of [-1, 1]) { const gr = c.createRadialGradient(L / 2, s * 8, 2, L / 2 + 60, s * 14, 70); const col = { stock: '#fff4c8', xenon: '#eaf6ff', amber: '#ffc46b', ice: '#9fdcff' }[(comparing ? SD.styleOf(state, car.id) : preview).lights] || '#fff4c8'; gr.addColorStop(0, col + '55'); gr.addColorStop(1, col + '00'); c.fillStyle = gr; c.beginPath(); c.moveTo(L / 2 - 2, s * 8); c.lineTo(L / 2 + 90, s * 36); c.lineTo(L / 2 + 90, s * -14); c.closePath(); c.fill(); } c.restore(); }
       const v = { ...car, x: 0, y: 0, angle, speed: 0, color: comparing ? car.color : paint || car.color };
       try { C.draw(v, c, { style: comparing ? SD.styleOf(state, car.id) : preview, night }); } catch (e) { console.error(e); }
       c.restore();
