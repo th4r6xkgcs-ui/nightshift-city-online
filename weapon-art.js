@@ -26,10 +26,10 @@
 
   // ---------------- pixel buffer + part painter ----------------
   const GW = 84, GH = 38; // grid (gun drawn with origin offset ox,oy so attachments have room)
-  function Buf(skin) {
-    const px = new Array(GW * GH).fill(null), b = { px, skin };
-    const put = (x, y, c) => { x = Math.round(x); y = Math.round(y); if (x >= 0 && y >= 0 && x < GW && y < GH) px[y * GW + x] = c; };
-    const get = (x, y) => (x >= 0 && y >= 0 && x < GW && y < GH ? px[y * GW + x] : null);
+  function Buf(skin, BW = GW, BH = GH) {
+    const px = new Array(BW * BH).fill(null), b = { px, skin, w: BW, h: BH };
+    const put = (x, y, c) => { x = Math.round(x); y = Math.round(y); if (x >= 0 && y >= 0 && x < BW && y < BH) px[y * BW + x] = c; };
+    const get = (x, y) => (x >= 0 && y >= 0 && x < BW && y < BH ? px[y * BW + x] : null);
     const noise = (x, y) => { let h = (x * 374761393 + y * 668265263) >>> 0; h = ((h ^ (h >>> 13)) * 1274126177) >>> 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
     const camoAt = (x, y) => { const v = noise(x >> 2, y >> 1) * 0.6 + noise(x >> 1, y >> 2) * 0.4; return v < 0.33 ? 0 : v > 0.72 ? 1 : -1; };
     function tones(mat) {
@@ -66,11 +66,11 @@
     b.get = get; b.put = put;
     return b;
   }
-  function outline(b) {
-    const out = b.px.slice();
-    for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) { if (b.px[y * GW + x]) continue; let n = false;
-      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const xx = x + dx, yy = y + dy; if (xx >= 0 && yy >= 0 && xx < GW && yy < GH && b.px[yy * GW + xx] && b.px[yy * GW + xx] !== 'glow') n = true; }
-      if (n) out[y * GW + x] = INK; }
+  function outline(b, ink = INK) {
+    const out = b.px.slice(), BW = b.w || GW, BH = b.h || GH;
+    for (let y = 0; y < BH; y++) for (let x = 0; x < BW; x++) { if (b.px[y * BW + x]) continue; let n = false;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const xx = x + dx, yy = y + dy; if (xx >= 0 && yy >= 0 && xx < BW && yy < BH && b.px[yy * BW + xx] && b.px[yy * BW + xx] !== 'glow') n = true; }
+      if (n) out[y * BW + x] = ink; }
     b.px = out;
   }
 
@@ -223,18 +223,22 @@
   /* global S, g */
   function installHeld() {
     const Sx = root.NightshiftSprites; if (!Sx || !root.NightshiftDetailedArt || Sx.__weaponArt) return !!(Sx && Sx.__weaponArt);
-    const person = Sx.person;
+    const person = Sx.person, eq = { id: null, at: -1e9 };
     Sx.person = function (p, isPlayer, options = {}) {
       const armed = isPlayer && options.weapon !== false && !options.noWeapon && root.NightshiftInventory?.state?.pocket?.pistol > 0;
-      if (!armed || !p || !Number.isFinite(p.x)) return person.call(this, p, isPlayer, options);
+      if (!armed || !p || !Number.isFinite(p.x)) { if (isPlayer && !armed) eq.id = null; return person.call(this, p, isPlayer, options); }
       const WS = root.NightshiftWeapons, id = WS?.state?.equipped || 'pistol', ang = p.angle || 0, ctx = g, C = root.NightshiftCharacters;
       const skin = WS?.state?.skins?.[id] || null, mods = WS?.state?.mods?.[id] || [], sp = sprite(id), hold = sp && sp.box.w > 34 ? 'long' : 'short';
       // hands come from the character's holding pose for this facing, so arms and gun line up
       let hx = p.x + Math.cos(ang) * 6.5, hy = p.y - 5.5 + Math.sin(ang) * 1.2, behind = Math.sin(ang) < -0.38;
-      if (C?.enabled && C.holdHand) { const d = C.dirOfAngle(ang), hh = C.holdHand(d, hold); behind = hh.back; hx = p.x + (behind ? 4.5 : hh.x); hy = p.y + (behind ? -9 : hh.y); }
-      if (behind) drawHeld(ctx, id, hx, hy, ang, skin, mods, { laser: true });
+      const st = C?.stance?.(p, true) || '', low = st === 'sneak' || st === 'crouch' ? 'crouch' : 'idle';
+      if (C?.enabled && C.holdHand) { const d = C.dirOfAngle(ang), hh = C.holdHand(d, hold, low); behind = hh.back; hx = p.x + (behind ? 4.5 : hh.x); hy = p.y + (behind ? -9 + (low === 'crouch' ? 4.5 : 0) : hh.y); }
+      // equipping: the gun swings up from the hip over ~0.22 s whenever you draw or switch
+      const now = performance.now(); if (eq.id !== id) { eq.id = id; eq.at = now; }
+      const k = Math.min(1, (now - eq.at) / 220), ease = 1 - (1 - k) * (1 - k), da = (1 - ease) * (Math.cos(ang) >= 0 ? 1.1 : -1.1), ga = ang + da; hy += (1 - ease) * 4;
+      if (behind) drawHeld(ctx, id, hx, hy, ga, skin, mods, { laser: k >= 1 });
       const r = person.call(this, p, isPlayer, { ...options, noWeapon: true, hold });
-      if (!behind) drawHeld(ctx, id, hx, hy, ang, skin, mods, { laser: true });
+      if (!behind) drawHeld(ctx, id, hx, hy, ga, skin, mods, { laser: k >= 1 });
       return r;
     };
     Sx.__weaponArt = true; return true;
@@ -336,6 +340,6 @@
   function inspect(id) { if (typeof document === 'undefined' || !root.NightshiftWeaponsData) return; insp = insp || buildInspect(); insp.open(id); }
   function closeInspect() { insp?.close(); }
 
-  const api = Object.freeze({ build, sprite, icon, drawHeld, inspect, closeInspect, GUNS: Object.keys(GUNS), anchors: (id) => sprite(id)?.a, paused: () => !!insp && !insp.el.hidden });
+  const api = Object.freeze({ pix: { Buf, outline, MAT, ramp, mix, hexToRgb, INK }, build, sprite, icon, drawHeld, inspect, closeInspect, GUNS: Object.keys(GUNS), anchors: (id) => sprite(id)?.a, paused: () => !!insp && !insp.el.hidden });
   if (typeof module === 'object' && module.exports) module.exports = api; else root.NightshiftWeaponArt = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
