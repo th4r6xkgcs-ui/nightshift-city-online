@@ -50,7 +50,9 @@
     g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
     o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.02);
   }
-  const GUN = { pistol: [0.1, 1600, 0.45, 110], revolver: [0.18, 1100, 0.6, 80], smg: [0.07, 2200, 0.32, 140], shotgun: [0.26, 700, 0.75, 60], rifle: [0.22, 1300, 0.65, 70], ar: [0.11, 1800, 0.45, 100] };
+  const GUN = { pistol: [0.1, 1600, 0.45, 110], compact: [0.08, 1900, 0.38, 130], revolver: [0.18, 1100, 0.6, 80], hawk: [0.22, 900, 0.7, 65], smg: [0.07, 2200, 0.32, 140], machine: [0.06, 2400, 0.3, 150],
+    shotgun: [0.26, 700, 0.75, 60], pump: [0.28, 650, 0.78, 55], sawnoff: [0.3, 600, 0.8, 50], rifle: [0.22, 1300, 0.65, 70], hunting: [0.26, 1100, 0.7, 60], carbine: [0.1, 1700, 0.42, 105], ar: [0.11, 1800, 0.45, 100],
+    pipe: [0.16, 900, 0.55, 70], zip: [0.07, 2100, 0.3, 160] };
   function gunshot() {
     oneShot((t) => {
       const id = root.NightshiftWeapons?.state?.equipped || 'pistol', [dur, fq, vol, thump] = GUN[id] || GUN.pistol;
