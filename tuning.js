@@ -124,6 +124,7 @@
       cars.append(b);
     }
     panel.append(cars);
+    if (root.NightshiftCarStyle) { const sb = el('button', { className: 'x', type: 'button', style: 'display:block;width:100%;margin:6px 0 8px;padding:11px;background:linear-gradient(180deg,#ffd970,#c99a2a);color:#1b1408;font-weight:800' }, '🎨 STYLE STUDIO · wheels, wings, finish, livery, lights'); const car = selected; sb.onclick = () => { close(); root.NightshiftCarStyle.open(car, 'shop'); }; panel.append(sb); }
     const lv = T.levels(state, selected.id);
     for (const u of T.UPGRADES) {
       const row = el('div', { className: 'up' });

@@ -91,6 +91,7 @@
         ['📈', 'Front businesses', 'Passive income while you are away, from an $800 shoeshine stand up. Phone → EMPIRE.', 'OPEN', open2(() => R.NightshiftEmpire.open())],
       ]],
       ['🚗 CARS', [
+        ['🎨', 'Style studio', 'Spin your car on a turntable, preview paint finishes, wheels, wings, liveries, lights and underglow. Apply at any 🔧 GARAGE (park your car there → STYLE STUDIO). Looks score at car meets.', null],
         ['🔓', 'Steal a car', 'Stand next to any locked car and hold USE until the lock pops. Cops notice.', null],
         ['🔧', "Rusty's chop shop", 'Drive a stolen car into the striped bay behind the scrapyard: chop it for cash, strip it for parts, or re-VIN it and keep it. Check his 🔥 hot list.', 'GPS', () => gps(R.NightshiftChop?.BAY, "Rusty's chop shop")],
         ['🔑', 'Car collection', 'Ten models from a $5k hatch to a $290k hypercar at Prestige Motors (Palm Grove). Rare ones get left on the street: steal one and Rusty re-VINs it. 📱 → 🚗 MY CARS.', 'OPEN', open2(() => R.NightshiftCars.open())],
