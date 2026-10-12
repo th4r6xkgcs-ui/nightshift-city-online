@@ -38,7 +38,7 @@
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
     'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked', 'heists', 'gymSessions', 'clubSold', 'fronts', 'eventsDone', 'stashes', 'fightWins', 'fightLadder', 'modsFitted', 'marketProfit',
     'scrapGathered', 'leafPicked', 'trimmed', 'cooked', 'pressed', 'gunsCrafted', 'gunsSold', 'pillsSold', 'lockup', 'bagLevel', 'realGuns',
-    'chopped', 'hotChops', 'breakins', 'cleanJobs', 'lootHauled', 'harvested', 'mealsCooked', 'mealsSold', 'pets', 'kits', 'dream', 'style', 'garageCars'];
+    'chopped', 'hotChops', 'breakins', 'cleanJobs', 'lootHauled', 'harvested', 'mealsCooked', 'mealsSold', 'pets', 'kits', 'dream', 'style', 'garageCars', 'contracts', 'silentContracts'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -148,7 +148,7 @@
       raceGolds: Object.values(root.NightshiftRaces?.state?.medals || {}).filter((m) => m === 'gold').length,
       ...(() => { const ch = root.NightshiftChop?.state?.stats || {}, bi = root.NightshiftBreakin?.state?.stats || {}, fd = root.NightshiftFood?.state || {}, pt = root.NightshiftPets?.state || {}, dh = root.NightshiftDreamHome?.state;
         return { chopped: (ch.chopped || 0) + (ch.stripped || 0) + (ch.revin || 0), hotChops: ch.hot || 0, breakins: bi.jobs || 0, cleanJobs: bi.clean || 0, lootHauled: bi.loot || 0, harvested: fd.harvested || 0, mealsCooked: fd.cooked || 0, mealsSold: fd.sold || 0,
-          pets: (pt.pets || []).length, kits: Object.keys(pt.kits || {}).length, dream: pt.dream ? 1 : 0, style: dh && root.NightshiftDecorData ? root.NightshiftDecorData.style(dh) : 0, garageCars: Math.min(4, G.cars.filter((c) => c?.owned === true).length) }; })(),
+          pets: (pt.pets || []).length, kits: Object.keys(pt.kits || {}).length, dream: pt.dream ? 1 : 0, style: dh && root.NightshiftDecorData ? root.NightshiftDecorData.style(dh) : 0, garageCars: Math.min(4, G.cars.filter((c) => c?.owned === true).length), contracts: root.NightshiftHitman?.state?.done || 0, silentContracts: root.NightshiftHitman?.state?.silent || 0 }; })(),
     });
   }
 

@@ -54,6 +54,7 @@
     sam: { name: 'Broker Sam', icon: '📈', role: 'market' },
     dex: { name: 'Dex', icon: '🔧', role: 'gun shop' },
     mom: { name: 'Mom', icon: '❤️', role: 'family' },
+    broker: { name: 'The Broker', icon: '🎯', role: 'contracts' },
   };
 
   // ---- news ----
