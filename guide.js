@@ -31,6 +31,7 @@
   body #actions.expanded>button[hidden]{display:none!important}
   ${Object.entries(MORE).map(([id, [ic, cap]]) => `#actions.expanded>#${id}::before{content:'${ic}';font-size:20px;line-height:1}#actions.expanded>#${id}::after{content:'${cap}';font:500 9px ui-sans-serif,system-ui,sans-serif;letter-spacing:0;color:#9fb0c8;text-transform:none}`).join('\n')}
   #actions.expanded>button[aria-label="Customize character"]::before{content:'👕';font-size:20px;line-height:1}#actions.expanded>button[aria-label="Customize character"]::after{content:'Change your look';font:500 9px ui-sans-serif,system-ui,sans-serif;color:#9fb0c8}
+  @media (max-height:500px){body #actions.expanded>button{min-height:54px!important;padding:3px 4px!important;gap:0!important}body #actions.expanded>button::before{font-size:16px!important}body #actions.expanded>button::after{font-size:8.5px!important}}
   /* coach marks */
   #gdSpot{position:fixed;z-index:90;border-radius:16px;pointer-events:none;box-shadow:0 0 0 9999px #03060ccc,0 0 0 3px #ffcf5a,0 0 24px #ffcf5a88;transition:all .25s ease}
   #gdTip{position:fixed;z-index:91;max-width:min(320px,86vw);background:linear-gradient(180deg,#1a2234,#0e1422);border:1px solid #ffcf5a88;border-radius:16px;padding:12px 14px;color:#eef3fb;
