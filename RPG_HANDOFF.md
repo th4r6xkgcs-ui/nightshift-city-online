@@ -338,3 +338,10 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
   - Escape closes Claude panels.
   - **Phone:** header first, then a 4-tile app home screen (Empire, Messages, Market, Stashes), then jobs and the city guide.
   - Regression scripts open the phone with `NightshiftJobs.open()` and click `.app` tiles.
+- **Controls and water art**
+  - `hud.js`:
+    - Joystick bases are glass rings; the move nub is a glossy blue orb and the aim nub a pink orb, both with glow.
+    - Action buttons are rounded glass tiles in the display font. USE is outlined amber and FIRE red; held buttons brighten.
+  - `fishing.js`:
+    - Water at both spots is wide, with drifting shimmer and a foam edge (harbor: 380 px; canal: the full west strip).
+    - Plank pier deck on posts and a moored boat that bobs.
