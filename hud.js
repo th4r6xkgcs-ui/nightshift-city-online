@@ -72,6 +72,7 @@
   #nsBars>div{position:static!important;transform:none!important;max-width:none!important;width:100%!important;top:auto!important;bottom:auto!important;left:auto!important;border-radius:12px!important;font-family:var(--body)!important;font-weight:600!important;box-shadow:0 8px 22px #0007!important}
   /* toast */
   #toast{font-family:var(--body)!important;font-weight:600}
+  body.ns-panel #toast{z-index:80!important;top:auto!important;bottom:calc(16px + env(safe-area-inset-bottom))!important;box-shadow:0 10px 30px #000c!important}
   /* every menu: one look */
   ${PANELS.join(',')}{font-family:var(--body)!important;border-radius:18px!important;box-shadow:0 30px 80px #000d,inset 0 1px 0 #ffffff14!important;border-color:#ffffff24!important}
   ${PANELS.map((p) => p + ' h2').join(',')}{font-family:var(--disp)!important;letter-spacing:.04em}
