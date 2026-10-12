@@ -13,10 +13,10 @@
     contract: ['🎯', 'Hitman contracts'], cars: ['🚗', 'Cars'], meet: ['🏁', 'Car meet'], casino: ['🎰', 'Casino'], fishing: ['🎣', 'Fishing'], fronts: ['📈', 'Front businesses'],
     market: ['💹', 'Stock market'], jobs: ['📱', 'Phone jobs'], heists: ['🏦', 'Heists'], venues: ['🪩', 'Clubs, gym & fights'], lab: ['⚗️', 'Drug lab'], food: ['🍳', 'Farm & food'],
     home: ['🏠', 'Home & decor'], suburbs: ['🌴', 'Palm Grove shops'], pets: ['🐾', 'Pets'], goals: ['🏆', 'Goals, dailies & rank'], tuning: ['🛠️', 'Tuning'], travel: ['🚌', 'Travel'],
-    events: ['🌆', 'City events & stashes'], races: ['🏎️', 'Street races'], other: ['🏙️', 'Street & other'],
+    events: ['🌆', 'City events & stashes'], stash: ['🏠', 'Your stash house'], races: ['🏎️', 'Street races'], other: ['🏙️', 'Street & other'],
   };
   const PANELS = { csPanel: 'casino', emPanel: 'fronts', fsPanel: 'fishing', gsPanel: 'guns', hmPanel: 'home', hsPanel: 'heists', jbPanel: 'jobs', lbPanel: 'lab', mkPanel: 'market', tnPanel: 'tuning',
-    vnPanel: 'venues', frPanel: 'food', ptPanel: 'pets', sbPanel: 'suburbs', fdPanel: 'food', fdDiner: 'food', dhPanel: 'home', chPanel: 'chop', cxPanel: 'cars', mtPanel: 'meet', htPanel: 'contract',
+    vnPanel: 'venues', frPanel: 'food', ptPanel: 'pets', sbPanel: 'suburbs', fdPanel: 'food', fdDiner: 'food', dhPanel: 'home', chPanel: 'chop', cxPanel: 'cars', mtPanel: 'meet', htPanel: 'contract', shPanel: 'stash',
     spShop: 'supply', spBench: 'supply', spBag: 'supply', dyPanel: 'goals', glPanel: 'goals', rsPanel: 'goals', znTravel: 'travel' };
   const ZONES = { breakin: 'breakin', farm: 'food', suburbs: 'suburbs', dreamhome: 'home' };
   // Typical rates once you're set up (from the economy sim in tests/supply.cjs and the data files). Shown as guidance.
@@ -38,7 +38,7 @@
   const money = (n) => (n < 0 ? '-$' : '$') + Math.abs(Math.round(n)).toLocaleString();
   const session = { start: performance.now(), earned: {}, spent: {} };
   let tagged = null;
-  function tag(cat) { if (CATS[cat]) tagged = { cat, at: performance.now() }; }
+  function tag(cat) { if (CATS[cat] || cat === 'ignore') tagged = { cat, at: performance.now() }; }
   function category() {
     if (tagged && performance.now() - tagged.at < 2500) return tagged.cat;
     for (const [id, cat] of Object.entries(PANELS)) { const e = document.getElementById(id); if (e && !e.hidden) return cat; }
@@ -50,7 +50,8 @@
     const p = P(); if (!p || !Number.isFinite(p.cash)) return;
     if (last === null) { last = p.cash; return; }
     const d = p.cash - last; last = p.cash; if (!d || Math.abs(d) > 5e7) return;
-    const c = category(), book = d > 0 ? 'earned' : 'spent', all = d > 0 ? state.all : state.spent;
+    const c = category(); if (c === 'ignore') return;
+    const book = d > 0 ? 'earned' : 'spent', all = d > 0 ? state.all : state.spent;
     session[book][c] = (session[book][c] || 0) + Math.abs(d); all[c] = (all[c] || 0) + Math.abs(d);
     if (++dirty > 5) { dirty = 0; persist(); }
   }, 200);
