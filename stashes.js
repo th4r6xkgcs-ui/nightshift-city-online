@@ -75,8 +75,12 @@
       const d = dist(p, s); if (d > S.GLINT) continue;
       const k = 1 - d / S.GLINT, pulse = 0.5 + 0.5 * Math.sin(t * 6 + s.x);
       ctx.globalAlpha = Math.min(1, 0.25 + k * 0.9) * (0.6 + 0.4 * pulse);
-      ctx.fillStyle = '#5a3d17'; ctx.fillRect(s.x - 8, s.y - 6, 16, 12);
-      ctx.fillStyle = '#c99a4a'; ctx.fillRect(s.x - 8, s.y - 2, 16, 3);
+      const R = (c, x, y, w, h) => { ctx.fillStyle = c; ctx.fillRect(Math.round(s.x + x), Math.round(s.y + y), w, h); };
+      R('#05080f55', -9, 5, 20, 3); R('#0b0f17', -10, -6, 20, 12); // shadow + outline
+      R('#2f4a3a', -9, -5, 18, 10); R('#3e624c', -9, -5, 18, 3); R('#22362a', -9, 3, 18, 2); // duffel
+      R('#1a2a20', -9, -1, 18, 1); R('#c9c3a8', -1, -2, 2, 3); // zip + pull
+      R('#0b0f17', -5, -9, 10, 4); R('#2f4a3a', -4, -8, 8, 2); // handle
+      R('#d9d4c0', -9, -3, 3, 6); R('#d9d4c0', 6, -3, 3, 6); // tape
     }
     ctx.restore();
   }

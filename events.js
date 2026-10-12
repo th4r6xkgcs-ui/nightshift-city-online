@@ -86,8 +86,8 @@
     if (ev.type === 'sprint' && ev.stage === 'run') ev.gates.forEach((gt, i) => {
       if (i < ev.progress) return;
       ctx.globalAlpha = i === ev.progress ? 1 : 0.4; ctx.strokeStyle = COLOR; ctx.lineWidth = 4;
-      ctx.beginPath(); ctx.arc(gt.x, gt.y, V.RADIUS.gate, 0, Math.PI * 2); ctx.stroke();
-      ctx.fillStyle = '#e8fbff'; ctx.font = 'bold 13px monospace'; ctx.fillText(String(i + 1), gt.x, gt.y);
+      ctx.globalAlpha *= 0.5; ctx.beginPath(); ctx.arc(gt.x, gt.y, V.RADIUS.gate, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = i === ev.progress ? 1 : 0.4;
+      drawGate(ctx, gt.x, gt.y, i + 1, t);
     });
     ctx.globalAlpha = 1;
     // marker: pulsing ring + icon plate
@@ -104,8 +104,9 @@
       ctx.fillStyle = '#06222ae8'; ctx.fillRect(tgt.x - w / 2, tgt.y - r - 26, w, 18);
       ctx.strokeStyle = COLOR; ctx.lineWidth = 1.5; ctx.strokeRect(tgt.x - w / 2, tgt.y - r - 26, w, 18);
       ctx.fillStyle = '#e8fbff'; ctx.fillText(label, tgt.x, tgt.y - r - 17);
-      if (ev.type === 'truck') { ctx.font = '26px sans-serif'; ctx.fillText('🚚', ev.x, ev.y); }
-      if (ev.type === 'briefcase' || (ev.type === 'package' && ev.stage === 'open')) { ctx.font = '20px sans-serif'; ctx.fillText(T.icon, ev.x, ev.y + Math.sin(t * 4) * 3); }
+      if (ev.type === 'truck') drawTruck(ctx, ev.x, ev.y, t, ev.stage === 'crack' ? ev.progress / T.hold : 0);
+      if (ev.type === 'briefcase') drawBriefcase(ctx, ev.x, ev.y + Math.sin(t * 4) * 2);
+      if (ev.type === 'package' && ev.stage === 'open') drawPackage(ctx, ev.x, ev.y + Math.sin(t * 4) * 2);
     }
     if (dist(p, tgt) > 110) { // guide arrow (cyan, outside the pink job arrow radius)
       const a = Math.atan2(tgt.y - p.y, tgt.x - p.x), rr = p.car ? 90 : 66;
@@ -113,6 +114,51 @@
       ctx.fillStyle = COLOR; ctx.strokeStyle = '#00141a'; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(-6, -7); ctx.lineTo(-2, 0); ctx.lineTo(-6, 7); ctx.closePath(); ctx.stroke(); ctx.fill();
     }
+    ctx.restore();
+  }
+
+  // ---- pixel props (art pass): armored truck, briefcase, package, checkpoint gate ----
+  const R = (ctx, c, x, y, w, h) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
+  function drawTruck(ctx, x, y, t, open) {
+    ctx.save(); ctx.translate(Math.round(x), Math.round(y));
+    R(ctx, '#05080f66', -30, -13, 64, 30); // shadow
+    R(ctx, '#0b0f17', -33, -16, 66, 32); // outline
+    R(ctx, '#5f6b63', -32, -15, 46, 30); R(ctx, '#77837a', -32, -15, 46, 4); R(ctx, '#46504a', -32, 11, 46, 4); // box
+    for (let i = -28; i < 12; i += 8) R(ctx, '#4e5852', i, -11, 1, 22); // panel ribs
+    R(ctx, '#c9a646', -24, -3, 22, 6); R(ctx, '#1e2228', -21, -2, 16, 4); R(ctx, '#e8d27a', -20, -2, 4, 1); // gold stripe + plate
+    R(ctx, '#3a4442', 14, -14, 18, 28); R(ctx, '#4d5a56', 14, -14, 18, 3); // cab
+    R(ctx, '#7fb2c9', 25, -11, 5, 22); R(ctx, '#c9e6f0', 26, -10, 1, 8); // windshield
+    R(ctx, '#f4e9b4', 31, -12, 2, 4); R(ctx, '#f4e9b4', 31, 8, 2, 4); // headlights
+    R(ctx, '#151a1f', -26, -18, 9, 3); R(ctx, '#151a1f', 4, -18, 9, 3); R(ctx, '#151a1f', -26, 15, 9, 3); R(ctx, '#151a1f', 4, 15, 9, 3); // wheels
+    // rear doors swing open with crack progress; cash glints inside
+    const o = Math.max(0, Math.min(1, open)), d = Math.round(o * 9);
+    R(ctx, '#2b2f2c', -33, -14, 3, 28);
+    if (o > 0.05) { R(ctx, '#1b1f1c', -32, -10, 4, 20); R(ctx, '#3f8f4f', -31, -7, 3, 4); R(ctx, '#3f8f4f', -31, 1, 3, 4); if (Math.sin(t * 9) > 0.6) R(ctx, '#fff7c2', -30, -6, 1, 1); }
+    R(ctx, '#56615a', -33 - d, -14, 2, 13); R(ctx, '#56615a', -33 - d, 1, 2, 13);
+    if (Math.sin(t * 6) > 0) R(ctx, '#ff5a4a', 12, -16, 3, 2); // hazard
+    ctx.restore();
+  }
+  function drawBriefcase(ctx, x, y) {
+    ctx.save(); ctx.translate(Math.round(x), Math.round(y));
+    R(ctx, '#05080f55', -8, 6, 18, 3); R(ctx, '#0b0f17', -9, -6, 18, 13);
+    R(ctx, '#5a3a22', -8, -5, 16, 11); R(ctx, '#7a5233', -8, -5, 16, 3); R(ctx, '#3f2816', -8, 4, 16, 2);
+    R(ctx, '#0b0f17', -3, -9, 6, 4); R(ctx, '#5a3a22', -2, -8, 4, 2); R(ctx, '#d9b44a', -6, -1, 2, 2); R(ctx, '#d9b44a', 4, -1, 2, 2);
+    ctx.restore();
+  }
+  function drawPackage(ctx, x, y) {
+    ctx.save(); ctx.translate(Math.round(x), Math.round(y));
+    R(ctx, '#05080f55', -8, 7, 18, 3); R(ctx, '#0b0f17', -9, -8, 18, 16);
+    R(ctx, '#b88a55', -8, -7, 16, 14); R(ctx, '#d1a56c', -8, -7, 16, 3); R(ctx, '#8f6a3f', -8, 4, 16, 3);
+    R(ctx, '#e2dccb', -1, -7, 2, 14); R(ctx, '#e2dccb', -8, -1, 16, 2); R(ctx, '#c0473f', 3, 2, 4, 3);
+    ctx.restore();
+  }
+  function drawGate(ctx, x, y, n, t) {
+    ctx.save(); ctx.translate(Math.round(x), Math.round(y));
+    for (const sx of [-58, 52]) { R(ctx, '#0b0f17', sx - 1, -34, 8, 40); R(ctx, '#d9dee6', sx, -33, 6, 38); R(ctx, '#9aa3ad', sx + 4, -33, 2, 38); }
+    R(ctx, '#0b0f17', -59, -46, 118, 15);
+    for (let i = 0; i < 29; i++) R(ctx, (i + Math.floor(t * 4)) % 2 ? '#f2f4f7' : '#111419', -58 + i * 4, -45, 4, 6), R(ctx, (i + Math.floor(t * 4)) % 2 ? '#111419' : '#f2f4f7', -58 + i * 4, -39, 4, 6);
+    R(ctx, '#0b0f17', -10, -58, 20, 13); R(ctx, '#4fe3ff', -9, -57, 18, 11);
+    ctx.fillStyle = '#04141a'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(n), 0, -51);
     ctx.restore();
   }
   const E = root.NightshiftEncounters;
