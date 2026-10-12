@@ -22,3 +22,10 @@ body[data-control-size="compact"] #nub{width:44px;height:44px}
 @media(max-height:500px){#map{display:none}#hud{max-width:220px;font-size:10px}#actions{bottom:calc(var(--control-bottom) + 117px)}#pad,#aimPad{width:100px;height:100px}#actions.expanded{inset:12px 130px 12px;max-height:none;max-width:360px}body[data-control-hand="left"] #actions.expanded{inset:12px 130px 12px}#jobPanel{top:90px!important}body[data-wanted="true"] #crimeStatus{top:63px!important}body[data-control-hints="true"] #help{display:none}}
 
 #aimPad[data-firing="true"]{border-color:#f0c18b99;background:#66513b55}#aimPad[data-firing="true"] #aimNub{background:#efc591aa}
+
+/* Restrained glass panels and rounded controls for the illustrated city pass. */
+#hud,#map{background:linear-gradient(135deg,#102330e8,#172b36c9);border:1px solid #a2c4bb44;border-radius:12px;box-shadow:0 6px 24px #07101b44;color:#eef2df;letter-spacing:.15px}
+#actions>button{border-radius:13px!important;background:linear-gradient(160deg,#354e58ee,#19323de8);box-shadow:0 3px 10px #07101b44;color:#e8efdc}
+#actions.expanded{background:linear-gradient(140deg,#1c3544f7,#101e2ef5);border-color:#9bb7ac66;border-radius:18px}
+#toast{max-width:calc(100vw - 32px);border:1px solid #b9cbbc44;background:#152b39ed;box-shadow:0 10px 36px #06132166;font-size:13px;line-height:1.45}
+#nub,#aimNub{box-shadow:inset 0 2px 5px #dbe7de44,0 3px 12px #04122244}

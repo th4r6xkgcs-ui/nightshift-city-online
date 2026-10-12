@@ -1,18 +1,21 @@
-# Current project state — v0.53
+# Current project state — v0.54
 
-Canonical combined client: `codex/city-reactions-v53`, based on v0.52. Dependency-free Canvas/localStorage, mobile-first, separate from Nightshift Garage. Private static preview includes exact Claude RPG rpg-core 8b6c4c3 modules; no multiplayer backend is deployed in this preview.
+Canonical combined client: `codex/visual-overhaul-v54`, based on v0.52. Dependency-free Canvas/localStorage, mobile-first, separate from Nightshift Garage. Private static preview includes exact Claude RPG rpg-core 8b6c4c3 modules; no multiplayer backend is deployed in this preview.
 
 Latest batch adds Claude respect/fishing/Hustle/lab/weapon-mod systems, saved contact familiarity, a 24-event journal and crash loyalty consequences. Detailed contracts: CLIENT_HANDOFF_V53.md.
 
 Current gameplay includes gang membership/custom founding, local corner influence, bounded recruits and passive physical followers, loyalty/escort jobs, noncombat rival pressure, premium street customers, existing production/dealer economy and RPG progression. Ordinary walking/driving/combat/police/courier/interiors continue to work.
 
-Checks: 88 suites plus root syntax; 86 static assets. Ten simulated minute crew soak and physical escort completion pass. Customer transactions share existing inventory, market demand and sales ledger. Atlas overflow avoids repeated canvas rebuilding at the eight-atlas cap.
+Checks: 89 suites plus root syntax; 87 static assets. Ten simulated minute crew soak and physical escort completion pass. Customer transactions share existing inventory, market demand and sales ledger. Atlas overflow avoids repeated canvas rebuilding at the eight-atlas cap.
 
 Transport: followers board nearby stopped vehicles, with safe exits and on-foot resumption. See CLIENT_HANDOFF_V52.md.
 
 Limits: physical iPhone, real DOM/audio and extended balance QA pending; companions/rival envoys are passive, vehicle seating is transient across reloads; authored customers are static; claims represent local corners, not whole district capture. Claude owns RPG/backend work. New phases should start from this combined top and reserve files through PR #3.
 
 Read CLIENT_HANDOFF_V51.md / CLIENT_HANDOFF_V50_1.md / CLIENT_HANDOFF_V50.md. Detailed older state is preserved below as history.
+
+
+Current art pass: high-density Canvas rendering (2× DPR, four-million-pixel budget), smoother sprite sampling, vehicle paint/glass highlights, clothing shading, rooftop glass, storefront planters/signs and restrained mobile HUD finishes. See CLIENT_HANDOFF_V54.md. Further recruitment/follower/gang-management expansion is deferred until multiplayer. Existing crew saves and gameplay remain intact. Imported Claude RPG snapshot remains 8b6c4c3; newer refs 8495bd7 / 24d1749 were observed but are not integrated.
 
 ## Historical state (superseded)
 
