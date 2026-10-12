@@ -118,6 +118,7 @@
         ['🏠', 'Home upgrades', 'Use the LAPTOP in your apartment for perks.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
       ]],
       ['🎲 HAVE FUN', [
+        ['👕', 'Style studio', 'Spin your character, zoom in, try on anything for free. Buy at a 👕 BOUTIQUE (outside CLOTHING stores), change at home or Phone → STYLE. Save up to 5 outfits.', 'OPEN', open2(() => R.NightshiftWardrobe.open('home'))],
         ['🎰', 'Casino', 'Slots, roulette and blackjack at the Lucky 7.', 'GPS', () => gps(R.NightshiftCasino?.door?.(), 'Lucky 7 Casino')],
         ['🏁', 'Street races', 'Drive into a 🏁 ring and stop. Win medals.', 'GPS', () => gps(nearest(R.NightshiftRaces?.starts?.()), 'Race start')],
         ['🥊', 'Fight club', 'In the gym: STRIKE on green, BLOCK on red, wait on yellow.', 'GPS', () => gps(nearest(ven.filter((v) => v.kind === 'gym')), 'Fight club')],
