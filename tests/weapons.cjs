@@ -18,7 +18,10 @@ assert.ok(W.WEAPONS.length >= 15, 'a real arsenal');
 for (const cls of ['crude', 'pistol', 'smg', 'shotgun', 'rifle']) assert.ok(W.WEAPONS.some((w) => w.cls === cls), cls);
 const pipe = W.BY_ID.pipe;
 assert.ok(pipe.dur <= 12 && pipe.mag === 1 && pipe.level === 1 && pipe.tier === 0, 'the first gun is a cheap pipe pistol that breaks after a few shots');
-assert.equal(W.dps(W.BY_ID.ar), Math.max(...W.WEAPONS.map(W.dps)), 'the top-tier gun has the highest firepower');
+assert.equal(W.dps(W.BY_ID.ar), Math.max(...W.WEAPONS.filter((w) => !w.legend).map(W.dps)), 'the top-tier regular gun has the highest firepower');
+assert.equal(W.dps(W.BY_ID.tiger), Math.max(...W.WEAPONS.map(W.dps)), 'the rarest legendary tops everything');
+assert.ok(W.LEGENDS.length === 5 && W.LEGENDS.every((id) => W.BY_ID[id].value > W.BY_ID.ar.value), 'legendaries are worth the most');
+{ const st = W.clean({ owned: ['whisper'] }); assert.deepEqual(st.learned, ['whisper'], 'owning a legendary means you learned it'); assert.ok(W.craftBlock(W.clean({}), 'reaper', { bench: 3, shooting: 50, have: () => true }).includes('blueprint')); assert.equal(W.rollBlueprint({ learned: W.LEGENDS.slice() }, () => 0, 1), null, 'nothing left to find'); assert.ok(W.effective(W.BY_ID.whisper).suppressed); }
 // Real guns are worth more than their parts at the parts counter (so gun-running pays), and margins grow with tier.
 const partsCost = (w) => Object.entries(w.craft.mats).reduce((t, [k, n]) => t + S.MATERIALS[k].price * n, 0);
 let lastMargin = -Infinity;

@@ -13,10 +13,12 @@
     { id: 'bi-pg-5', type: 'house', where: '19 Grove Ln, Palm Grove', zone: 'suburbs' }, { id: 'bi-pg-6', type: 'house', where: '25 Grove Ln, Palm Grove', zone: 'suburbs' },
     { id: 'bi-wh-west', type: 'warehouse', where: 'Westside warehouse, back door', zone: 'city' }, { id: 'bi-wh-docks', type: 'warehouse', where: 'Dockside warehouse, back door', zone: 'city' },
     { id: 'bi-pg-mansion', type: 'mansion', where: 'The Halvorsen Estate, Palm Grove', zone: 'suburbs' },
+    { id: 'bi-stash-south', type: 'stash', where: 'Southside trap house', zone: 'city' }, { id: 'bi-stash-east', type: 'stash', where: 'Eastside trap house', zone: 'city' },
   ];
   const TIER = {
     house: { pay: [1500, 2600], guards: 1, hp: 60, rank: 0 },
     warehouse: { pay: [3200, 5200], guards: 2, hp: 80, rank: 1 },
+    stash: { pay: [2800, 4600], guards: 1, hp: 80, rank: 1 },
     mansion: { pay: [7000, 12000], guards: 3, hp: 110, rank: 2 },
   };
   const MARKS = [

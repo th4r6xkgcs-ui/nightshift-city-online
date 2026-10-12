@@ -77,11 +77,11 @@
   const btn = (cls, txt, fn, dis) => { const x = el('button', { className: cls, type: 'button', disabled: !!dis }, txt); x.onclick = fn; return x; };
   const mins = (ms) => { const m = Math.max(0, Math.ceil(ms / 60000)); return m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m} min`; };
   const where = (c) => c.loc.zone === 'suburbs' ? `${c.loc.where} · 🚌 bus to Palm Grove` : `${c.loc.where} · city`;
-  const typeName = { house: 'House', warehouse: 'Warehouse', mansion: 'Estate' };
+  const typeName = { house: 'House', warehouse: 'Warehouse', mansion: 'Estate', stash: 'Trap house' };
 
   function gps(c) {
     try {
-      if (c.loc.zone === 'city') { const w = root.NightshiftBreakin?.WAREHOUSES?.find((q) => q.id === c.loc.id); if (w) { root.NightshiftMap?.navigate?.({ x: w.x, y: w.y, label: `🎯 ${c.name}` }); say(`📍 GPS set · ${w.name} back door`); } }
+      if (c.loc.zone === 'city') { const w = [...(root.NightshiftBreakin?.WAREHOUSES || []), ...(root.NightshiftBreakin?.STASHES || [])].find((q) => q.id === c.loc.id); if (w) { root.NightshiftMap?.navigate?.({ x: w.x, y: w.y, label: `🎯 ${c.name}` }); say(`📍 GPS set · ${w.name} back door`); } }
       else { const st = root.NightshiftZones?.CITY_STOPS?.[0]; if (st) { root.NightshiftMap?.navigate?.({ x: st.x, y: st.y, label: '🚌 Bus to Palm Grove' }); say('📍 GPS set · Midtown bus stop → ride to Palm Grove. The house has a gold 🎯 sign.'); } }
     } catch { /* optional */ }
   }
@@ -133,6 +133,7 @@
       p.cash += r.paid;
       try { root.NightshiftSkills?.gain('shooting', 120, 'contract'); root.NightshiftSkills?.gain('stealth', r.silent ? 160 : 60, 'contract'); root.NightshiftAudio?.play('cash'); } catch { /* optional */ }
       say(`🎯 Contract complete · ${c.name} · +${money(r.paid)}${r.silent ? ' · 🤫 silent +50%' : ''}${r.clean ? ' · 🧼 clean +25%' : ''}${r.rankUp ? ` · ⬆️ RANK: ${r.rankUp.toUpperCase()}` : ''}`);
+      try { const rk = D.rankOf(state.done).index; root.NightshiftWeapons?.blueprintDrop?.((0.08 + rk * 0.06) * (r.silent ? 1.6 : 1), 'a bonus from the Broker'); } catch { /* optional */ }
       try { root.NightshiftLife?.text?.('broker', r.rankUp ? `Word gets around. You're a ${r.rankUp} now. Bigger names will come your way.` : r.silent ? 'Nobody heard a thing. That\'s why I call you.' : 'Done is done. Next time, quieter.'); } catch { /* optional */ }
     } else if (r.failed) {
       say(`🎯 Contract failed · ${r.reason || (result?.died ? 'you went down' : 'the mark walked')}`);

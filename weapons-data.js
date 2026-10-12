@@ -43,7 +43,30 @@
       craft: C({ frame: 2, barrel: 2, trigger: 1, bolt: 1, lens: 2, metal: 10 }, 55), desc: 'Pinpoint and long range. One hit, one down.' },
     { id: 'ar', name: 'Ridgeback AR', icon: '⚡', cls: 'rifle', tier: 3, level: 13, dmg: 22, pellets: 1, rate: 115, mag: 30, spread: 0.045, range: 650, speed: 13, dur: 1200, value: 7500,
       craft: C({ frame: 3, barrel: 2, trigger: 2, bolt: 2, spring: 5, metal: 14 }, 70), desc: 'Top-tier all-rounder: fast, accurate, hard-hitting.' },
+    // ---- Legendary: craftable only once you've found the BLUEPRINT (safes, gun lockers, stash-house vaults, the Broker). ----
+    { id: 'goldhawk', name: 'Gilded Hawk', icon: '👑', cls: 'pistol', tier: 2, level: 8, legend: true, dmg: 66, pellets: 1, rate: 470, mag: 8, spread: 0.015, range: 650, speed: 14, dur: 1000, value: 9500,
+      craft: C({ frame: 1, barrel: 2, trigger: 1, spring: 3, metal: 12, jewels: 3 }, 60), desc: 'A hand cannon plated in melted-down jewellery. Hits like a truck, never jams.' },
+    { id: 'whisper', name: 'Whisper SMG', icon: '🤫', cls: 'smg', tier: 2, level: 7, legend: true, silent: true, dmg: 15, pellets: 1, rate: 80, mag: 30, spread: 0.07, range: 400, speed: 12, dur: 1100, value: 8000,
+      craft: C({ frame: 2, barrel: 1, trigger: 1, bolt: 1, spring: 4, metal: 8, pipe: 2, tape: 4 }, 60), desc: 'Integrally suppressed. Barely a cough per shot: built for break-ins and contracts.' },
+    { id: 'dragon', name: 'Dragonbreath 12', icon: '🐉', cls: 'shotgun', tier: 3, level: 10, legend: true, dmg: 13, pellets: 8, rate: 620, mag: 8, spread: 0.3, range: 250, speed: 11, dur: 1000, value: 11000,
+      craft: C({ frame: 2, barrel: 2, trigger: 1, bolt: 1, spring: 5, metal: 12, chem: 4 }, 75), desc: 'Semi-auto, eight hot pellets a shell. Rooms empty themselves.' },
+    { id: 'reaper', name: 'Reaper .50', icon: '💀', cls: 'rifle', tier: 3, level: 12, legend: true, dmg: 150, pellets: 1, rate: 1350, mag: 5, spread: 0.002, range: 1150, speed: 16, dur: 800, value: 14000,
+      craft: C({ frame: 2, barrel: 3, trigger: 1, bolt: 2, lens: 3, metal: 16 }, 90), desc: 'Anti-materiel rifle. Anything it hits stays down.' },
+    { id: 'tiger', name: 'Tigerstripe AR', icon: '🐯', cls: 'rifle', tier: 3, level: 15, legend: true, dmg: 26, pellets: 1, rate: 100, mag: 30, spread: 0.035, range: 700, speed: 14, dur: 2000, value: 18000,
+      craft: C({ frame: 3, barrel: 2, trigger: 2, bolt: 2, spring: 6, metal: 16, gadgets: 2 }, 100), desc: 'Hand-finished tiger-stripe furniture, smart optic, match barrel. The best rifle in the city.' },
   ];
+  const LEGENDS = WEAPONS.filter((w) => w.legend).map((w) => w.id);
+  // Blueprint drops: pick one you haven't learned (rarer guns less often). chance is per roll.
+  const BP_WEIGHT = { whisper: 5, goldhawk: 4, dragon: 3, reaper: 2, tiger: 1 };
+  function rollBlueprint(state, rnd = Math.random, chance = 0.05) {
+    if (!(rnd() < chance)) return null;
+    const left = LEGENDS.filter((id) => !(state.learned || []).includes(id)); if (!left.length) return null;
+    const tot = left.reduce((t, id) => t + (BP_WEIGHT[id] || 1), 0); let x = rnd() * tot;
+    for (const id of left) { if ((x -= BP_WEIGHT[id] || 1) <= 0) return id; }
+    return left[left.length - 1];
+  }
+  function learn(state, id) { if (!BY_LEGEND(id)) return false; if (!state.learned) state.learned = []; if (state.learned.includes(id)) return false; state.learned.push(id); return true; }
+  const BY_LEGEND = (id) => WEAPONS.find((w) => w.id === id && w.legend) || null;
   const BY_ID = Object.fromEntries(WEAPONS.map((w) => [w.id, w]));
   // Shown when you have no working gun (the game blocks firing; see weapons.js pocket sync).
   const NONE = Object.freeze({ id: 'none', name: 'Unarmed', icon: '✊', cls: 'none', tier: 0, level: 1, dmg: 0, pellets: 1, rate: 400, mag: 30, spread: 0, range: 1, speed: 1, dur: 1, value: 0, desc: 'No gun. Craft one at your home workbench.' });
@@ -98,7 +121,7 @@
     if (mods.includes('extmag')) e.mag = Math.min(30, Math.round(w.mag * 1.5));
     if (mods.includes('grip')) e.spread = w.spread * 0.5;
     if (mods.includes('scope')) { e.range = Math.round(w.range * 1.35); e.spread = e.spread * 0.6; }
-    e.suppressed = mods.includes('suppressor');
+    e.suppressed = mods.includes('suppressor') || !!w.silent;
     return e;
   }
   // Max shots for a gun (reinforce +60%; durMul = Crafting skill bonus, 1..1.5).
@@ -131,7 +154,9 @@
     const spare = {};
     for (const [id, n] of Object.entries(raw?.spare || {})) if (okId(id) && Number.isSafeInteger(n) && n > 0) spare[id] = Math.min(SPARE_MAX, n);
     const armor = Number.isFinite(raw?.armor) ? Math.max(0, Math.min(100, raw.armor)) : 0;
-    return { version: 2, owned, equipped, mods, armor, cond, broken, spare, quality };
+    const learned = Array.isArray(raw?.learned) ? [...new Set(raw.learned.filter((id) => BY_ID[id]?.legend))] : [];
+    for (const id of owned) if (BY_ID[id].legend && !learned.includes(id)) learned.push(id);
+    return { version: 2, owned, equipped, mods, armor, cond, broken, spare, quality, learned };
   }
   const usable = (state) => WEAPONS.filter((w) => state.owned.includes(w.id) && !state.broken.includes(w.id)).map((w) => w.id);
   function equip(state, id) { if (!usable(state).includes(id)) return false; state.equipped = id; return true; }
@@ -148,6 +173,7 @@
     const w = BY_ID[id];
     if (!w) return 'Unknown weapon';
     if (w.tier > ctx.bench) return w.tier === 1 && ctx.bench === 0 ? 'Needs your Lockup workshop' : `Needs a level ${w.tier} workshop`;
+    if (w.legend && !(state.learned || []).includes(id)) return 'Needs the blueprint · safes, gun lockers, stash-house vaults, the Broker';
     if (!(ctx.shooting >= w.level)) return `Needs Shooting level ${w.level}`;
     if ((state.spare[id] || 0) >= SPARE_MAX && state.owned.includes(id)) return 'Spare rack is full';
     if (!ctx.have(w.craft.mats)) return 'Missing materials';
@@ -271,7 +297,7 @@
   const dps = (w) => (w.dmg * w.pellets * 1000) / w.rate;
   const costText = (cost) => Object.entries(cost).map(([k, n]) => `${n} ${k}`).join(' + ');
 
-  const api = Object.freeze({ WEAPONS, BY_ID, NONE, PLATE, buildPlate, QUALITY, rollQuality, qOf, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, maxDur, clean, usable, equip, cycle,
+  const api = Object.freeze({ WEAPONS, BY_ID, NONE, LEGENDS, BP_WEIGHT, rollBlueprint, learn, PLATE, buildPlate, QUALITY, rollQuality, qOf, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, maxDur, clean, usable, equip, cycle,
     craftBlock, craft, modBlock, craftMod, wear, repairCost, repair, usedValue, sell, pelletAngles, fitMagazine, dps, costText });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftWeaponsData = api;

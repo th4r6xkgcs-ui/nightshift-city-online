@@ -440,3 +440,33 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
     - Crafting a better copy of a gun you hold swaps it in, and the old one becomes a spare. Spares are always Standard.
     - Saved in `state.quality`.
   - **UI:** a new-gun reveal card shows the quality, and gun and material icons get an automatic outline/rim/shade pass.
+
+## Beyond the city: zones, countryside, suburbs, break-ins, hitman, cars (owner: "suburbs, rural farming, food buffs, break-ins, hitman, chop shop, car guy, furniture, pets, never be bored")
+All Claude-owned new files. No Codex file was edited except where noted on `claude/art-pass`. Load order is in `online/build-online.cjs` (rpg-play): `zones, food-data, food, farm, breakin-data, breakin, hitman-data, hitman, cars-data, cars, pets-data, pets, suburbs, chop-data, chop, decor-data, dreamhome` after `supply.js`.
+
+- **Zone engine (`zones.js`):** whole extra maps without touching the city.
+  - It rides the apartment hooks: while a zone is active `NightshiftHome.paused()` is true, so `game.js` calls `NightshiftHome.render(now)` and we draw the zone; USE goes through `NightshiftHome.use/interaction`.
+  - Owns movement + collisions, camera (`def.zoom`), a cached ground layer, y-sorted props/actors/player, bullets (yours and enemies'), fog of war with a vision cone, sound "echo" rings, night lighting (lightmap follows the real canvas pixel ratio), USE targets with `NightshiftSign` signs, fade, banner, bus travel.
+  - API: `register(def)`, `enter(id, spawn)`, `leave(to)`, `active()`, `openTravel()`, `api`, `CITY_STOPS`, `addCompanion(fn)` (pets and the hitman sign use it).
+  - Bus stops in the city: Midtown (1262, 958) and West End (420, 612). Fare a few dollars.
+- **Harlow Fields countryside (`farm.js`) + food (`food-data.js`, `food.js`):** lease plots at the co-op, plant, water (+35% speed), harvest into the backpack; hens/cows need feed; windmill makes flour; orchard; hidden leaf field. Cook at the apartment kitchen or the farmhouse; meals give timed buffs via `NightshiftSkills.addModifier`/`xpMultiplier`, or sell at the Diner back door (1600, 948). Save `nightshift-food-v1`.
+- **Break-ins (`breakin-data.js`, `breakin.js`):** generated interiors (spanning-tree rooms + loops), typed furniture, loot containers with search timers, guards with patrol/investigate/alert/search states, dogs, cone vision, hearing (suppressors cut gunshot noise to 80 px), echoes for unseen footsteps/shots, alarm → police timer, HOT BAG (only yours once you walk out the back door), cooldown per place. Unaware targets take 2.5× damage; a one-shot takedown nobody sees doesn't trip the alarm by itself. Entry: six Palm Grove houses + the Halvorsen Estate, and two city warehouse back doors (nights). Save `nightshift-breakin-v1`.
+- **Hitman career (`hitman-data.js`, `hitman.js`) — NEW this batch:**
+  - The Broker (phone contact `broker`) texts after your first break-in. 📱 → 🎯 CONTRACTS shows three offers per 20-minute window, each with a pixel dossier portrait.
+  - A contract places the mark (+ bodyguards) in that break-in location (`NightshiftBreakinData.addMark`: the room furthest from the back door). Gold ▼ over the mark when visible. Kill them, walk out: pay × (1 + 0.5 silent + 0.25 clean). Alarm long enough → the mark flees for the back door; if they get out the contract fails. Contract locations ignore the place cooldown, warehouses open at any hour.
+  - Ranks Rookie → Cleaner (3) → Professional (8) → Specialist (15) → Silent Assassin (25): pay ×1.15 per rank, warehouses at Cleaner, the Estate at Professional. Save `nightshift-hitman-v1`. Goals `hit1`, `silent3`.
+- **Palm Grove suburbs (`suburbs.js`):** houses, gated mansion, Golden Pawn (fences jewels/gadgets/art), Paws & Claws (pets), Prestige Motors (showroom + body kits), park, dream house for sale.
+- **Pets + kits (`pets-data.js`, `pets.js`):** pets follow you everywhere (city + zones), perks while fed, dogs sniff stashes. Prestige kits = stat multipliers + visual parts on your car.
+- **Dream house (`decor-data.js`, `dreamhome.js`):** four rooms, 15 decor slots, Style tiers (+2% sale prices per tier), four-car garage with your cars and kits, pets roam, bed gives "Well rested".
+- **Rusty's chop shop (`chop-data.js`, `chop.js`):** steal a car, drive into the bay behind the scrapyard: CHOP (cash, hot list ×2), STRIP (parts), RE-VIN (keep it). Lift takes 3 cars / 15 min.
+- **Car collection (`cars-data.js`, `cars.js`) — NEW this batch:**
+  - Ten fictional models: Brick Hatch $5.2k, Mule Pickup, Ridgeback 4x4, Bulldog V8, Kestrel Rally, Monarch '62, Velvet Lowrider, Aurora GT, Vortex R $145k, Phantom Zero $290k. Each has its own accel/top speed/steer/armor and paints.
+  - Art: every model is baked once per paint at 4× into an offscreen canvas (body outline + paint + form shading + sheen, glass with reflections, seams, chrome, lights, mirrors, per-body details), drawn smoothly scaled; brake/tail/headlight glow, hypercar LED strips, lowrider idle hop and wear are live.
+  - **Hooks (no Codex edits):** `NightshiftSprites.car` wrapper draws any car whose `model` starts with `CX:`; `NightshiftVehicles.handling` wrapper lends the model's stats to `MODELS[0]` for the call (ids `cx-N` resolve to index 0); `damage/hit` divided by armor. Owned cars are pushed into `cars` (ids `cx-<uid>`) and saved by us (`nightshift-cars-v1`), positions synced every 4 s.
+  - Bought at Prestige Motors (Palm Grove) → parked by the Midtown apartment. A rare model is parked in the city every 25 min (Rico texts); steal it → Rusty re-VINs it into the collection (60% of its chop value) or chops it. 📱 → 🚗 MY CARS = garage list (GPS, sell at 55%) + collection book; milestones 3/6/10 different models pay $5k/$20k/$100k. Goals `ride1`, `exotic1`.
+- **Tests:** `tests/hitman.cjs`, `tests/cars.cjs`, plus the existing `breakin`, `chop`, `food`, `pets`, `decor`, `goals` suites.
+
+### Notes for Codex (please read)
+- **v0.54 merged into `claude/rpg-play`.** Conflicts: `game.js` (took your `render-quality.js` resize; we pass `NightshiftRenderScale || devicePixelRatio` as the DPR so `fx.js` can still lower it on slow phones) and `sprite-renderer.js` (kept the art-pass people; your car paint changes merged cleanly).
+- **Panel id clash avoided:** `#hmPanel` is home upgrades; hitman uses `#htPanel`.
+- **Cars you may want to know about:** extra cars live in `cars` with `model: 'CX:<id>'`. If you ever rebuild `cars` or the vehicle save, keep unknown ids alone (we re-add ours on load).
