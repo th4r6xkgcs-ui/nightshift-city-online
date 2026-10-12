@@ -41,7 +41,7 @@
   #nsL{left:max(10px,env(safe-area-inset-left));width:min(228px,48vw)} #nsR{right:max(10px,env(safe-area-inset-right));align-items:flex-end}
   #nsL>*,#nsR>*{pointer-events:auto}
   #nsBars{position:fixed;z-index:24;display:flex;flex-direction:column;gap:6px;pointer-events:none;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:min(440px,calc(100vw - 2 * min(34vw,300px)))}
-  @media (orientation:portrait){#nsBars{bottom:calc(178px + env(safe-area-inset-bottom));width:calc(100vw - 24px)}}
+  @media (orientation:portrait){#nsBars{bottom:calc(262px + env(safe-area-inset-bottom));width:calc(100vw - 24px)}}
   body.ns-menu #nsL,body.ns-menu #nsR,body.ns-menu #nsBars,body.ns-menu #pad,body.ns-menu #aimPad,body.ns-menu #lfRadio{visibility:hidden!important}
   body.ns-panel #actions{visibility:hidden!important}
   /* status card */
@@ -98,7 +98,6 @@
   const dRank = mk('👤', 'Respect rank', () => root.NightshiftRespect?.open?.());
   const dDaily = mk('📅', 'Daily challenges', () => root.NightshiftDailies?.open?.());
   const dPhone = mk('📱', 'Hustle phone', () => root.NightshiftJobs?.open?.());
-  const dMsg = mk('📩', 'Messages', () => root.NightshiftLife?.open?.());
   L.append(status, dock);
   const cap = el('div', { className: 'cap' });
   document.body.append(L, R, BARS);
@@ -145,11 +144,15 @@
     setBadge(dSkills, total ? String(total) : '', 'y');
     const rk = root.NightshiftRespect?.rank?.(); if (rk) { dRank.icon.textContent = rk.icon || '👤'; dRank.b.title = `Respect: ${rk.name}`; }
     const dy = root.NightshiftDailies?.state, done = dy?.claimed?.length || 0; setBadge(dDaily, dy?.day ? `${done}/3` : '', done >= 3 ? 'g' : 'y');
-    const job = root.NightshiftJobs?.active?.(); dPhone.b.classList.toggle('hot', !!job); setBadge(dPhone, job ? '●' : '', '');
-    const unread = root.NightshiftLife?.state?.unread || 0; setBadge(dMsg, unread ? String(unread) : '', '');
+    const job = root.NightshiftJobs?.active?.(), unread = root.NightshiftLife?.state?.unread || 0; dPhone.b.classList.toggle('hot', !!job); setBadge(dPhone, unread ? String(unread) : job ? '●' : '', '');
     const key = `${place}|${armor > 0}`; if (key !== last) last = key;
   }
   function setBadge(d, text, cls) { d.badge.hidden = !text; d.badge.textContent = text; d.badge.className = 'b' + (cls ? ' ' + cls : ''); }
+  // Escape / back closes whichever Claude panel is open (some panels only had a CLOSE button).
+  addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    for (const id of MINE) { const p = $(id); if (p && !p.hidden && getComputedStyle(p).display !== 'none') { const btn = p.querySelector('.close,.x,button[type=button]'); if (btn && /close|leave|✕|×/i.test(btn.textContent)) btn.click(); else p.hidden = true; } }
+  });
   setInterval(render, 120);
   render();
 
