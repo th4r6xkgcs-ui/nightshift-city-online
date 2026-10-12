@@ -147,8 +147,9 @@
     cash.textContent = money(p.cash);
     const H = root.NightshiftHome, indoor = H?.kind?.();
     if (p.car) { const d = root.NightshiftVehicles?.dashboard?.(p.car) || ''; ammo.textContent = `🚗 ${Math.abs((p.car.speed || 0) * 15 | 0)}`; ammo.className = 'ammo'; sub.textContent = d.replace(/^(Speed|Reverse) \d+ · /, ''); }
-    else { const cs = CS(), rl = !!cs?.until; ammo.textContent = rl ? 'RELOADING' : `▮ ${p.ammo ?? 0}/${30} · ${cs?.reserve ?? 0}`; ammo.className = 'ammo' + (rl ? ' rl' : ''); }
-    const env = root.NightshiftEnvironment, place = indoor ? (indoor === 'shop' ? 'CORNER SHOP' : 'YOUR APARTMENT') : env?.district?.(p) || '', clock = env?.clock?.(env.state?.minute ?? 0) || '';
+    else { const cs = CS(), rl = !!cs?.until; ammo.textContent = rl ? 'RELOADING' : `▮ ${p.ammo ?? 0}/${root.NightshiftWeapons?.current?.()?.mag ?? 30} · ${cs?.reserve ?? 0}`; ammo.className = 'ammo' + (rl ? ' rl' : ''); }
+    const zn = root.NightshiftZones?.active?.(), znName = zn ? (root.NightshiftZones.zones()[zn]?.name || '').toUpperCase() : '';
+    const env = root.NightshiftEnvironment, place = zn ? znName : indoor ? (indoor === 'shop' ? 'CORNER SHOP' : 'YOUR APARTMENT') : env?.district?.(p) || '', clock = env?.clock?.(env.state?.minute ?? 0) || '';
     if (!p.car) sub.textContent = `${place} · ${clock}`;
     cap.textContent = `${place} · ${clock}`;
     let ex = ''; try { ex = [root.NightshiftCrewOps?.hud?.(), root.NightshiftRivals?.hud?.()].filter(Boolean).join(' ').replace(/<br>/g, ' · ').replace(/<[^>]*>/g, '').replace(/^ · /, ''); } catch { /* optional */ }
