@@ -23,6 +23,14 @@
     { id: 'lift', room: 'Garage', name: 'Car lift', x: 1130, y: 640 },
   ];
   const SLOT = Object.fromEntries(SLOTS.map((s) => [s.id, s]));
+  // Your Midtown apartment shares the same furniture collection (buy once, place in either home). Room space 640×420.
+  const APT_SLOTS = [
+    { id: 'art', name: 'Wall art', x: 86, y: 30, wall: true }, { id: 'plant', name: 'Plant', x: 380, y: 112 }, { id: 'lamp', name: 'Lighting', x: 282, y: 214 },
+    { id: 'petbed', name: 'Pet bed', x: 252, y: 140 }, { id: 'music', name: 'Music', x: 108, y: 346 }, { id: 'aquarium', name: 'Aquarium', x: 470, y: 334 },
+  ];
+  const APT_SLOT = Object.fromEntries(APT_SLOTS.map((s) => [s.id, s]));
+  const APT_TIERS = [{ name: 'Bare', at: 0 }, { name: 'Lived-in', at: 6 }, { name: 'Cozy', at: 16 }, { name: 'Sharp', at: 30 }];
+  const APT_PER_TIER = 0.01;
   // [id, slot, name, price, style, extra]. The first item of every slot is the free default.
   const RAW = [
     ['sofa-thrift', 'sofa', 'Thrift-store couch', 0, 0], ['sofa-leather', 'sofa', 'Leather sectional', 4000, 8], ['sofa-chesterfield', 'sofa', 'Velvet chesterfield', 9000, 15], ['sofa-cloud', 'sofa', 'Designer cloud sofa', 18000, 25],
@@ -51,9 +59,10 @@
   const SLEEP_COOLDOWN = 10 * 60 * 1000;
 
   function clean(raw) {
-    const s = { version: 1, owned: [], placed: { ...DEFAULTS }, sleptAt: 0 };
+    const s = { version: 1, owned: [], placed: { ...DEFAULTS }, apt: Object.fromEntries(APT_SLOTS.map((a) => [a.id, DEFAULTS[a.id]])), sleptAt: 0 };
     for (const id of Array.isArray(raw?.owned) ? raw.owned : []) if (ITEM[id] && ITEM[id].price + (ITEM[id].loot ? 1 : 0) > 0 && !s.owned.includes(id)) s.owned.push(id);
     for (const [slot, id] of Object.entries(raw?.placed || {})) if (SLOT[slot] && ITEM[id]?.slot === slot && (ITEM[id].price === 0 && !ITEM[id].loot ? true : s.owned.includes(id))) s.placed[slot] = id;
+    for (const [slot, id] of Object.entries(raw?.apt || {})) if (APT_SLOT[slot] && ITEM[id]?.slot === slot && (ITEM[id].price === 0 && !ITEM[id].loot ? true : s.owned.includes(id))) s.apt[slot] = id;
     s.sleptAt = Number.isFinite(raw?.sleptAt) && raw.sleptAt > 0 ? raw.sleptAt : 0;
     return s;
   }
@@ -71,9 +80,21 @@
     if (s.placed[it.slot] === id) return { ok: false, reason: 'Already placed' };
     s.placed[it.slot] = id; return { ok: true, bought: false, item: it };
   }
+  // Same as place() but into the apartment's slots.
+  function placeApt(s, wallet, id, bag) {
+    const it = ITEM[id]; if (!it || !APT_SLOT[it.slot]) return { ok: false, reason: 'That doesn\'t fit in the apartment' };
+    if (!s.apt) s.apt = {};
+    if (s.apt[it.slot] === id && owns(s, id)) return { ok: false, reason: 'Already placed' };
+    let bought = false;
+    if (!owns(s, id)) { const keep = s.placed[it.slot], r = place(s, wallet, id, bag); if (!r.ok) return r; s.placed[it.slot] = keep; bought = true; }
+    s.apt[it.slot] = id; return { ok: true, bought, item: it };
+  }
+  const aptStyle = (s) => Object.values(s.apt || {}).reduce((t, id) => t + (ITEM[id]?.style || 0), 0);
+  function aptTier(s) { const st = aptStyle(s); let i = 0; APT_TIERS.forEach((t, k) => { if (st >= t.at) i = k; }); return { index: i, name: APT_TIERS[i].name, style: st, next: APT_TIERS[i + 1] || null }; }
   const style = (s) => Object.values(s.placed).reduce((t, id) => t + (ITEM[id]?.style || 0), 0);
   function tier(s) { const st = style(s); let i = 0; TIERS.forEach((t, k) => { if (st >= t.at) i = k; }); return { index: i, name: TIERS[i].name, style: st, next: TIERS[i + 1] || null }; }
-  const priceBonus = (s, owned = true) => (owned ? 1 + PER_TIER * tier(s).index : 1);
+  // The better of your two homes sets the deal bonus (dream house +2%/tier, apartment +1%/tier).
+  const priceBonus = (s, owned = true) => Math.max(owned ? 1 + PER_TIER * tier(s).index : 1, 1 + APT_PER_TIER * aptTier(s).index);
   // cars: [{ model, condition }], kits: { carId: kitId }
   function garageScore(s, cars, kits = {}) {
     const deco = ['gfloor', 'gwall', 'lift'].reduce((t, k) => t + (ITEM[s.placed[k]]?.style || 0), 0);
@@ -81,7 +102,7 @@
   }
   function sleep(s, now = Date.now()) { if (now - s.sleptAt < SLEEP_COOLDOWN) return { ok: false, reason: `Not tired yet · ${Math.ceil((SLEEP_COOLDOWN - (now - s.sleptAt)) / 60000)} min` }; s.sleptAt = now; const bedStyle = ITEM[s.placed.bed]?.style || 0; return { ok: true, boost: 1.15 + bedStyle * 0.01, minutes: 10 }; }
 
-  const api = Object.freeze({ SLOTS, SLOT, ITEMS, ITEM, DEFAULTS, TIERS, PER_TIER, KIT_SCORE, MODEL_SCORE, SLEEP_COOLDOWN, clean, owns, place, style, tier, priceBonus, garageScore, sleep });
+  const api = Object.freeze({ APT_SLOTS, APT_SLOT, APT_TIERS, APT_PER_TIER, placeApt, aptStyle, aptTier, SLOTS, SLOT, ITEMS, ITEM, DEFAULTS, TIERS, PER_TIER, KIT_SCORE, MODEL_SCORE, SLEEP_COOLDOWN, clean, owns, place, style, tier, priceBonus, garageScore, sleep });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftDecorData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -325,10 +325,11 @@
       else ITEMART[id]?.(c, 0, it.slot === 'sofa' ? 30 : it.slot === 'lamp' ? 26 : 0, 1); } catch { /* preview optional */ }
     return cv;
   }
-  function openSlot(slotId) {
-    const s = D.SLOT[slotId], p = P(), cur = placed(slotId);
-    head(`${s.room.toUpperCase()} · ${s.name.toUpperCase()}`, `Buy once, swap any time for free. Style ${D.style(state)} · ${D.tier(state).name} · cash ${money(p?.cash || 0)}`);
-    if (slotId === 'bed') {
+  function openSlot(slotId, where = 'dream') {
+    const apt = where === 'apt', s = apt ? { ...D.APT_SLOT[slotId], room: 'Your apartment' } : D.SLOT[slotId], p = P(), cur = apt ? state.apt[slotId] : placed(slotId);
+    const at = D.aptTier(state);
+    head(`${s.room.toUpperCase()} · ${s.name.toUpperCase()}`, apt ? `Your furniture works in both homes: buy once, place anywhere. Apartment style ${at.style} · ${at.name}${at.next ? ` (${at.next.at - at.style} more for ${at.next.name})` : ''} · deals +${Math.round(at.index * D.APT_PER_TIER * 100)}% · cash ${money(p?.cash || 0)}` : `Buy once, swap any time for free. Style ${D.style(state)} · ${D.tier(state).name} · cash ${money(p?.cash || 0)}`);
+    if (slotId === 'bed' && !apt) {
       const left = Math.max(0, D.SLEEP_COOLDOWN - (Date.now() - state.sleptAt));
       pnl.append(el('div', { style: 'display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:linear-gradient(90deg,#7c6ad822,#ffffff05);border:1px solid #7c6ad855;margin:6px 0' }, ''));
       const r = pnl.lastChild; r.append(el('div', { style: 'font-size:26px' }, '😴')); const tt = el('div', { style: 'flex:1' }); tt.append(el('b', { style: 'font:800 13px var(--disp,system-ui)' }, 'SLEEP'), el('div', { style: 'color:#a9b8ca;font-size:11px' }, `Full health and a "Well rested" XP boost for 10 min. Nicer beds give a bigger boost.${left ? ` · ready in ${Math.ceil(left / 60000)} min` : ''}`)); r.append(tt, btn('go', 'SLEEP', () => {
@@ -343,11 +344,11 @@
       if (on) r.append(el('span', { className: 'okc' }, 'PLACED'));
       else r.append(btn(has ? 'alt' : 'go', has ? 'PLACE' : it.price ? money(it.price) : 'FREE', () => {
         const bag = { has: (c) => { const b = root.NightshiftSupply?.state?.bag || {}; return Object.entries(c).every(([k, n]) => (b[k] || 0) >= n); }, take: (c) => root.NightshiftSupply?.take?.(c) };
-        const before = D.tier(state).index, res = D.place(state, P(), it.id, bag); if (!res.ok) { say(res.reason); return; }
-        persist(); gameSave(); const after = D.tier(state);
-        say(after.index > before ? `🏡 Your place is now ${after.name.toUpperCase()}! Clients pay +${Math.round(after.index * D.PER_TIER * 100)}% when you deal` : `✦ ${it.name} ${res.bought ? 'bought and ' : ''}placed`);
+        const tierOf = () => (apt ? D.aptTier(state) : D.tier(state)), before = tierOf().index, res = apt ? D.placeApt(state, P(), it.id, bag) : D.place(state, P(), it.id, bag); if (!res.ok) { say(res.reason); return; }
+        persist(); gameSave(); const after = tierOf();
+        say(after.index > before ? `🏠 Your ${apt ? 'apartment' : 'place'} is now ${after.name.toUpperCase()}! Clients pay +${Math.round(after.index * (apt ? D.APT_PER_TIER : D.PER_TIER) * 100)}% when you deal` : `✦ ${it.name} ${res.bought ? 'bought and ' : ''}placed`);
         try { if (res.bought) root.NightshiftSkills?.gain('charisma', Math.max(5, Math.round(it.style * 3)), 'decor'); } catch { /* optional */ }
-        openSlot(slotId);
+        openSlot(slotId, where);
       }, !has && ((p?.cash || 0) < it.price)));
       pnl.append(r);
     }
@@ -374,5 +375,36 @@
     pnl.append(el('div', { className: 'sub', style: 'margin-top:8px' }, 'Garage decor: floor, wall and lift slots — walk up to them and press DECOR.'));
   }
 
-  root.NightshiftDreamHome = Object.freeze({ get state() { return state; }, openStyle, openSlot, openGarage });
+  // ---------------- the Midtown apartment: same furniture, six slots (room space 640×420) ----------------
+  const UP = () => root.NightshiftHomeUpgrades;
+  const inApt = () => { try { return root.NightshiftHome?.paused?.() && root.NightshiftHome?.kind?.() === 'home' && !root.NightshiftZones?.active?.(); } catch { return false; } };
+  function drawApt(ctx) {
+    const t = performance.now() / 1000, pos = UP()?.roomPos?.();
+    for (const s of D.APT_SLOTS) {
+      const id = state.apt?.[s.id], art = ITEMART[id];
+      if (art) { ctx.save(); try { art(ctx, s.x, s.y, t); } catch { /* cosmetic */ } ctx.restore(); }
+      // "decorate me" sparkle on empty slots when you're near
+      if ((!id || D.ITEM[id].price === 0) && pos && Math.hypot(pos.x - s.x, pos.y - s.y) < 150) { ctx.save(); ctx.globalAlpha = 0.35 + 0.35 * Math.sin(t * 3 + s.x); ctx.fillStyle = '#ffe9a8'; ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'center'; ctx.fillText('✦', s.x, s.y - 4); ctx.restore(); }
+    }
+  }
+  function aptTargets() { return D.APT_SLOTS.map((s) => ({ kind: 'decor', slot: s.id, x: s.x, y: s.y, action: 'DECOR', label: `${s.name} · ${D.ITEM[state.apt?.[s.id]]?.name || 'empty'}` })); }
+  function installApt() {
+    const I = root.NightshiftInteriors, HM = root.NightshiftHome;
+    if (I && !I.__decor && typeof I.draw === 'function') { const draw = I.draw; I.draw = function (kind, ctx) { const r = draw.apply(this, arguments); if (kind === 'home') { try { if (ctx) drawApt(ctx); } catch { /* cosmetic */ } } return r; }; I.__decor = true; }
+    if (HM && !HM.__decor && typeof HM.interaction === 'function' && typeof HM.use === 'function') {
+      const interaction = HM.interaction, use = HM.use;
+      HM.interaction = function () {
+        const t = interaction.apply(this, arguments), pos = UP()?.roomPos?.(); if (!pos || !inApt()) return t;
+        const d = (o) => Math.hypot(pos.x - o.x, pos.y - o.y); let best = null;
+        for (const m of aptTargets()) if (d(m) < 44 && (!best || d(m) < d(best))) best = m;
+        if (!best) return t; if (t && Number.isFinite(t.x) && d(t) <= d(best)) return t; return best;
+      };
+      HM.use = function () { const t = inApt() ? HM.interaction() : null; if (t?.kind === 'decor') { openSlot(t.slot, 'apt'); return true; } return use.apply(this, arguments); };
+      HM.__decor = true;
+    }
+    return !!(root.NightshiftInteriors?.__decor && root.NightshiftHome?.__decor);
+  }
+  const aptRetry = setInterval(() => { if (installApt()) clearInterval(aptRetry); }, 700);
+
+  root.NightshiftDreamHome = Object.freeze({ aptTargets, get state() { return state; }, openStyle, openSlot, openGarage });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
