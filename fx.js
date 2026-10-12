@@ -146,8 +146,40 @@
       ctx.fillStyle = g2; ctx.beginPath(); ctx.ellipse(c.x, c.y, c.r * 1.4, c.r, 0.3, 0, Math.PI * 2); ctx.fill();
     }
   }
+
+  // ---- police cruisers: when officers respond, a cruiser with a flashing light bar pulls up nearby ----
+  const cruisers = [], seenCops = new WeakSet();
+  const ROADX = [440, 880, 1320, 1760], ROADY = [340, 680, 1020, 1360];
+  function roadSpot(o) {
+    const nx = ROADX.reduce((a, b) => (Math.abs(b - o.x) < Math.abs(a - o.x) ? b : a)), ny = ROADY.reduce((a, b) => (Math.abs(b - o.y) < Math.abs(a - o.y) ? b : a));
+    return Math.abs(nx - o.x) < Math.abs(ny - o.y) ? { x: nx + 22, y: o.y, angle: Math.PI / 2 } : { x: o.x, y: ny + 22, angle: 0 };
+  }
+  setInterval(() => {
+    const cops = root.NightshiftCrime?.officers || [], p = P(), now = performance.now();
+    for (const o of cops) if (o && !seenCops.has(o)) { seenCops.add(o); if (Number.isFinite(o.x)) { const r = roadSpot(o); cruisers.push({ ...r, t: now }); } }
+    for (let i = cruisers.length - 1; i >= 0; i--) { const c = cruisers[i]; if ((p && (p.heat || 0) < 0.05 && now - c.t > 15000) || now - c.t > 120000) cruisers.splice(i, 1); }
+    if (cruisers.length > 6) cruisers.splice(0, cruisers.length - 6);
+  }, 500);
+  function drawCruisers(ctx, t) {
+    for (const c of cruisers) {
+      try { root.NightshiftSprites?.car?.({ x: c.x, y: c.y, angle: c.angle, color: '#e9edf3', speed: 0, model: 'SEDAN', condition: 100 }); } catch { /* sprite optional */ }
+      ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.angle);
+      ctx.fillStyle = '#10151d'; ctx.fillRect(-20, -14, 10, 28); ctx.fillRect(12, -14, 8, 28); // black doors/hood band
+      const on = Math.floor(t * 6) % 2;
+      ctx.fillStyle = '#05080f'; ctx.fillRect(-3, -9, 6, 18);
+      ctx.fillStyle = on ? '#ff3b4e' : '#5a1820'; ctx.fillRect(-2, -8, 4, 7);
+      ctx.fillStyle = on ? '#2a3550' : '#3b7bff'; ctx.fillRect(-2, 1, 4, 7);
+      ctx.restore();
+      ctx.save(); ctx.globalCompositeOperation = 'lighter';
+      const gl = (col, a) => { const g2 = ctx.createRadialGradient?.(c.x, c.y, 0, c.x, c.y, 70); if (!g2) return; g2.addColorStop(0, col.replace('A', a)); g2.addColorStop(1, col.replace('A', 0)); ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(c.x, c.y, 70, 0, Math.PI * 2); ctx.fill(); };
+      gl(on ? 'rgba(255,50,70,A)' : 'rgba(60,110,255,A)', 0.28);
+      ctx.restore();
+    }
+  }
   function drawGround() {
-    const ctx = G(); if (!ctx || !marks.length) return;
+    const ctx = G(); if (!ctx) return;
+    if (cruisers.length) try { drawCruisers(ctx, performance.now() / 1000); } catch { /* cosmetic */ }
+    if (!marks.length) return;
     const now = performance.now();
     ctx.save(); ctx.lineWidth = 3; ctx.lineCap = 'round';
     for (let i = marks.length - 1; i >= 0; i--) {
