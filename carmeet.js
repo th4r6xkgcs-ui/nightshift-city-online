@@ -31,8 +31,8 @@
   const C = (c, col, x, y, r) => { c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); };
   const { RING } = D;
   // Where tonight's rivals park (around the court), and the crowd.
-  const SPOTS = [[78, 448, 0.35], [376, 448, Math.PI - 0.35], [78, 578, -0.35], [376, 578, Math.PI + 0.35], [228, 612, Math.PI]];
-  const CROWD = [[150, 470], [140, 520], [152, 572], [306, 470], [316, 520], [304, 572], [196, 446], [262, 446], [176, 600], [282, 600], [120, 610], [338, 612]];
+  const SPOTS = [[84, 448, 0.35], [318, 446, Math.PI - 0.35], [84, 580, -0.35], [318, 582, Math.PI + 0.35], [228, 606, Math.PI]];
+  const CROWD = [[150, 470], [140, 520], [152, 572], [282, 474], [292, 520], [282, 566], [196, 446], [262, 446], [176, 600], [282, 600], [140, 610], [300, 612]];
   const UNDERGLOW = ['#3ad0ff', '#ff4ad8', '#7cdeb5', '#ffb33a', '#9a5aff'];
 
   function myCar() { const p = P(), c = p?.car; return c && c.owned ? c : null; }
@@ -108,8 +108,8 @@
     c.save(); c.font = '800 11px "Chakra Petch",system-ui'; c.textAlign = 'center'; c.fillStyle = live ? '#ffd970' : '#9fb3c8'; c.fillText(live ? 'NIGHT MEET · LIVE' : 'NIGHT MEET · 21:00–03:00', RING.x, RING.y - RING.r - 71); c.restore();
     if (!live) return;
     // string lights across the court
-    c.save(); c.strokeStyle = '#2a2e33'; c.lineWidth = 1; c.beginPath(); c.moveTo(60, 400); c.quadraticCurveTo(228, 428, 396, 400); c.moveTo(60, 632); c.quadraticCurveTo(228, 652, 396, 632); c.stroke(); c.restore();
-    for (let k = 0; k <= 14; k++) { const u = k / 14; for (const [y0, y1] of [[400, 428], [632, 652]]) { const x = 60 + 336 * u, y = (1 - u) * (1 - u) * y0 + 2 * u * (1 - u) * y1 + u * u * y0; C(c, ['#ffd970', '#ff4ad8', '#3ad0ff'][k % 3], x, y + 2, 2); } }
+    c.save(); c.strokeStyle = '#2a2e33'; c.lineWidth = 1; c.beginPath(); c.moveTo(50, 404); c.quadraticCurveTo(196, 430, 342, 404); c.moveTo(50, 628); c.quadraticCurveTo(196, 648, 342, 628); c.stroke(); c.restore();
+    for (let k = 0; k <= 14; k++) { const u = k / 14; for (const [y0, y1] of [[404, 430], [628, 648]]) { const x = 50 + 292 * u, y = (1 - u) * (1 - u) * y0 + 2 * u * (1 - u) * y1 + u * u * y0; C(c, ['#ffd970', '#ff4ad8', '#3ad0ff'][k % 3], x, y + 2, 2); } }
     // rival cars with underglow
     const field = D.rivals(key());
     field.forEach((rv, i) => {
