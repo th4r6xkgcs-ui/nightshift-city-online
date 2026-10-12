@@ -244,7 +244,8 @@
   #glPanel .g.done{opacity:.55} #glPanel .g.cur{border-color:#ffd970} #glPanel .g .i{font-size:15px;width:20px;text-align:center}
   #glPanel .g .b{flex:1;min-width:0} #glPanel .g .h{font-size:11px;color:#b9c8da} #glPanel .g .r{font-size:11px;color:#7cdeb5;white-space:nowrap}
   #glPanel .close{all:unset;box-sizing:border-box;cursor:pointer;position:sticky;top:0;float:right;font:700 13px ui-monospace,Menlo,monospace;background:#2c4c7c;color:#fff;border:1px solid #6f8db3;border-radius:8px;padding:6px 10px}
-  @media (max-height:430px){#glCard .h{display:none}}`;
+  @media (max-height:430px){#glCard .h{display:none}}
+  #glCard:not(.fresh) .h{display:none}`;
   document.head.appendChild(css);
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const card = el('button', { id: 'glCard', type: 'button', ariaLabel: 'Next goal' });
@@ -266,12 +267,14 @@
   const skillName = (k) => root.NightshiftSkillsData?.SKILLS.find((s) => s.id === k)?.name || k;
   const rewardText = (r = {}) => [r.cash ? `$${r.cash.toLocaleString()}` : '', ...Object.keys(r.xp || {}).map((k) => `${skillName(k)} XP`)].filter(Boolean).join(' + ');
   const fmt = (n) => (n >= 10000 ? Math.round(n / 1000) + 'k' : String(n));
-  let lastKey = '';
+  let lastKey = '', hintGoal = '', hintUntil = 0;
   function render() {
     const ctx = snapshot();
     const n = next(state, ctx);
     const tt = trackTarget(), dist = tt ? Math.round(tt.dist / 10) : -1;
     const key = n ? `${n.goal.id}|${n.cur}|${tt?.goal.id}|${dist >= 0 ? Math.round(dist / 5) : -1}` : 'all';
+    if (n && n.goal.id !== hintGoal) { hintGoal = n.goal.id; hintUntil = performance.now() + 15000; }
+    card.classList.toggle('fresh', performance.now() < hintUntil);
     if (key !== lastKey) {
       lastKey = key;
       card.textContent = '';
