@@ -130,6 +130,7 @@
     persist();
     const p = P();
     if (r.paid > 0 && p) {
+      try { root.NightshiftLedger?.tag('contract'); } catch { /* optional */ } 
       p.cash += r.paid;
       try { root.NightshiftSkills?.gain('shooting', 120, 'contract'); root.NightshiftSkills?.gain('stealth', r.silent ? 160 : 60, 'contract'); root.NightshiftAudio?.play('cash'); } catch { /* optional */ }
       say(`🎯 Contract complete · ${c.name} · +${money(r.paid)}${r.silent ? ' · 🤫 silent +50%' : ''}${r.clean ? ' · 🧼 clean +25%' : ''}${r.rankUp ? ` · ⬆️ RANK: ${r.rankUp.toUpperCase()}` : ''}`);

@@ -36,6 +36,7 @@
       const r = S.take(state, s.id); if (!r) continue;
       const cash = r.cash + r.bonus;
       try { root.NightshiftGoals?.notePayout?.(cash); } catch { /* optional */ }
+try { root.NightshiftLedger?.tag('events'); } catch { /* optional */ } 
       p.cash = Math.min(100000000, p.cash + cash);
       const got = give(r.items);
       try { root.NightshiftSkills?.gain('luck', 50, 'stash'); } catch { /* optional */ }

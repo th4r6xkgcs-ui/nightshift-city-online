@@ -210,7 +210,7 @@
     let any = false;
     for (const [id, base] of Object.entries(BI.FENCE)) {
       const n = bag[id] || 0; if (!n) continue; any = true; const m = SD.MATERIALS[id], each = Math.round(base * price);
-      pnl.append(row(m.icon, `${m.name} ×${n}`, `${money(each)} each`, btn('go', `SELL ALL · ${money(each * n)}`, () => { if (!root.NightshiftSupply.take({ [id]: n })) return; P().cash += each * n; try { root.NightshiftSkills?.gain('dealing', 10 * n, 'fence'); } catch { /* optional */ } gameSave(); say(`💍 Fenced ${n} ${m.name.toLowerCase()} · +${money(each * n)}`); openPawn(); })));
+      pnl.append(row(m.icon, `${m.name} ×${n}`, `${money(each)} each`, btn('go', `SELL ALL · ${money(each * n)}`, () => { if (!root.NightshiftSupply.take({ [id]: n })) return; try { root.NightshiftLedger?.tag('breakin'); } catch { /* optional */ } P().cash += each * n; try { root.NightshiftSkills?.gain('dealing', 10 * n, 'fence'); } catch { /* optional */ } gameSave(); say(`💍 Fenced ${n} ${m.name.toLowerCase()} · +${money(each * n)}`); openPawn(); })));
     }
     if (!any) pnl.append(el('div', { className: 'sub' }, 'Nothing to fence. Break into houses here (back doors) or the city warehouses at night.'));
     const st = root.NightshiftBreakin?.state?.stats; if (st) pnl.append(el('h3', {}, 'YOUR RECORD'), el('div', { className: 'sub' }, `${st.jobs} jobs · ${st.clean} clean · ${money(st.loot)} hauled · ${st.kills} takedowns`));

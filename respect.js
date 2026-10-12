@@ -45,6 +45,7 @@
     const r = queue.shift(), p = P();
     if (!r || !p) return;
     try { root.NightshiftGoals?.notePayout?.(r.cash); } catch { /* optional */ }
+    try { root.NightshiftLedger?.tag('goals'); } catch { /* optional */ } 
     p.cash = Math.min(100000000, p.cash + r.cash); gameSave();
     say(`${r.icon} RESPECT · You're now a ${r.name.toUpperCase()} · +${money(r.cash)}`);
     try { root.NightshiftAudio?.play('pickup'); } catch { /* sound optional */ }

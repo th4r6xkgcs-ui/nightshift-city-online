@@ -52,6 +52,7 @@
     if (res.result === 'done') {
       const pay = res.pay || 0;
       try { root.NightshiftGoals?.notePayout?.(pay); } catch { /* optional */ }
+try { root.NightshiftLedger?.tag('events'); } catch { /* optional */ } 
       if (p) p.cash = Math.min(100000000, p.cash + pay);
       for (const [sk, xp] of Object.entries(T.xp)) try { root.NightshiftSkills?.gain(sk, xp, 'event'); } catch { /* optional */ }
       if (ev.type === 'briefcase' && ev.hot && p) { p.heat = Math.min(5, (p.heat || 0) + 1.5); try { root.NightshiftCrime?.report?.({ x: p.x, y: p.y }, performance.now(), 'theft'); } catch { /* optional */ } }

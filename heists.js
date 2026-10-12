@@ -67,6 +67,7 @@
       say(`💰 Vault cracked! ${money(run.pay)} in the bag · lose the cops or stash it at your apartment`);
       try { root.NightshiftAudio?.play('pickup'); } catch { /* sound */ }
     } else if (res === 'paid') {
+try { root.NightshiftLedger?.tag('heists'); } catch { /* optional */ } 
       p.cash = Math.min(100000000, p.cash + run.pay);
       for (const [sk, xp] of [['shooting', 200], ['stealth', 250], ['toughness', 120]]) try { root.NightshiftSkills?.gain(sk, xp, 'heist'); } catch { /* optional */ }
       state.done++; state.total += run.pay; state.best = Math.max(state.best, run.pay); state.cooldown[run.bank.id] = Date.now() + H.COOLDOWN_MS;

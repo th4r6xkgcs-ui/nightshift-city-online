@@ -220,6 +220,7 @@
   function bagValue() { const F = { ...B.FENCE, weed: 60, coke: 150 }; let v = job.bag.cash; for (const [k, n] of Object.entries(job.bag.items)) v += (F[k] || (root.NightshiftSupplyData?.MATERIALS?.[k]?.price || 3)) * n; return v; }
   function finish(api) {
     const p = P(), j = job; if (!p || !j) return;
+    try { root.NightshiftLedger?.tag('breakin'); } catch { /* optional */ } 
     p.cash += j.bag.cash;
     const items = { ...j.bag.items }, ammo = items.ammo || 0; delete items.ammo;
     // weed/coke go straight into the game's pocket (where dealers look for them)

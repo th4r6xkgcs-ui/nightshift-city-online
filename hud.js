@@ -27,8 +27,8 @@
     document.head.append(l1, l2);
   } catch { /* offline: system fonts */ }
 
-  const MINE = ['#gdPanel', '#skPanel', '#glPanel', '#dyPanel', '#rsPanel', '#jbPanel', '#emPanel', '#mkPanel', '#lfMsg', '#gsPanel', '#csPanel', '#vnPanel', '#fsPanel', '#hsPanel', '#hmPanel', '#tnPanel', '#lbPanel', '#spBag', '#spBench', '#spShop', '#fdPanel', '#fdDiner', '#znTravel', '#frPanel', '#ptPanel', '#sbPanel', '#chPanel', '#dhPanel', '#htPanel', '#cxPanel', '#mtPanel'];
-  const PANELS = ['#gdPanel', '#skPanel', '#glPanel', '#dyPanel', '#rsPanel', '#jbPanel', '#emPanel', '#mkPanel', '#lfMsg', '#gsPanel', '#csPanel', '#vnPanel', '#fsPanel', '#hsPanel', '#hmPanel', '#tnPanel', '#lbPanel', '#spBag', '#spBench', '#spShop', '#fdPanel', '#fdDiner', '#znTravel', '#frPanel', '#ptPanel', '#sbPanel', '#chPanel', '#dhPanel', '#htPanel', '#cxPanel', '#mtPanel',
+  const MINE = ['#gdPanel', '#skPanel', '#glPanel', '#dyPanel', '#rsPanel', '#jbPanel', '#emPanel', '#mkPanel', '#lfMsg', '#gsPanel', '#csPanel', '#vnPanel', '#fsPanel', '#hsPanel', '#hmPanel', '#tnPanel', '#lbPanel', '#spBag', '#spBench', '#spShop', '#fdPanel', '#fdDiner', '#znTravel', '#frPanel', '#ptPanel', '#sbPanel', '#chPanel', '#dhPanel', '#htPanel', '#cxPanel', '#mtPanel', '#lgPanel'];
+  const PANELS = ['#gdPanel', '#skPanel', '#glPanel', '#dyPanel', '#rsPanel', '#jbPanel', '#emPanel', '#mkPanel', '#lfMsg', '#gsPanel', '#csPanel', '#vnPanel', '#fsPanel', '#hsPanel', '#hmPanel', '#tnPanel', '#lbPanel', '#spBag', '#spBench', '#spShop', '#fdPanel', '#fdDiner', '#znTravel', '#frPanel', '#ptPanel', '#sbPanel', '#chPanel', '#dhPanel', '#htPanel', '#cxPanel', '#mtPanel', '#lgPanel',
     '#backupPanel', '#businessPanel', '#cityJournalPanel', '#craftPanel', '#gangLifePanel', '#inventoryPanel', '#mapPanel', '#progressPanel', '#vehiclePanel', '#controlSettings', '#creator'];
 
   const css = el('style'); css.id = 'nsHud';
