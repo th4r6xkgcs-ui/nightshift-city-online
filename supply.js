@@ -229,23 +229,27 @@
     xp({ crafting: Math.round(job.seconds * 4) }, 'craft');
     try { root.NightshiftAudio?.play('pickup'); root.NightshiftFeedback?.floating(p.x, p.y - 34, '🛠️ ' + job.label, '#ffb347'); } catch { /* cosmetic */ }
     say(job.done(r));
-    if (job.gun && r.weapon && !r.spare) reveal(r.weapon);
+    if (job.gun && r.weapon && !r.spare) reveal(r.weapon, r.quality ?? 1);
     renderBench(); refresh();
   }
 
   // ---- new-gun reveal card ----
   let revealT = 0;
-  function reveal(w) {
+  function reveal(w, q = 1) {
     const card = document.getElementById('spReveal') || (() => { const d = el('div', { id: 'spReveal' }); document.body.append(d); d.onclick = () => d.classList.remove('on'); return d; })();
     card.textContent = '';
     const tierName = w.crude ? 'CRUDE' : ['', 'STREET', 'PRO', 'MILITARY'][w.tier] || '';
     card.dataset.tier = w.crude ? 0 : w.tier;
+    const Q = W.QUALITY[q];
     card.append(el('div', { className: 'k' }, `NEW GUN · ${tierName}`));
+    const qb = el('div', { className: 'qq' }, Q.name.toUpperCase()); qb.style.color = Q.color; qb.style.borderColor = Q.color; card.append(qb);
     const ic = gunIcon(w.id, 240, 94); if (ic) card.append(ic);
     card.append(el('div', { className: 'n' }, w.name));
     const st = el('div', { className: 'stats' });
-    for (const [k, v] of [['DMG', w.pellets > 1 ? `${w.pellets}×${w.dmg}` : w.dmg], ['MAG', w.mag], ['RPM', Math.round(60000 / w.rate)], ['LASTS', w.dur + ' shots']]) { const d = el('div'); d.append(el('b', {}, String(v)), document.createTextNode(k)); st.append(d); }
+    const e = W.effective(w, [], q), dur = W.maxDur(w, [], WS()?.durMul?.() ?? 1, q);
+    for (const [k, v] of [['DMG', e.pellets > 1 ? `${e.pellets}×${e.dmg}` : e.dmg], ['MAG', e.mag], ['RPM', Math.round(60000 / e.rate)], ['LASTS', dur + ' shots']]) { const d = el('div'); d.append(el('b', {}, String(v)), document.createTextNode(k)); st.append(d); }
     card.append(st, el('div', { className: 's' }, w.desc));
+    if (q === 3) card.dataset.tier = 3;
     card.classList.remove('on'); void card.offsetWidth; card.classList.add('on');
     clearTimeout(revealT); revealT = setTimeout(() => card.classList.remove('on'), 3600);
   }
@@ -299,7 +303,7 @@
   #spReveal[data-tier="3"]{box-shadow:0 30px 80px #000d,0 0 40px #ffb34755} #spReveal[data-tier="2"]{box-shadow:0 30px 80px #000d,0 0 34px #7cc7ff44}
   #spReveal canvas{display:block;margin:0 auto 8px;image-rendering:pixelated} #spReveal .n{font:700 22px var(--disp,system-ui);color:#ffd970}
   #spReveal .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:10px 0 6px;font-size:10px;color:#8fa6c0} #spReveal .stats b{display:block;color:#fff;font:700 15px var(--disp,system-ui)}
-  #spReveal .s{color:#a9b8ca;font-size:12px;line-height:1.35}`;
+  #spReveal .s{color:#a9b8ca;font-size:12px;line-height:1.35} #spReveal .qq{display:inline-block;margin:0 0 8px;padding:2px 10px;border:1px solid;border-radius:999px;font:700 11px var(--disp,system-ui);letter-spacing:.18em}`;
   document.head.appendChild(css);
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const btn = (cls, txt, fn, dis) => { const b = el('button', { className: cls, type: 'button', disabled: !!dis }, txt); b.onclick = fn; return b; };
@@ -451,8 +455,8 @@
         card.append(st);
         const need = el('div', { className: 'need' }); for (const [k, n] of Object.entries(w.craft.mats)) need.append(chip(k, n, pool[k] || 0)); card.append(need);
         const row = el('div', { className: 'row' });
-        row.append(el('span', { className: why ? 'why' : 'okc' }, why || `${Math.round(w.craft.seconds * mod('crafting.speed'))}s${owned ? ' · makes a SPARE' : ''} · worth ${money(w.value)}`));
-        row.append(btn('go', 'CRAFT', () => startCraft({ where: benchWhere, gun: true, real: w.tier >= 1, label: w.name, seconds: w.craft.seconds, check: (c) => W.craftBlock(WS().state, w.id, c), run: (c) => WS().craft(w.id, c), done: (r) => r.spare ? `${w.icon} Crafted a spare ${w.name} · sell it at the arms buyer or keep it as backup` : `${w.icon} Crafted ${w.name}! It's in your hand.` }), !!why || busy));
+        row.append(el('span', { className: why ? 'why' : 'okc' }, why || `${Math.round(w.craft.seconds * mod('crafting.speed'))}s${owned ? ' · spare, or upgrades yours if better' : ''} · worth ${money(w.value)}`));
+        row.append(btn('go', 'CRAFT', () => startCraft({ where: benchWhere, gun: true, real: w.tier >= 1, label: w.name, seconds: w.craft.seconds, check: (c) => W.craftBlock(WS().state, w.id, c), run: (c) => WS().craft(w.id, { ...c, quality: W.rollQuality(root.NightshiftSkills?.level?.('crafting') ?? 1) }), done: (r) => { const qn = W.QUALITY[r.quality ?? 1].name; return r.upgraded ? `${w.icon} ${qn} ${w.name}! Better than yours: it's in your hand, the old one is a spare.` : r.spare ? `${w.icon} Crafted a spare ${w.name} (yours is as good or better) · sell it or keep it as backup` : `${w.icon} Crafted a ${qn} ${w.name}! It's in your hand.`; } }), !!why || busy));
         card.append(row); cards.append(card);
       }
       benchP.append(cards);

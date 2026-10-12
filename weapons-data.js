@@ -69,6 +69,19 @@
   ];
   const MOD = Object.fromEntries(MODS.map((m) => [m.id, m]));
   const SPARE_MAX = 20;
+  // Craft quality: rolled for each gun you craft (Crafting skill shifts the odds). Spares are Standard.
+  const QUALITY = [
+    { id: 'rough', name: 'Rough', dur: 0.8, dmg: 0.95, val: 0.8, color: '#9fb3c8' },
+    { id: 'standard', name: 'Standard', dur: 1, dmg: 1, val: 1, color: '#e8eff7' },
+    { id: 'fine', name: 'Fine', dur: 1.2, dmg: 1.05, val: 1.25, color: '#7cc7ff' },
+    { id: 'master', name: 'Masterwork', dur: 1.5, dmg: 1.1, val: 1.6, color: '#ffb347' },
+  ];
+  // Odds by Crafting level (1..50): rough fades out, fine/masterwork grow. rnd in [0,1).
+  function rollQuality(craftLevel = 1, rnd = Math.random) {
+    const L = Math.max(1, Math.min(50, craftLevel)), r = rnd();
+    const rough = Math.max(0.03, 0.3 - L * 0.012), master = Math.min(0.2, 0.02 + L * 0.004), fine = Math.min(0.4, 0.12 + L * 0.01);
+    if (r < rough) return 0; if (r < rough + fine) return 2; if (r < rough + fine + master) return 3; return 1;
+  }
   // Armor plate: crafted at any bench, tops body armor up by `points` (max 100).
   const PLATE = { mats: { metal: 10, tape: 2 }, points: 25, max: 100, seconds: 12 };
   function buildPlate(state, ctx) {
@@ -79,8 +92,9 @@
   }
 
   // Weapon stats with its mods applied.
-  function effective(w, mods = []) {
-    const e = { ...w, mods: mods.slice() };
+  function effective(w, mods = [], q = 1) {
+    const e = { ...w, mods: mods.slice(), quality: q };
+    if (q !== 1 && QUALITY[q]) e.dmg = Math.max(1, Math.round(w.dmg * QUALITY[q].dmg));
     if (mods.includes('extmag')) e.mag = Math.min(30, Math.round(w.mag * 1.5));
     if (mods.includes('grip')) e.spread = w.spread * 0.5;
     if (mods.includes('scope')) { e.range = Math.round(w.range * 1.35); e.spread = e.spread * 0.6; }
@@ -88,7 +102,8 @@
     return e;
   }
   // Max shots for a gun (reinforce +60%; durMul = Crafting skill bonus, 1..1.5).
-  const maxDur = (w, mods = [], durMul = 1) => Math.max(1, Math.round(w.dur * (mods.includes('reinforce') ? 1.6 : 1) * Math.max(1, Math.min(1.5, durMul))));
+  const maxDur = (w, mods = [], durMul = 1, q = 1) => Math.max(1, Math.round(w.dur * (mods.includes('reinforce') ? 1.6 : 1) * Math.max(1, Math.min(1.5, durMul)) * (QUALITY[q]?.dur ?? 1)));
+  const qOf = (state, id) => (Number.isInteger(state?.quality?.[id]) ? state.quality[id] : 1);
 
   const okId = (id) => typeof id === 'string' && !!BY_ID[id];
   function clean(raw) {
@@ -105,16 +120,18 @@
       const c = [...new Set(list.filter((m) => typeof m === 'string' && MOD[m] && (MOD[m].crude || !BY_ID[wid].crude)))];
       if (c.length) mods[wid] = c;
     }
+    const quality = {};
+    for (const id of owned) { const q = raw?.quality?.[id]; if (Number.isInteger(q) && q >= 0 && q < QUALITY.length && q !== 1) quality[id] = q; }
     const cond = {};
     for (const id of owned) {
-      const mx = maxDur(BY_ID[id], mods[id] || [], 1.5), v = raw?.cond?.[id];
-      cond[id] = broken.includes(id) ? 0 : Number.isFinite(v) && v >= 0 ? Math.min(mx, Math.round(v)) : maxDur(BY_ID[id], mods[id] || []);
+      const q = Number.isInteger(quality[id]) ? quality[id] : 1, mx = maxDur(BY_ID[id], mods[id] || [], 1.5, q), v = raw?.cond?.[id];
+      cond[id] = broken.includes(id) ? 0 : Number.isFinite(v) && v >= 0 ? Math.min(mx, Math.round(v)) : maxDur(BY_ID[id], mods[id] || [], 1, q);
       if (cond[id] <= 0 && !broken.includes(id)) cond[id] = 1;
     }
     const spare = {};
     for (const [id, n] of Object.entries(raw?.spare || {})) if (okId(id) && Number.isSafeInteger(n) && n > 0) spare[id] = Math.min(SPARE_MAX, n);
     const armor = Number.isFinite(raw?.armor) ? Math.max(0, Math.min(100, raw.armor)) : 0;
-    return { version: 2, owned, equipped, mods, armor, cond, broken, spare };
+    return { version: 2, owned, equipped, mods, armor, cond, broken, spare, quality };
   }
   const usable = (state) => WEAPONS.filter((w) => state.owned.includes(w.id) && !state.broken.includes(w.id)).map((w) => w.id);
   function equip(state, id) { if (!usable(state).includes(id)) return false; state.equipped = id; return true; }
@@ -136,18 +153,24 @@
     if (!ctx.have(w.craft.mats)) return 'Missing materials';
     return '';
   }
-  // ctx.spend(cost) must take the materials (bag/locker); durMul = crafting skill bonus.
+  const setQ = (state, id, q) => { if (!state.quality) state.quality = {}; if (q === 1) delete state.quality[id]; else state.quality[id] = q; };
+  // ctx.spend(cost) must take the materials (bag/locker); durMul = crafting skill bonus; quality = rolled tier.
   function craft(state, id, ctx) {
     const why = craftBlock(state, id, ctx);
     if (why) return { ok: false, reason: why };
-    const w = BY_ID[id];
+    const w = BY_ID[id], q = Number.isInteger(ctx.quality) ? Math.max(0, Math.min(QUALITY.length - 1, ctx.quality)) : 1;
     if (!ctx.spend(w.craft.mats)) return { ok: false, reason: 'Missing materials' };
-    if (state.owned.includes(id) && !state.broken.includes(id)) { state.spare[id] = (state.spare[id] || 0) + 1; return { ok: true, spare: true, weapon: w }; }
+    if (state.owned.includes(id) && !state.broken.includes(id)) {
+      // A better copy replaces the one you carry (fresh condition); the old one becomes a spare.
+      if (q > qOf(state, id)) { state.spare[id] = Math.min(SPARE_MAX, (state.spare[id] || 0) + 1); setQ(state, id, q); state.cond[id] = maxDur(w, state.mods[id] || [], ctx.durMul, q); return { ok: true, spare: false, upgraded: true, quality: q, weapon: w }; }
+      state.spare[id] = (state.spare[id] || 0) + 1; return { ok: true, spare: true, quality: q, weapon: w };
+    }
     if (!state.owned.includes(id)) state.owned.push(id);
     state.broken = state.broken.filter((b) => b !== id);
-    state.cond[id] = maxDur(w, state.mods[id] || [], ctx.durMul);
+    setQ(state, id, q);
+    state.cond[id] = maxDur(w, state.mods[id] || [], ctx.durMul, q);
     if (!state.equipped) state.equipped = id;
-    return { ok: true, spare: false, weapon: w };
+    return { ok: true, spare: false, quality: q, weapon: w };
   }
   function modBlock(state, weaponId, modId, ctx) {
     const m = MOD[modId], w = BY_ID[weaponId];
@@ -174,14 +197,15 @@
   function wear(state, durMul = 1) {
     const id = state.equipped, w = BY_ID[id];
     if (!w) return { none: true };
-    state.cond[id] = Math.max(0, (state.cond[id] ?? maxDur(w, state.mods[id] || [], durMul)) - 1);
+    state.cond[id] = Math.max(0, (state.cond[id] ?? maxDur(w, state.mods[id] || [], durMul, qOf(state, id))) - 1);
     if (state.cond[id] > 0) return { ok: true, left: state.cond[id] };
-    if ((state.spare[id] || 0) > 0) { // a fresh spare swaps in
+    if ((state.spare[id] || 0) > 0) { // a fresh spare (Standard) swaps in
       state.spare[id] -= 1; if (!state.spare[id]) delete state.spare[id];
+      setQ(state, id, 1);
       state.cond[id] = maxDur(w, state.mods[id] || [], durMul);
       return { broke: true, swapped: true, weapon: w };
     }
-    if (w.crude) { state.owned = state.owned.filter((x) => x !== id); delete state.mods[id]; delete state.cond[id]; }
+    if (w.crude) { state.owned = state.owned.filter((x) => x !== id); delete state.mods[id]; delete state.cond[id]; if (state.quality) delete state.quality[id]; }
     else state.broken.push(id);
     state.equipped = usable(state)[0] || null;
     return { broke: true, destroyed: !!w.crude, weapon: w, next: state.equipped };
@@ -190,7 +214,7 @@
   function repairCost(state, id, durMul = 1) {
     const w = BY_ID[id];
     if (!w || w.crude || !state.owned.includes(id)) return null;
-    const mx = maxDur(w, state.mods[id] || [], durMul), f = 1 - Math.min(1, (state.cond[id] || 0) / mx);
+    const mx = maxDur(w, state.mods[id] || [], durMul, qOf(state, id)), f = 1 - Math.min(1, (state.cond[id] || 0) / mx);
     if (f <= 0.02) return null;
     const k = 1 + w.tier * 0.5, cost = { metal: Math.ceil(6 * k * f), spring: Math.ceil(2 * f) };
     if (state.broken.includes(id)) cost.trigger = 1;
@@ -202,7 +226,7 @@
     if (w.tier > ctx.bench) return { ok: false, reason: w.tier === 1 && ctx.bench === 0 ? 'Repair it at your Lockup workshop' : `Needs a level ${w.tier} workshop` };
     if (!ctx.spend(cost)) return { ok: false, reason: 'Missing materials' };
     state.broken = state.broken.filter((b) => b !== id);
-    state.cond[id] = maxDur(w, state.mods[id] || [], ctx.durMul);
+    state.cond[id] = maxDur(w, state.mods[id] || [], ctx.durMul, qOf(state, id));
     if (!state.equipped) state.equipped = id;
     return { ok: true, cost };
   }
@@ -210,9 +234,10 @@
   function usedValue(state, id, durMul = 1) {
     const w = BY_ID[id];
     if (!w) return 0;
-    if (state.broken.includes(id)) return Math.round(w.value * 0.2);
-    const mx = maxDur(w, state.mods[id] || [], durMul);
-    return Math.round(w.value * (0.35 + 0.65 * Math.min(1, (state.cond[id] || 0) / mx)));
+    const qv = QUALITY[qOf(state, id)].val;
+    if (state.broken.includes(id)) return Math.round(w.value * 0.2 * qv);
+    const mx = maxDur(w, state.mods[id] || [], durMul, qOf(state, id));
+    return Math.round(w.value * qv * (0.35 + 0.65 * Math.min(1, (state.cond[id] || 0) / mx)));
   }
   // kind: 'spare' | 'owned'. price multiplier (Dealing skill), buyer demand handled by the caller.
   function sell(state, wallet, id, kind = 'spare', price = 1, durMul = 1) {
@@ -226,7 +251,7 @@
     if (!state.owned.includes(id)) return { ok: false, reason: 'Not yours' };
     const cash = Math.round(usedValue(state, id, durMul) * price);
     state.owned = state.owned.filter((x) => x !== id); state.broken = state.broken.filter((x) => x !== id);
-    delete state.mods[id]; delete state.cond[id];
+    delete state.mods[id]; delete state.cond[id]; if (state.quality) delete state.quality[id];
     if (state.equipped === id) state.equipped = usable(state)[0] || null;
     wallet.cash += cash; return { ok: true, cash };
   }
@@ -246,7 +271,7 @@
   const dps = (w) => (w.dmg * w.pellets * 1000) / w.rate;
   const costText = (cost) => Object.entries(cost).map(([k, n]) => `${n} ${k}`).join(' + ');
 
-  const api = Object.freeze({ WEAPONS, BY_ID, NONE, PLATE, buildPlate, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, maxDur, clean, usable, equip, cycle,
+  const api = Object.freeze({ WEAPONS, BY_ID, NONE, PLATE, buildPlate, QUALITY, rollQuality, qOf, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, maxDur, clean, usable, equip, cycle,
     craftBlock, craft, modBlock, craftMod, wear, repairCost, repair, usedValue, sell, pelletAngles, fitMagazine, dps, costText });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftWeaponsData = api;

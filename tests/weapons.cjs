@@ -103,3 +103,25 @@ const shot = W.pelletAngles(1, W.BY_ID.shotgun, () => 1);
 assert.equal(shot.length, 6); assert.ok(shot.every((a) => Math.abs(a - 1 - 0.28) < 1e-9));
 assert.deepEqual(W.absorb(50, 20), { armor: 36, dmg: 6 }); assert.deepEqual(W.absorb(5, 20), { armor: 0, dmg: 15 });
 console.log('PASS: cycling working guns, magazine fit, pellet spread, armor');
+
+// Craft quality: rolled per craft; better copies replace the one you carry; affects damage, durability and value.
+const seqR = (vals) => { let i = 0; return () => vals[i++ % vals.length]; };
+assert.equal(W.rollQuality(1, () => 0), 0, 'low roll at Crafting 1 is Rough');
+assert.equal(W.rollQuality(1, () => 0.999), 1);
+const odds = (L) => { const n = [0, 0, 0, 0]; for (let i = 0; i < 2000; i++) n[W.rollQuality(L, () => i / 2000)]++; return n.map((x) => x / 2000); };
+const o1 = odds(1), o40 = odds(40);
+assert.ok(o1[0] > o40[0] && o1[3] < o40[3] && o1[2] < o40[2], 'skill shifts odds away from Rough toward Fine/Masterwork');
+assert.ok(o40[3] <= 0.2 && o40[0] >= 0.03, 'Masterwork stays rare; Rough never fully disappears');
+const qs = W.clean({}), qbag = { have: () => true, spend: () => true, bench: 3, shooting: 50, durMul: 1 };
+W.craft(qs, 'pistol', { ...qbag, quality: 0 });
+assert.equal(W.qOf(qs, 'pistol'), 0); assert.equal(qs.cond.pistol, Math.round(500 * 0.8));
+assert.equal(W.effective(W.BY_ID.revolver, [], 3).dmg, Math.round(45 * 1.1));
+const up = W.craft(qs, 'pistol', { ...qbag, quality: 3 });
+assert.ok(up.upgraded); assert.equal(W.qOf(qs, 'pistol'), 3); assert.equal(qs.spare.pistol, 1, 'the Rough one became a spare');
+assert.equal(qs.cond.pistol, 750, 'masterwork lasts 1.5x');
+assert.ok(W.craft(qs, 'pistol', { ...qbag, quality: 2 }).spare, 'a worse copy is just a spare');
+assert.equal(W.usedValue(qs, 'pistol'), Math.round(1050 * 1.6));
+assert.deepEqual(W.clean(JSON.parse(JSON.stringify(qs))).quality, { pistol: 3 }, 'quality survives save');
+assert.deepEqual(W.clean({ version: 2, owned: ['pistol'], quality: { pistol: 9, ar: 3 } }).quality, {}, 'bad quality dropped');
+qs.cond.pistol = 1; W.wear(qs); assert.equal(W.qOf(qs, 'pistol'), 1, 'a swapped-in spare is Standard');
+console.log('PASS: craft quality (odds by skill, upgrades swap in, damage/durability/value, save)');
