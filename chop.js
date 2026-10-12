@@ -73,9 +73,19 @@
     try {
       // A clean top-down pixel portrait in the car's paint.
       const x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.translate(60, 35);
-      R(x, '#00000055', -30, -12, 64, 28); R(x, car.color || '#888', -32, -14, 64, 28); R(x, '#ffffff22', -32, -14, 64, 4); R(x, '#0b1220', -10, -11, 18, 22); R(x, '#9fc3d6', -8, -10, 6, 20); R(x, '#9fc3d6', 4, -10, 4, 20);
-      for (const [wx, wy] of [[-24, -16], [16, -16], [-24, 12], [16, 12]]) R(x, '#111', wx, wy, 10, 4);
-      R(x, '#ffe9a8', 30, -11, 3, 5); R(x, '#ffe9a8', 30, 6, 3, 5); R(x, '#c0473f', -33, -11, 2, 5); R(x, '#c0473f', -33, 6, 2, 5);
+      const col = car.color || '#888', sh = (hex, k) => { const m = /^#?(..)(..)(..)$/.exec(hex) || [0, '88', '88', '88']; return '#' + [1, 2, 3].map((i) => Math.max(0, Math.min(255, Math.round(parseInt(m[i], 16) * k)))).map((v) => v.toString(16).padStart(2, '0')).join(''); };
+      O(x, '#00000066', 2, 4, 40, 16);
+      for (const [wx, wy] of [[-26, -17], [14, -17], [-26, 13], [14, 13]]) { R(x, '#0d0d0d', wx, wy, 12, 4); R(x, '#3a3a3a', wx + 2, wy + 1, 8, 1); }
+      R(x, sh(col, 0.7), -36, -14, 72, 28); R(x, col, -35, -15, 70, 28); R(x, sh(col, 1.25), -35, -15, 70, 3); R(x, sh(col, 0.75), -35, 10, 70, 3);
+      R(x, sh(col, 0.85), 14, -12, 1, 22); R(x, sh(col, 0.85), -26, -12, 1, 22); // hood + trunk seams
+      R(x, '#0b1220', -14, -12, 26, 22); R(x, '#5f8fb0', 6, -11, 6, 20); R(x, '#8fc0dc', 7, -10, 2, 8); R(x, '#4a7090', -14, -11, 4, 20); // glass
+      R(x, sh(col, 1.1), -9, -10, 14, 18); R(x, sh(col, 1.35), -8, -9, 12, 2); // roof
+      R(x, sh(col, 0.6), 4, -17, 3, 3); R(x, sh(col, 0.6), 4, 12, 3, 3); // mirrors
+      R(x, '#fff3c4', 33, -13, 3, 6); R(x, '#fff3c4', 33, 5, 3, 6); R(x, '#ffffff', 34, -12, 1, 2); R(x, '#ffffff', 34, 6, 1, 2);
+      R(x, '#c0473f', -36, -13, 2, 6); R(x, '#c0473f', -36, 5, 2, 6); R(x, '#ff7a6a', -36, -12, 1, 2);
+      R(x, '#c9d1d6', 35, -4, 2, 6); R(x, '#d8b24a', -36, -2, 2, 4); // grille + plate
+      if ((car.condition ?? 100) < 70) { R(x, '#3a3f45', -20, 4, 8, 2); R(x, '#3a3f45', 20, -9, 5, 3); }
+      if ((car.condition ?? 100) < 40) { R(x, '#2a2d30', -4, 8, 10, 3); R(x, '#5a3a2a', 24, 2, 4, 4); }
     } catch { /* cosmetic */ }
     return cv;
   }
@@ -171,13 +181,13 @@
     // workbench with vise against the scrapyard fence
     R(c, '#00000055', 236, 1609, 0, 0); R(c, '#5a3b22', 168, 1606, 26, 8); R(c, '#7a5532', 168, 1606, 26, 2); R(c, '#444a50', 172, 1603, 6, 4); R(c, '#cfd6db', 184, 1604, 8, 1);
     // painted sign board on the fence
-    R(c, '#00000066', 128, 1586, 98, 16); R(c, '#2a1d14', 126, 1584, 98, 16); R(c, '#e07a2a', 126, 1584, 98, 2);
-    c.save(); c.font = 'bold 9px system-ui'; c.textAlign = 'center'; c.fillStyle = lit ? '#ffb36b' : '#f0a050'; if (lit) { c.shadowColor = '#ff8a3a'; c.shadowBlur = 8; } c.fillText("RUSTY'S CHOP", 175, 1595.5); c.restore();
-    R(c, '#5b6168', 130, 1600, 2, 6); R(c, '#5b6168', 218, 1600, 2, 6);
-    if (lit) light(130, 1585, 92, 14);
+    R(c, '#00000066', 254, 1586, 98, 16); R(c, '#2a1d14', 252, 1584, 98, 16); R(c, '#e07a2a', 252, 1584, 98, 2);
+    c.save(); c.font = 'bold 9px system-ui'; c.textAlign = 'center'; c.fillStyle = lit ? '#ffb36b' : '#f0a050'; if (lit) { c.shadowColor = '#ff8a3a'; c.shadowBlur = 8; } c.fillText("RUSTY'S CHOP", 301, 1595.5); c.restore();
+    R(c, '#5b6168', 256, 1600, 2, 6); R(c, '#5b6168', 344, 1600, 2, 6);
+    if (lit) light(301, 1592, 92, 14);
     // work lamp on a pole
     R(c, '#2b2f33', 238, 1608, 2, 30); R(c, '#2b2f33', 238, 1608, 14, 2); R(c, '#cfd6db', 250, 1607, 6, 4);
-    if (dark > 0.25) { light(256, 1612, 6, 4); c.save(); c.globalCompositeOperation = 'lighter'; const gr = c.createRadialGradient(290, 1640, 4, 290, 1640, 70); gr.addColorStop(0, '#ffe2a855'); gr.addColorStop(1, '#ffe2a800'); c.fillStyle = gr; c.fillRect(220, 1570, 140, 140); c.restore(); }
+    if (dark > 0.25) { light(253, 1609, 6, 3); for (const [lx, ly] of [[270, 1606], [300, 1606], [330, 1606], [270, 1630], [300, 1630], [330, 1630], [200, 1620]]) light(lx, ly, 2, 2); c.save(); c.globalCompositeOperation = 'lighter'; const gr = c.createRadialGradient(290, 1640, 4, 290, 1640, 70); gr.addColorStop(0, '#ffe2a855'); gr.addColorStop(1, '#ffe2a800'); c.fillStyle = gr; c.fillRect(220, 1570, 140, 140); c.restore(); }
     // Rusty: grease-stained overalls, cap, wrench; walks over to the lift when a car is on it
     const rx = car ? bx + 4 : RUSTY.x, ry = car ? 1652 : RUSTY.y, bob = Math.sin(t * (car ? 9 : 2)) * (car ? 0.8 : 0.5);
     O(c, '#00000055', rx, ry + 2, 7, 3);
