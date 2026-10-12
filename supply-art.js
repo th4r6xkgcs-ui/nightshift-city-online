@@ -382,7 +382,25 @@
     tiger: (c) => { P(c, K.st, 9, 4, 18, 4); P(c, K.hi, 9, 4, 18, 1); P(c, '#e8833a', 18, 4, 9, 4); for (let i = 0; i < 4; i++) P(c, K.bk, 19 + i * 2, 4 + (i % 2), 1, 3); P(c, K.sl, 27, 5, 7, 2); P(c, K.st, 15, 8, 3, 6); P(c, K.hi, 15, 8, 1, 6); P(c, '#e8833a', 11, 8, 3, 4); P(c, K.bk, 12, 9, 1, 2); P(c, '#e8833a', 1, 4, 9, 3); P(c, '#e8833a', 1, 7, 3, 3); P(c, K.bk, 3, 4, 1, 3); P(c, K.bk, 6, 4, 1, 3); P(c, K.bk, 1, 8, 1, 2); P(c, K.bk, 12, 1, 7, 3); P(c, '#e3c25a', 12, 1, 7, 1); P(c, '#ff3040', 17, 2, 1, 1); },
     ar: (c) => { P(c, K.st, 9, 4, 18, 4); P(c, K.hi, 9, 4, 18, 1); P(c, '#3a4148', 18, 4, 9, 4); for (let i = 19; i < 27; i += 2) P(c, K.bk, i, 5, 1, 2); P(c, K.sl, 27, 5, 7, 2); P(c, K.st, 15, 8, 3, 6); P(c, K.hi, 15, 8, 1, 6); P(c, K.st, 11, 8, 3, 4); P(c, K.st, 1, 4, 9, 3); P(c, K.st, 1, 7, 3, 3); P(c, K.st, 12, 2, 5, 2); P(c, K.rd, 13, 2, 1, 1); },
   };
-  function gunIcon(id, w = 72, h = 28) { const f = GUN[id]; if (!f) return null; const scale = Math.max(2, Math.round(w / 18)); const cv = pixCanvas('g-' + id, 36, 14, scale, f); cv.style.width = w + 'px'; cv.style.height = Math.round(w * 16 / 38) + 'px'; return cv; }
+  // skin: a paint job from weapons-data SKINS (palette swap of steel/slide/highlight + optional camo blobs).
+  const hex3 = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  function skinned(f, skinId) {
+    const S = root.NightshiftWeaponsData?.SKIN?.[skinId]; if (!S?.pal) return f;
+    return (c) => {
+      const keep = { st: K.st, sl: K.sl, hi: K.hi }; Object.assign(K, S.pal);
+      try { f(c); } finally { Object.assign(K, keep); }
+      if (S.camo) { // camo blobs on painted pixels only
+        const img = c.getImageData(0, 0, 38, 16), d = img.data, st = hex3(S.pal.st), sl = hex3(S.pal.sl), cm = S.camo.map(hex3);
+        for (let y = 0; y < 16; y++) for (let x = 0; x < 38; x++) {
+          const i = (y * 38 + x) * 4, same = (q) => d[i] === q[0] && d[i + 1] === q[1] && d[i + 2] === q[2]; if (!same(st) && !same(sl)) continue;
+          const n = ((Math.floor(x / 3) * 73856093) ^ (Math.floor((y + (x % 5 === 0 ? 1 : 0)) / 2) * 19349663)) >>> 0;
+          if (skinId === 'tiger' ? (x + Math.floor(y / 2)) % 4 === 0 : n % 5 < 2) { const q = cm[n % cm.length]; d[i] = q[0]; d[i + 1] = q[1]; d[i + 2] = q[2]; }
+        }
+        c.putImageData(img, 0, 0);
+      }
+    };
+  }
+  function gunIcon(id, w = 72, h = 28, skin = null) { const f = GUN[id]; if (!f) return null; const scale = Math.max(2, Math.round(w / 18)); const cv = pixCanvas('g-' + id + (skin && skin !== 'stock' ? '~' + skin : ''), 36, 14, scale, skin && skin !== 'stock' ? skinned(f, skin) : f); cv.style.width = w + 'px'; cv.style.height = Math.round(w * 16 / 38) + 'px'; return cv; }
 
   root.NightshiftSupplyArt = Object.freeze({ drawSite, signLift, drawBench, matIcon, gunIcon, GUN_SHAPES: Object.keys(GUN) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

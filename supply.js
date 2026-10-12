@@ -318,7 +318,7 @@
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const btn = (cls, txt, fn, dis) => { const b = el('button', { className: cls, type: 'button', disabled: !!dis }, txt); b.onclick = fn; return b; };
   const matIcon = (id, size = 22) => { try { return ART()?.matIcon?.(id, size) || null; } catch { return null; } };
-  const gunIcon = (id, w = 72, h = 30) => { try { const c = ART()?.gunIcon?.(id, w, h) || null; if (c) c.classList.add('gun'); return c; } catch { return null; } };
+  const gunIcon = (id, w = 72, h = 30, skin = WS()?.state?.skins?.[id] || null) => { try { const c = ART()?.gunIcon?.(id, w, h, skin) || null; if (c) c.classList.add('gun'); return c; } catch { return null; } };
   function chip(id, need, have) {
     const c = el('span', { className: 'chip ' + (have >= need ? 'ok' : 'no') });
     const ic = matIcon(id, 16); if (ic) c.append(ic); else c.append(document.createTextNode(S.MATERIALS[id]?.icon || ''));
@@ -492,6 +492,18 @@
           card.append(row); cards.append(card);
         }
         benchP.append(cards);
+        // paint jobs for the selected gun
+        benchP.append(el('h3', {}, `🎨 PAINT JOB · ${W.BY_ID[modGun].name.toUpperCase()}`));
+        const paints = el('div', { className: 'cards' }), cur = wst.skins?.[modGun] || 'stock';
+        for (const s of W.SKINS) {
+          const card = el('div', { className: 'card' + (cur === s.id ? ' ready' : '') }), hd = el('div', { className: 'hd' }), ic = gunIcon(modGun, 84, 34, s.id); if (ic) hd.append(ic);
+          const nm = el('div'); nm.append(el('div', { className: 'nm' }, s.name), el('div', { className: 'tg' }, s.price ? `${money(s.price)} + materials` : 'FREE')); hd.append(nm); card.append(hd);
+          const need = el('div', { className: 'need' }); for (const [k, n] of Object.entries(s.mats)) need.append(chip(k, n, pool[k] || 0)); card.append(need);
+          const row = el('div', { className: 'row' }); row.append(el('span', { className: 'okc' }, cur === s.id ? 'ON YOUR GUN ✓' : 'Cosmetic · shows in your hand'));
+          if (cur !== s.id) row.append(btn('go', 'PAINT', () => { const gid = modGun, r = W.paint(WS().state, P(), gid, s.id, { have: (c) => ctx.have(c), spend: (c) => ctx.spend(c) }); if (!r.ok) { say(r.reason); return; } WS().save?.(); persist(); gameSave(); xp({ crafting: 15 }, 'paint'); say(`🎨 ${W.BY_ID[gid].name} · ${s.name}`); renderBench(); }));
+          card.append(row); paints.append(card);
+        }
+        benchP.append(paints);
       }
     } else if (benchTab === 'repair') {
       const cards = el('div', { className: 'cards' });

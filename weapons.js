@@ -265,7 +265,7 @@
   function armoryCard(id, { compact } = {}) {
     const w = current().id === id ? current() : W.effective(W.BY_ID[id], state.mods[id] || [], W.qOf(state, id)), eq = state.equipped === id, broken = state.broken.includes(id), Q = W.QUALITY[W.qOf(state, id)];
     const card = el('div', { className: 'w' + (eq ? ' eq' : '') + (broken ? ' lock' : '') });
-    const icon = root.NightshiftSupply?.gunIcon?.(id, 72, 30);
+    const icon = root.NightshiftSupply?.gunIcon?.(id, 72, 30, state.skins?.[id] || null);
     const nm = el('div', { className: 'nm' }); if (icon) nm.append(icon); nm.append(document.createTextNode(` ${w.name} `)); const qb = el('span', { className: 'q' }, Q.name.toUpperCase()); qb.style.color = Q.color; qb.style.borderColor = Q.color + '88'; nm.append(qb); card.append(nm);
     const mx = W.maxDur(W.BY_ID[id], state.mods[id] || [], durMul(), W.qOf(state, id)), f = broken ? 0 : Math.min(1, (state.cond[id] || 0) / mx);
     const bar = el('div', { className: 'bar' }), i = el('i'); i.style.width = Math.max(3, Math.round(f * 100)) + '%'; i.style.background = f > 0.5 ? '#7cdeb5' : f > 0.2 ? '#ffd970' : '#ff5a6a'; bar.append(i);
@@ -358,6 +358,6 @@
     return true;
   }
   function blueprintDrop(chance, from) { const id = W.rollBlueprint(state, Math.random, chance); return id ? learn(id, from) && id : null; }
-  root.NightshiftWeapons = Object.freeze({ learn, blueprintDrop, current, equip, cycle, open, close, door, craft, craftMod, repair, sell, armoryCard, condText, durMul, syncPocket,
+  root.NightshiftWeapons = Object.freeze({ skinPalette: (id) => W.SKIN[state.skins?.[id]]?.pal || null, save: () => { persist(); }, learn, blueprintDrop, current, equip, cycle, open, close, door, craft, craftMod, repair, sell, armoryCard, condText, durMul, syncPocket,
     paused: () => !shop.hidden, armed: () => !!W.BY_ID[state.equipped], get state() { return state; } });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -56,6 +56,31 @@
       craft: C({ frame: 3, barrel: 2, trigger: 2, bolt: 2, spring: 6, metal: 16, gadgets: 2 }, 100), desc: 'Hand-finished tiger-stripe furniture, smart optic, match barrel. The best rifle in the city.' },
   ];
   const LEGENDS = WEAPONS.filter((w) => w.legend).map((w) => w.id);
+  // Paint jobs: cosmetic finishes for any gun you own (applied at a workbench). pal: body / slide / highlight colours
+  // used by the icons (supply-art.js) and the held sprite (sprite-renderer.js).
+  const SKINS = [
+    { id: 'stock', name: 'Factory finish', price: 0, mats: {}, pal: null },
+    { id: 'desert', name: 'Desert tan', price: 350, mats: { tape: 1 }, pal: { st: '#9a8460', sl: '#b8a07a', hi: '#e0cfa8' } },
+    { id: 'olive', name: 'Olive drab', price: 450, mats: { tape: 1 }, pal: { st: '#4a5232', sl: '#5e6a40', hi: '#8f9a68' } },
+    { id: 'urban', name: 'Urban camo', price: 900, mats: { tape: 2 }, pal: { st: '#4a5058', sl: '#6e7680', hi: '#b8c0c8' }, camo: ['#2b2f33', '#9aa3ab'] },
+    { id: 'carbon', name: 'Carbon fibre', price: 1500, mats: { metal: 2 }, pal: { st: '#15171a', sl: '#2a2e33', hi: '#5a6068' }, camo: ['#2a2e33', '#1b1e22'] },
+    { id: 'tiger', name: 'Tiger stripe', price: 2500, mats: { tape: 2 }, pal: { st: '#c8742a', sl: '#e8833a', hi: '#ffc070' }, camo: ['#1b1410', '#1b1410'] },
+    { id: 'neon', name: 'Neon pink', price: 3000, mats: { chem: 1 }, pal: { st: '#b0306a', sl: '#ff4ad8', hi: '#ffb0ec' } },
+    { id: 'chrome', name: 'Mirror chrome', price: 4000, mats: { metal: 4 }, pal: { st: '#8a939b', sl: '#c9d1d6', hi: '#ffffff' } },
+    { id: 'gold', name: '24k gold', price: 9000, mats: { jewels: 2 }, pal: { st: '#a8781e', sl: '#d8a83a', hi: '#ffe9a0' } },
+  ];
+  const SKIN = Object.fromEntries(SKINS.map((s) => [s.id, s]));
+  // ctx: { have(cost), spend(cost) } for materials; wallet for cash.
+  function paint(state, wallet, gunId, skinId, ctx) {
+    const s = SKIN[skinId]; if (!s) return { ok: false, reason: 'Unknown finish' };
+    if (!state.owned.includes(gunId)) return { ok: false, reason: 'You don\'t own that gun' };
+    if ((state.skins?.[gunId] || 'stock') === skinId) return { ok: false, reason: 'Already painted' };
+    if (!(wallet.cash >= s.price)) return { ok: false, reason: `Needs $${s.price.toLocaleString()}` };
+    if (Object.keys(s.mats).length && !(ctx?.have?.(s.mats))) return { ok: false, reason: 'Missing materials' };
+    if (Object.keys(s.mats).length && !ctx.spend(s.mats)) return { ok: false, reason: 'Missing materials' };
+    wallet.cash -= s.price; if (!state.skins) state.skins = {}; if (skinId === 'stock') delete state.skins[gunId]; else state.skins[gunId] = skinId;
+    return { ok: true, skin: s };
+  }
   // Blueprint drops: pick one you haven't learned (rarer guns less often). chance is per roll.
   const BP_WEIGHT = { whisper: 5, goldhawk: 4, dragon: 3, reaper: 2, tiger: 1 };
   function rollBlueprint(state, rnd = Math.random, chance = 0.05) {
@@ -156,7 +181,8 @@
     const armor = Number.isFinite(raw?.armor) ? Math.max(0, Math.min(100, raw.armor)) : 0;
     const learned = Array.isArray(raw?.learned) ? [...new Set(raw.learned.filter((id) => BY_ID[id]?.legend))] : [];
     for (const id of owned) if (BY_ID[id].legend && !learned.includes(id)) learned.push(id);
-    return { version: 2, owned, equipped, mods, armor, cond, broken, spare, quality, learned };
+    const skins = {}; for (const [id, sk] of Object.entries(raw?.skins || {})) if (owned.includes(id) && SKIN[sk] && sk !== 'stock') skins[id] = sk;
+    return { version: 2, owned, equipped, mods, armor, cond, broken, spare, quality, learned, skins };
   }
   const usable = (state) => WEAPONS.filter((w) => state.owned.includes(w.id) && !state.broken.includes(w.id)).map((w) => w.id);
   function equip(state, id) { if (!usable(state).includes(id)) return false; state.equipped = id; return true; }
@@ -297,7 +323,7 @@
   const dps = (w) => (w.dmg * w.pellets * 1000) / w.rate;
   const costText = (cost) => Object.entries(cost).map(([k, n]) => `${n} ${k}`).join(' + ');
 
-  const api = Object.freeze({ WEAPONS, BY_ID, NONE, LEGENDS, BP_WEIGHT, rollBlueprint, learn, PLATE, buildPlate, QUALITY, rollQuality, qOf, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, maxDur, clean, usable, equip, cycle,
+  const api = Object.freeze({ SKINS, SKIN, paint, WEAPONS, BY_ID, NONE, LEGENDS, BP_WEIGHT, rollBlueprint, learn, PLATE, buildPlate, QUALITY, rollQuality, qOf, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, maxDur, clean, usable, equip, cycle,
     craftBlock, craft, modBlock, craftMod, wear, repairCost, repair, usedValue, sell, pelletAngles, fitMagazine, dps, costText });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftWeaponsData = api;
