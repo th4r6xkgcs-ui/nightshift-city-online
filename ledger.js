@@ -91,7 +91,7 @@
     const kpi = el('div', { className: 'kpi' });
     const box = (cls, v, k) => { const d = el('div', { className: cls }); d.append(el('b', {}, v), document.createTextNode(k)); kpi.append(d); };
     box('pos', money(sum(earned)), 'EARNED'); box('neg', money(sum(spent)), 'SPENT'); box(sum(earned) - sum(spent) >= 0 ? 'pos' : 'neg', money(sum(earned) - sum(spent)), 'NET');
-    if (hrs) box('', money((sum(earned) - sum(spent)) / hrs) + '/h', 'NET PER HOUR');
+    if (hrs) box('', hrs >= 1 / 6 ? money((sum(earned) - sum(spent)) / hrs) + '/h' : '—', hrs >= 1 / 6 ? 'NET PER HOUR' : 'PER HOUR AFTER 10 MIN');
     pnl.append(kpi, el('h3', {}, 'WHERE IT CAME FROM'), bars(earned, false), el('h3', {}, 'WHERE IT WENT'), bars(spent, true));
     pnl.append(el('div', { className: 'sub', style: 'margin-top:8px' }, '"Street & other" covers dealers, couriers, robberies and anything paid out on the street.'));
   }
