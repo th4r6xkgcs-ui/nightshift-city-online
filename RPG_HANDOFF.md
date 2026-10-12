@@ -387,3 +387,45 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
     - Market and tip texts start after one minute outside.
   - **Indoor toasts** (`hud.js`): new body class `ns-home`. In portrait, toasts move to the empty bottom-right space (the aim stick is hidden indoors), so they no longer cover the room or the door. The welcome text is now one line.
   - **Goal arrow** (`goals.js`): shows a distance tag ("102m"; 10 px ≈ 1 m). The first-goal hint has been rewritten.
+
+## Crafting economy (owner: "first goal craft a cheap pistol that breaks… collect → process → sell… make everything make sense economically… grindy")
+- **New modules (Claude-owned, load after `life.js`):** `supply-data.js` (pure rules, `tests/supply.cjs` incl. economy sim), `supply-art.js` (all pixel art + icons), `supply.js` (gameplay + panels).
+- **Start:** a brand-new player (no saves) has $200, no gun, 24 spare rounds, and 2 tape + 10 baggies in the 🎒. Existing saves keep their guns (weapons save version 1 → migrated with the Street Pistol) and get a small material gift. "Start a new life" (backpack panel) reloads with `?newlife=1`; `starter-home.js` wipes every `nightshift*` key before any module loads.
+- **"Carrying a gun" = `pocket.pistol`:** `game.js` only fires when it is above 0, so `weapons.js` keeps it at 1 when a working gun is equipped and deletes it when you're unarmed. The corner shop's `PISTOL · $150` button is hidden.
+  - **Test harness (`tests/harness.cjs`, rpg-play only):** seeds `nightshift-weapons-v1 = {"version":1}`, so base-game tests run as an armed legacy player.
+  - **Browser regression scripts:** seed the same save.
+- **Guns (`weapons-data.js` v2):**
+  - **15 guns:** Pipe Pistol, Zip .22, Sawn-off (crude, home bench); Street Pistol, Compact 9, Six-Shot Magnum, Pump Shotgun (Lockup Lv1); Machine Pistol, Viper SMG, Desert Hawk, Hunting Rifle (Lv2); Breaker 12, Carbine, Longshot DMR, Ridgeback AR (Lv3).
+  - **Fields per gun:** `craft.mats`, `craft.seconds`, `dur` (shots), `value` (arms buyer), `cls`, `tier`, `level` (Shooting level needed).
+  - **Wear:** every trigger pull wears the gun (`wear`). Crude guns are destroyed when worn out; real guns become `broken` and need a repair at a bench of their tier (repairs cost metal and springs; a broken gun also needs a trigger group). A spare swaps in automatically.
+  - **Street Pistol** keeps the original game's stats (30-round magazine, 180 ms), so Codex's core tests still hold.
+  - **Attachments** are crafted (`MODS[].mats`, `.tier`); reinforced parts give +60% durability. Armor plates: 10 metal + 2 tape.
+- **Places:** world positions are in `supply-data.js`; all sit inside open lots or on sidewalks.
+  - **Collect:**
+    - Scrapyard (SW)
+    - Construction site (top Midtown, day)
+    - Grow plots (West End park)
+    - Smuggler boat (east docks, 20:00–05:00)
+    - Pharmacy dumpster (behind the clinic)
+    - Arms container (east edge, 21:00–04:00)
+  - **Process:**
+    - Trim house: 3 leaf + 1 baggie → 1 weed in the pocket
+    - Motel kitchen: snow + chem + 2 baggies → 2 coke in the pocket
+    - Trailer lab: 2 chem + 1 baggie → 3 pills
+  - **Sell:** Codex dealers and customers (weed/coke), the party promoter (pills, nights), the arms buyer (guns, nights, 4 per 15 min).
+  - **Shops:** hardware cart (tape, baggies, metal, wood), two bag stalls (24 → 200 space), the gun shop as a parts counter (+ ammo crates, armor), the Lockup ($6k / $18k / $45k).
+- **Loop mechanics:**
+  - USE starts a timed loop; the ring fills over the player.
+  - Spots have stock that refills over time.
+  - Illegal spots add heat.
+  - Walking away, the place closing, a full bag or an empty spot stops the loop. Menus pause the timer.
+- **Home workbench:** room coordinates (574, 236), via an `NightshiftHome.interaction/use` wrap. It can craft from the bag plus the 600-space home locker; the Lockup only uses the bag.
+- **Also changed:**
+  - New Crafting skill.
+  - 🎒 dock button (shows a fill badge) and a BACKPACK phone tile.
+  - Guide sections "Guns & crafting" and "Product".
+  - Tour steps for 🎒 and the gun pill.
+  - Starter Empire fronts: shoeshine $800, hot dog $2.5k, arcade $6k (about 33 h payback).
+  - New goals: `scav1` and `craft1` come right after `walk`, then `shoot`, `leaf1`, `trim1`, `bag1`, `crafter`, `pills1`, `lockup1`, `gun1` (crafted real gun), `coke1`, `gunrun1`, `factory`, `arsenal` (10 guns).
+  - Per-gun sounds (ambience) and camera shake (fx) are keyed by id and class.
+- **Art-pass branch:** `sprite-renderer.js` `gunArm` draws a held sprite for each of the 15 guns. `game.js` no-gun message now reads "craft one at your home workbench".
