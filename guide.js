@@ -27,7 +27,8 @@
     progress: ['📈', 'Reputation'], search: ['🔍', 'Search crate'], controls: ['🎮', 'Controls'], journal: ['📓', 'City journal'], street: ['🧥', 'Gangs & corners'], loot: ['💰', 'Pick up loot'], glove: ['🧤', 'Car glovebox'] };
   const css = el('style');
   css.textContent = `
-  #actions.expanded>button{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.1}
+  body #actions.expanded>button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px;line-height:1.1}
+  body #actions.expanded>button[hidden]{display:none!important}
   ${Object.entries(MORE).map(([id, [ic, cap]]) => `#actions.expanded>#${id}::before{content:'${ic}';font-size:20px;line-height:1}#actions.expanded>#${id}::after{content:'${cap}';font:500 9px ui-sans-serif,system-ui,sans-serif;letter-spacing:0;color:#9fb0c8;text-transform:none}`).join('\n')}
   #actions.expanded>button[aria-label="Customize character"]::before{content:'👕';font-size:20px;line-height:1}#actions.expanded>button[aria-label="Customize character"]::after{content:'Change your look';font:500 9px ui-sans-serif,system-ui,sans-serif;color:#9fb0c8}
   /* coach marks */
@@ -130,7 +131,7 @@
   document.body.append(spot, tip);
   let step = -1, steps = [];
   const shown = (s) => { const e = $(s); if (!e) return null; const r = e.getBoundingClientRect(); const cs = getComputedStyle(e); return r.width > 4 && r.height > 4 && cs.visibility !== 'hidden' && cs.display !== 'none' ? r : null; };
-  function startTour() { steps = STEPS.filter(([s]) => shown(s)); if (!steps.length) return; step = 0; showStep(); }
+  function startTour() { steps = STEPS.slice(); step = 0; showStep(); }
   function endTour() { step = -1; spot.hidden = true; tip.hidden = true; state.toured = true; persist(); say('Tip: tap ❓ any time to see everything you can do.'); }
   function showStep() {
     const [sel, title, text] = steps[step], r = shown(sel);
