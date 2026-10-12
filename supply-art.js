@@ -285,7 +285,10 @@
 
   // ---------------- apartment workbench (room coords) ----------------
   function drawBench(c, pos, t) {
-    const x = pos.x - 40, y = pos.y - 26;
+    c.save(); c.translate(pos.x, pos.y); c.scale(0.8, 0.8); benchBody(c, t); c.restore();
+  }
+  function benchBody(c, t) {
+    const x = -40, y = -26;
     // pegboard on the wall above
     R(c, '#6b5236', x + 4, y - 30, 72, 26); for (let i = 0; i < 9; i++) for (let j = 0; j < 3; j++) R(c, '#4a3826', x + 9 + i * 8, y - 26 + j * 8, 1.5, 1.5);
     R(c, '#9aa3ab', x + 12, y - 24, 3, 14); R(c, '#c0473f', x + 11, y - 26, 5, 4); // hammer

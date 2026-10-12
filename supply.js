@@ -225,7 +225,7 @@
   .spP .mats{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px}
   .spP .mat{display:flex;align-items:center;gap:7px;background:#ffffff08;border:1px solid #ffffff14;border-radius:10px;padding:5px 7px;font-size:11.5px}
   .spP .mat b{font:700 14px var(--disp,system-ui);color:#fff} .spP .mat span{color:#a9b8ca;font-size:10px;display:block;line-height:1.1}
-  .spP canvas{image-rendering:pixelated;flex:none}
+  .spP canvas{image-rendering:pixelated;flex:none} .spP canvas.gun,#gsPanel canvas.gun{background:linear-gradient(#b7c4d3,#8e9db0);border-radius:9px;padding:4px 6px;box-shadow:inset 0 0 0 1px #ffffff55,0 2px 6px #0006}
   .spP .tabs{display:flex;gap:6px;margin:6px 0 8px;flex-wrap:wrap} .spP .tab{padding:7px 12px;background:#ffffff0c;border:1px solid #ffffff1c} .spP .tab.on{background:#ffd97022;border-color:#ffd970;color:#ffd970}
   .spP .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
   .spP .card{background:#ffffff07;border:1px solid #ffffff16;border-radius:14px;padding:9px 10px;position:relative}
@@ -255,7 +255,7 @@
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const btn = (cls, txt, fn, dis) => { const b = el('button', { className: cls, type: 'button', disabled: !!dis }, txt); b.onclick = fn; return b; };
   const matIcon = (id, size = 22) => { try { return ART()?.matIcon?.(id, size) || null; } catch { return null; } };
-  const gunIcon = (id, w = 72, h = 30) => { try { return ART()?.gunIcon?.(id, w, h) || null; } catch { return null; } };
+  const gunIcon = (id, w = 72, h = 30) => { try { const c = ART()?.gunIcon?.(id, w, h) || null; if (c) c.classList.add('gun'); return c; } catch { return null; } };
   function chip(id, need, have) {
     const c = el('span', { className: 'chip ' + (have >= need ? 'ok' : 'no') });
     const ic = matIcon(id, 16); if (ic) c.append(ic); else c.append(document.createTextNode(S.MATERIALS[id]?.icon || ''));
@@ -529,7 +529,7 @@
   }
 
   // ---- home workbench (inside the apartment) ----
-  const BENCH_POS = { x: 585, y: 175 }; // room coords (640×420 room); drawn by supply-art.js
+  const BENCH_POS = { x: 574, y: 236 }; // room coords (640×420 room); drawn by supply-art.js
   let roomPos = null;
   function installHome() {
     const HM = root.NightshiftHome, SP = root.NightshiftSprites, I = root.NightshiftInteriors;
@@ -540,8 +540,8 @@
       HM.interaction = function () {
         const t = interaction.apply(this, arguments);
         if (!roomPos || !home()) return t;
-        const d = Math.hypot(roomPos.x - BENCH_POS.x, roomPos.y - (BENCH_POS.y + 30));
-        if (d < 70 && (!t || !Number.isFinite(t.x) || d < Math.hypot(roomPos.x - t.x, roomPos.y - t.y))) return { kind: 'bench', action: 'CRAFT', label: 'Workbench', x: BENCH_POS.x, y: BENCH_POS.y + 30 };
+        const d = Math.hypot(roomPos.x - BENCH_POS.x, roomPos.y - BENCH_POS.y);
+        if (d < 82 && (!t || !Number.isFinite(t.x) || d < Math.hypot(roomPos.x - t.x, roomPos.y - t.y))) return { kind: 'bench', action: 'CRAFT', label: 'Workbench', x: BENCH_POS.x, y: BENCH_POS.y };
         return t;
       };
       HM.use = function () { const t = home() ? HM.interaction() : null; if (t?.kind === 'bench') { openBench('home'); return true; } return use.apply(this, arguments); };
