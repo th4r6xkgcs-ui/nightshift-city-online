@@ -295,3 +295,14 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
   - Redrawn furniture, room day/night light, and asphalt grit.
 - **Details:** PR #3 comment "heads-up, I did an art pass".
 - **Claude-owned props:** armored truck (doors open as you crack it), briefcase, package, checkpoint gates (events.js) and the duffel-bag stash (stashes.js).
+- **Art pass 2**
+  - `fx.js` (Claude):
+    - Camera shake, via a drift-free wrap of `NightshiftCamera.step`, on hits, crashes and gunfire (shotgun and rifle shake hardest). Respects `prefers-reduced-motion`.
+    - Skid marks (fade after 25 s) and tyre smoke when braking, drifting or launching.
+    - Crash debris puffs and rain splash ripples.
+    - API: `NightshiftFx.{shake, stats}`.
+  - Loads after `life.js`.
+  - Art-pass branch:
+    - Lit windows now punch through the night lightmap (`NightshiftWorld.litWindows()`).
+    - `NightshiftHome.enter(kind, spawn)` takes an optional in-room spawn point; the player wakes up at (252,172) beside the bed with a clear path to the door.
+    - New `NightshiftHome.leave()`; regression scripts use it.
