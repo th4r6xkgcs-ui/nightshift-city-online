@@ -30,8 +30,12 @@ function onlineHtml(indexHtml) {
 
 // Claude's RPG layer (skills + goals). Injected before boot.js at build time so
 // Codex's index.html stays untouched; skipped for any script it already lists.
-const RPG_SCRIPTS = ['skills-data.js', 'skills.js', 'weapons-data.js', 'weapons.js', 'skill-effects.js', 'casino-data.js', 'casino.js', 'tuning-data.js', 'tuning.js', 'races-data.js', 'races.js', 'home-data.js', 'home-upgrades.js', 'fishing-data.js', 'fishing.js', 'lab-data.js', 'lab.js', 'jobs-data.js', 'jobs.js', 'heists-data.js', 'heists.js', 'venues-data.js', 'venues.js', 'empire-data.js', 'empire.js', 'events-data.js', 'events.js', 'stashes-data.js', 'stashes.js', 'market-data.js', 'market.js', 'goals-data.js', 'goals.js', 'dailies-data.js', 'dailies.js', 'respect-data.js', 'respect.js'];
+const RPG_SCRIPTS = ['skills-data.js', 'skills.js', 'weapons-data.js', 'weapons.js', 'skill-effects.js', 'casino-data.js', 'casino.js', 'tuning-data.js', 'tuning.js', 'races-data.js', 'races.js', 'home-data.js', 'home-upgrades.js', 'fishing-data.js', 'fishing.js', 'lab-data.js', 'lab.js', 'jobs-data.js', 'jobs.js', 'heists-data.js', 'heists.js', 'venues-data.js', 'venues.js', 'empire-data.js', 'empire.js', 'events-data.js', 'events.js', 'stashes-data.js', 'stashes.js', 'market-data.js', 'market.js', 'life-data.js', 'life.js', 'goals-data.js', 'goals.js', 'dailies-data.js', 'dailies.js', 'respect-data.js', 'respect.js'];
+// Claude scripts that must run before Codex's modules read their saves (inserted before the first script tag).
+const EARLY_SCRIPTS = ['starter-home.js'];
 function withRpg(html) {
+  const early = EARLY_SCRIPTS.filter((s) => fs.existsSync(path.join(ROOT, s)) && !html.includes(`src="${s}"`));
+  if (early.length && /<script\s+src="/.test(html)) html = html.replace(/<script\s+src="/, (m) => early.map((s) => `<script src="${s}" defer></script>`).join('') + m);
   const missing = RPG_SCRIPTS.filter((s) => fs.existsSync(path.join(ROOT, s)) && !html.includes(`src="${s}"`));
   if (!missing.length || !/<script\s+src="boot\.js"/.test(html)) return html;
   const tags = missing.map((s) => `<script src="${s}" defer></script>`).join('');
@@ -47,7 +51,7 @@ function readGame() {
   return { html, ...gameAssets(html) };
 }
 
-module.exports = { gameAssets, onlineHtml, readGame, withRpg, ONLINE_SCRIPTS, RPG_SCRIPTS, ROOT };
+module.exports = { gameAssets, onlineHtml, readGame, withRpg, ONLINE_SCRIPTS, RPG_SCRIPTS, EARLY_SCRIPTS, ROOT };
 
 if (require.main === module) {
   const game = readGame();
