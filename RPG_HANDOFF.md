@@ -377,3 +377,13 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
     - Several cruisers park nose-to-tail 70 px apart instead of stacking; the cap is 6.
     - They leave 15 s after heat clears, or after 120 s.
     - `NightshiftFx.stats().cruisers` lists their positions.
+- **First-minute clarity pass** (owner: "a bit confusing")
+  - **Apartment** (art-pass, `home.js`): the doorway is lit, with warm street light spilling in, a doormat, and a bobbing "🚪 EXIT TO CITY" sign with animated chevrons. These hide once you're at the door, where the USE prompt takes over.
+  - **Controls tour** (`guide.js`): starts only after you've been outside for 1.5 s; it used to fire inside the apartment during the spawn hand-off.
+  - **Texts** (`life.js`):
+    - Texts now go through a queue: one at a time, at least 9 s apart.
+    - They never arrive during the tour or while a menu is open.
+    - Mom's welcome can arrive indoors; everything else waits until you've spent 20 s outside.
+    - Market and tip texts start after one minute outside.
+  - **Indoor toasts** (`hud.js`): new body class `ns-home`. In portrait, toasts move to the empty bottom-right space (the aim stick is hidden indoors), so they no longer cover the room or the door. The welcome text is now one line.
+  - **Goal arrow** (`goals.js`): shows a distance tag ("102m"; 10 px ≈ 1 m). The first-goal hint has been rewritten.
