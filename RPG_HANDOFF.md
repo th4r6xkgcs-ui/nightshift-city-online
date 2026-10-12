@@ -38,3 +38,12 @@ Add `nightshift-skills-v1` and `nightshift-goals-v1` to the `KEYS` list in `back
 ## Backlog: owner said "add later, don't forget" (2026-10-11)
 - **Daily/weekly challenges**: 3 rotating daily jobs (e.g. "sell 10 units", "lose the cops twice") plus weekly ones, and a login-streak bonus.
 - **Respect prestige rank**: a long-term rank on top of skills, for endgame grinding.
+- **City events** (`events*.js`): every 2.5–4 min (first one ~1 min after load), a timed event spawns on a road 35–130 m from the player. It doesn't spawn during a heist or race, and timers freeze while an RPG panel is open. You get a toast, a cyan dashed marker with a label plate, a cyan guide arrow (radius 66/90, outside the pink job arrow) and an `#evHud` countdown bar. In landscape the bar stacks above the job bar; in portrait it sits under it.
+  - 💼 Briefcase: reach it for $300–900; 35% are hot (+1.5 heat and a theft report).
+  - 🚚 Armored truck: stay within 90 px for 12 s for $1.5–3k. Progress decays when you step away, heat stays ≥ 2, and `Crime.report(...,'robbery')` fires every 4 s.
+  - 🎁 Package: grab it, then deliver it ≥ 900 px away within 90 s. Pays $500 + distance/3 + $5 per second left.
+  - 🏁 Sprint: drive into the start in a car, then pass 3 gates in order within 28 s. Pays $600 + $25 per second left; leaving the car fails it.
+  - Pay is +5% per Respect rank, plus skill XP. API: `NightshiftEvents.{state, active, spawn(type), dismiss, next}`. Save (stats only): `nightshift-events-v1`, which needs adding to backups `KEYS`.
+  - Wiring: goals `event1` "Opportunist" and `event25`; daily "Finish n city event(s)"; Respect source "City events" (10/event, cap 300); a lifetime stats row; a 🌆 LIVE entry at the top of the city guide.
+  - Load order: `events-data.js`, `events.js` after `empire.js`.
+  - Tests: `tests/events.cjs` (3 PASS). Browser: all 4 types complete at 844×390 and 390×844 with no page errors.
