@@ -52,7 +52,7 @@
   #lfRadio[hidden]{display:none} #lfRadio .st{white-space:nowrap;color:var(--rc,#ff4fd8);font-weight:800} #lfRadio .tk{white-space:nowrap;overflow:hidden;flex:1;min-width:0}
   #lfRadio .tk span{display:inline-block;padding-left:100%;animation:lfTicker var(--dur,18s) linear infinite} #lfRadio .pw{opacity:.8}
   @keyframes lfTicker{to{transform:translateX(-100%)}}
-  @media (orientation:portrait){#lfRadio{top:auto;bottom:calc(14px + env(safe-area-inset-bottom,0px));max-width:calc(100vw - 24px)}}`;
+  @media (orientation:portrait){#lfRadio{left:auto;right:12px;transform:none;max-width:min(46vw,300px)}}`;
   document.head.appendChild(msgCss);
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const msgPanel = el('div', { id: 'lfMsg', hidden: true, role: 'dialog', ariaLabel: 'Messages' });
@@ -130,6 +130,7 @@
     const p = P(), inCar = !!p?.car && !root.NightshiftHome?.paused?.();
     radio.hidden = !inCar;
     if (!inCar) { music.stop(); return; }
+    if (innerHeight > innerWidth) { const r = document.querySelector('#jbBtn')?.getBoundingClientRect(); radio.style.top = r?.height ? Math.round(r.bottom + 8) + 'px' : ''; } else radio.style.top = '';
     const s = L.STATION[state.station];
     radio.style.setProperty('--rc', state.radio ? s.color : '#777');
     stEl.textContent = state.radio ? `📻 ${s.freq} ${s.name}` : '📻 OFF';
