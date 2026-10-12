@@ -118,6 +118,8 @@
       progress: (c) => [Math.min(c.chopped, 1), 1], reward: { cash: 300, xp: { driving: 60 } } },
     { id: 'farm1', place: 'busstop', tier: 'Rising', title: 'Country life', hint: 'Take the 🚌 bus to Harlow Fields, lease a plot at the co-op, plant seeds, water them and harvest 5 crops.',
       progress: (c) => [Math.min(c.harvested, 5), 5], reward: { cash: 250, xp: { farming: 80 } } },
+    { id: 'decor1', place: 'apartment', tier: 'Hustle', title: 'Home sweet home', hint: 'Walk up to a ✦ sparkle in your apartment and press DECOR: wall art, plants, lamps, music, a pet bed, an aquarium. Nicer place, better deals.',
+      progress: (c) => [Math.min(c.aptStyle, 6), 6], reward: { cash: 400, xp: { charisma: 60 } } },
     { id: 'meal1', place: 'apartment', tier: 'Rising', title: 'Home cooking', hint: 'Cook a meal at your apartment kitchen (or the farmhouse). Meals give buffs; eat them from the 🎒.',
       progress: (c) => [Math.min(c.mealsCooked, 1), 1], reward: { cash: 150, xp: { toughness: 40 } } },
     { id: 'breakin1', place: 'warehouse', tier: 'Rising', title: 'Night shift', hint: 'Break in somewhere: a city warehouse back door after 21:00, or a house in Palm Grove (🚌 bus). Walk out with the loot.',

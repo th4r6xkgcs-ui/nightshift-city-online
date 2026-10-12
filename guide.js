@@ -111,6 +111,7 @@
         ['⭐', 'Skills', 'Everything you do levels a skill. Tap ⭐ to see perks.', 'OPEN', open2(() => R.NightshiftSkills.open())],
         ['🏋️', 'Gym', 'Timing reps for Speed and Toughness. Half price in the morning.', 'GPS', () => gps(nearest(ven.filter((v) => v.kind === 'gym')), 'Iron Works Gym')],
         ['🔧', 'Car tuning', 'Engine, handling, armor upgrades at a garage.', 'GPS', () => gps(nearest(R.NightshiftTuning?.sites?.()), 'Tuning garage')],
+        ['🛋️', 'Furnish your apartment', 'Walk up to a ✦ sparkle at home and press DECOR. Furniture is yours for both homes; a nicer place makes clients pay more.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
         ['🏠', 'Home upgrades', 'Use the LAPTOP in your apartment for perks.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
       ]],
       ['🎲 HAVE FUN', [
