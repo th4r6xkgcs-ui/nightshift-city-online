@@ -20,7 +20,7 @@ for (const type of Object.keys(B.TYPES)) {
 }
 console.log('PASS: generated interiors (connected, loot + guards inside rooms, entry clear, paths via doors) for 120 layouts');
 
-for (const [kind, t] of Object.entries(B.LOOT)) for (const [it] of t.loot) assert.ok(it === 'cash' || it === 'ammo' || S.MATERIALS[it], `${kind} loot ${it} is a real item`);
+for (const [kind, t] of Object.entries(B.LOOT)) for (const [it] of t.loot) assert.ok(it === 'cash' || it === 'ammo' || it === 'weed' || it === 'coke' || S.MATERIALS[it], `${kind} loot ${it} is a real item`);
 for (const k of Object.keys(B.FENCE)) assert.equal(S.MATERIALS[k].kind, 'loot');
 const r = B.rollLoot('safe', () => 0); assert.ok(r.cash >= 400 && r.items.jewels >= 1);
 assert.deepEqual(B.rollLoot('nope'), { cash: 0, items: {} });

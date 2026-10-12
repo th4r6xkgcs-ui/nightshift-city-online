@@ -10,11 +10,14 @@
     house: { cols: 3, rows: 2, rw: 210, rh: 175, guards: [['owner', 1], ['dog', 0.5]], loot: 7, cooldown: 25, heat: 1.2, police: 55, name: 'House' },
     mansion: { cols: 4, rows: 3, rw: 220, rh: 185, guards: [['guard', 3], ['dog', 1]], loot: 12, cooldown: 45, heat: 2.2, police: 70, name: 'Mansion' },
     warehouse: { cols: 3, rows: 2, rw: 250, rh: 200, guards: [['guard', 2], ['guard', 0.6]], loot: 9, cooldown: 35, heat: 1.8, police: 60, name: 'Warehouse' },
+    // A rival crew's trap house: product, cash being counted, guns. Cops take their time coming here.
+    stash: { cols: 3, rows: 2, rw: 215, rh: 180, guards: [['thug', 2], ['thug', 0.7], ['dog', 0.4]], loot: 10, cooldown: 40, heat: 1.4, police: 90, name: 'Stash house' },
   };
   const ROOMS = {
     house: ['kitchen', 'living', 'bedroom', 'bedroom', 'bath', 'office'],
     mansion: ['foyer', 'living', 'kitchen', 'dining', 'bedroom', 'bedroom', 'office', 'gallery', 'bath', 'gym', 'vault', 'lounge'],
     warehouse: ['loading', 'storage', 'storage', 'office', 'armory', 'storage'],
+    stash: ['trap', 'cook', 'count', 'bedroom', 'storage', 'cook'],
   };
   // Furniture per room: [kind, w, h, anchor] — anchor: 'n' along top wall, 's' bottom, 'w'/'e' sides, 'c' centre.
   const FURN = {
@@ -32,6 +35,9 @@
     loading: [['crates', 70, 60, 'ne'], ['forklift', 40, 54, 'w']],
     storage: [['rack', 150, 22, 'n'], ['rack', 150, 22, 'c'], ['crates', 50, 40, 'se']],
     armory: [['rack', 120, 22, 'n'], ['crates', 60, 40, 'c']],
+    trap: [['sofa', 90, 34, 's'], ['tv', 70, 16, 'n'], ['rug', 90, 56, 'c', 1], ['mattress', 60, 40, 'w']],
+    cook: [['labtable', 120, 28, 'n'], ['labtable', 100, 28, 'c'], ['barrels', 40, 40, 'se']],
+    count: [['counttable', 96, 52, 'c'], ['shelf', 26, 80, 'e'], ['chair', 22, 22, 'w']],
   };
   // Loot containers by room type: [kind, chance]
   const CONTAINERS = {
@@ -39,6 +45,7 @@
     bath: [['cabinet', 0.6]], office: [['desk', 0.8], ['safe', 0.45]], foyer: [['drawer', 0.4]], dining: [['silver', 0.7]], gallery: [['art', 0.9], ['art', 0.7]],
     gym: [['locker', 0.6]], vault: [['safe', 1], ['safe', 0.7]], lounge: [['cashbox', 0.7], ['art', 0.4]],
     loading: [['crate', 0.8]], storage: [['crate', 0.9], ['crate', 0.6]], armory: [['gunlocker', 1], ['ammo', 0.9]],
+    trap: [['drawer', 0.6], ['cashjar', 0.6]], cook: [['product', 1], ['product', 0.6], ['chemcrate', 0.8]], count: [['cashpile', 1], ['safe', 0.7]],
   };
   // seconds to search; loot: [item, chance, min, max] with item 'cash' for money.
   const LOOT = {
@@ -58,6 +65,9 @@
     crate: { seconds: 4, loot: [['metal', 0.8, 2, 4], ['spring', 0.5, 1, 2], ['pipe', 0.4, 1, 1], ['barrel', 0.12, 1, 1], ['chem', 0.25, 1, 2]] },
     gunlocker: { seconds: 8, loot: [['barrel', 0.7, 1, 2], ['trigger', 0.7, 1, 1], ['bolt', 0.5, 1, 1], ['frame', 0.4, 1, 1], ['lens', 0.3, 1, 1]] },
     ammo: { seconds: 3, loot: [['ammo', 1, 20, 45]] },
+    product: { seconds: 4, loot: [['weed', 0.8, 2, 5], ['coke', 0.5, 1, 3], ['pills', 0.5, 3, 8]] },
+    chemcrate: { seconds: 3, loot: [['chem', 1, 2, 4], ['baggie', 0.8, 4, 10]] },
+    cashpile: { seconds: 6, loot: [['cash', 1, 350, 1100]] },
   };
   // What the pawn shop pays for stolen goods (per unit).
   const FENCE = { jewels: 180, gadgets: 140, art: 650 };
@@ -67,6 +77,7 @@
     guard: { hp: 70, dmg: 11, rate: 650, spread: 0.1, speed: 1.3, sight: 260, cone: 1.25, armed: true, name: 'Guard' },
     cop: { hp: 80, dmg: 12, rate: 600, spread: 0.09, speed: 1.6, sight: 300, cone: 1.5, armed: true, name: 'Police' },
     // Hitman contracts (hitman-data.js): the mark and the muscle they hired.
+    thug: { hp: 60, dmg: 10, rate: 700, spread: 0.12, speed: 1.3, sight: 240, cone: 1.3, armed: true, name: 'Crew member' },
     mark: { hp: 60, dmg: 8, rate: 850, spread: 0.18, speed: 1.1, sight: 220, cone: 1.3, armed: true, name: 'Mark' },
     bodyguard: { hp: 85, dmg: 12, rate: 620, spread: 0.09, speed: 1.35, sight: 270, cone: 1.35, armed: true, name: 'Bodyguard' },
   };
@@ -183,7 +194,7 @@
   }
   function cooldownLeft(state, id, type, now = Date.now()) { const t = state?.robbed?.[id]; if (!t) return 0; return Math.max(0, t + (TYPES[type]?.cooldown || 30) * 60000 - now); }
   function clean(raw, now = Date.now()) {
-    const s = { version: 1, robbed: {}, stats: { jobs: 0, clean: 0, loot: 0, kills: 0, caught: 0 } };
+    const s = { version: 1, robbed: {}, stats: { jobs: 0, clean: 0, loot: 0, kills: 0, caught: 0, trap: 0 } };
     for (const [id, t] of Object.entries(raw?.robbed || {})) if (typeof id === 'string' && Number.isFinite(t) && t <= now) s.robbed[id] = t;
     for (const k of Object.keys(s.stats)) { const v = raw?.stats?.[k]; s.stats[k] = Number.isSafeInteger(v) && v >= 0 ? Math.min(v, 1e9) : 0; }
     return s;

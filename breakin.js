@@ -33,13 +33,14 @@
   let job = null; // { id, type, L, from, door, guards, loot:{id:true}, bag:{cash,items}, alarmAt, policeAt, search, kills }
 
   // ---------------- art: floors, walls, furniture, containers ----------------
-  const FLOOR = { kitchen: 'tile', bath: 'tile', living: 'wood', bedroom: 'wood', office: 'wood', foyer: 'marble', dining: 'marble', gallery: 'marble', gym: 'rubber', vault: 'steel', lounge: 'carpet', loading: 'concrete', storage: 'concrete', armory: 'concrete' };
+  const FLOOR = { kitchen: 'tile', bath: 'tile', living: 'wood', bedroom: 'wood', office: 'wood', foyer: 'marble', dining: 'marble', gallery: 'marble', gym: 'rubber', vault: 'steel', lounge: 'carpet', loading: 'concrete', storage: 'concrete', armory: 'concrete', trap: 'grimy', cook: 'tile', count: 'wood' };
   function floor(c, R0, kind, r) {
     const { x, y, w, h } = R0;
     if (kind === 'wood') { R(c, '#7a5534', x, y, w, h); for (let yy = 0; yy < h; yy += 10) { R(c, '#6a4728', x, y + yy, w, 1); for (let xx = ((yy / 10) % 3) * 23; xx < w; xx += 70) R(c, '#5a3c22', x + xx, y + yy, 1, 10); } for (let i = 0; i < 40; i++) R(c, '#8a6440', x + r() * w, y + r() * h, 6, 1); }
     else if (kind === 'tile') { R(c, '#c9cfd2', x, y, w, h); for (let yy = 0; yy < h; yy += 16) R(c, '#a9b1b6', x, y + yy, w, 1); for (let xx = 0; xx < w; xx += 16) R(c, '#a9b1b6', x + xx, y, 1, h); for (let i = 0; i < 20; i++) R(c, '#d8dde0', x + Math.floor(r() * w / 16) * 16 + 1, y + Math.floor(r() * h / 16) * 16 + 1, 15, 15); }
     else if (kind === 'marble') { R(c, '#e8e2d8', x, y, w, h); for (let yy = 0; yy < h; yy += 30) for (let xx = (yy / 30) % 2 ? 0 : 30; xx < w; xx += 60) R(c, '#d8d0c2', x + xx, y + yy, 30, 30); for (let i = 0; i < 26; i++) { const sx = x + r() * w, sy = y + r() * h; c.strokeStyle = '#c0b6a644'; c.beginPath(); c.moveTo(sx, sy); c.lineTo(sx + 12, sy + 6); c.stroke(); } }
     else if (kind === 'carpet') { R(c, '#5a2a3a', x, y, w, h); for (let i = 0; i < 300; i++) R(c, r() < 0.5 ? '#6a3446' : '#4a2230', x + r() * w, y + r() * h, 2, 2); R(c, '#c9a24a33', x + 10, y + 10, w - 20, 2); R(c, '#c9a24a33', x + 10, y + h - 12, w - 20, 2); }
+    else if (kind === 'grimy') { R(c, '#4a3e36', x, y, w, h); for (let i = 0; i < 260; i++) R(c, r() < 0.5 ? '#54473e' : '#3f342d', x + r() * w, y + r() * h, 2, 2); for (let i = 0; i < 6; i++) O(c, '#2e2620aa', x + 20 + r() * (w - 40), y + 20 + r() * (h - 40), 8 + r() * 14, 5 + r() * 8); for (let i = 0; i < 10; i++) R(c, '#d8d0c288', x + r() * w, y + r() * h, 3, 2); }
     else if (kind === 'rubber') { R(c, '#2b2f33', x, y, w, h); for (let yy = 0; yy < h; yy += 40) for (let xx = 0; xx < w; xx += 40) R(c, '#33383d', x + xx + 1, y + yy + 1, 38, 38); }
     else if (kind === 'steel') { R(c, '#5d646b', x, y, w, h); for (let yy = 0; yy < h; yy += 20) for (let xx = 0; xx < w; xx += 20) { C(c, '#7d868c', x + xx + 5, y + yy + 5, 1); C(c, '#7d868c', x + xx + 15, y + yy + 15, 1); } }
     else { R(c, '#6a6e72', x, y, w, h); for (let i = 0; i < 260; i++) R(c, r() < 0.5 ? '#75797d' : '#5e6266', x + r() * w, y + r() * h, 2, 2); for (let i = 0; i < 4; i++) R(c, '#c9b14a', x + 10 + r() * (w - 60), y + 10 + r() * (h - 10), 40, 3); }
@@ -74,6 +75,10 @@
     bar: (c, f) => { R(c, '#3a2216', f.x, f.y, f.w, f.h); R(c, '#5a3a22', f.x, f.y, 4, f.h); for (let k = 0; k < 6; k++) R(c, ['#2f6b3f', '#c0473f', '#e0b021'][k % 3], f.x + 8, f.y + 6 + k * 14, 6, 10); },
     crates: (c, f) => { for (let yy = 0; yy < f.h; yy += 20) for (let xx = 0; xx < f.w; xx += 24) { R(c, '#00000033', f.x + xx + 2, f.y + yy + 3, 22, 18); R(c, '#8a6a40', f.x + xx, f.y + yy, 22, 18); R(c, '#a8834e', f.x + xx, f.y + yy, 22, 2); R(c, '#6a4a2a', f.x + xx + 10, f.y + yy, 2, 18); } },
     forklift: (c, f) => { R(c, '#e0b021', f.x, f.y + 14, f.w, f.h - 14); R(c, '#1b1b1b', f.x + 4, f.y + 18, f.w - 8, 16); R(c, '#9aa3ab', f.x + 6, f.y, 3, 16); R(c, '#9aa3ab', f.x + f.w - 9, f.y, 3, 16); for (const dx of [-3, f.w - 3]) C(c, '#111', f.x + dx + 3, f.y + f.h - 8, 5); },
+    mattress: (c, f) => { R(c, '#00000033', f.x + 3, f.y + 4, f.w, f.h); R(c, '#c9c0a8', f.x, f.y, f.w, f.h); R(c, '#b3a88c', f.x, f.y + f.h - 4, f.w, 4); O(c, '#a0937266', f.x + f.w * 0.6, f.y + f.h * 0.5, 9, 6); R(c, '#e8e2d0', f.x + 4, f.y + 4, 18, 12); R(c, '#5a6aa0', f.x + 26, f.y + 6, f.w - 30, f.h - 10); },
+    labtable: (c, f) => { R(c, '#00000033', f.x + 3, f.y + 4, f.w, f.h); R(c, '#9aa3ab', f.x, f.y, f.w, f.h); R(c, '#c9d1d6', f.x, f.y, f.w, 3); for (let k = 0; k < 4; k++) { const x = f.x + 10 + k * (f.w - 20) / 3; R(c, '#e8eef4', x - 4, f.y + 6, 8, 10); R(c, ['#7fd0ff', '#e8e2d0', '#ff9ad0', '#9fe08a'][k], x - 3, f.y + 10, 6, 5); } R(c, '#2b2f33', f.x + f.w - 20, f.y + 14, 14, 10); C(c, '#e0473a', f.x + f.w - 13, f.y + 19, 3); R(c, '#e8e2d0', f.x + 6, f.y + 18, 22, 6); for (let k = 0; k < 5; k++) R(c, '#ffffff', f.x + 8 + k * 4, f.y + 19, 2, 3); },
+    barrels: (c, f) => { for (const [dx, dy] of [[10, 10], [28, 12], [18, 28]]) { O(c, '#00000044', f.x + dx + 2, f.y + dy + 3, 9, 9); C(c, '#2f5d8a', f.x + dx, f.y + dy, 9); C(c, '#3d7fd0', f.x + dx, f.y + dy, 7); C(c, '#244a6e', f.x + dx, f.y + dy, 2); R(c, '#e0b021', f.x + dx - 6, f.y + dy - 1, 12, 2); } },
+    counttable: (c, f) => { R(c, '#00000033', f.x + 3, f.y + 4, f.w, f.h); R(c, '#4a3a2a', f.x, f.y, f.w, f.h); R(c, '#5a4a38', f.x, f.y, f.w, 3); for (let k = 0; k < 7; k++) { const x = f.x + 8 + (k % 4) * 21, y = f.y + 8 + Math.floor(k / 4) * 20; R(c, '#2f6b3f', x, y, 16, 9); R(c, '#4f9a5f', x, y, 16, 2); R(c, '#e8e2d0', x + 6, y, 2, 9); } R(c, '#1b1e22', f.x + f.w - 22, f.y + f.h - 18, 16, 12); R(c, '#7cdeb5', f.x + f.w - 20, f.y + f.h - 16, 12, 4); R(c, '#9aa3ab', f.x + 6, f.y + f.h - 12, 10, 8); },
     rack: (c, f) => { R(c, '#00000033', f.x + 3, f.y + 4, f.w, f.h); R(c, '#2e5a7a', f.x, f.y, f.w, f.h); for (let k = 0; k < f.w; k += 30) { R(c, '#e0703a', f.x + k, f.y, 3, f.h); for (let b = 0; b < 2; b++) R(c, ['#8a6a40', '#a8834e', '#c9b58a'][(k / 30 + b) % 3 | 0], f.x + k + 5 + b * 12, f.y + 3, 10, f.h - 6); } },
   };
   function container(c, l, opened, t, visible) {
@@ -87,6 +92,9 @@
       case 'crate': case 'ammo': box(l.kind === 'ammo' ? '#4a5a3a' : '#8a6a40', 22, 18, l.kind === 'ammo' ? '#5d7048' : '#a8834e'); if (opened) R(c, '#2b2218', x - 9, y - 7, 18, 12); break;
       case 'gunlocker': box('#2b3238', 20, 30, '#4a5560'); for (let k = 0; k < 3; k++) R(c, '#11161a', x - 7, y - 10 + k * 7, 14, 1); if (opened) R(c, '#111', x - 8, y - 13, 16, 26); break;
       case 'cashbox': box('#3a3f45', 18, 12, '#9aa3ab'); break;
+      case 'product': box('#6a5a3a', 24, 16, '#8a7a52'); if (!opened) { R(c, '#3fae4a', x - 9, y - 6, 6, 5); R(c, '#f4f4f0', x - 2, y - 6, 5, 5); R(c, '#ff7fd0', x + 5, y - 5, 4, 4); } break;
+      case 'chemcrate': box('#2d6fb5', 20, 16, '#55a0e8'); R(c, '#e0b021', x - 6, y - 2, 12, 4); R(c, '#111', x - 2, y - 1, 4, 2); break;
+      case 'cashpile': if (!opened) { for (let k = 0; k < 5; k++) { R(c, '#00000033', x - 10 + k * 4 + 1, y - 6 + (k % 2) * 5 + 2, 10, 6); R(c, '#2f6b3f', x - 10 + k * 4, y - 6 + (k % 2) * 5, 10, 6); R(c, '#4f9a5f', x - 10 + k * 4, y - 6 + (k % 2) * 5, 10, 1); R(c, '#e8e2d0', x - 6 + k * 4, y - 6 + (k % 2) * 5, 2, 6); } } else R(c, '#2b2218', x - 10, y - 5, 20, 10); break;
       case 'cashjar': O(c, '#9fc3d6aa', x, y, 6, 8); if (!opened) R(c, '#7cdeb5', x - 3, y - 2, 6, 6); break;
       default: box('#6a4a2e', 20, 14, '#8a6440'); C(c, '#c9a24a', x, y + 1, 1.3);
     }
@@ -203,20 +211,25 @@
     const txt = [got.cash ? `+${money(got.cash)}` : '', ...Object.entries(got.items).map(([k, n]) => `+${n} ${k === 'ammo' ? '🔹' : root.NightshiftSupplyData?.MATERIALS?.[k]?.icon || k}`)].filter(Boolean).join(' ') || 'empty';
     api.float(l.x, l.y - 16, txt, got.cash || Object.keys(got.items).length ? '#ffe9a8' : '#9fb3c8');
     try { root.NightshiftAudio?.play('pickup'); root.NightshiftSkills?.gain('stealth', 12, 'loot'); } catch { /* optional */ }
+    // Legendary blueprints hide in safes and gun lockers (more often in the estate and stash houses).
+    const bpChance = { safe: 0.04, gunsafe: 0.07, gunlocker: 0.1, cashpile: 0.03 }[l.kind] || 0;
+    if (bpChance) { try { root.NightshiftWeapons?.blueprintDrop?.(bpChance * (job.type === 'mansion' || job.type === 'stash' ? 2 : 1) * mod('luck.rare'), `found in a ${l.kind === 'gunlocker' ? 'gun locker' : l.kind}`); } catch { /* optional */ } }
   }
 
   // ---------------- start / finish ----------------
-  function bagValue() { const F = B.FENCE; let v = job.bag.cash; for (const [k, n] of Object.entries(job.bag.items)) v += (F[k] || (root.NightshiftSupplyData?.MATERIALS?.[k]?.price || 3)) * n; return v; }
+  function bagValue() { const F = { ...B.FENCE, weed: 60, coke: 150 }; let v = job.bag.cash; for (const [k, n] of Object.entries(job.bag.items)) v += (F[k] || (root.NightshiftSupplyData?.MATERIALS?.[k]?.price || 3)) * n; return v; }
   function finish(api) {
     const p = P(), j = job; if (!p || !j) return;
     p.cash += j.bag.cash;
     const items = { ...j.bag.items }, ammo = items.ammo || 0; delete items.ammo;
+    // weed/coke go straight into the game's pocket (where dealers look for them)
+    try { const pk = root.NightshiftInventory?.state?.pocket; if (pk) { for (const k of ['weed', 'coke']) if (items[k]) { pk[k] = Math.min(999, (pk[k] || 0) + items[k]); delete items[k]; } root.NightshiftInventory.save?.(); } } catch { /* optional */ }
     const cs = CS(); if (ammo && cs) cs.reserve = Math.min(240, cs.reserve + ammo);
     const res = root.NightshiftSupply?.give?.(items) || { added: {}, lost: items };
     const lost = Object.values(res.lost || {}).reduce((a, b) => a + b, 0);
     const heat = (j.alarmAt ? j.L.T.heat : 0.25) + j.kills * 0.4;
     p.heat = Math.min(5, (p.heat || 0) + heat * mod('stealth.heat'));
-    state.robbed[j.id] = Date.now(); state.stats.jobs += 1; if (!j.alarmAt) state.stats.clean += 1; state.stats.loot += Math.round(bagValue()); state.stats.kills += j.kills;
+    state.robbed[j.id] = Date.now(); state.stats.jobs += 1; if (j.type === 'stash') state.stats.trap += 1; if (!j.alarmAt) state.stats.clean += 1; state.stats.loot += Math.round(bagValue()); state.stats.kills += j.kills;
     persist(); gameSave();
     try { root.NightshiftSkills?.gain('stealth', j.alarmAt ? 40 : 120, 'breakin'); } catch { /* optional */ }
     if (j.contract) { try { HM()?.resolve?.({ killed: j.markDown, alarm: !!j.alarmAt, otherKills: j.otherKills, escaped: j.markGone }); } catch (e) { console.error(e); } }
@@ -269,7 +282,7 @@
       },
       targets(api) {
         const out = [];
-        for (const l of L.loot) if (!j.looted[l.id] && dist(api.pos, l) < 60) out.push({ x: l.x, y: l.y, r: 40, action: j.search?.id === l.id ? '…' : 'SEARCH', label: `Search the ${l.kind}`, use: () => startSearch(l) });
+        for (const l of L.loot) if (!j.looted[l.id] && dist(api.pos, l) < 60) out.push({ x: l.x, y: l.y, r: 40, action: j.search?.id === l.id ? '…' : 'SEARCH', label: `Search the ${({ cashjar: 'cash jar', jewelbox: 'jewellery box', gunsafe: 'gun safe', gunlocker: 'gun locker', cashbox: 'cash box', tv: 'TV', art: 'painting', product: 'product stash', chemcrate: 'chemical crate', cashpile: 'counting table' })[l.kind] || l.kind}`, use: () => startSearch(l) });
         return out;
       },
       exits: [{ x: L.exit.x, y: L.exit.y, r: 44, action: 'ESCAPE', label: 'Back door · leave with your loot', sign: 'EXIT', icon: '🚪', color: '#7cdeb5', lift: 6, use: (api) => finish(api) }],
@@ -317,12 +330,16 @@
 
   // ---------------- city warehouses (night) ----------------
   const WAREHOUSES = [{ id: 'bi-wh-west', x: 790, y: 470, name: 'Westside warehouse' }, { id: 'bi-wh-docks', x: 1670, y: 1150, name: 'Dockside warehouse' }];
+  // Rival crews' trap houses: open any hour, armed crew inside, product + cash + guns.
+  const STASHES = [{ id: 'bi-stash-south', x: 1370, y: 1520, name: 'Southside trap house', type: 'stash' }, { id: 'bi-stash-east', x: 2110, y: 840, name: 'Eastside trap house', type: 'stash' }];
   const nightNow = () => { const m = root.NightshiftEnvironment?.state?.minute ?? 720, h = m / 60; return h >= 21 || h < 5; };
   const E = root.NightshiftEncounters;
   if (E && !E.__breakin) {
     const locs = E.locations, use = E.use, draw = E.draw;
-    E.locations = function () { const list = locs.apply(this, arguments) || []; return P()?.hp > 0 ? [...list, ...WAREHOUSES.map((w) => ({ id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🔦 BACK DOOR', action: nightNow() || HM()?.contractFor?.(w.id) ? 'BREAK IN' : 'LOCKED', hint: `${w.name} · break in at night (21:00–05:00)` }))] : list; };
+    E.locations = function () { const list = locs.apply(this, arguments) || []; return P()?.hp > 0 ? [...list, ...STASHES.map((w) => { const left = B.cooldownLeft(state, w.id, 'stash'); return { id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🏚️ TRAP HOUSE', action: left && !HM()?.contractFor?.(w.id) ? 'HOT' : 'BREAK IN', hint: left ? `${w.name} · crew on edge for ${Math.ceil(left / 60000)} min` : `${w.name} · armed crew, product, cash` }; }), ...WAREHOUSES.map((w) => ({ id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🔦 BACK DOOR', action: nightNow() || HM()?.contractFor?.(w.id) ? 'BREAK IN' : 'LOCKED', hint: `${w.name} · break in at night (21:00–05:00)` }))] : list; };
     E.use = function (id) {
+      const sh = STASHES.find((q) => q.id === id);
+      if (sh) { start({ id: sh.id, type: 'stash', name: sh.name, from: 'city', door: { x: sh.x, y: sh.y } }); return true; }
       const w = WAREHOUSES.find((q) => q.id === id);
       if (w) { if (!nightNow() && !HM()?.contractFor?.(w.id)) { say('🔒 Too many workers around. Come back after 21:00.'); return true; } start({ id: w.id, type: 'warehouse', name: w.name, from: 'city', door: { x: w.x, y: w.y } }); return true; }
       return use.apply(this, arguments);
@@ -332,6 +349,14 @@
   }
   function drawDoors() {
     const ctx = G(), p = P(); if (!ctx || !p) return;
+    for (const w of STASHES) {
+      if (Math.abs(p.x - w.x) > 700 || Math.abs(p.y - w.y) > 500) continue;
+      const x = w.x, y = w.y, hot = B.cooldownLeft(state, w.id, 'stash') > 0, ct = HM()?.contractFor?.(w.id);
+      // boarded-up door: plywood, spray tag, a camera, trash bags
+      R(ctx, '#2a2420', x - 14, y - 36, 28, 32); R(ctx, '#8a6a40', x - 12, y - 34, 24, 28); for (let k = 0; k < 3; k++) R(ctx, '#6a4a2a', x - 12, y - 30 + k * 9, 24, 2); R(ctx, '#b84a8a', x - 9, y - 24, 10, 3); R(ctx, '#7cdeb5', x - 2, y - 18, 8, 2);
+      R(ctx, '#1b1e22', x + 12, y - 44, 6, 4); C(ctx, '#e0473a', x + 16, y - 42, 1); R(ctx, '#11161a', x - 26, y - 10, 10, 9); R(ctx, '#11161a', x - 18, y - 8, 8, 8);
+      root.NightshiftSign?.(ctx, x, y - 52, ct ? '🎯' : '🏚️', ct ? 'CONTRACT · GO IN' : hot ? 'TRAP HOUSE · HOT' : 'TRAP HOUSE · BREAK IN', ct ? '#ffd970' : hot ? '#7d8796' : '#ff8a7a', ct ? { glow: true } : undefined);
+    }
     for (const w of WAREHOUSES) {
       if (Math.abs(p.x - w.x) > 700 || Math.abs(p.y - w.y) > 500) continue;
       const x = w.x, y = w.y;
@@ -343,5 +368,5 @@
     }
   }
 
-  root.NightshiftBreakin = Object.freeze({ start, get state() { return state; }, active: () => !!job, debug: () => job, WAREHOUSES, cooldownLeft: (id, type) => B.cooldownLeft(state, id, type) });
+  root.NightshiftBreakin = Object.freeze({ STASHES, start, get state() { return state; }, active: () => !!job, debug: () => job, WAREHOUSES, cooldownLeft: (id, type) => B.cooldownLeft(state, id, type) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

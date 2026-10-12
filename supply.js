@@ -235,10 +235,18 @@
 
   // ---- new-gun reveal card ----
   let revealT = 0;
-  function reveal(w, q = 1) {
+  function reveal(w, q = 1, blueprint = false) {
     const card = document.getElementById('spReveal') || (() => { const d = el('div', { id: 'spReveal' }); document.body.append(d); d.onclick = () => d.classList.remove('on'); return d; })();
     card.textContent = '';
-    const tierName = w.crude ? 'CRUDE' : ['', 'STREET', 'PRO', 'MILITARY'][w.tier] || '';
+    const tierName = w.legend ? 'LEGENDARY' : w.crude ? 'CRUDE' : ['', 'STREET', 'PRO', 'MILITARY'][w.tier] || '';
+    if (blueprint) {
+      card.dataset.tier = 'bp'; card.append(el('div', { className: 'k' }, '📜 BLUEPRINT FOUND · LEGENDARY'));
+      const ic = gunIcon(w.id, 240, 94); if (ic) card.append(ic);
+      card.append(el('div', { className: 'n' }, w.name), el('div', { className: 's' }, `${w.desc} Craft it at your Lockup (level ${w.tier}, Shooting ${w.level}).`));
+      const need = el('div', { className: 's' }); need.textContent = 'Needs: ' + Object.entries(w.craft.mats).map(([k, n]) => `${n} ${S.MATERIALS[k]?.icon || k}`).join('  '); card.append(need);
+      card.classList.remove('on'); void card.offsetWidth; card.classList.add('on'); clearTimeout(revealT); revealT = setTimeout(() => card.classList.remove('on'), 5200);
+      return;
+    }
     card.dataset.tier = w.crude ? 0 : w.tier;
     const Q = W.QUALITY[q];
     card.append(el('div', { className: 'k' }, `NEW GUN · ${tierName}`));
@@ -299,6 +307,8 @@
     background:radial-gradient(120% 90% at 50% 0%,#2b3546,#0d1118 70%);border:1px solid #ffffff2a;box-shadow:0 30px 80px #000d,0 0 0 1px #000}
   #spReveal.on{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
   #spReveal .k{font:700 11px var(--disp,system-ui);letter-spacing:.2em;color:#9fb3c8;margin-bottom:8px}
+  #spReveal[data-tier="bp"]{background:radial-gradient(120% 90% at 50% 0%,#4a3a14,#120e06 72%);border-color:#e3c25a88;box-shadow:0 30px 80px #000d,0 0 40px #e3c25a44} #spReveal[data-tier="bp"] .k{color:#ffd970}
+  .spP .card.legend{border-color:#e3c25a77;background:linear-gradient(135deg,#2a2210d0,#141a24)} .spP .card.legend .nm{color:#ffd970} .spP .card.bp canvas.gun{filter:brightness(.15) sepia(1) hue-rotate(5deg)}
   #spReveal[data-tier="1"] .k{color:#7cdeb5} #spReveal[data-tier="2"] .k{color:#7cc7ff} #spReveal[data-tier="3"] .k{color:#ffb347}
   #spReveal[data-tier="3"]{box-shadow:0 30px 80px #000d,0 0 40px #ffb34755} #spReveal[data-tier="2"]{box-shadow:0 30px 80px #000d,0 0 34px #7cc7ff44}
   #spReveal canvas{display:block;margin:0 auto 8px;image-rendering:pixelated} #spReveal .n{font:700 22px var(--disp,system-ui);color:#ffd970}
@@ -450,9 +460,9 @@
       const cards = el('div', { className: 'cards' });
       for (const w of W.WEAPONS) {
         const why = W.craftBlock(wst, w.id, ctx), owned = wst.owned.includes(w.id) && !wst.broken.includes(w.id);
-        const card = el('div', { className: 'card' + (w.tier > lvl ? ' lock' : '') + (!why ? ' ready' : '') });
+        const card = el('div', { className: 'card' + (w.tier > lvl ? ' lock' : '') + (!why ? ' ready' : '') + (w.legend ? ' legend' : '') + (w.legend && !(wst.learned || []).includes(w.id) ? ' bp' : '') });
         const hd = el('div', { className: 'hd' }); const ic = gunIcon(w.id, 84, 34); if (ic) hd.append(ic);
-        const nm = el('div'); nm.append(el('div', { className: 'nm' }, w.name), el('div', { className: 'tg' }, `${w.crude ? 'CRUDE' : w.cls.toUpperCase()} · ${w.tier ? 'LOCKUP LV ' + w.tier : 'HOME BENCH'} · SHOOTING ${w.level}`)); hd.append(nm); card.append(hd);
+        const nm = el('div'); nm.append(el('div', { className: 'nm' }, w.name), el('div', { className: 'tg' }, `${w.legend ? '👑 LEGENDARY · ' : ''}${w.crude ? 'CRUDE' : w.cls.toUpperCase()} · ${w.tier ? 'LOCKUP LV ' + w.tier : 'HOME BENCH'} · SHOOTING ${w.level}`)); hd.append(nm); card.append(hd);
         card.append(el('div', { className: 'ds' }, w.desc));
         const st = el('div', { className: 'stats' });
         for (const [k, v] of [['DMG', w.pellets > 1 ? `${w.pellets}×${w.dmg}` : w.dmg], ['MAG', w.mag], ['RPM', Math.round(60000 / w.rate)], ['LASTS', w.dur]]) { const d = el('div'); d.append(el('b', {}, String(v)), document.createTextNode(k)); st.append(d); }
@@ -626,7 +636,7 @@
     start({ id, kind, spot: sp }, { near: nearFn });
   }
   const progress = () => (act ? { kind: act.kind, site: act.site, f: Math.min(1, (performance.now() - act.t0) / act.dur), icon: act.spot.icon, win: act.win, missed: act.missed } : null);
-  root.NightshiftSupply = Object.freeze({ get state() { return state; }, openBag, openBench, openShop, gpsTo, buy, count, space, refresh, matIcon, gunIcon, sites, useSite, newLife, startZone, progress, tap: () => tapAct(), give: (items) => { const r = S.give(state, items); persist(); gameSave(); return r; }, take: (cost) => { if (!S.has(state.bag, cost)) return false; S.take(state.bag, cost); persist(); gameSave(); return true; },
+  root.NightshiftSupply = Object.freeze({ get state() { return state; }, reveal, openBag, openBench, openShop, gpsTo, buy, count, space, refresh, matIcon, gunIcon, sites, useSite, newLife, startZone, progress, tap: () => tapAct(), give: (items) => { const r = S.give(state, items); persist(); gameSave(); return r; }, take: (cost) => { if (!S.has(state.bag, cost)) return false; S.take(state.bag, cost); persist(); gameSave(); return true; },
     activity: () => (act ? { kind: act.kind, site: act.site, done: act.done } : null), stop: () => stop(), save: () => persist(), BENCH_POS,
     paused: () => !bagP.hidden || !benchP.hidden || !shopP.hidden });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

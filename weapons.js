@@ -350,6 +350,14 @@
   function craftMod(id, modId, ctx) { const r = W.craftMod(state, id, modId, ctx); if (r.ok) { if (state.equipped === id) equip(id, true); after(); } return r; }
   function repair(id, ctx) { const r = W.repair(state, id, { ...ctx, durMul: durMul() }); if (r.ok) { if (state.equipped === id) equip(id, true); after(); } return r; }
   function sell(id, kind, price) { const p = P(); if (!p) return { ok: false, reason: 'Not ready' }; const r = W.sell(state, p, id, kind, price, durMul()); if (r.ok) after(); return r; }
-  root.NightshiftWeapons = Object.freeze({ current, equip, cycle, open, close, door, craft, craftMod, repair, sell, armoryCard, condText, durMul, syncPocket,
+  // A blueprint was found (break-in safe, stash-house vault, the Broker): learn the legendary recipe for good.
+  function learn(id, from = '') {
+    if (!W.learn(state, id)) return false; persist(); gameSave();
+    const w = W.BY_ID[id]; try { root.NightshiftSupply?.reveal?.(w, 1, true); } catch { /* optional */ }
+    say(`📜 Blueprint: ${w.name}${from ? ' · ' + from : ''} · craft it at your Lockup`); try { root.NightshiftAudio?.play('pickup'); } catch { /* optional */ }
+    return true;
+  }
+  function blueprintDrop(chance, from) { const id = W.rollBlueprint(state, Math.random, chance); return id ? learn(id, from) && id : null; }
+  root.NightshiftWeapons = Object.freeze({ learn, blueprintDrop, current, equip, cycle, open, close, door, craft, craftMod, repair, sell, armoryCard, condText, durMul, syncPocket,
     paused: () => !shop.hidden, armed: () => !!W.BY_ID[state.equipped], get state() { return state; } });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
