@@ -301,7 +301,8 @@
     const r = d.indoor ? 0 : rain();
     if (r > 0.2) { ctx.save(); ctx.strokeStyle = 'rgba(180,210,240,.35)'; ctx.lineWidth = 1; ctx.beginPath(); const n = Math.round(60 * r); for (let i = 0; i < n; i++) { const x = (i * 97 + now * 0.6) % Wd, y = (i * 211 + now * 1.4) % Hd; ctx.moveTo(x, y); ctx.lineTo(x - 3, y + 11); } ctx.stroke(); ctx.restore(); }
     if (dark < 0.02) return;
-    const dpr = Math.max(1, Math.min(2, root.NightshiftRenderScale || devicePixelRatio || 1));
+    // match the game canvas's real backing ratio (Codex v0.54 caps it by pixel budget, fx.js can lower it)
+    const dpr = ctx.canvas?.width && Wd ? ctx.canvas.width / Wd : Math.max(1, Math.min(2, root.NightshiftRenderScale || devicePixelRatio || 1));
     if (!lm || lm.width !== Math.round(Wd * dpr) || lm.height !== Math.round(Hd * dpr)) { lm = document.createElement('canvas'); lm.width = Math.round(Wd * dpr); lm.height = Math.round(Hd * dpr); }
     const x = lm.getContext('2d');
     x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'source-over'; x.clearRect(0, 0, lm.width, lm.height);
