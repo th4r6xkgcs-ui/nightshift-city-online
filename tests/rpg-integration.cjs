@@ -6,7 +6,7 @@ run('NightshiftSkills.open();globalThis.start=JSON.stringify({x:player.x,y:playe
 assert.equal(run('NightshiftRPG.paused()'),true);assert.equal(run('JSON.stringify({x:player.x,y:player.y,ammo:player.ammo,cash:player.cash})===start'),true,'skill menu blocks gameplay');
 run('document.querySelector("#skPanel").hidden=true;NightshiftGoals.open();frame(11000)');assert.equal(run('NightshiftRPG.paused()'),true);run('document.querySelector("#glPanel").hidden=true');
 assert.equal(run('NightshiftRPG.paused()'),false);
-run('NightshiftSkills.gain("shooting",200,"integration");NightshiftGoals.state.stats.walked=500');
+run('for(const goal of NightshiftGoalsData.GOALS)if(goal.id!=="walk")NightshiftGoals.state.done[goal.id]=0;NightshiftSkills.gain("shooting",200,"integration");NightshiftGoals.state.stats.walked=500');
 for(const timer of run.intervals.filter(t=>t.ms===1000||t.ms===3000))timer.fn();
 assert.ok(storage.has('nightshift-skills-v1'));assert.ok(storage.has('nightshift-goals-v1'));
 assert.ok(run('NightshiftGoals.state.done.walk')>=0);

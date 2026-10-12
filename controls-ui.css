@@ -29,3 +29,13 @@ body[data-control-size="compact"] #nub{width:44px;height:44px}
 #actions.expanded{background:linear-gradient(140deg,#1c3544f7,#101e2ef5);border-color:#9bb7ac66;border-radius:18px}
 #toast{max-width:calc(100vw - 32px);border:1px solid #b9cbbc44;background:#152b39ed;box-shadow:0 10px 36px #06132166;font-size:13px;line-height:1.45}
 #nub,#aimNub{box-shadow:inset 0 2px 5px #dbe7de44,0 3px 12px #04122244}
+
+/* Living Streets: reserve safe-area space, stabilize numeric HUD width. */
+#hud,#map{top:calc(env(safe-area-inset-top,0px) + 10px);font-variant-numeric:tabular-nums}
+#hud{left:max(12px,env(safe-area-inset-left,0px));line-height:1.5}
+#map{right:max(12px,env(safe-area-inset-right,0px));white-space:pre-line;line-height:1.4}
+#actions>button:active{filter:brightness(1.2);transform:translateY(1px)}
+#actions>button:focus-visible{outline:2px solid #f4d597;outline-offset:3px}
+#toast{pointer-events:none;width:max-content;max-width:min(420px,calc(100vw - 32px))}
+@media(max-width:430px){#hud{font-size:11px;max-width:calc(100vw - 140px)}#map{max-width:116px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){#toast{transition:none}#actions>button:active{transform:none}}

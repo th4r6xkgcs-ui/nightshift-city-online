@@ -1,3 +1,9 @@
+# After v0.55 Living Streets
+
+Current branch: codex/living-streets-v55. See CLIENT_HANDOFF_V55.md. Next: physical iPhone Safari/audio/performance checks, refine public-art hooks with Claude, and extended gameplay balance QA. Further crew/follower/gang expansion waits for multiplayer. No merges or public access changes authorized.
+
+## Historical priorities
+
 # Larger milestones after v0.54
 
 Owner direction: a polished solo crime RPG on phones first, larger tested batches, MMO later. Canonical combined client: codex/visual-overhaul-v54; Claude completed RPG snapshot 8b6c4c3. Coordinate file ownership through PR #3 and post exact combined heads for Claude's rpg-play build.

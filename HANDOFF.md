@@ -1,6 +1,14 @@
+## CURRENT — v0.55 Living Streets (2026-10-12)
+
+Canonical branch: codex/living-streets-v55, built from verified v0.54 a2750326 and exact Claude rpg-play c31e4976 (rpg-core 556cec53 / art-pass fdc3c36d). Read CLIENT_HANDOFF_V55.md for file ownership, imported module provenance, save contracts and verification limits.
+
+Full art layer: 20 distinct held guns, 11 pet species, baked collectible cars, deeper building materials, clear intersections, readable street props, animated neighborhoods, smoother camera and unified mobile HUD/notice queue. Gameplay modules imported intact; no new crew/follower/gang-management expansion. Preview remains local single-player, owner-private Sites; no backend deployment, merges or access changes.
+
+Validation: 107 suites and root syntax; 137-asset static build; real Edge profile/home checks and 390/844/320 viewport, dual-touch cancellation, city/day/night/countryside/suburbs/apartment renders; zero page errors. Physical iPhone and sustained device/audio QA pending.
+
 # HANDOFF — Nightshift City Online
 
-## CURRENT — v0.54 combined Street Life client (2026-10-11)
+## HISTORICAL — v0.54 combined Street Life client (2026-10-11)
 
 Current batch: exact Claude RPG 8b6c4c3 integration, persistent contact memory, city journal and crash loyalty consequences. See CLIENT_HANDOFF_V53.md.
 

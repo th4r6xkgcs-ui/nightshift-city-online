@@ -156,26 +156,6 @@ function storefrontLight(b,night){
 // Art pass (Claude): asphalt grit baked into the cached ground once — speckle, patches, cracks, manholes,
 // oil stains and tyre marks on the road bands only (deterministic, so every device sees the same streets).
 function ground(ctx,width,height){
- groundBase(ctx,width,height);
- let seed=1337;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
- const XS=[],YS=[];for(let x=440;x<width;x+=440)XS.push(x);for(let y=340;y<height;y+=340)YS.push(y);
- const onRoad=(x,y)=>XS.some(v=>Math.abs(x-v)<46)||YS.some(v=>Math.abs(y-v)<46);
- const R=(c,x,y,w,h)=>{ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),w,h)};
- // patches
- for(let i=0;i<70;i++){const vert=rnd()<.5,c=vert?XS[Math.floor(rnd()*XS.length)]:YS[Math.floor(rnd()*YS.length)],t=40+rnd()*(vert?height-80:width-80),o=(rnd()-.5)*60,w=14+rnd()*30,h=10+rnd()*22;const x=vert?c+o:t,y=vert?t:c+o;if(onRoad(x,y))R(rnd()<.5?'#ffffff08':'#00000014',x,y,vert?h:w,vert?w:h)}
- // speckle
- for(let i=0;i<9000;i++){const x=rnd()*width,y=rnd()*height;if(!onRoad(x,y))continue;R(rnd()<.55?'#ffffff0d':'#0000001c',x,y,rnd()<.8?1:2,1)}
- // cracks
- ctx.strokeStyle='#0a101826';ctx.lineWidth=1;
- for(let i=0;i<60;i++){let x=rnd()*width,y=rnd()*height;if(!onRoad(x,y))continue;ctx.beginPath();ctx.moveTo(x,y);for(let k=0;k<5;k++){x+=(rnd()-.5)*16;y+=(rnd()-.5)*16;ctx.lineTo(x,y)}ctx.stroke()}
- // manholes + drains near intersections, oil stains + tyre marks
- for(const x of XS)for(const y of YS){
-  const mx=x+(rnd()<.5?-24:20),my=y+(rnd()<.5?-30:26);ctx.fillStyle='#0b111a55';ctx.beginPath();ctx.arc(mx,my,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#5c656e66';ctx.beginPath();ctx.arc(mx,my,6,0,Math.PI*2);ctx.stroke();R('#5c656e55',mx-4,my-.5,8,1);R('#5c656e55',mx-.5,my-4,1,8);
-  for(const [ox,oy] of [[-120,-14],[130,12],[-12,-110],[14,120]]){ctx.fillStyle='#04070c22';ctx.beginPath();ctx.ellipse(x+ox+(rnd()-.5)*30,y+oy+(rnd()-.5)*30,6+rnd()*6,3+rnd()*3,rnd()*3,0,Math.PI*2);ctx.fill()}
-  ctx.strokeStyle='#05080d1f';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x+(rnd()<.5?-40:40),y+(rnd()<.5?-40:40),34+rnd()*10,rnd()*6,rnd()*6+1.6);ctx.stroke();ctx.lineWidth=1;
- }
-}
-function groundBase(ctx,width,height){
  rect(ctx,'#344d4b',0,0,width,height);const cafes=new Set(createBuildings(width,height).filter(b=>['DINER','CORNER SHOP'].includes(b.name)).map(b=>(b.x-80)+':'+(b.y-75)));
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
   const palette=palettes[districtStyle(x+100,y+100)];rect(ctx,palette.edge,x+82,y+80,276,180);rect(ctx,palette.yard,x+93,y+91,254,156);
@@ -198,9 +178,13 @@ function groundBase(ctx,width,height){
  for(let x=0;x<width;x+=440)wash(ctx,'#273443',x-57,0,114,height,'#ffffff03','#0c1c3018');
  for(let y=0;y<height;y+=340)wash(ctx,'#273443',0,y-56,width,112,'#ffffff03','#0c1c3022');
  for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
-  rect(ctx,'#242e3b',x-63,y-63,126,126);
-  for(let k=-49;k<50;k+=14){rect(ctx,'#d6d7b8',x+k,y-79,8,13);rect(ctx,'#d6d7b8',x+k,y+67,8,13);rect(ctx,'#d6d7b8',x-79,y+k,13,8);rect(ctx,'#d6d7b8',x+67,y+k,13,8)}
-  rect(ctx,'#b8b8a2',x-53,y-101,106,3);rect(ctx,'#b8b8a2',x-53,y+98,106,3);
+  // Cut all four curb bars out of the junction. Keep pedestrian corners intact.
+  rect(ctx,'#273443',x-63,y-83,126,166);
+  rect(ctx,'#273443',x-85,y-62,170,124);
+  for(let k=-46;k<47;k+=14){rect(ctx,'#d6d7b8',x+k,y-61,8,12);rect(ctx,'#d6d7b8',x+k,y+49,8,12);rect(ctx,'#d6d7b8',x-61,y+k,12,8);rect(ctx,'#d6d7b8',x+49,y+k,12,8)}
+  // Both lanes: the legacy traffic loops do not follow a universal handedness.
+  rect(ctx,'#e1ddbd',x-57,y-84,114,3);rect(ctx,'#e1ddbd',x-57,y+81,114,3);
+  rect(ctx,'#e1ddbd',x-84,y-57,3,114);rect(ctx,'#e1ddbd',x+81,y-57,3,114);
   rect(ctx,'#c8b674',x-2,y+112,2,90);rect(ctx,'#c8b674',x+2,y+112,2,90);
   for(let k=114;k<335;k+=48){rect(ctx,'#c8b674',x+k,y-2,26,2);rect(ctx,'#c8b674',x+k,y+2,26,2)}
   if(x>0&&y>0&&(x/440+y/340)%3===0){
@@ -219,6 +203,11 @@ function groundBase(ctx,width,height){
   if(cafe)for(let i=0;i<2;i++){const tx=x+350,ty=y+163+i*52;oval(ctx,'#15253655',tx+6,ty+5,16,8);oval(ctx,'#29434a',tx,ty,13,8);oval(ctx,'#b99f79',tx,ty-2,12,7);rect(ctx,'#e7d3a6',tx-1,ty-6,3,3);for(const side of [-1,1]){rect(ctx,'#253940',tx+side*17-3,ty-5,6,10);rect(ctx,'#8d7760',tx+side*17-3,ty-7,6,3)}}
   if(x>0&&y>0&&(districtStyle(x+100,y+100)==='midtown'||districtStyle(x+100,y+100)==='docks')){palm(ctx,x+360,y+147);palm(ctx,x+360,y+246)}
   for(let k=0;k<3;k++)rect(ctx,'#9a8060',x-81,y+211+k*4,15,2);rect(ctx,'#303e3e',x-80,y+207,2,18);rect(ctx,'#303e3e',x-68,y+207,2,18);
+ }
+ // Direction arrows follow the actual authored traffic loops, not assumed lanes.
+ for(const [ax,ay,angle] of [[660,322,0],[1100,322,0],[1302,510,Math.PI/2],[1100,1002,Math.PI],[660,1002,Math.PI],[422,850,-Math.PI/2],[1100,698,0],[1540,698,0],[1778,1190,Math.PI/2],[1540,1378,Math.PI],[1100,1378,Math.PI],[898,1190,-Math.PI/2]]){
+  ctx.save();ctx.translate(ax,ay);ctx.rotate(angle);rect(ctx,'#bfc6b599',-12,-2,19,4);
+  ctx.fillStyle='#bfc6b599';ctx.beginPath();ctx.moveTo(13,0);ctx.lineTo(3,-7);ctx.lineTo(3,7);ctx.closePath();ctx.fill();ctx.restore();
  }
 }
 let groundCache=null,cacheWidth=0,cacheHeight=0;
@@ -261,6 +250,34 @@ function roofTop(b,night,kind){
  if(seed%3!==0){const ax=x+w-13,ay=y+14;rect(g,'#0f1c2866',ax-2,ay+26,7,4);rect(g,'#4a5560',ax,ay,2,28);rect(g,'#4a5560',ax-4,ay+8,10,1);rect(g,'#4a5560',ax-3,ay+15,8,1);
   const on=night>.2&&((t+seed*.13)%1.6)<.5;g.fillStyle=on?'#ff3b3b':'#6b2a2a';g.beginPath();g.arc(ax+1,ay,2.2,0,Math.PI*2);g.fill();
   if(on){g.save();g.globalCompositeOperation='lighter';const gr=g.createRadialGradient?g.createRadialGradient(ax+1,ay,0,ax+1,ay,12):null;if(gr){gr.addColorStop(0,'#ff3b3b88');gr.addColorStop(1,'#ff3b3b00');g.fillStyle=gr;g.beginPath();g.arc(ax+1,ay,12,0,Math.PI*2);g.fill()}g.restore()}}
+}
+// Bounded, deterministic animation: no timers, particles, gameplay state or new saves.
+function ambient(ctx,b,time,night=0){
+ const {x,y,w,h,name}=b,t=Number.isFinite(time)?time:0,seed=hash(x,y)%100;
+ ctx.save();
+ if(name==='APARTMENTS'){
+  // Rooftop laundry catches a small neighborhood breeze.
+  rect(ctx,'#243e46',x+51,y+26,2,28);rect(ctx,'#243e46',x+99,y+26,2,28);
+  rect(ctx,'#c4bda3',x+51,y+28,50,1);
+  for(let i=0;i<3;i++){const sway=Math.round(Math.sin(t*.8+seed+i)*2);rect(ctx,['#b4c5bf','#b87868','#d7bc88'][i],x+56+i*14+sway,y+29,10,14+i%2*4);rect(ctx,'#ffffff22',x+57+i*14+sway,y+30,2,11)}
+ }else{
+  // Vent fan animation stays inside the existing rooftop utility footprint.
+  const fx=x+48,fy=y+36;rect(ctx,'#19313c',fx-9,fy-9,18,18);
+  ctx.save();ctx.translate(fx,fy);ctx.rotate(t*1.8+seed);rect(ctx,'#93aaa5',-7,-2,14,4);rect(ctx,'#93aaa5',-2,-7,4,14);ctx.restore();rect(ctx,'#d8ceae',fx-2,fy-2,4,4);
+ }
+ if(['DINER','WAREHOUSE','GARAGE'].includes(name)){
+  // Three recycled steam shapes; never allocate a growing particle collection.
+  for(let i=0;i<3;i++){const life=((t*.28+i/3+seed/100)%1+1)%1;ctx.globalAlpha=(1-life)*.24;const sx=x+w-25+Math.sin(t+seed+i)*3+life*8,sy=y+16-life*30;rect(ctx,'#d8dfd4',sx,sy,7+life*9,4);rect(ctx,'#d8dfd4',sx-2,sy+3,6+life*7,3)}
+  ctx.globalAlpha=1;
+ }
+ if(['CORNER SHOP','DINER','CLOTHING','CLUB'].includes(name)){
+  // A slow reflection and shop-specific display movement behind the glass.
+  const phase=(Math.sin(t*.45+seed)+1)/2;
+  ctx.globalAlpha=.16;rect(ctx,'#c7eee4',x+17+phase*39,y+h-31,4,20);ctx.globalAlpha=1;
+  if(name==='DINER'){rect(ctx,'#efcf99',x+23,y+h-19,10,5);rect(ctx,'#efcf99',x+34,y+h-18,3,3);rect(ctx,'#ffffff66',x+26,y+h-25-Math.round(phase*3),2,4)}
+  if(name==='CLUB'&&night>.2)for(let i=0;i<5;i++)rect(ctx,['#dc85bf','#94cfc5'][i%2],x+19+i*10,y+h-9-Math.round(4+phase*8+(i%2)*4),5,4+Math.round(phase*8+(i%2)*4));
+ }
+ ctx.restore();
 }
 function building(b){
  if(typeof camera!=='undefined'&&(b.x+b.w+48<camera.x||b.y+b.h+48<camera.y||b.x>camera.x+W/camera.zoom||b.y>camera.y+H/camera.zoom))return;
@@ -331,7 +348,7 @@ function building(b){
  rect(g,'#1a334066',x+3,y+h-1,w-6,5);rect(g,trim,x+w/2-23,y+h+1,46,3);rect(g,'#677f82',x+w/2-19,y+h+4,38,3);
  // Frontage fittings add readable larger shapes, rather than noisy speckles.
  if(shop){const bx=x+w-43,by=y+h+10;rect(g,'#152d3966',bx+4,by+5,25,25);wash(g,'#42695d',bx,by,24,22,'#a9cbbf33','#173c3455');oval(g,'#446e55',bx+12,by-1,13,7);oval(g,'#76966a',bx+9,by-4,8,4);rect(g,'#c3b58c',x+28,y+h+10,20,23);rect(g,'#253e48',x+31,y+h+12,14,16);g.fillStyle='#d8d0ac';g.font='7px system-ui';g.textAlign='center';g.fillText(name==='DINER'?'MENU':'OPEN',x+38,y+h+23)}
- storefrontLight(b,night);g.restore();
+ ambient(g,b,(typeof ticks==='number'?ticks:0)/60,night);storefrontLight(b,night);g.restore();
 }
-root.NightshiftWorld={litWindows:()=>litWindows,createBuildings,road,building,ground,cafeActors,cafeCanopy,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop,signActors,signTop};
+root.NightshiftWorld={ambient,litWindows:()=>litWindows,createBuildings,road,building,ground,cafeActors,cafeCanopy,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop,signActors,signTop};
 })(globalThis);
