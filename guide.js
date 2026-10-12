@@ -151,11 +151,17 @@
   }
   addEventListener('resize', () => { if (step >= 0) showStep(); });
   // First time outside: run the tour once the HUD is up and no menu is open.
-  let wasHome = false;
+  // (Only after ~1.5 s continuously outside, so it never fires inside the apartment during the spawn hand-off.)
+  let wasHome = false, outsideSince = 0;
+  const isHome = () => !!root.NightshiftHome?.kind?.();
   setInterval(() => {
-    const H = root.NightshiftHome, home = !!H?.kind?.();
-    if (home) { wasHome = true; return; }
-    if (!state.toured && step < 0 && (wasHome || root.NightshiftLife?.spawned?.() === false) && !root.NightshiftHud?.menuOpen?.() && P()) { wasHome = false; setTimeout(() => { if (!state.toured && step < 0) startTour(); }, 900); }
+    const now = performance.now();
+    if (isHome()) { wasHome = true; outsideSince = 0; return; }
+    if (!outsideSince) outsideSince = now;
+    const ready = wasHome || (root.NightshiftLife?.spawned?.() === false && now > 6000);
+    if (!state.toured && step < 0 && ready && now - outsideSince > 1500 && !root.NightshiftHud?.menuOpen?.() && P()) {
+      wasHome = false; setTimeout(() => { if (!state.toured && step < 0 && !isHome()) startTour(); }, 400);
+    }
   }, 500);
 
   root.NightshiftGuide = Object.freeze({ tour: startTour, open, close, paused: () => !panel.hidden || step >= 0 });

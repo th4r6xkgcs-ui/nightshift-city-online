@@ -9,7 +9,7 @@
   // Tutorial goals come first and teach one system each; milestones keep the grind going.
   const GOALS = [
     // ---- first session ----
-    { id: 'walk', tier: 'Start', title: 'Hit the streets', hint: 'Walk to your apartment door and USE EXIT, then move with the left stick (WASD on keyboard).',
+    { id: 'walk', tier: 'Start', title: 'Hit the streets', hint: 'Step out through the 🚪 EXIT, then walk a block: drag the left stick (WASD on keyboard).',
       progress: (c) => [Math.min(c.walked, 400), 400], reward: { cash: 25, xp: { athletics: 30 } } },
     { id: 'shoot', tier: 'Start', title: 'Test your piece', hint: 'Aim with the right stick and FIRE a few rounds.',
       progress: (c) => [Math.min(c.shots, 5), 5], reward: { cash: 25, xp: { shooting: 20 } } },

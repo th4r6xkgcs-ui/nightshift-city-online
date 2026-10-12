@@ -218,6 +218,13 @@
     ctx.fillStyle = '#ffd970'; ctx.strokeStyle = '#1a1300'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(-6, -8); ctx.lineTo(-2, 0); ctx.lineTo(-6, 8); ctx.closePath(); ctx.stroke(); ctx.fill();
     ctx.restore();
+    // distance tag just past the arrow (10 px ≈ 1 m), so "which way and how far" is readable at a glance
+    const lx = p.x + Math.cos(a) * (r + 24), ly = p.y + Math.sin(a) * (r + 18), label = `${Math.max(1, Math.round(t.dist / 10))}m`;
+    ctx.save(); ctx.font = '700 9px "Chakra Petch",ui-monospace,monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const w = (ctx.measureText ? ctx.measureText(label).width : label.length * 5) + 10;
+    ctx.fillStyle = '#0c111ee6'; ctx.strokeStyle = '#ffd970'; ctx.lineWidth = 1;
+    if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(lx - w / 2, ly - 7, w, 14, 7); ctx.fill(); ctx.stroke(); } else ctx.fillRect(lx - w / 2, ly - 7, w, 14);
+    ctx.fillStyle = '#ffd970'; ctx.fillText(label, lx, ly + 0.5); ctx.restore();
   }
   const E = root.NightshiftEncounters;
   if (E && !E.__goals) {

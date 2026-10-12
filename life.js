@@ -32,8 +32,8 @@
     if (H.kind?.() === 'home' || H.enter('home', { x: 252, y: 172 })) {
       spawned = true; clearInterval(spawnTimer);
       const first = !state.welcomed; state.welcomed = true; persist();
-      setTimeout(() => say(first ? '🏠 Welcome home. This apartment is yours: REST in bed, STYLE at the wardrobe, STORE items. Walk to the door at the bottom and USE EXIT to hit the streets.'
-        : `🏠 You wake up in bed · ${L.hhmm(minute())} · walk to the door at the bottom and USE EXIT`), 400);
+      setTimeout(() => say(first ? '🏠 Your own place. Head for the 🚪 EXIT sign to hit the streets.'
+        : `🏠 You wake up · ${L.hhmm(minute())} · 🚪 EXIT is at the bottom`), 400);
       if (first) setTimeout(() => text('mom', 'Proud of you for getting your own place, baby. Eat something and call me sometime ❤️'), 9000);
       setTimeout(() => text('rico', 'Yo, you up? Check your 📱 HUSTLE phone, I put some work on there for you.'), first ? 20000 : 6000);
     }
@@ -57,7 +57,21 @@
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const msgPanel = el('div', { id: 'lfMsg', hidden: true, role: 'dialog', ariaLabel: 'Messages' });
   document.body.append(msgPanel);
-  function text(from, msg) {
+  // Texts queue up and arrive one at a time (>= 9 s apart), never during the controls tour or while a menu is open,
+  // so a new player isn't buried in pop-ups. Mom's welcome is allowed inside the apartment; everything else waits
+  // until you've been outside a little.
+  const inbox = []; let lastText = -1e9, outsideMs = 0, lastTick = performance.now();
+  function text(from, msg) { if (L.CONTACTS[from] && inbox.length < 8) inbox.push([from, msg]); }
+  setInterval(() => {
+    const now = performance.now(), dt = now - lastTick; lastTick = now;
+    const home = !!root.NightshiftHome?.kind?.(); if (!home) outsideMs += dt;
+    if (!inbox.length || now - lastText < 9000) return;
+    if (root.NightshiftGuide?.paused?.() || root.NightshiftHud?.menuOpen?.()) return;
+    const i = inbox.findIndex(([from]) => from === 'mom' || outsideMs > 20000);
+    if (i < 0) return;
+    const [from, msg] = inbox.splice(i, 1)[0]; lastText = now; deliver(from, msg);
+  }, 500);
+  function deliver(from, msg) {
     const c = L.CONTACTS[from]; if (!c) return;
     state.log.push({ from, text: String(msg).slice(0, 200), at: Date.now() }); state.log = state.log.slice(-40);
     if (msgPanel.hidden) state.unread = Math.min(99, state.unread + 1);
@@ -83,10 +97,10 @@
 
   // Tip texts tied to real mechanics.
   setInterval(() => {
-    if (!spawned) return;
+    if (!spawned || outsideMs < 60000) return; // tips start after a minute on the streets
     const M = root.NightshiftMarketData, slot = M ? M.slotOf(Date.now()) : 0, news = M?.news(slot);
     const out = L.texts(state, { at: Date.now(), minute: minute(), marketWindow: news ? news.window : -1, marketText: news?.text, holding: !!Object.keys(root.NightshiftMarket?.state?.hold || {}).length });
-    if (out.length) { persist(); out.forEach((m, i) => setTimeout(() => text(m.from, m.text), i * 3500)); }
+    if (out.length) { persist(); out.forEach((m) => text(m.from, m.text)); }
   }, 5000);
   // City events arrive as texts from Rico (watch NightshiftEvents for new spawns).
   let lastEvent = null;
