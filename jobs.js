@@ -167,7 +167,7 @@
   const hud = el('div', { id: 'jbHud', hidden: true });
   const panel = el('div', { id: 'jbPanel', hidden: true, role: 'dialog', ariaLabel: 'Hustle phone' });
   document.body.append(btn, hud, panel);
-  btn.onclick = () => { if (panel.hidden) { try { root.releaseControls?.(); } catch { /* n/a */ } panel.hidden = false; renderPanel(); } else panel.hidden = true; };
+  btn.onclick = () => { if (panel.hidden) { try { root.releaseControls?.(); } catch { /* n/a */ } panel.hidden = false; lastPanel = ''; renderPanel(); } else panel.hidden = true; };
   function render() {
     btn.textContent = active ? `📱 ${J.TYPES[active.offer.type].icon} ON JOB` : '📱 HUSTLE';
     const pill = document.querySelector('#wpPill');
@@ -195,6 +195,10 @@
     const next = Math.ceil((J.SLOT_MS - (Date.now() % J.SLOT_MS)) / 60000);
     const emp = root.NightshiftEmpire, pend = emp?.pending?.() || 0;
     if (emp) { const eb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `📈 EMPIRE${pend ? ` · ${money(pend)} to collect` : ' · front businesses & passive income'}`); eb.onclick = () => { panel.hidden = true; emp.open(); }; panel.append(eb); }
+    const mk = root.NightshiftMarket;
+    if (mk) { const v = mk.value(); const mb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `💹 MARKET${v ? ` · portfolio ${money(v)}` : ' · trade NightCoin & city stocks'}`); mb.onclick = () => { panel.hidden = true; mk.open(); }; panel.append(mb); }
+    const sh = root.NightshiftStashes;
+    if (sh && sh.count() < sh.total) { const rb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, sh.state.rumor ? `📦 STASH RUMOR · GPS to the circle · ${sh.count()}/${sh.total} found` : `📦 BUY A STASH RUMOR · ${money(root.NightshiftStashesData.RUMOR_PRICE)} · ${sh.count()}/${sh.total} found`); rb.onclick = () => { if (sh.buyRumor()) panel.hidden = true; }; panel.append(rb); }
     panel.append(top, el('div', { className: 'sub' }, `New offers in ~${next} min · ${state.done} jobs done · ${money(state.earned)} earned · Respect bonus +${rank() * 5}%`));
     if (active) {
       const o = el('div', { className: 'o' }), ab = el('button', { className: 'go', type: 'button' }, 'ABANDON');

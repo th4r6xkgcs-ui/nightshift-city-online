@@ -111,7 +111,31 @@
   }
   const dps = (w) => (w.dmg * w.pellets * 1000) / w.rate;
 
-  const api = Object.freeze({ WEAPONS, BY_ID, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, effective, buyMod, clean, canBuy, buy, equip, cycle, pelletAngles, fitMagazine, dps });
+  // Workbench: build mods from salvage instead of cash (scrap + parts from crates, stashes and trucks).
+  const BUILD = { extmag: { scrap: 6, parts: 1 }, grip: { scrap: 5, parts: 1 }, scope: { scrap: 8, parts: 2 }, suppressor: { scrap: 10, parts: 3 } };
+  const PLATE = { cost: { scrap: 6, parts: 1 }, points: 25, max: 100 };
+  const hasAll = (pocket, cost) => Object.entries(cost).every(([k, n]) => Number.isSafeInteger(pocket?.[k]) && pocket[k] >= n);
+  const spend = (pocket, cost) => { for (const [k, n] of Object.entries(cost)) { pocket[k] -= n; if (!pocket[k]) delete pocket[k]; } };
+  function buildMod(state, pocket, weaponId, modId, shootingLevel) {
+    const m = MOD[modId], cost = BUILD[modId];
+    if (!m || !cost || !BY_ID[weaponId]) return { ok: false, reason: 'Unknown mod' };
+    if (!state.owned.includes(weaponId)) return { ok: false, reason: 'Buy the gun first' };
+    const have = state.mods[weaponId] || [];
+    if (have.includes(modId)) return { ok: false, reason: 'Already fitted' };
+    if (!(shootingLevel >= m.level)) return { ok: false, reason: `Needs Shooting level ${m.level}` };
+    if (!hasAll(pocket, cost)) return { ok: false, reason: `Needs ${costText(cost)} in your pockets` };
+    spend(pocket, cost); state.mods[weaponId] = [...have, modId];
+    return { ok: true, cost };
+  }
+  function buildPlate(state, pocket) {
+    if ((state.armor || 0) >= PLATE.max) return { ok: false, reason: 'Armor is full' };
+    if (!hasAll(pocket, PLATE.cost)) return { ok: false, reason: `Needs ${costText(PLATE.cost)} in your pockets` };
+    spend(pocket, PLATE.cost); state.armor = Math.min(PLATE.max, (state.armor || 0) + PLATE.points);
+    return { ok: true, armor: state.armor };
+  }
+  const costText = (cost) => Object.entries(cost).map(([k, n]) => `${n} ${k}`).join(' + ');
+
+  const api = Object.freeze({ WEAPONS, BUILD, PLATE, buildMod, buildPlate, costText, BY_ID, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, effective, buyMod, clean, canBuy, buy, equip, cycle, pelletAngles, fitMagazine, dps });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftWeaponsData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

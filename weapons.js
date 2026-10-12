@@ -251,6 +251,12 @@
       armorRow.append(b);
     }
     shop.append(armorRow);
+    const pocket = root.NightshiftInventory?.state?.pocket, ok = (cost) => pocket && Object.entries(cost).every(([k, n]) => (pocket[k] || 0) >= n);
+    const bench = el('div', { className: 'ammo' });
+    bench.append(el('span', {}, `🔧 Workbench · pockets: ${pocket?.scrap || 0} scrap, ${pocket?.parts || 0} parts · build mods below with 🔧`));
+    const pb = el('button', { className: 'buy', type: 'button', disabled: !ok(W.PLATE.cost) || (state.armor || 0) >= W.PLATE.max }, `🔩 Plate +${W.PLATE.points} · ${W.costText(W.PLATE.cost)}`);
+    pb.onclick = () => { const r = W.buildPlate(state, root.NightshiftInventory?.state?.pocket); if (!r.ok) { say(r.reason); return; } try { root.NightshiftInventory?.save?.(); } catch { /* best effort */ } persist(); gameSave(); renderPill(); say(`🔩 Armor plate fitted · armor ${Math.round(r.armor)}`); renderShop(); };
+    bench.append(pb); shop.append(bench);
     const grid = el('div', { className: 'grid' });
     for (const w of W.WEAPONS) {
       const owned = state.owned.includes(w.id), eq = state.equipped === w.id, locked = lv < w.level;
@@ -287,6 +293,12 @@
             fitted ? `${m.icon} ${m.name} ✓` : lockedM ? `${m.icon} Lv ${m.level}` : `${m.icon} ${m.name} ${money(m.price)}`);
           b.onclick = () => { const pl = P(); if (!pl) return; const r = W.buyMod(state, pl, w.id, m.id, shootingLevel()); if (!r.ok) { say(r.reason); return; } persist(); gameSave(); say(`${m.icon} ${m.name} fitted to ${w.name} · -${money(r.price)}`); renderPill(); renderShop(); };
           mods.append(b);
+          const cost = W.BUILD[m.id];
+          if (!fitted && !lockedM && cost) {
+            const bb = el('button', { className: 'mod', type: 'button', title: `Build from salvage: ${W.costText(cost)}`, disabled: !ok(cost) }, `🔧 ${cost.scrap}s+${cost.parts}p`);
+            bb.onclick = () => { const r = W.buildMod(state, root.NightshiftInventory?.state?.pocket, w.id, m.id, shootingLevel()); if (!r.ok) { say(r.reason); return; } try { root.NightshiftInventory?.save?.(); } catch { /* best effort */ } persist(); gameSave(); say(`🔧 Built ${m.name} for ${w.name} · ${W.costText(r.cost)}`); renderPill(); renderShop(); };
+            mods.append(bb);
+          }
         }
         card.append(mods);
         if (have.length) card.append(el('div', { className: 'd' }, have.map((id) => W.MOD[id].desc).join(' · ')));

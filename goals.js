@@ -36,7 +36,7 @@
 
   // Sanitizes a raw context so goal formulas never see NaN/undefined.
   const CTX_KEYS = ['walked', 'drove', 'shots', 'escapes', 'earned', 'delivery', 'salvage', 'batches', 'sold',
-    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked', 'heists', 'gymSessions', 'clubSold', 'fronts', 'eventsDone'];
+    'properties', 'carsOwned', 'totalLevel', 'maxSkill', 'home', 'inCar', 'casinoWins', 'casinoWagered', 'weaponsOwned', 'tuneLevels', 'tuneBestCar', 'raceMedals', 'raceGolds', 'homeItems', 'respectRank', 'fishCaught', 'koi', 'jobsDone', 'labCooked', 'heists', 'gymSessions', 'clubSold', 'fronts', 'eventsDone', 'stashes', 'fightWins', 'fightLadder', 'modsFitted', 'marketProfit'];
   function context(raw) {
     const c = {};
     for (const k of CTX_KEYS) { const v = Number(raw?.[k]); c[k] = Number.isFinite(v) && v > 0 ? v : 0; }
@@ -137,6 +137,8 @@
       respectRank: root.NightshiftRespect?.state?.reached || 0,
       fronts: Object.keys(root.NightshiftEmpire?.state?.fronts || {}).length,
       heists: root.NightshiftHeists?.state?.done || 0, gymSessions: root.NightshiftVenues?.state?.sessions || 0, clubSold: root.NightshiftVenues?.state?.sold || 0, eventsDone: root.NightshiftEvents?.state?.done || 0,
+      stashes: root.NightshiftStashes?.count?.() || 0, fightWins: root.NightshiftVenues?.state?.wins || 0, fightLadder: root.NightshiftVenues?.state?.ladder || 0,
+      modsFitted: Object.values(root.NightshiftWeapons?.state?.mods || {}).reduce((t, l) => t + l.length, 0), marketProfit: Math.max(0, root.NightshiftMarket?.state?.realized || 0),
       jobsDone: root.NightshiftJobs?.state?.done || 0, labCooked: root.NightshiftLab?.state?.cooked || 0,
       fishCaught: root.NightshiftFishing?.state?.total || 0, koi: root.NightshiftFishing?.state?.caught?.koi || 0,
       raceMedals: Object.keys(root.NightshiftRaces?.state?.medals || {}).length,

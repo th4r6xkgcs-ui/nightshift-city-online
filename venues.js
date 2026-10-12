@@ -80,7 +80,14 @@
     if (cur.kind === 'gym') renderGym(cash); else renderClub(cash);
     panel.scrollTop = scroll;
   }
+  let tab = 'train';
   function renderGym(cash) {
+    if (!gym.on && !fight.f) {
+      const tabs = el('div', { className: 'row' });
+      for (const [id, name] of [['train', '🏋️ TRAIN'], ['fight', '🥊 FIGHT CLUB']]) { const b = el('button', { className: 'go' + (tab === id ? ' on' : ''), type: 'button' }, name); b.onclick = () => { tab = id; render(); }; tabs.append(b); }
+      panel.append(tabs);
+    }
+    if (fight.f || tab === 'fight') { renderFight(cash); return; }
     const wait = Math.max(0, Math.ceil((state.gymAt + V.GYM.cooldownMs - Date.now()) / 1000));
     panel.append(el('div', { className: 'sub' }, `Speed Lv ${root.NightshiftSkills?.level('athletics') ?? 1} · Toughness Lv ${root.NightshiftSkills?.level('toughness') ?? 1} · sessions ${state.sessions}`));
     if (!gym.on) {
@@ -122,6 +129,73 @@
     say(`🏋️ ${gym.msg}`); render();
   }
   function loop() { cancelAnimationFrame(raf); const t = () => { if (!gym.on || panel.hidden) { gym.on = false; return; } drawBar(); raf = requestAnimationFrame(t); }; raf = requestAnimationFrame(t); }
+
+  // ---- fight club ----
+  const fight = { f: null, beat: null, beatAt: 0, nextAt: 0, msg: 'Pick an opponent. Win to climb the ladder.', timer: 0 };
+  const lv = (k) => root.NightshiftSkills?.level?.(k) ?? 1;
+  function renderFight(cash) {
+    const wait = Math.max(0, Math.ceil(((state.fightAt || 0) + V.FIGHT.cooldownMs - Date.now()) / 1000));
+    if (!fight.f) {
+      panel.append(el('div', { className: 'sub' }, `Back-room fights · ladder ${state.ladder}/${V.FIGHTERS.length} · record ${state.wins}-${state.fights - state.wins} · Toughness = HP & damage, Speed = reaction time`));
+      panel.append(el('div', { className: 'msg' }, wait > 0 ? `Patch yourself up · next fight in ${wait}s` : fight.msg));
+      V.FIGHTERS.forEach((o, i) => {
+        const ok = V.canFight(state, i), b = el('button', { className: 'go', type: 'button', disabled: !ok || wait > 0 || cash < o.fee, style: 'display:block;width:100%;margin-top:6px;text-align:left' },
+          ok ? `${o.icon} ${o.name} · ${o.hp} HP · purse ${money(o.purse)} · entry ${money(o.fee)}${i < state.ladder ? ' ✓' : ''}` : `🔒 ${o.name} · beat ${V.FIGHTERS[i - 1].name} first`);
+        b.onclick = () => startFight(i); panel.append(b);
+      });
+      return;
+    }
+    const f = fight.f, bar = (cur, max, color) => { const o = el('div', { style: 'height:10px;background:#06120e;border-radius:6px;overflow:hidden;margin:3px 0 8px' }), i = el('i', { style: `display:block;height:100%;width:${Math.round((cur / max) * 100)}%;background:${color}` }); o.append(i); return o; };
+    panel.append(el('div', {}, `${f.opp.icon} ${f.opp.name} · ${f.oppHp}/${f.opp.hp}`), bar(f.oppHp, f.opp.hp, '#ff7d8a'), el('div', {}, `🧍 You · ${f.hp}/${f.maxHp}`), bar(f.hp, f.maxHp, '#7cdeb5'));
+    const CUES = { open: ['🟢 OPENING — STRIKE!', '#7dffb8'], swing: ['🔴 HE SWINGS — BLOCK!', '#ff7d8a'], feint: ['🟡 FEINT — DON’T MOVE', '#ffd970'] }, cue = fight.beat ? CUES[fight.beat.kind][0] : '… circling …';
+    panel.append(el('div', { className: 'msg', style: `font-size:20px;text-align:center;color:${fight.beat ? CUES[fight.beat.kind][1] : 'inherit'}` }, cue), el('div', { className: 'msg', style: 'text-align:center' }, fight.msg));
+    const row = el('div', { className: 'row', style: 'flex-wrap:nowrap' });
+    for (const [act, label, bg] of [['strike', '👊 STRIKE', 'linear-gradient(#b7f5dc,#4fbf96)'], ['block', '🛡️ BLOCK', 'linear-gradient(#ffd0d6,#e0566a)']]) {
+      const b = el('button', { className: 'big', type: 'button', style: `flex:1;margin:0;background:${bg};color:#111` }, label);
+      b.onpointerdown = (e) => { e.preventDefault(); answer(act); }; row.append(b);
+    }
+    panel.append(row, el('div', { className: 'sub', style: 'text-align:center' }, `Keys: J strike · K block · window ${f.window} ms · on a FEINT press nothing`));
+  }
+  function startFight(i) {
+    const p = P(), o = V.FIGHTERS[i];
+    if (!p || p.cash < o.fee || !V.canFight(state, i)) return;
+    p.cash -= o.fee; gameSave();
+    fight.f = V.startFight(i, { toughness: lv('toughness'), athletics: lv('athletics') });
+    fight.beat = null; fight.nextAt = performance.now() + 1200; fight.msg = `Entry ${money(o.fee)} paid · watch for the cue`;
+    clearInterval(fight.timer); fight.timer = setInterval(fightTick, 30); render();
+  }
+  function fightTick() {
+    if (!fight.f) { clearInterval(fight.timer); return; }
+    if (panel.hidden) { endFight('lose', 'You walked out — forfeit'); return; }
+    const now = performance.now();
+    if (!fight.beat && now >= fight.nextAt) { fight.beat = V.nextBeat(fight.f); fight.beatAt = now; render(); }
+    else if (fight.beat && now - fight.beatAt > fight.f.window) answer(null);
+  }
+  function answer(act) {
+    if (!fight.f) return;
+    if (!fight.beat) { if (act) { fight.msg = 'Too early — wait for the cue'; render(); } return; }
+    const ms = performance.now() - fight.beatAt, r = V.resolveBeat(fight.f, fight.beat, act, ms);
+    fight.msg = { crit: '💥 Clean shot! Critical', hit: '👊 Landed it', blocked: '🛡️ Blocked + counter', hurt: '🤕 Took a hit', whiff: act ? '😵 Wrong move' : '🐢 Too slow', baited: '🎣 Took the bait', read: '👀 Read the feint' }[r.result];
+    try { root.NightshiftAudio?.play(r.result === 'hurt' ? 'impact' : 'pickup'); } catch { /* sound optional */ }
+    fight.beat = null; fight.nextAt = performance.now() + 450 + Math.random() * 900;
+    if (r.end) endFight(r.end); else render();
+  }
+  function endFight(end, note) {
+    const f = fight.f, p = P(); clearInterval(fight.timer); fight.f = null; fight.beat = null;
+    state.fights++; state.fightAt = Date.now();
+    if (end === 'win') {
+      state.wins++; if (f.index + 1 > state.ladder) state.ladder = f.index + 1; state.purses = Math.min(1e10, state.purses + f.opp.purse);
+      if (p) p.cash = Math.min(100000000, p.cash + f.opp.purse);
+      for (const sk of ['toughness', 'athletics']) try { root.NightshiftSkills?.gain(sk, V.FIGHT.xp * (f.index + 2), 'fight'); } catch { /* optional */ }
+      fight.msg = `🏆 You beat ${f.opp.name}! +${money(f.opp.purse)}${f.index + 1 === V.FIGHTERS.length ? ' · CHAMPION' : ''}`;
+    } else {
+      if (p) p.hp = Math.max(1, p.hp - 15);
+      try { root.NightshiftSkills?.gain('toughness', V.FIGHT.xp, 'fight'); } catch { /* optional */ }
+      fight.msg = note || `💀 ${f.opp.name} put you down · -15 HP`;
+    }
+    persist(); gameSave(); say(`🥊 ${fight.msg}`); render();
+  }
+  addEventListener('keydown', (e) => { if (!fight.f || panel.hidden) return; const k = e.key.toLowerCase(); if (k === 'j' || k === 'k') { e.preventDefault(); answer(k === 'j' ? 'strike' : 'block'); } });
 
   function renderClub(cash) {
     const L = root.NightshiftLabData, lab = root.NightshiftLab?.state, id = cur.id;
@@ -175,5 +249,6 @@
   }, true);
   setInterval(() => { if (!panel.hidden && !gym.on) render(); }, 1000);
 
-  root.NightshiftVenues = Object.freeze({ open, close, paused: () => !panel.hidden, places: () => places(), get state() { return state; }, gym: () => ({ on: gym.on, rep: gym.rep, good: gym.good, zone: gym.zone, start: gym.start }) });
+  root.NightshiftVenues = Object.freeze({ open, close, paused: () => !panel.hidden, places: () => places(), get state() { return state; }, gym: () => ({ on: gym.on, rep: gym.rep, good: gym.good, zone: gym.zone, start: gym.start }),
+    fight: () => (fight.f ? { opp: fight.f.opp.id, hp: fight.f.hp, oppHp: fight.f.oppHp, beat: fight.beat?.kind || null, window: fight.f.window } : null), answer, fightTab: () => { tab = 'fight'; render(); } });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
