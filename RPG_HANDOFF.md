@@ -348,3 +348,8 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
 - **Public play link, approved by the owner** (the Claude artifact viewer asks for an iOS update on the owner's iPhone): https://th4r6xkgcs-ui.github.io/nightshift-city-online/
   - Served by GitHub Pages from the `gh-pages` branch, which holds static output of `node online/build-online.cjs <dir>` from `claude/rpg-play` plus `.nojekyll`.
   - To update, rebuild and force-push `gh-pages`.
+- **Player guide** (`guide.js`, Claude, loads after `hud.js`; the owner said the game is "a bit confusing")
+  - **First-time controls tour:** spotlight coach marks on the sticks, action button, status card, goal card, dock, minimap and MORE. It runs the first time you step outside; SKIP, NEXT and GOT IT; saved in `nightshift-guide-v1`. Add `?notour` to the URL to skip it in automated tests.
+  - **❓ dock button:** opens a "What can I do?" panel grouped into MAKE MONEY, GET STRONGER and HAVE FUN, each entry with a how-to line and GPS/OPEN, plus "replay the tour".
+  - **MORE grid:** every Codex button gets an emoji icon and a short caption via CSS (`#actions.expanded>#id::before/::after`). Compact in landscape.
+  - The GitHub Pages site is redeployed with all of this.
