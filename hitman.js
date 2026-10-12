@@ -61,17 +61,17 @@
   }
 
   // ---------------- panel ----------------
-  const pnl = el('div', { id: 'hmPanel', className: 'spP', hidden: true, role: 'dialog', ariaLabel: 'Contracts' }); document.body.append(pnl);
+  const pnl = el('div', { id: 'htPanel', className: 'spP', hidden: true, role: 'dialog', ariaLabel: 'Contracts' }); document.body.append(pnl);
   const css = el('style', {}, `
-  #hmPanel .dossier{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:14px;background:linear-gradient(135deg,#2a1216,#141a24);border:1px solid #ff5a6a44;margin:6px 0 8px}
-  #hmPanel .offer{display:flex;gap:10px;align-items:center;padding:8px;border-radius:12px;background:#ffffff07;border:1px solid #ffffff12;margin-bottom:6px}
-  #hmPanel .offer canvas{width:56px!important;height:56px!important}
-  #hmPanel .meta{flex:1;min-width:0} #hmPanel .meta b{font:700 13px var(--disp,system-ui);display:block} #hmPanel .meta div{color:#a9b8ca;font-size:11px;line-height:1.35}
-  #hmPanel .pay{color:#7cdeb5;font:700 13px var(--disp,system-ui)} #hmPanel .tag{display:inline-block;padding:1px 6px;border-radius:6px;background:#ffffff12;margin:2px 4px 0 0;font-size:10px;color:#cfe0f2}
-  #hmPanel .go{background:linear-gradient(180deg,#ff6a5a,#c0302a);color:#fff;padding:9px 12px} #hmPanel .ghost{background:#ffffff12;border:1px solid #ffffff22;padding:8px 10px;color:#cfe0f2}
-  #hmPanel .rank{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff14}
-  #hmPanel .bar{height:6px;border-radius:4px;background:#ffffff14;overflow:hidden;margin-top:4px} #hmPanel .bar i{display:block;height:100%;background:linear-gradient(90deg,#ff8a7a,#ffd970)}
-  #hmPanel .rules{color:#8fa6c0;font-size:11px;line-height:1.5;margin-top:8px}`);
+  #htPanel .dossier{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:14px;background:linear-gradient(135deg,#2a1216,#141a24);border:1px solid #ff5a6a44;margin:6px 0 8px}
+  #htPanel .offer{display:flex;gap:10px;align-items:center;padding:8px;border-radius:12px;background:#ffffff07;border:1px solid #ffffff12;margin-bottom:6px}
+  #htPanel .offer canvas{width:56px!important;height:56px!important}
+  #htPanel .meta{flex:1;min-width:0} #htPanel .meta b{font:700 13px var(--disp,system-ui);display:block} #htPanel .meta div{color:#a9b8ca;font-size:11px;line-height:1.35}
+  #htPanel .pay{color:#7cdeb5;font:700 13px var(--disp,system-ui)} #htPanel .tag{display:inline-block;padding:1px 6px;border-radius:6px;background:#ffffff12;margin:2px 4px 0 0;font-size:10px;color:#cfe0f2}
+  #htPanel .go{background:linear-gradient(180deg,#ff6a5a,#c0302a);color:#fff;padding:9px 12px} #htPanel .ghost{background:#ffffff12;border:1px solid #ffffff22;padding:8px 10px;color:#cfe0f2}
+  #htPanel .rank{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff14}
+  #htPanel .bar{height:6px;border-radius:4px;background:#ffffff14;overflow:hidden;margin-top:4px} #htPanel .bar i{display:block;height:100%;background:linear-gradient(90deg,#ff8a7a,#ffd970)}
+  #htPanel .rules{color:#8fa6c0;font-size:11px;line-height:1.5;margin-top:8px}`);
   document.head.append(css);
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pnl.hidden) { pnl.hidden = true; e.stopImmediatePropagation(); } }, true);
   const btn = (cls, txt, fn, dis) => { const x = el('button', { className: cls, type: 'button', disabled: !!dis }, txt); x.onclick = fn; return x; };

@@ -39,7 +39,7 @@
     for (let k = 0; k < 3; k++) {
       const loc = k === 2 && rk >= 2 ? LOCS.find((l) => l.type === 'mansion') : pool[Math.floor(r() * pool.length)];
       if (out.some((o) => o.loc.id === loc.id)) continue;
-      const T = TIER[loc.type], m = MARKS[Math.floor(r() * MARKS.length)];
+      const T = TIER[loc.type], used = new Set(out.map((o) => o.name)), free = MARKS.filter((q) => !used.has(q[0])), m = free[Math.floor(r() * free.length)];
       const pay = Math.round(((T.pay[0] + r() * (T.pay[1] - T.pay[0])) * rankMult(s.done)) / 50) * 50;
       out.push({ id: `c${win}-${k}`, loc, type: loc.type, name: m[0], why: m[1], color: m[2], pay, guards: T.guards + (rk >= 3 ? 1 : 0), hp: T.hp, armed: loc.type !== 'house' || r() < 0.5, until: (win + 1) * OFFER_MS });
     }

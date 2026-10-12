@@ -9,6 +9,7 @@ for (let w = 0; w < 50; w++) {
   const now = w * H.OFFER_MS + 1000, offers = H.offers(s0, now);
   assert.ok(offers.length >= 1 && offers.length <= 3);
   assert.equal(new Set(offers.map((o) => o.loc.id)).size, offers.length, 'no duplicate places');
+  assert.equal(new Set(offers.map((o) => o.name)).size, offers.length, 'no duplicate marks');
   for (const o of offers) {
     assert.equal(o.type, 'house', 'Rookies only get houses');
     assert.ok(o.pay >= H.TIER.house.pay[0] - 50 && o.pay <= H.TIER.house.pay[1] + 50);
