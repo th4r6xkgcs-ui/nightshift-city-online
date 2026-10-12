@@ -272,6 +272,7 @@
     const row = el('div', { className: 'st' }); row.append(el('span', {}, 'Condition'), el('div')); row.lastChild.append(bar, el('span', {}, condText(id))); card.append(row);
     if (!compact) card.append(el('div', { className: 'd' }, `${w.pellets > 1 ? w.pellets + '×' + w.dmg : w.dmg} dmg · ${w.mag}-rd mag · ${Math.round(60000 / w.rate)} rpm · ${(state.mods[id] || []).map((m) => W.MOD[m].icon).join(' ') || 'no mods'}${state.spare[id] ? ` · ${state.spare[id]} spare` : ''}`));
     const act = el('div', { className: 'act' });
+    if (root.NightshiftWeaponArt) { const ib = el('button', { className: 'eqb', type: 'button', title: 'Inspect' }, '🔍'); ib.onclick = () => root.NightshiftWeaponArt.inspect(id); act.append(ib); }
     if (eq) act.append(el('span', { className: 'on' }, 'IN HAND'));
     else if (broken) act.append(el('span', {}, W.BY_ID[id].tier ? 'Repair at your Lockup' : ''));
     else { const b = el('button', { className: 'eqb', type: 'button' }, 'EQUIP'); b.onclick = () => { equip(id); renderShop(); root.NightshiftSupply?.refresh?.(); }; act.append(el('span'), b); }

@@ -64,6 +64,7 @@
     const SD = R.NightshiftSupplyData, sp = (id) => SD?.GBY?.[id] || SD?.PBY?.[id];
     return [
       ['🔫 GUNS & CRAFTING (start here)', [
+        ['🔍', 'Inspect a gun', 'Tap any gun picture (bench, backpack, armory) to inspect it up close: preview attachments and paint jobs, compare stats before you craft.', 'OPEN', open2(() => R.NightshiftWeaponArt.inspect())],
         ['🔩', 'Scrapyard', 'Collect pipe, scrap metal and springs. Stand in the yard and press COLLECT.', 'GPS', () => gps(sp('scrapyard'), 'Scrapyard')],
         ['🛠️', 'Home workbench', 'In your apartment. Craft crude guns: the Pipe Pistol is your first. Crude guns fall apart.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
         ['🔫', 'Gun shop parts counter', 'Barrels, triggers, frames, bolts, springs, lenses. Plus ammo and armor.', 'GPS', () => gps(R.NightshiftWeapons?.door?.(), 'Gun shop')],
