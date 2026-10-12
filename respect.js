@@ -31,6 +31,7 @@
       earned10k: (snap.earned || 0) / 10000,
       fronts: Object.keys(root.NightshiftEmpire?.state?.fronts || {}).length,
       heists: root.NightshiftHeists?.state?.done || 0,
+      events: root.NightshiftEvents?.state?.done || 0,
     };
   }
   let current = R.points(context()), queue = [], ready = false;
@@ -65,7 +66,7 @@
       ['Phone jobs done', String(jobs?.done || 0)], ['Heists pulled', `${heist?.done || 0} (best ${m(heist?.best)})`],
       ['Fish caught', `${fish?.total || 0} (best ${m(fish?.best)})`], ['Lab batches', String(lab?.cooked || 0)],
       ['Races run', String(races?.runs || 0)], ['Casino bets', `${cas?.spins || 0} (best win ${m(cas?.biggest)})`],
-      ['Gym sessions', String(ven?.sessions || 0)], ['Best daily streak', String(daily?.best || 0)], ['Goals done', String(Object.keys(root.NightshiftGoals?.state?.done || {}).length)],
+      ['Gym sessions', String(ven?.sessions || 0)], ['City events', `${root.NightshiftEvents?.state?.done || 0} (${m(root.NightshiftEvents?.state?.earned)})`], ['Best daily streak', String(daily?.best || 0)], ['Goals done', String(Object.keys(root.NightshiftGoals?.state?.done || {}).length)],
     ];
   }
   // ---- UI ----

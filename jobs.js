@@ -223,6 +223,8 @@
   function places() {
     const p = P() || { x: 0, y: 0 }, out = [], near = (list) => (list || []).filter(Boolean).sort((a, b) => dist(a, p) - dist(b, p))[0];
     const add = (key, label, pos) => { if (pos && Number.isFinite(pos.x) && Number.isFinite(pos.y)) out.push({ key, label, x: pos.x, y: pos.y }); };
+    const ev = root.NightshiftEvents?.active?.(), evT = ev && root.NightshiftEventsData?.TYPES[ev.type];
+    if (ev && evT) add('event', `🌆 LIVE: ${evT.icon} ${evT.name}`, ev.stage === 'carry' ? ev.to : ev.stage === 'run' ? ev.gates[ev.progress] : ev);
     add('casino', '🎰 Lucky 7 Casino', root.NightshiftCasino?.door?.());
     add('guns', '⌖ Gun shop', root.NightshiftWeapons?.door?.());
     add('tune', '🔧 Tuning garage', near(root.NightshiftTuning?.sites?.()));
