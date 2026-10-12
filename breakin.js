@@ -279,7 +279,12 @@
         for (const g of j.guards) {
           if (g.dead) continue;
           if (Math.hypot(b.x - g.x, b.y - (g.y - 12)) < 13) {
-            g.hp -= b.dmg; g.state = 'alert'; g.lastSeen = { x: api.pos.x, y: api.pos.y, t: performance.now() }; g.reaction = Math.min(g.reaction || 0, performance.now() + 200); alarm(performance.now());
+            // Unaware targets take 2.5× (sneak attack). A one-shot takedown nobody sees doesn't trip the alarm by itself
+            // (the gunshot can still be heard; suppressors help).
+            const unaware = g.state !== 'alert' && g.state !== 'flee', dmg = b.dmg * (unaware ? 2.5 : 1);
+            g.hp -= dmg;
+            if (g.hp > 0) { g.state = 'alert'; g.lastSeen = { x: api.pos.x, y: api.pos.y, t: performance.now() }; g.reaction = Math.min(g.reaction || 0, performance.now() + 200); alarm(performance.now()); }
+            else if (unaware) api.float(g.x, g.y - 46, 'SNEAK ATTACK', '#9fd0ff');
             if (g.hp <= 0) {
               g.dead = true; j.kills += 1;
               if (g.kind === 'mark') { j.markDown = true; api.float(g.x, g.y - 34, '🎯 MARK DOWN', '#ffd970'); say(`🎯 ${g.name} is down. Walk out the back door to get paid.`); try { root.NightshiftAudio?.play('impact'); } catch { /* optional */ } }
