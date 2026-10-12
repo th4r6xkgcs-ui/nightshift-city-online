@@ -47,7 +47,7 @@
   const FB = root.NightshiftFeedback;
   if (FB && typeof FB.shot === 'function' && !FB.__fxShot) {
     const shot = FB.shot;
-    FB.shot = function () { const r = shot.apply(this, arguments); const w = root.NightshiftWeapons?.state?.equipped; shake(w === 'shotgun' ? 0.32 : w === 'rifle' || w === 'revolver' ? 0.22 : w === 'ar' || w === 'smg' ? 0.08 : 0.1); return r; };
+    FB.shot = function () { const r = shot.apply(this, arguments); scareAt(P(), 260); const w = root.NightshiftWeapons?.state?.equipped; shake(w === 'shotgun' ? 0.32 : w === 'rifle' || w === 'revolver' ? 0.22 : w === 'ar' || w === 'smg' ? 0.08 : 0.1); return r; };
     FB.__fxShot = true;
   }
 
@@ -78,6 +78,74 @@
   const env = () => root.NightshiftEnvironment;
   function raining() { const e = env(); return e?.weather ? e.weather(e.state?.minute ?? 720) : 0; }
 
+
+  // ---- ambient life: pigeons, steam vents, drifting cloud shadows ----
+  const birds = [], BLOCKED = (x, y) => { try { return blocked(x, y); } catch { return false; } }; // eslint-disable-line no-undef
+  let nextFlock = 0;
+  const night = () => { const e = env(); return e?.darkness ? e.darkness(e.state?.minute ?? 720) : 0; };
+  function scareAt(p, r) { if (!p) return; for (const b of birds) if (!b.fly && Math.hypot(b.x - p.x, b.y - p.y) < r) launch(b, p); }
+  function launch(b, from) { const a = Math.atan2(b.y - from.y, b.x - from.x) + (Math.random() - 0.5) * 0.8, sp = 2.2 + Math.random() * 1.4; b.fly = true; b.vx = Math.cos(a) * sp; b.vy = Math.sin(a) * sp - 0.6; b.t = 0; }
+  function spawnFlock() {
+    const p = P(), cam = CAM(); if (!p || !cam) return;
+    const W0 = (root.innerWidth || 800) / (cam.zoom || 1), H0 = (root.innerHeight || 600) / (cam.zoom || 1);
+    for (let k = 0; k < 20; k++) {
+      const x = cam.x + Math.random() * W0, y = cam.y + Math.random() * H0;
+      if (Math.hypot(x - p.x, y - p.y) < 140 || BLOCKED(x, y)) continue;
+      const n = 4 + Math.floor(Math.random() * 4);
+      for (let i = 0; i < n; i++) birds.push({ x: x + (Math.random() - 0.5) * 30, y: y + (Math.random() - 0.5) * 18, fly: false, ph: Math.random() * 6, face: Math.random() < 0.5 ? -1 : 1, c: ['#8a8f98', '#6f747c', '#a2a7ae', '#5c6168'][i % 4] });
+      return;
+    }
+  }
+  setInterval(() => {
+    const p = P(), now = performance.now(); if (!p) return;
+    // update
+    for (let i = birds.length - 1; i >= 0; i--) {
+      const b = birds[i];
+      if (b.fly) { b.x += b.vx; b.y += b.vy; b.vy -= 0.02; b.t++; if (b.t > 120) birds.splice(i, 1); continue; }
+      const d = Math.hypot(b.x - p.x, b.y - p.y), car = p.car && Math.abs(p.car.speed || 0) > 2.5;
+      if (d < (car ? 110 : 55)) launch(b, p);
+      else if (d > 900) birds.splice(i, 1);
+      else if (Math.random() < 0.01) { b.x += (Math.random() - 0.5) * 4; b.face = Math.random() < 0.5 ? -1 : 1; }
+    }
+    if (now > nextFlock && night() < 0.5 && !root.NightshiftHome?.kind?.() && birds.filter((b) => !b.fly).length < 14) { spawnFlock(); nextFlock = now + 6000 + Math.random() * 8000; }
+    // steam vents (night or rain)
+    if ((night() > 0.3 || raining() > 0.2) && Math.random() < 0.5) {
+      for (const v of VENTS) if (Math.hypot(v.x - p.x, v.y - p.y) < 600 && Math.random() < 0.25) smoke.push({ x: v.x + (Math.random() - 0.5) * 6, y: v.y, vx: 0.15 + Math.random() * 0.2, vy: -0.35 - Math.random() * 0.25, r: 3 + Math.random() * 3, life: 0, max: 70 + Math.random() * 40, c: '#dfe6ee' });
+    }
+  }, 33);
+  const VENTS = []; for (const x of [440, 880, 1320, 1760]) for (const y of [340, 680, 1020, 1360]) if ((x * 7 + y * 3) % 5 < 2) VENTS.push({ x: x + ((x + y) % 2 ? 28 : -32), y: y + ((x * y) % 3 ? 36 : -30) });
+  function drawBirds(ctx, t) {
+    for (const b of birds) {
+      ctx.save(); ctx.translate(Math.round(b.x), Math.round(b.y));
+      if (b.fly) {
+        const flap = Math.sin(t * 30 + b.ph) * 3, k = Math.max(0, 1 - b.t / 120); ctx.globalAlpha = k;
+        ctx.strokeStyle = '#2b2f36'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-5, -flap); ctx.lineTo(0, 0); ctx.lineTo(5, -flap); ctx.stroke();
+        ctx.fillStyle = '#05080f33'; ctx.fillRect(-2, 10 + b.t * 0.2, 4, 2);
+      } else {
+        const peck = Math.sin(t * 5 + b.ph) > 0.85 ? 1 : 0;
+        ctx.scale(b.face, 1);
+        ctx.fillStyle = '#05080f44'; ctx.fillRect(-3, 2, 7, 2);
+        ctx.fillStyle = '#1b1e24'; ctx.fillRect(-4, -3, 8, 5);
+        ctx.fillStyle = b.c; ctx.fillRect(-3, -2, 6, 3);
+        ctx.fillStyle = '#5a7a6e'; ctx.fillRect(1, -3 + peck, 3, 2);
+        ctx.fillStyle = '#e0a060'; ctx.fillRect(4, -2 + peck, 1, 1);
+      }
+      ctx.restore();
+    }
+  }
+  const clouds = Array.from({ length: 4 }, (_, i) => ({ x: i * 700, y: (i * 523) % 1700, r: 160 + (i * 37) % 120 }));
+  function drawClouds(ctx) {
+    const n = night(), cam = CAM(); if (n > 0.6 || !cam || !ctx.createRadialGradient) return;
+    const a = 0.09 * (1 - n), W0 = (root.innerWidth || 800) / (cam.zoom || 1), H0 = (root.innerHeight || 600) / (cam.zoom || 1);
+    for (const c of clouds) {
+      c.x += 0.18; c.y += 0.05;
+      // wrap clouds around the camera so there is always weather overhead
+      if (c.x - c.r > cam.x + W0 + 300) c.x = cam.x - c.r - 300; if (c.x + c.r < cam.x - 600) c.x = cam.x + W0 + c.r;
+      if (c.y - c.r > cam.y + H0 + 300) c.y = cam.y - c.r - 200; if (c.y + c.r < cam.y - 600) c.y = cam.y + H0 + c.r;
+      const g2 = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.r); g2.addColorStop(0, `rgba(6,10,24,${a})`); g2.addColorStop(1, 'rgba(6,10,24,0)');
+      ctx.fillStyle = g2; ctx.beginPath(); ctx.ellipse(c.x, c.y, c.r * 1.4, c.r, 0.3, 0, Math.PI * 2); ctx.fill();
+    }
+  }
   function drawGround() {
     const ctx = G(); if (!ctx || !marks.length) return;
     const now = performance.now();
@@ -94,6 +162,7 @@
   function drawTop() {
     const ctx = G(), cam = CAM(); if (!ctx) return;
     ctx.save();
+    try { drawBirds(ctx, performance.now() / 1000); drawClouds(ctx); } catch { /* cosmetic */ }
     for (let i = smoke.length - 1; i >= 0; i--) {
       const s = smoke[i]; s.life++; s.x += s.vx; s.y += s.vy; s.r += 0.25; s.vx *= 0.97; s.vy *= 0.97;
       if (s.life > s.max) { smoke.splice(i, 1); continue; }
@@ -157,5 +226,5 @@
     ctx.restore();
   };
 
-  root.NightshiftFx = Object.freeze({ shake, stats: () => ({ marks: marks.length, smoke: smoke.length, trauma }) });
+  root.NightshiftFx = Object.freeze({ shake, stats: () => ({ marks: marks.length, smoke: smoke.length, trauma, birds: birds.length }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
