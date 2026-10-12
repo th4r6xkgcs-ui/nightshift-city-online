@@ -286,3 +286,12 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
 - City events freeze while you're inside the apartment or in any RPG panel.
 - Save `nightshift-life-v1`, which needs adding to backups. Tests: `tests/life.cjs` (4 PASS).
 - Regression scripts must now exit the apartment first: `NightshiftHome.kind() && NightshiftHome.use()`.
+
+## Art pass (owner request while Codex was unavailable)
+- **Branch:** `claude/art-pass`, also merged into `claude/rpg-play`. It edits Codex-owned art files: environment, sprite-renderer, scene-renderer, interior-art, home and world.
+- **Changes:**
+  - Night lightmap, dusk grade and vignette.
+  - New character renderer (variety, outlines, uniforms, guns matching the equipped weapon).
+  - Redrawn furniture, room day/night light, and asphalt grit.
+- **Details:** PR #3 comment "heads-up, I did an art pass".
+- **Claude-owned props:** armored truck (doors open as you crack it), briefcase, package, checkpoint gates (events.js) and the duffel-bag stash (stashes.js).
