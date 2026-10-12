@@ -127,13 +127,28 @@ function gunArm(ctx,p,L){
  const id=root.NightshiftWeapons?.state?.equipped||'pistol',mods=root.NightshiftWeapons?.state?.mods?.[id]||[];
  ctx.save();ctx.rotate(p.angle||0);
  rounded(shade(L.shirt,L.style==='jacket'?-.35:0),3,-3,8,5,2);rounded(L.skin,10,-2.5,4,4,1.5);
- const metal='#1a2128',hi='#8d979b';
- if(id==='pistol'||id==='revolver'){rect(metal,12,-3.5,id==='revolver'?11:9,3.5);rect(hi,13,-3.5,id==='revolver'?10:8,1);rect('#2c2420',12.5,-.5,2.5,4);if(id==='revolver')rect('#3a3f45',15,-4.5,4,5.5)}
- else if(id==='smg'){rect(metal,11,-4,14,4.5);rect(hi,12,-4,12,1);rect('#20272c',16,.5,2.5,6);rect(metal,7,-3,4,3)}
- else if(id==='shotgun'){rect('#5b3d28',5,-3.5,7,4);rect(metal,12,-3.5,17,3);rect(hi,12,-3.5,17,1);rect('#4a3524',17,-.5,6,2.5)}
- else if(id==='rifle'){rect('#4a3a2c',4,-3.5,8,4);rect(metal,12,-3,20,3);rect(hi,12,-3,20,.8);rect('#11161a',15,-6.5,8,2.5);rect('#7fb6d6',22,-6.3,1,2)}
- else{rect(metal,4,-3.5,8,4);rect(metal,12,-4,16,4.5);rect(hi,13,-4,14,1);rect('#20272c',17,.5,3,6.5);rect('#3a4148',25,-2.5,6,2)}
- if(mods.includes('suppressor'))rect('#2b3036',id==='pistol'||id==='revolver'?21:28,-3.5,7,3);
+ const metal='#1a2128',hi='#8d979b',wood='#5b3d28',woodL='#7a5532',tape='#8b9399',chrome='#b9c2c7';
+ // Held guns, top-down, barrel along +x (one shape per craftable gun; unknown ids fall back by length).
+ const G={
+  pipe:()=>{rect(tape,11,-3,13,2.6);rect(chrome,11,-3,13,.8);rect('#2a2a2a',10,-1,3,3.5)},
+  zip:()=>{rect(tape,11,-3,14,2.6);rect(chrome,11,-3,14,.8);rect(wood,9,-3.5,4,4.5);rect('#b9c2c7',9.5,-2,3,.8)},
+  sawnoff:()=>{rect(wood,5,-3.8,8,4.6);rect(woodL,5,-3.8,8,1);rect(metal,13,-4,12,2);rect(metal,13,-1.6,12,2);rect(hi,13,-4,12,.7)},
+  pistol:()=>{rect(metal,12,-3.5,9,3.5);rect(hi,13,-3.5,8,1);rect('#2c2420',12.5,-.5,2.5,4)},
+  compact:()=>{rect(metal,12,-3.2,7,3);rect(hi,12.5,-3.2,6,.9);rect('#3a3f45',12.5,-.5,2.5,3.5)},
+  revolver:()=>{rect(metal,12,-3.5,11,3.5);rect(hi,13,-3.5,10,1);rect('#2c2420',12.5,-.5,2.5,4);rect('#3a3f45',15,-4.5,4,5.5)},
+  hawk:()=>{rect('#8f989d',12,-4,13,4.2);rect('#d6dde1',12,-4,13,1.1);rect('#5d646b',12.5,-.2,3,4)},
+  machine:()=>{rect(metal,12,-3.6,11,3.8);rect(hi,12.5,-3.6,10,1);rect('#20272c',14,.2,2.5,6.5)},
+  smg:()=>{rect(metal,11,-4,14,4.5);rect(hi,12,-4,12,1);rect('#20272c',16,.5,2.5,6);rect(metal,7,-3,4,3)},
+  pump:()=>{rect(wood,4,-3.6,8,4.2);rect(metal,12,-3.6,18,3);rect(hi,12,-3.6,18,.9);rect(woodL,19,-1,7,2.6)},
+  shotgun:()=>{rect(metal,5,-3.5,7,4);rect(metal,12,-3.5,17,3);rect(hi,12,-3.5,17,1);rect('#2b3238',17,-.5,6,2.5)},
+  hunting:()=>{rect(wood,3,-3.5,14,4);rect(woodL,3,-3.5,14,1);rect(metal,15,-3,19,2.6);rect(hi,15,-3,19,.8);rect(chrome,14,-5,1.4,2)},
+  carbine:()=>{rect(metal,4,-3.5,7,4);rect(metal,11,-4,15,4.5);rect(hi,12,-4,13,1);rect('#20272c',16,.5,3,6);rect('#3a4148',24,-2.8,5,2)},
+  rifle:()=>{rect('#4a3a2c',4,-3.5,8,4);rect(metal,12,-3,20,3);rect(hi,12,-3,20,.8);rect('#11161a',15,-6.5,8,2.5);rect('#7fb6d6',22,-6.3,1,2)},
+  ar:()=>{rect(metal,4,-3.5,8,4);rect(metal,12,-4,16,4.5);rect(hi,13,-4,14,1);rect('#20272c',17,.5,3,6.5);rect('#3a4148',25,-2.5,6,2)}
+ };
+ (G[id]||G.pistol)();
+ const len={pipe:24,zip:25,sawnoff:25,pistol:21,compact:19,revolver:23,hawk:25,machine:23,smg:28,pump:30,shotgun:29,hunting:34,carbine:29,rifle:32,ar:31}[id]||21;
+ if(mods.includes('suppressor'))rect('#2b3036',len,-3.5,7,3);
  if(mods.includes('grip')){ctx.fillStyle='#ff304055';ctx.fillRect(22,-1.6,40,.8)}
  ctx.restore();
 }
