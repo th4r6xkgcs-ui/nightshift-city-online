@@ -123,10 +123,22 @@
       if (S.room(state) <= 0) { say('🎒 Backpack full · stash it at home or buy a bigger bag'); return; }
     } else if (S.batches(state, sp.id) <= 0) { say(`${sp.icon} ${sp.name} needs ${S.costText(sp.in)} per batch`); return; }
     const speed = s.kind === 'process' ? (sp.id === 'trim' ? mod('farming.growTime') : 1) : 1;
-    act = { site: s.id, kind: s.kind, spot: sp, t0: performance.now(), dur: sp.seconds * 1000 * speed, done: 0 };
+    act = { site: s.id, kind: s.kind, spot: sp, t0: performance.now(), dur: sp.seconds * 1000 * speed, done: 0, perfects: 0 };
+    newWindow();
     say(`${sp.icon} ${s.kind === 'gather' ? 'Collecting' : 'Processing'} at the ${sp.name} · stay close · tap ${s.kind === 'gather' ? 'COLLECT' : 'PROCESS'} again to stop`);
     renderAct();
   }
+  // Quick-tap timing: each cycle has a gold window; tapping the activity bar inside it is a PERFECT
+  // (the cycle finishes at once with a bonus). Tapping outside it does nothing. AFK still earns the base rate.
+  function newWindow() { if (!act) return; const a = 0.38 + Math.random() * 0.32; act.win = [a, a + 0.2]; act.missed = false; }
+  function tapAct() {
+    if (!act || act.kind === 'craft') return;
+    const f = (performance.now() - act.t0) / act.dur;
+    if (act.missed) return;
+    if (f >= act.win[0] && f <= act.win[1]) { act.perfect = true; act.t0 = performance.now() - act.dur; cycle(); }
+    else { act.missed = true; try { const p = P(); root.NightshiftFeedback?.floating(p.x, p.y - 30, 'too early', '#9fb3c8'); } catch { /* cosmetic */ } }
+  }
+  addEventListener('keydown', (e) => { if ((e.key === 'c' || e.key === 'C') && act && !(e.target instanceof HTMLInputElement)) tapAct(); });
   function stop(reason) {
     if (!act) return;
     const n = act.done; act = null; renderAct();
@@ -139,6 +151,14 @@
     else r = S.process(state, sp.id, root.NightshiftInventory?.state?.pocket);
     if (!r.ok) { stop(`${sp.icon} ${r.reason}`); return; }
     act.done += 1;
+    const perfect = !!act.perfect; act.perfect = false;
+    if (perfect) {
+      act.perfects += 1;
+      if (act.kind === 'gather') { const main = sp.loot[0][0], extra = S.give(state, { [main]: 1 }).added; for (const [k, n] of Object.entries(extra)) r.added[k] = (r.added[k] || 0) + n; }
+      else if (sp.in.baggie) state.bag.baggie = (state.bag.baggie || 0) + 1; // careful work wastes no packaging
+      r.xp = Object.fromEntries(Object.entries(r.xp || {}).map(([k, n]) => [k, Math.round(n * 1.5)]));
+      try { root.NightshiftAudio?.play('pickup'); root.NightshiftFeedback?.floating(p.x, p.y - 52, act.kind === 'gather' ? 'PERFECT! +1' : 'PERFECT! baggie saved', '#ffd970'); } catch { /* cosmetic */ }
+    }
     if (r.heat && p) p.heat = Math.min(5, (p.heat || 0) + r.heat * mod('stealth.heat'));
     xp(r.xp, 'supply');
     const got = act.kind === 'gather' ? r.added : r.out;
@@ -150,7 +170,7 @@
     // keep going if possible
     if (act.kind === 'gather' && (S.stockNow(state, sp.id) <= 0 || S.room(state) <= 0)) { stop(S.room(state) <= 0 ? '🎒 Backpack full' : `${sp.icon} Picked clean · refills over time`); return; }
     if (act.kind === 'process' && S.batches(state, sp.id) <= 0) { stop(`${sp.icon} Out of ${Object.keys(sp.in).map((k) => S.MATERIALS[k].name.toLowerCase()).join(' / ')}`); return; }
-    act.t0 = performance.now();
+    act.t0 = performance.now(); newWindow();
   }
   setInterval(() => {
     if (!act) return;
@@ -245,10 +265,11 @@
   .spP .place{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:12px;background:#ffffff07;border:1px solid #ffffff12;margin-bottom:5px;font-size:11.5px}
   .spP .place .pi{font-size:20px;width:28px;text-align:center} .spP .place .pt{flex:1} .spP .place .pt b{font:700 12.5px var(--disp,system-ui)} .spP .place .pt span{display:block;color:#a9b8ca;font-size:10.5px}
   .spP .st-open{color:#7cdeb5} .spP .st-closed{color:#ff9aa5}
-  #spAct{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(196px + env(safe-area-inset-bottom));z-index:27;min-width:220px;max-width:86vw;padding:7px 12px;border-radius:14px;
-    background:#0d1320e6;border:1px solid #ffffff26;color:#eef3f9;font:700 12px var(--disp,system-ui);box-shadow:0 10px 26px #0009;pointer-events:none}
+  #spAct{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(222px + env(safe-area-inset-bottom));z-index:27;min-width:220px;max-width:86vw;padding:7px 12px;border-radius:14px;
+    background:#0d1320e6;border:1px solid #ffffff26;color:#eef3f9;font:700 12px var(--disp,system-ui);box-shadow:0 10px 26px #0009;pointer-events:auto;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
   #spAct[hidden]{display:none} #spAct .cap{height:6px;background:#060a10;border-radius:4px;overflow:hidden;margin-top:5px} #spAct .cap i{display:block;height:100%;background:linear-gradient(90deg,#7cdeb5,#ffd970)}
-  #spAct small{font-weight:400;color:#a9b8ca}
+  #spAct small{font-weight:400;color:#a9b8ca} #spAct .cap{position:relative} #spAct .win{position:absolute;top:0;bottom:0;background:#ffd97088;border-left:1px solid #ffd970;border-right:1px solid #ffd970}
+  #spAct .win.off{background:#ff5a6a33;border-color:#ff5a6a66} #spAct.hot{border-color:#ffd970;box-shadow:0 0 0 2px #ffd97066,0 10px 26px #0009} #spAct .tip{display:block;font-size:10.5px;color:#ffd970;margin-top:3px}
   @media (orientation:landscape){#spAct{bottom:calc(14px + env(safe-area-inset-bottom))}}
   body.ns-menu #spAct{display:none}`;
   document.head.appendChild(css);
@@ -283,8 +304,16 @@
     actBar.hidden = false; actBar.textContent = '';
     const what = act.kind === 'craft' ? `🛠️ Crafting ${act.spot.name}` : `${act.spot.icon} ${act.kind === 'gather' ? 'Collecting' : 'Processing'} · ${act.spot.name}`;
     actBar.append(document.createTextNode(what + ' '), el('small', {}, act.kind === 'craft' ? `${Math.ceil((act.dur - (performance.now() - act.t0)) / 1000)}s` : `#${act.done + 1} · ${space()} bag · walk away to stop`));
-    const c = el('div', { className: 'cap' }), i = el('i'); i.style.width = Math.round(f * 100) + '%'; c.append(i); actBar.append(c);
+    const c = el('div', { className: 'cap' }), i = el('i'); i.style.width = Math.round(f * 100) + '%'; c.append(i);
+    if (act.win && act.kind !== 'craft') {
+      const w = el('b', { className: 'win' + (act.missed ? ' off' : '') }); w.style.left = Math.round(act.win[0] * 100) + '%'; w.style.width = Math.round((act.win[1] - act.win[0]) * 100) + '%'; c.append(w);
+      const inWin = !act.missed && f >= act.win[0] && f <= act.win[1];
+      actBar.classList.toggle('hot', inWin);
+      if (!act.done && !act.perfects) actBar.append(el('small', { className: 'tip' }, 'Tap this bar in the gold zone for a PERFECT (+bonus)'));
+    } else actBar.classList.remove('hot');
+    actBar.append(c);
   }
+  actBar.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); tapAct(); renderAct(); });
 
   // ---- 🎒 backpack + where-to-get-it guide ----
   const whereFrom = (id) => [...S.GATHER.filter((g) => g.loot.some(([it]) => it === id)).map((g) => g.name), ...(S.PARTS_COUNTER.includes(id) ? ['Gun shop'] : []), ...(S.HARDWARE.some((h) => h.id === id) ? ['Hardware'] : []), ...S.PROCESS.filter((p) => p.out[id]).map((p) => p.name)];
