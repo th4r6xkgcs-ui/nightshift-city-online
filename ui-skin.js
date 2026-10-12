@@ -13,7 +13,7 @@
   #toast{background:var(--ns-glass)!important;border:1px solid var(--ns-line);border-left:3px solid var(--ns-accent);box-shadow:0 10px 28px #0008;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
     font-size:13px!important;line-height:1.35;max-width:min(560px,60vw);padding:9px 14px!important;border-radius:12px!important;color:var(--ns-text);pointer-events:none}
   @media (orientation:landscape){#toast{top:calc(52px + env(safe-area-inset-top,0px))!important}}
-  @media (orientation:portrait){#toast{top:34%!important;max-width:min(360px,84vw)}}
+  @media (orientation:portrait){#toast{top:58%!important;max-width:min(360px,84vw)}}
   #actions button,#shoot,#pad,#aimPad{box-shadow:0 6px 16px #0007,inset 0 1px 0 #ffffff1a}
   #actions button{background:radial-gradient(circle at 50% 30%,#2b4566e6,#14223ae6)!important;border-color:#9fc3e055!important;letter-spacing:.03em}
   #actions button:active{transform:scale(.94)}
