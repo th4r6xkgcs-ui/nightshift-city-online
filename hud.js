@@ -27,8 +27,8 @@
     document.head.append(l1, l2);
   } catch { /* offline: system fonts */ }
 
-  const MINE = ['#gdPanel', '#skPanel', '#glPanel', '#dyPanel', '#rsPanel', '#jbPanel', '#emPanel', '#mkPanel', '#lfMsg', '#gsPanel', '#csPanel', '#vnPanel', '#fsPanel', '#hsPanel', '#hmPanel', '#tnPanel', '#lbPanel'];
-  const PANELS = ['#gdPanel', '#skPanel', '#glPanel', '#dyPanel', '#rsPanel', '#jbPanel', '#emPanel', '#mkPanel', '#lfMsg', '#gsPanel', '#csPanel', '#vnPanel', '#fsPanel', '#hsPanel', '#hmPanel', '#tnPanel', '#lbPanel',
+  const MINE = ['#gdPanel', '#skPanel', '#glPanel', '#dyPanel', '#rsPanel', '#jbPanel', '#emPanel', '#mkPanel', '#lfMsg', '#gsPanel', '#csPanel', '#vnPanel', '#fsPanel', '#hsPanel', '#hmPanel', '#tnPanel', '#lbPanel', '#spBag', '#spBench', '#spShop'];
+  const PANELS = ['#gdPanel', '#skPanel', '#glPanel', '#dyPanel', '#rsPanel', '#jbPanel', '#emPanel', '#mkPanel', '#lfMsg', '#gsPanel', '#csPanel', '#vnPanel', '#fsPanel', '#hsPanel', '#hmPanel', '#tnPanel', '#lbPanel', '#spBag', '#spBench', '#spShop',
     '#backupPanel', '#businessPanel', '#cityJournalPanel', '#craftPanel', '#gangLifePanel', '#inventoryPanel', '#mapPanel', '#progressPanel', '#vehiclePanel', '#controlSettings', '#creator'];
 
   const css = el('style'); css.id = 'nsHud';
@@ -109,6 +109,8 @@
   const dRank = mk('👤', 'Respect rank', () => root.NightshiftRespect?.open?.());
   const dDaily = mk('📅', 'Daily challenges', () => root.NightshiftDailies?.open?.());
   const dPhone = mk('📱', 'Hustle phone', () => root.NightshiftJobs?.open?.());
+  const dBag = mk('🎒', 'Backpack & where to get things', () => root.NightshiftSupply?.openBag?.());
+  dock.insertBefore(dBag.b, dRank.b);
   L.append(status, dock);
   const cap = el('div', { className: 'cap' });
   document.body.append(L, R, BARS);
@@ -156,6 +158,8 @@
     setBadge(dSkills, total ? String(total) : '', 'y');
     const rk = root.NightshiftRespect?.rank?.(); if (rk) { dRank.icon.textContent = rk.icon || '👤'; dRank.b.title = `Respect: ${rk.name}`; }
     const dy = root.NightshiftDailies?.state, done = dy?.claimed?.length || 0; setBadge(dDaily, dy?.day ? `${done}/3` : '', done >= 3 ? 'g' : 'y');
+    const SU = root.NightshiftSupply?.state, SD = root.NightshiftSupplyData;
+    if (SU && SD) { const f = SD.weightOf(SU.bag) / SD.cap(SU); setBadge(dBag, f >= 0.999 ? 'FULL' : f >= 0.8 ? Math.round(f * 100) + '%' : '', f >= 0.999 ? '' : 'y'); }
     const job = root.NightshiftJobs?.active?.(), unread = root.NightshiftLife?.state?.unread || 0; dPhone.b.classList.toggle('hot', !!job); setBadge(dPhone, unread ? String(unread) : job ? '●' : '', '');
     const key = `${place}|${armor > 0}`; if (key !== last) last = key;
   }

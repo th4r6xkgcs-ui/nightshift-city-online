@@ -58,14 +58,9 @@ const vs = V.clean({ ladder: 2, wins: 3, fights: 5, purses: 900 });
 assert.ok(V.canFight(vs, 2) && !V.canFight(vs, 3) && !V.canFight(vs, -1)); assert.equal(V.clean({ ladder: 99 }).ladder, 5);
 console.log('PASS: fight club (skills, perfect/afk play, timing, ladder, save)');
 
-// ---- workbench ----
-const ws = W.clean({ owned: ['pistol'] }), pocket = { scrap: 12, parts: 1 };
-assert.equal(W.buildMod(ws, pocket, 'pistol', 'scope', 9).ok, false, 'scope needs 2 parts');
-assert.equal(W.buildMod(ws, pocket, 'pistol', 'grip', 1).ok, false, 'shooting level gate');
-assert.ok(W.buildMod(ws, pocket, 'pistol', 'grip', 9).ok); assert.deepEqual(pocket, { scrap: 7 }); assert.deepEqual(ws.mods.pistol, ['grip']);
-assert.equal(W.buildMod(ws, pocket, 'pistol', 'grip', 9).reason, 'Already fitted');
-assert.equal(W.buildPlate(ws, pocket).ok, false, 'plate needs parts'); pocket.parts = 9;
-for (let i = 0; i < 4; i++) W.buildPlate(ws, { scrap: 99, parts: 9 });
-assert.equal(ws.armor, 100); assert.equal(W.buildPlate(ws, { scrap: 99, parts: 9 }).reason, 'Armor is full');
-for (const m of W.MODS) assert.ok(W.BUILD[m.id], 'every mod buildable');
-console.log('PASS: workbench mods and armor plates from salvage');
+// ---- workbench: armor plates (gun mods moved to crafted attachments, see tests/weapons.cjs) ----
+const ws = W.clean({ version: 1 }), mats = { metal: 99, tape: 9 }, bctx = { spend: (c) => { if (!Object.entries(c).every(([k, n]) => mats[k] >= n)) return false; for (const [k, n] of Object.entries(c)) mats[k] -= n; return true; } };
+assert.equal(W.buildPlate(ws, { spend: () => false }).ok, false, 'plate needs materials');
+for (let i = 0; i < 4; i++) assert.ok(W.buildPlate(ws, bctx).ok);
+assert.equal(ws.armor, 100); assert.equal(W.buildPlate(ws, bctx).reason, 'Armor is full'); assert.deepEqual(mats, { metal: 59, tape: 1 });
+console.log('PASS: workbench armor plates from crafted materials');

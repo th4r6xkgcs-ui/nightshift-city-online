@@ -71,6 +71,12 @@
         { key: 'fishing.bite', label: 'Bite wait', per: -0.01, min: 0.5 },
         { key: 'fishing.rare', label: 'Rare catch chance', per: 0.02, max: 2.0 },
       ] },
+    { id: 'crafting', name: 'Crafting', icon: '🛠️', desc: 'Build guns and gear faster, and make them last longer.',
+      earn: 'Craft guns, attachments and repairs at a workbench.',
+      perks: [
+        { key: 'crafting.speed', label: 'Craft time', per: -0.01, min: 0.5 },
+        { key: 'crafting.durability', label: 'Gun durability', per: 0.01, max: 1.5 },
+      ] },
   ];
 
   // XP needed to go from `level` to `level + 1`.
@@ -102,6 +108,7 @@
     stealth: 0.5 * 150,                    // an escape every ~2 minutes
     charisma: 40 + 5 * 4 + 10,             // deliveries + sales + goal rewards
     fishing: 4 * 18,                       // ~4 landed fish per minute, ~18 XP each (fishing-data.js XP)
+    crafting: 2 * 60,                      // ~2 crafts a minute when stocked, 4 XP per craft-second (supply.js)
   });
 
   const api = Object.freeze({ MAX_LEVEL, TITLES, SKILLS, xpToNext, XP, PACE });

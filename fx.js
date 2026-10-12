@@ -47,7 +47,7 @@
   const FB = root.NightshiftFeedback;
   if (FB && typeof FB.shot === 'function' && !FB.__fxShot) {
     const shot = FB.shot;
-    FB.shot = function () { const r = shot.apply(this, arguments); scareAt(P(), 260); const w = root.NightshiftWeapons?.state?.equipped; shake(w === 'shotgun' ? 0.32 : w === 'rifle' || w === 'revolver' ? 0.22 : w === 'ar' || w === 'smg' ? 0.08 : 0.1); return r; };
+    FB.shot = function () { const r = shot.apply(this, arguments); scareAt(P(), 260); const cw = root.NightshiftWeapons?.current?.() || {}, w = cw.id, k = cw.cls; shake(k === 'shotgun' ? 0.32 : w === 'sawnoff' ? 0.36 : w === 'hawk' || w === 'hunting' || w === 'rifle' || w === 'revolver' ? 0.24 : w === 'ar' || w === 'carbine' || k === 'smg' ? 0.08 : w === 'pipe' ? 0.18 : 0.1); return r; };
     FB.__fxShot = true;
   }
 

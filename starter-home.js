@@ -18,6 +18,11 @@
   const KEY = 'nightshift-city-activities-v1';
   try {
     const ls = root.localStorage; if (!ls) return;
+    // "Start a new life" (supply.js) reloads with ?newlife=1: wipe every save before any module reads it.
+    if (/[?&]newlife=1\b/.test(root.location?.search || '')) {
+      for (const k of Object.keys(ls)) if (/nightshift/i.test(k)) ls.removeItem(k);
+      try { root.history?.replaceState?.(null, '', root.location.pathname); } catch { /* cosmetic */ }
+    }
     let d = {}; try { d = JSON.parse(ls.getItem(KEY) || '{}') || {}; } catch { d = {}; }
     if (d.owned !== true) { d.owned = true; ls.setItem(KEY, JSON.stringify(d)); }
     root.NightshiftStarterHome = Object.freeze({ owned: true });
