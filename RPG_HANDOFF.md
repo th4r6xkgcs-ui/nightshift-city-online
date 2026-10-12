@@ -366,3 +366,14 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
     - Drifting cloud shadows in daytime.
   - Art-pass branch: Codex interaction prompts ("👆 CAR/HOME/RACE…") and the GPS target now use `NightshiftSign`.
   - Race start signs moved below the ring.
+- **Sound and police cruisers**
+  - `ambience.js` (Claude, loads after `guide.js`): synthesized city audio (no audio files). It plays only when the game's 🔊 SOUND toggle is on, and only after a tap.
+    - A traffic rumble bed (busier in Midtown, quieter at the docks and late at night), rain hiss, wind, distant sirens while heat ≥ 1, and footsteps (wetter in rain).
+    - Per-weapon gunshots via a `NightshiftFeedback.shot` wrap (`__amb`); the suppressor muffles them.
+    - A cash "ka-ching" on jumps of $500 or more.
+    - Indoors it drops to a soft room tone.
+    - API: `NightshiftAmbience.{on, level}`.
+  - `fx.js`: each newly spawned police officer gets a white/black cruiser with a flashing red/blue light bar, parked at the nearest road lane.
+    - Several cruisers park nose-to-tail 70 px apart instead of stacking; the cap is 6.
+    - They leave 15 s after heat clears, or after 120 s.
+    - `NightshiftFx.stats().cruisers` lists their positions.
