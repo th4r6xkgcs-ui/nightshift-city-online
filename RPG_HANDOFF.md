@@ -429,3 +429,14 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
   - New goals: `scav1` and `craft1` come right after `walk`, then `shoot`, `leaf1`, `trim1`, `bag1`, `crafter`, `pills1`, `lockup1`, `gun1` (crafted real gun), `coke1`, `gunrun1`, `factory`, `arsenal` (10 guns).
   - Per-gun sounds (ambience) and camera shake (fx) are keyed by id and class.
 - **Art-pass branch:** `sprite-renderer.js` `gunArm` draws a held sprite for each of the 15 guns. `game.js` no-gun message now reads "craft one at your home workbench".
+- **Crafting polish**
+  - **Perfect taps (`supply.js`):** every collect/process cycle has a gold window drawn on the activity bar. Tapping the bar (or pressing C) inside it finishes the cycle at once:
+    - Collecting gives +1 of the spot's main item.
+    - Processing refunds the baggie.
+    - Both give 1.5× XP.
+    - A tap outside the window ("too early") locks that cycle's window. Idle play still earns the base rate.
+  - **Craft quality (`weapons-data.js`):** each crafted gun rolls Rough / Standard / Fine / Masterwork via `rollQuality(craftingLevel)`.
+    - Quality changes damage (×0.95 to ×1.1), durability (×0.8 to ×1.5) and resale value (×0.8 to ×1.6).
+    - Crafting a better copy of a gun you hold swaps it in, and the old one becomes a spare. Spares are always Standard.
+    - Saved in `state.quality`.
+  - **UI:** a new-gun reveal card shows the quality, and gun and material icons get an automatic outline/rim/shade pass.

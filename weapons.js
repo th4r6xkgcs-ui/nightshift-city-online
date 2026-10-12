@@ -20,7 +20,7 @@
   const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode */ } };
   persist();
   // Equipped gun with its mods applied (mag/spread/range/suppressed). See weapons-data.js effective().
-  const current = () => (W.BY_ID[state.equipped] ? W.effective(W.BY_ID[state.equipped], state.mods?.[state.equipped] || []) : W.NONE);
+  const current = () => (W.BY_ID[state.equipped] ? W.effective(W.BY_ID[state.equipped], state.mods?.[state.equipped] || [], W.qOf(state, state.equipped)) : W.NONE);
   const durMul = () => { try { return root.NightshiftSkills?.mod('crafting.durability') ?? 1; } catch { return 1; } };
 
   /* eslint-disable no-undef */
@@ -207,9 +207,11 @@
     const w = current();
     pill.textContent = '';
     const n = W.usable(state).length, id = state.equipped;
+    const Qp = W.BY_ID[id] ? W.QUALITY[W.qOf(state, id)] : null;
+    if (Qp && Qp.id !== 'standard') { const qd = el('b', {}, '◆ '); qd.style.color = Qp.color; pill.append(qd); }
     pill.append(document.createTextNode(`${w.icon} ${w.suppressed ? "🔇 " : ""}${w.name.toUpperCase()} ${state.armor > 0 ? `🛡️${Math.ceil(state.armor)} ` : ''}`));
     if (W.BY_ID[id]) {
-      const mx = W.maxDur(W.BY_ID[id], state.mods[id] || [], durMul()), left = state.cond[id] || 0, f = Math.max(0, Math.min(1, left / mx));
+      const mx = W.maxDur(W.BY_ID[id], state.mods[id] || [], durMul(), W.qOf(state, id)), left = state.cond[id] || 0, f = Math.max(0, Math.min(1, left / mx));
       const bar = el('i', { className: 'dur' }); const fill = el('b'); fill.style.width = Math.round(f * 100) + '%'; fill.style.background = f > 0.5 ? '#7cdeb5' : f > 0.2 ? '#ffd970' : '#ff5a6a'; bar.append(fill); pill.append(bar);
       if (state.spare[id]) pill.append(el('small', {}, ` +${state.spare[id]}`));
     } else pill.append(el('small', {}, 'craft a gun'));
@@ -259,13 +261,13 @@
 
   const shop = el('div', { id: 'gsPanel', hidden: true, role: 'dialog', ariaLabel: 'Gun shop' });
   document.body.append(shop);
-  const condText = (id) => { const w = W.BY_ID[id], mx = W.maxDur(w, state.mods[id] || [], durMul()); return state.broken.includes(id) ? 'BROKEN' : `${state.cond[id] || 0}/${mx} shots`; };
+  const condText = (id) => { const w = W.BY_ID[id], mx = W.maxDur(w, state.mods[id] || [], durMul(), W.qOf(state, id)); return state.broken.includes(id) ? 'BROKEN' : `${state.cond[id] || 0}/${mx} shots`; };
   function armoryCard(id, { compact } = {}) {
-    const w = current().id === id ? current() : W.effective(W.BY_ID[id], state.mods[id] || []), eq = state.equipped === id, broken = state.broken.includes(id);
+    const w = current().id === id ? current() : W.effective(W.BY_ID[id], state.mods[id] || [], W.qOf(state, id)), eq = state.equipped === id, broken = state.broken.includes(id), Q = W.QUALITY[W.qOf(state, id)];
     const card = el('div', { className: 'w' + (eq ? ' eq' : '') + (broken ? ' lock' : '') });
     const icon = root.NightshiftSupply?.gunIcon?.(id, 72, 30);
-    const nm = el('div', { className: 'nm' }); if (icon) nm.append(icon); nm.append(document.createTextNode(` ${w.name}`)); card.append(nm);
-    const mx = W.maxDur(W.BY_ID[id], state.mods[id] || [], durMul()), f = broken ? 0 : Math.min(1, (state.cond[id] || 0) / mx);
+    const nm = el('div', { className: 'nm' }); if (icon) nm.append(icon); nm.append(document.createTextNode(` ${w.name} `)); const qb = el('span', { className: 'q' }, Q.name.toUpperCase()); qb.style.color = Q.color; qb.style.borderColor = Q.color + '88'; nm.append(qb); card.append(nm);
+    const mx = W.maxDur(W.BY_ID[id], state.mods[id] || [], durMul(), W.qOf(state, id)), f = broken ? 0 : Math.min(1, (state.cond[id] || 0) / mx);
     const bar = el('div', { className: 'bar' }), i = el('i'); i.style.width = Math.max(3, Math.round(f * 100)) + '%'; i.style.background = f > 0.5 ? '#7cdeb5' : f > 0.2 ? '#ffd970' : '#ff5a6a'; bar.append(i);
     const row = el('div', { className: 'st' }); row.append(el('span', {}, 'Condition'), el('div')); row.lastChild.append(bar, el('span', {}, condText(id))); card.append(row);
     if (!compact) card.append(el('div', { className: 'd' }, `${w.pellets > 1 ? w.pellets + '×' + w.dmg : w.dmg} dmg · ${w.mag}-rd mag · ${Math.round(60000 / w.rate)} rpm · ${(state.mods[id] || []).map((m) => W.MOD[m].icon).join(' ') || 'no mods'}${state.spare[id] ? ` · ${state.spare[id]} spare` : ''}`));
@@ -338,7 +340,8 @@
   #gsPanel .parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px;margin-bottom:8px}
   #gsPanel .part{display:flex;align-items:center;gap:8px;background:#1f252d;border:1px solid #3d4652;border-radius:10px;padding:6px 8px}
   #gsPanel .part canvas{flex:none;image-rendering:pixelated} #gsPanel .pn{flex:1;font-weight:700;font-size:12px} #gsPanel .pc{font-size:10.5px;color:#bfae98;margin-right:4px}
-  #gsPanel .part .buy{padding:6px 9px} #gsPanel .nm canvas{vertical-align:middle;image-rendering:pixelated}`;
+  #gsPanel .part .buy{padding:6px 9px} #gsPanel .nm canvas{vertical-align:middle;image-rendering:pixelated}
+  .q{display:inline-block;font:700 9.5px var(--disp,system-ui);letter-spacing:.12em;border:1px solid;border-radius:999px;padding:1px 6px;vertical-align:middle}`;
   document.head.appendChild(css2);
 
   // ---- crafting API (used by supply.js benches) ----
