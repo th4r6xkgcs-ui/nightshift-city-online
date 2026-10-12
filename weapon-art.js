@@ -19,13 +19,13 @@
     red: ['#5e1a1d', '#8e2b2c', '#c2443c', '#ff8a6a'], tan: ['#5b4a32', '#857050', '#ab9470', '#d8c39a'],
     olive: ['#262b1b', '#3c4429', '#56603a', '#87925e'], rubber: ['#0f1113', '#1a1d20', '#282c31', '#3d434a'],
   };
-  const SKINNABLE = { steel: 1, poly: 1, dark: 0 };
+  const SKINNABLE = { steel: 1, poly: 1, rust: 1, dark: 0 };
   const hexToRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
   const mix = (a, b, t) => { const A = hexToRgb(a), B = hexToRgb(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
   const ramp = (base, hi) => [mix(base, '#000000', 0.45), base, mix(base, hi || '#ffffff', 0.32), mix(base, '#ffffff', 0.62)];
 
   // ---------------- pixel buffer + part painter ----------------
-  const GW = 84, GH = 34; // grid (gun drawn with origin offset ox,oy so attachments have room)
+  const GW = 84, GH = 38; // grid (gun drawn with origin offset ox,oy so attachments have room)
   function Buf(skin) {
     const px = new Array(GW * GH).fill(null), b = { px, skin };
     const put = (x, y, c) => { x = Math.round(x); y = Math.round(y); if (x >= 0 && y >= 0 && x < GW && y < GH) px[y * GW + x] = c; };
@@ -86,7 +86,7 @@
       b.C(sl, x + 12, y, L - 12, 3); b.R(sl, x + 12, y + 3, L - 15, 1); b.L(INK, x + 2, y - 1, 2, 1); b.L(b.T(sl, 2), x + L - 2, y - 1, 1, 1);
       guard(b, x + 5, y + 5, 5); b.L(INK, x + 7, y + 5, 1, 2);
       if (o.grips) { b.L(b.T(fr, 3), x + 2, y + 6, 1, 4); for (let i = 0; i < 3; i++) b.L(b.T(fr, 0), x + 3, y + 6 + i * 2); }
-      return { hand: [x + 3, y + 7], muzzle: [x + L, y + 1], rail: [x + 9, y - 1], under: [x + L - 6, y + 4], mag: null };
+      return { hand: [x + 3, y + 7], muzzle: [x + L, y + 1], rail: [x + 9, y - 1], under: [x + L - 6, y + 4], mag: null, cyl: [x + 5, y + 1] };
     }
     const gripPts = [[x + 1, y + sH + 1], [x + 7, y + sH + 1], [x + 6, y + sH + 8], [x - 1, y + sH + 8]];
     const mag = o.mag || 0; if (mag) b.R('poly', x - 1 + (o.magX || 0), y + sH + 8, 6, mag, { matte: true }); // stick mag below the grip
@@ -135,7 +135,7 @@
     else if (o.hider) { b.R('dark', end, y + 1, 2, 2); b.L(INK, end + 1, y + 1, 1, 1); }
     if (o.frontSight) b.L(b.T('dark', 2), end - 2, y - 1, 1, 1);
     const muzzle = [end + (o.brake ? 4 : o.hider ? 2 : 0), y + 2];
-    return { hand: [x + 3, y + 7], muzzle, rail: [x + Math.round(rec / 2), y - 1], under: [bx + Math.max(2, Math.round((hg || bar) * 0.45)), y + 5], mag: magEnd };
+    return { hand: [x + 3, y + 7], muzzle, rail: [x + Math.round(rec / 2), y - 1], under: [bx + Math.max(2, Math.round((hg || bar) * 0.45)), y + 5], mag: magEnd, tube: o.tubeMag ? [bx + Math.round(bar * 0.75), y + 3] : null };
   }
   // integrated optic used by DMRs (and the scope mod on long guns)
   function optic(b, cx, ry, len = 14, mat = 'dark', lens = '#7cc7ff') {
@@ -160,7 +160,7 @@
     carbine: (b) => longgun(b, { rec: 14, bar: 11, hg: 8, mag: 'curved', magLen: 8, stock: 'skel', rail: true, hider: true, frontSight: true }),
     rifle: (b) => { const a = longgun(b, { rec: 15, bar: 20, hg: 11, mag: 'straight', magLen: 5, stock: 'fixed', rail: true, brake: true, bolt: true }); optic(b, a.rail[0], a.rail[1], 15); a.optic = true; return a; },
     ar: (b) => longgun(b, { rec: 15, bar: 14, hg: 11, mag: 'curved', magLen: 9, stock: 'skel', rail: true, carry: false, hider: true, frontSight: true }),
-    goldhawk: (b) => { const a = handgun(b, { len: 19, slideH: 5, serr: 4, hammer: true, slideMat: 'gold', frameMat: 'gold' }); for (let i = 0; i < 5; i++) b.L(b.T('gold', 0), OX + 8 + i * 2, OY + 3 - (i % 2), 1, 1); b.L('#7cc7ff', OX + 3, OY + 7, 1, 1); return a; },
+    goldhawk: (b) => { const a = handgun(b, { len: 19, slideH: 5, serr: 4, hammer: true, slideMat: 'gold', frameMat: 'poly' }); for (let i = 0; i < 5; i++) b.L(b.T('gold', 0), OX + 8 + i * 2, OY + 3 - (i % 2), 1, 1); b.L('#7cc7ff', OX + 3, OY + 7, 1, 1); return a; },
     whisper: (b) => { const a = longgun(b, { rec: 13, bar: 3, hg: 0, mag: 'straight', magLen: 8, stock: 'tube', rail: true }); const m = a.muzzle; b.C('dark', m[0], m[1] - 2, 14, 5); for (let i = 3; i < 14; i += 3) b.L(INK, m[0] + i, m[1] - 2, 1, 5); a.muzzle = [m[0] + 14, m[1]]; a.integral = true; return a; },
     dragon: (b) => { const a = longgun(b, { rec: 13, bar: 17, hg: 9, hgType: 'pump', furn: 'red', stock: 'fixed', mag: 'straight', magLen: 5, rail: true, brake: true }); for (let i = 0; i < 6; i++) b.L(b.T('gold', 2 + (i % 2)), OX + 2 + i * 2, OY + 2 + (i % 2), 1, 1); b.L(b.T('gold', 3), OX - 10, OY + 3, 4, 1); return a; },
     reaper: (b) => { const a = longgun(b, { rec: 17, bar: 26, hg: 12, mag: 'box', stock: 'fixed', rail: true, brake: true, bolt: true }); optic(b, a.rail[0] + 1, a.rail[1], 17); b.L(INK, OX + 30, OY + 5, 1, 4); b.L(INK, OX + 30, OY + 9, 3, 1); b.L(b.T('dark', 2), OX + 31, OY + 5, 1, 4); a.optic = true; return a; },
@@ -169,6 +169,8 @@
   // Attachments: drawn at the gun's anchors (same asset in every view)
   function attach(b, id, mods, a) {
     const has = (m) => mods.includes(m), hand = /pistol|compact|hawk|goldhawk|revolver|machine/.test(id);
+    if (has('extmag') && !a.mag && a.cyl) { const [cx, cy] = a.cyl; for (let i = 0; i < 3; i++) { b.L(b.T('gold', 2), cx + i * 2, cy + 3, 1, 1); b.L(b.T('gold', 3), cx + i * 2, cy + 3); } b.R(MAT.gold, cx - 1, cy - 2, 7, 1); } // speed-loader brass
+    if (has('extmag') && !a.mag && a.tube) { const [tx, ty] = a.tube; b.C('steel', tx, ty, 5, 2); b.L(b.T('chrome', 2), tx + 5, ty, 1, 2); }
     if (has('extmag') && a.mag) { const [mx, my] = a.mag; b.R('poly', mx, my - 1, hand ? 6 : 4, hand ? 4 : 5, { matte: true }); b.R(MAT.chrome, mx - (hand ? 0 : 1), my + (hand ? 3 : 4), hand ? 6 : 6, 1); }
     if (has('reinforce')) { const [ux, uy] = a.under; for (const dx of [-6, 0]) { for (let j = -4; j < 0; j++) if (b.get(ux + dx, uy + j)) { b.L(b.T('steel', 2), ux + dx, uy + j); b.L(b.T('steel', 0), ux + dx + 1, uy + j); } b.L(b.T('chrome', 3), ux + dx, uy - 4); } for (const [rx, ry] of [[a.hand[0] + 2, a.hand[1] - 4], [a.hand[0] + 5, a.hand[1] - 4]]) if (b.get(rx, ry)) b.L(b.T('chrome', 2), rx, ry); }
     if (has('grip')) { const [ux, uy] = a.under; b.R('dark', ux - 2, uy, 5, 2); b.L('#ff3b3b', ux + 3, uy, 1, 1); b.L('glow', ux + 4, uy, 1, 1); }
@@ -181,12 +183,18 @@
 
   // ---------------- baking + caches ----------------
   const cache = new Map();
-  const W = () => root.NightshiftWeaponsData;
+  const W = () => root.NightshiftWeaponsData || (typeof require === 'function' ? (() => { try { return require('./weapons-data.js'); } catch { return null; } })() : null);
+  // Pure pixel build (Node-testable): grid pixels, trimmed box and anchors.
+  function build(id, skinId = null, mods = []) {
+    if (!GUNS[id]) id = 'pistol';
+    const skin = skinId && skinId !== 'stock' ? (W()?.SKIN?.[skinId] || null) : null, b = Buf(skin), a = GUNS[id](b); attach(b, id, [...new Set(mods)], a); outline(b);
+    let x0 = GW, y0 = GH, x1 = 0, y1 = 0; for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) if (b.px[y * GW + x]) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+    return { px: b.px, box: { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 }, a, GW, GH };
+  }
   function sprite(id, skinId = null, mods = []) {
     if (!GUNS[id]) id = 'pistol';
     const mk = [...new Set(mods)].sort().join(','), key = id + '|' + (skinId || '') + '|' + mk; let s = cache.get(key); if (s) return s;
-    const skin = skinId && skinId !== 'stock' ? W()?.SKIN?.[skinId] || null : null, b = Buf(skin), a = GUNS[id](b); attach(b, id, mods, a); outline(b);
-    let x0 = GW, y0 = GH, x1 = 0, y1 = 0; for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) if (b.px[y * GW + x]) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+    const { px, box, a } = build(id, skinId, mods), b = { px }, [x0, y0, x1, y1] = [box.x, box.y, box.x + box.w - 1, box.y + box.h - 1];
     const cv = typeof document !== 'undefined' ? document.createElement('canvas') : null; if (!cv) return null;
     cv.width = GW; cv.height = GH; const c = cv.getContext('2d'), img = c.createImageData(GW, GH);
     for (let i = 0; i < b.px.length; i++) { let v = b.px[i]; if (!v) continue; if (v === 'glow') v = '#ff6b6b'; const [r, g, bl] = hexToRgb(v); img.data.set([r, g, bl, 255], i * 4); }
@@ -207,7 +215,7 @@
     ctx.save(); ctx.translate(Math.round(x), Math.round(y)); ctx.rotate(angle); if (flip) ctx.scale(1, -1);
     const dev = Math.abs(ctx.getTransform().a) || 1; ctx.imageSmoothingEnabled = dev * k < 1.6; // tiny on screen: smooth so outlines don't drop out
     ctx.drawImage(s.cv, s.box.x, s.box.y, s.box.w, s.box.h, (s.box.x - hx) * k, (s.box.y - hy) * k, s.box.w * k, s.box.h * k);
-    if (opts.laser && mods.includes('grip')) { const [ux, uy] = s.a.under; ctx.globalAlpha = 0.22; ctx.fillStyle = '#ff3b3b'; ctx.fillRect((ux + 4 - hx) * k, (uy - hy) * k, 70, 0.6); ctx.globalAlpha = 1; }
+    if (opts.laser && mods.includes('grip')) { const [ux, uy] = s.a.under; const lx = (ux + 4 - hx) * k, gr = ctx.createLinearGradient(lx, 0, lx + 48, 0); gr.addColorStop(0, '#ff3b3b70'); gr.addColorStop(1, '#ff3b3b00'); ctx.fillStyle = gr; ctx.fillRect(lx, (uy - hy) * k, 48, 0.6); }
     ctx.restore();
   }
 
@@ -219,19 +227,24 @@
     Sx.person = function (p, isPlayer, options = {}) {
       const armed = isPlayer && options.weapon !== false && !options.noWeapon && root.NightshiftInventory?.state?.pocket?.pistol > 0;
       if (!armed || !p || !Number.isFinite(p.x)) return person.call(this, p, isPlayer, options);
-      const WS = root.NightshiftWeapons, id = WS?.state?.equipped || 'pistol', ang = p.angle || 0, ctx = g, behind = Math.sin(ang) < -0.55;
-      const skin = WS?.state?.skins?.[id] || null, mods = WS?.state?.mods?.[id] || [], hx = p.x + Math.cos(ang) * 8, hy = p.y + Math.sin(ang) * 8 + 2;
-      const arm = () => { const o = root.NightshiftWardrobe?.outfit?.(), WD = root.NightshiftWardrobeData; let sleeve = root.NightshiftHome?.profile?.shirt || '#669baa', skinC = root.NightshiftHome?.profile?.skin || '#ca9873';
-        try { if (o && WD) { const pc = o.outer || o.top; sleeve = WD.ITEM[pc.id].colors[pc.color]; skinC = WD.SKINS[o.skin]; if (o.gloves) skinC = WD.ITEM[o.gloves.id].colors[o.gloves.color]; } } catch { /* defaults */ }
-        ctx.save(); ctx.translate(Math.round(p.x), Math.round(p.y + 2)); ctx.rotate(ang); ctx.fillStyle = INK; ctx.fillRect(2, -2.5, 8, 5); ctx.fillStyle = sleeve; ctx.fillRect(2.5, -2, 6, 4); ctx.fillStyle = skinC; ctx.fillRect(7.5, -1.8, 3, 3.6); ctx.restore(); };
-      if (behind) { arm(); drawHeld(ctx, id, hx, hy, ang, skin, mods, { laser: true }); }
-      const r = person.call(this, p, isPlayer, { ...options, noWeapon: true });
-      if (!behind) { arm(); drawHeld(ctx, id, hx, hy, ang, skin, mods, { laser: true }); }
+      const WS = root.NightshiftWeapons, id = WS?.state?.equipped || 'pistol', ang = p.angle || 0, ctx = g, C = root.NightshiftCharacters;
+      const skin = WS?.state?.skins?.[id] || null, mods = WS?.state?.mods?.[id] || [], sp = sprite(id), hold = sp && sp.box.w > 34 ? 'long' : 'short';
+      // hands come from the character's holding pose for this facing, so arms and gun line up
+      let hx = p.x + Math.cos(ang) * 6.5, hy = p.y - 5.5 + Math.sin(ang) * 1.2, behind = Math.sin(ang) < -0.38;
+      if (C?.enabled && C.holdHand) { const d = C.dirOfAngle(ang), hh = C.holdHand(d, hold); behind = hh.back; hx = p.x + (behind ? 4.5 : hh.x); hy = p.y + (behind ? -9 : hh.y); }
+      if (behind) drawHeld(ctx, id, hx, hy, ang, skin, mods, { laser: true });
+      const r = person.call(this, p, isPlayer, { ...options, noWeapon: true, hold });
+      if (!behind) drawHeld(ctx, id, hx, hy, ang, skin, mods, { laser: true });
       return r;
     };
     Sx.__weaponArt = true; return true;
   }
   if (typeof document !== 'undefined') { const t = setInterval(() => { if (installHeld()) clearInterval(t); }, 300); setTimeout(() => clearInterval(t), 20000); }
+  // armory cards also appear in the backpack / bench (their base styles only targeted the gun shop)
+  if (typeof document !== 'undefined') { const st = document.createElement('style'); st.textContent = `.spP .w{background:#1f252d;border:1px solid #3d4652;border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:4px} .spP .w.eq{border-color:#ffb347;box-shadow:0 0 0 1px #ffb34755 inset} .spP .w.lock{opacity:.6}
+  .spP .w .nm{font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap} .spP .w .q{font-size:9px;border:1px solid;border-radius:6px;padding:1px 5px;letter-spacing:.1em}
+  .spP .w .st{display:flex;align-items:center;gap:6px;font-size:10.5px;color:#d6cbbb} .spP .w .st>div{display:flex;align-items:center;gap:6px;flex:1} .spP .w .bar{flex:1;min-width:40px;height:5px;background:#0b0e12;border-radius:3px;overflow:hidden} .spP .w .bar i{display:block;height:100%}
+  .spP .w .act{display:flex;justify-content:flex-end;align-items:center;gap:6px} .spP .w .eqb{padding:7px 12px;background:#2c3a4c;border:1px solid #6f8db3;color:#fff;border-radius:8px;font:700 11px var(--disp,system-ui);cursor:pointer} .spP .w .on{color:#7cdeb5;font-weight:700;font-size:11px}`; document.head.append(st); }
 
   // ---------------- Weapon Inspection bench ----------------
   let insp = null;
@@ -323,5 +336,6 @@
   function inspect(id) { if (typeof document === 'undefined' || !root.NightshiftWeaponsData) return; insp = insp || buildInspect(); insp.open(id); }
   function closeInspect() { insp?.close(); }
 
-  root.NightshiftWeaponArt = Object.freeze({ sprite, icon, drawHeld, inspect, closeInspect, GUNS: Object.keys(GUNS), anchors: (id) => sprite(id)?.a, paused: () => !!insp && !insp.el.hidden });
+  const api = Object.freeze({ build, sprite, icon, drawHeld, inspect, closeInspect, GUNS: Object.keys(GUNS), anchors: (id) => sprite(id)?.a, paused: () => !!insp && !insp.el.hidden });
+  if (typeof module === 'object' && module.exports) module.exports = api; else root.NightshiftWeaponArt = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

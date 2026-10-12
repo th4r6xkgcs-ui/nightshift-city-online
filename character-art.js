@@ -17,7 +17,7 @@
   const lum = (h) => { const n = parseInt(String(h).slice(1, 7), 16); return ((n >> 16 & 255) * 0.3 + (n >> 8 & 255) * 0.59 + (n & 255) * 0.11) / 255; };
 
   // ---------------- geometry ----------------
-  function geom(o, dir, anim, f) {
+  function geom(o, dir, anim, f, hold = '') {
     const a = dir * Math.PI / 4, sx = Math.cos(a), sy = Math.sin(a), side = Math.abs(sx), bw = (W.BUILDS.find((b) => b.id === o.build) || W.BUILDS[1]).w;
     const n = ANIMS[anim] || 1, k = ((f % n) + n) % n;
     let stride = 0, bob = 0, arm = 0, lean = 0;
@@ -31,6 +31,13 @@
     g.legs = [-1, 1].map((s) => { const st = s * stride; return { s, hx: cx * 0.5 + s * spread, hy: g.hipY, fx: s * spread + sx * st * 0.9, fy: g.footY + sy * st * 0.35 - (anim !== 'idle' && st > 0 ? Math.min(1.5, st * 0.3) : 0), near: s * sx * -1 + sy * 0.01 }; });
     g.arms = [-1, 1].map((s) => { const sw = s * arm, spreadA = 1 - side * 0.8 * (1 - Math.abs(sy) * 0.6); return { s, x: cx + s * (g.SW / 2 - 0.6) * spreadA, y: g.shY + 1.2, hx: cx + s * (g.SW / 2 + 0.2) * spreadA + sx * sw * 0.7 - (anim === 'run' ? s * 0.6 : 0), hy: g.shY + (anim === 'run' ? 8.5 : 11.5) + sy * sw * 0.25 }; });
     // which arm is nearer the viewer (drawn after the torso in profile)
+    // holding a gun: hands come up to chest height in front of the body (long guns: support hand further out on the handguard)
+    if (hold) { const F = [cx + sx * 6.5, g.shY + 7 + sy * 1.2];
+      g.hold = hold; g.arms = g.arms.map((A) => { let hx, hy;
+        if (g.back) { hx = cx + A.s * (g.SW / 2 - 1.2); hy = g.shY + 3; }
+        else if (hold === 'long' && A.s === 1) { hx = F[0] + sx * 3.5 + (1 - side) * 1.5; hy = F[1] + sy * 1.4; }
+        else { hx = F[0] + A.s * 0.7 * (1 - side); hy = F[1] + 0.4; }
+        return { ...A, hx, hy }; }); }
     g.nearArm = g.profile ? (sy >= 0 ? (sx > 0 ? 1 : -1) : (sx > 0 ? 1 : -1)) : 0;
     return g;
   }
@@ -234,8 +241,8 @@
   }
 
   // ---------------- compose one frame ----------------
-  function compose(ctx, o, dir, anim, f) {
-    c = ctx; const g = geom(o, dir, anim, f), skin = W.SKINS[o.skin];
+  function compose(ctx, o, dir, anim, f, hold = '') {
+    c = ctx; const g = geom(o, dir, anim, f, hold), skin = W.SKINS[o.skin];
     // back-side items first
     if (g.back || g.side > 0.3) { hood(g, o, true); bagBack(g, o); } else if (o.bag?.id === 'duffel') bagBack(g, o);
     const arms = g.arms; // [-1, +1]; in profile -1 is the far arm, drawn behind the torso
@@ -265,19 +272,19 @@
     img.data.set(out); x.putImageData(img, 0, 0);
   }
   const frames = new Map(), MAX_FRAMES = 700;
-  function frame(o, dir, anim, f, scale = 2) {
-    const n = ANIMS[anim] || 1, k = ((f % n) + n) % n, key = W.keyOf(o) + '|' + dir + anim + k + '|' + scale;
+  function frame(o, dir, anim, f, scale = 2, hold = '') {
+    const n = ANIMS[anim] || 1, k = ((f % n) + n) % n, key = W.keyOf(o) + '|' + dir + anim + k + '|' + scale + hold;
     let cv = frames.get(key);
     if (cv) { frames.delete(key); frames.set(key, cv); return cv; }
     cv = document.createElement('canvas'); cv.width = CELL.w * scale; cv.height = CELL.h * scale;
     const x = cv.getContext('2d'); x.scale(scale, scale); x.translate(CELL.ax, CELL.ay); x.lineCap = 'round';
-    try { compose(x, o, dir, anim, k); } catch (e) { console.error(e); }
+    try { compose(x, o, dir, anim, k, hold); } catch (e) { console.error(e); }
     try { outline(cv, Math.max(1, Math.round(scale / 2.5))); } catch { /* tainted/unsupported */ }
     frames.set(key, cv); if (frames.size > MAX_FRAMES) frames.delete(frames.keys().next().value);
     return cv;
   }
-  function draw(ctx, o, x, y, dir, anim, f, scale = 2) {
-    const cv = frame(o, dir, anim, f, scale); const prev = ctx.imageSmoothingEnabled; ctx.imageSmoothingEnabled = false;
+  function draw(ctx, o, x, y, dir, anim, f, scale = 2, hold = '') {
+    const cv = frame(o, dir, anim, f, scale, hold); const prev = ctx.imageSmoothingEnabled; ctx.imageSmoothingEnabled = false;
     ctx.fillStyle = '#05080f55'; ctx.beginPath(); ctx.ellipse(Math.round(x) + 1.5, Math.round(y) + 14.5, 8.5, 3, 0, 0, Math.PI * 2); ctx.fill();
     ctx.drawImage(cv, Math.round(x) - CELL.ax, Math.round(y) - CELL.ay, CELL.w, CELL.h); ctx.imageSmoothingEnabled = prev;
   }
@@ -301,20 +308,23 @@
     if (!moving) return { anim: 'idle', f: Math.floor(performance.now() / 380 + (hash(p.id || '') % 4)) };
     return running ? { anim: 'run', f: Math.floor(ticks / 1.8) } : { anim: 'walk', f: Math.floor(ticks / 2.5) };
   }
+  const dirOfAngle = (a) => ((Math.round(a / (Math.PI / 4)) % 8) + 8) % 8;
+  // where the hands are when holding a gun (world offset from the anchor) — weapon-art puts the gun here
+  const holdHand = (dir, hold) => { const gg = geom(W.DEFAULT, dir, 'idle', 0, hold), A = gg.arms.find((a) => a.s === -1) || gg.arms[0]; return { x: A.hx, y: A.hy, back: gg.back }; };
   const dirOf = (p, isPlayer) => {
     /* eslint-disable-next-line no-undef */
     const moving = isPlayer ? (typeof player !== 'undefined' && player.moving) : p.moving === true;
     const a = moving && Number.isFinite(p.moveAngle) ? p.moveAngle : Number.isFinite(p.angle) ? p.angle : Math.atan2(p.dy || 0, p.dx || 0);
     return ((Math.round(a / (Math.PI / 4)) % 8) + 8) % 8;
   };
-  const api = { enabled: true, CELL, ANIMS, frame, draw, compose, geom, outfitFor, frames: () => frames.size, clear: () => frames.clear() };
+  const api = { enabled: true, CELL, ANIMS, frame, draw, compose, geom, outfitFor, dirOfAngle, holdHand, frames: () => frames.size, clear: () => frames.clear() };
   function install() {
     const S = root.NightshiftSprites; if (!S || S.__chars || typeof S.person !== 'function') return !!S?.__chars;
     const person = S.person, personTo = S.personTo;
     const ours = (ctx, p, isPlayer, options = {}) => {
       if (!api.enabled || !p) return false;
-      const o = outfitFor(p, isPlayer, options.role), d = dirOf(p, isPlayer), { anim, f } = animOf(p, isPlayer);
-      draw(ctx, o, p.x, p.y, d, anim, f);
+      const o = outfitFor(p, isPlayer, options.role), hold = options.hold || '', d = hold && Number.isFinite(p.angle) ? dirOfAngle(p.angle) : dirOf(p, isPlayer), { anim, f } = animOf(p, isPlayer);
+      draw(ctx, o, p.x, p.y, d, anim, f, 2, hold);
       if (!isPlayer && !options.hideHealth && Number.isFinite(p.hp) && p.hp < (p.maxHp || 40) && p.hp > 0) { ctx.fillStyle = '#182832'; ctx.fillRect(p.x - 13, p.y - 33, 26, 4); ctx.fillStyle = '#dd9884'; ctx.fillRect(p.x - 13, p.y - 33, 26 * Math.max(0, p.hp / (p.maxHp || 40)), 3); }
       return true;
     };
