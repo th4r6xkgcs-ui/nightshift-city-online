@@ -230,9 +230,9 @@
   }
   function openDream() {
     const p = P(), st = root.NightshiftPets?.state;
-    if (st?.dream) { head('🏡 YOUR DREAM HOUSE', 'Your cars line up in the driveway for everyone to see, and your pets have a yard. More rooms to furnish soon.'); pnl.append(el('div', { className: 'sub' }, `${ownedCars().length} car${ownedCars().length === 1 ? '' : 's'} on display · ${st.pets.length} pet${st.pets.length === 1 ? '' : 's'}`)); return; }
+    if (st?.dream) { head('🏡 YOUR DREAM HOUSE', 'Your cars line up in the driveway for everyone to see. Go inside to furnish every room and fill the garage.'); pnl.append(el('div', { className: 'sub' }, `${ownedCars().length} car${ownedCars().length === 1 ? '' : 's'} on display · ${st.pets.length} pet${st.pets.length === 1 ? '' : 's'}`)); return; }
     head('🏡 FOR SALE · 1 Prestige Row', `A modern four-bed with a three-car drive that shows off whatever you park there. ${money(PD.DREAM_HOUSE)} · you have ${money(p?.cash || 0)}`);
-    pnl.append(btn('go', `BUY · ${money(PD.DREAM_HOUSE)}`, () => { const r = root.NightshiftPets.buyDream(); say(r.ok ? '🏡 The dream house is yours! Your cars now show off in the driveway.' : r.reason); openDream(); }, (p?.cash || 0) < PD.DREAM_HOUSE));
+    pnl.append(btn('go', `BUY · ${money(PD.DREAM_HOUSE)}`, () => { const r = root.NightshiftPets.buyDream(); say(r.ok ? '🏡 The dream house is yours! Step inside to furnish it.' : r.reason); if (r.ok) { pnl.hidden = true; if (Z.zones().dreamhome) setTimeout(() => Z.enter('dreamhome'), 400); } else openDream(); }, (p?.cash || 0) < PD.DREAM_HOUSE));
   }
 
   // ---------------- zone ----------------
@@ -256,7 +256,7 @@
       out.push({ x: MALL.x + MALL.w / 6, y: MALL.y + MALL.h + 16, r: 50, action: 'PAWN', label: 'Golden Pawn · fence stolen goods', sign: 'PAWN', icon: '💍', color: '#e3c25a', lift: 80, use: openPawn });
       out.push({ x: MALL.x + MALL.w / 2, y: MALL.y + MALL.h + 16, r: 50, action: 'PETS', label: 'Paws & Claws · adopt pets, pet food', sign: 'PETS', icon: '🐾', color: '#7cc7ff', lift: 80, use: () => root.NightshiftPets?.openPets(true) });
       out.push({ x: SHOW.x + SHOW.w / 2, y: SHOW.y + SHOW.h + 16, r: 60, action: 'KITS', label: 'Prestige Motors · body kits for your cars', sign: 'PRESTIGE MOTORS', icon: '🏎️', color: '#e3c25a', lift: 110, use: openShowroom });
-      out.push({ x: DREAM.x + DREAM.w / 2, y: DREAM.y - 70, r: 60, action: root.NightshiftPets?.state?.dream ? 'HOUSE' : 'FOR SALE', label: root.NightshiftPets?.state?.dream ? 'Your dream house' : `Dream house for sale · ${money(PD.DREAM_HOUSE)}`, sign: root.NightshiftPets?.state?.dream ? 'YOUR PLACE' : `FOR SALE · ${money(PD.DREAM_HOUSE)}`, icon: '🏡', color: '#7cdeb5', lift: 12, use: openDream });
+      out.push({ x: DREAM.x + DREAM.w / 2, y: DREAM.y - 70, r: 60, action: root.NightshiftPets?.state?.dream ? 'GO IN' : 'FOR SALE', label: root.NightshiftPets?.state?.dream ? 'Your dream house · furnish it, park your cars' : `Dream house for sale · ${money(PD.DREAM_HOUSE)}`, sign: root.NightshiftPets?.state?.dream ? 'YOUR PLACE' : `FOR SALE · ${money(PD.DREAM_HOUSE)}`, icon: '🏡', color: '#7cdeb5', lift: 12, use: () => (root.NightshiftPets?.state?.dream && Z.zones().dreamhome ? Z.enter('dreamhome') : openDream()) });
       return out;
     },
     drawGround(c, t, api) {
