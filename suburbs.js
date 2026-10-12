@@ -192,9 +192,9 @@
     for (let k = 0; k < 2; k++) { const sw = Math.sin(t * 2 + k * 2) * 8, sx = x + 18 + k * 30; c.strokeStyle = '#9aa3ab'; c.lineWidth = 1; c.beginPath(); c.moveTo(sx, y + 4); c.lineTo(sx + sw, y + 34); c.moveTo(sx + 10, y + 4); c.lineTo(sx + 10 + sw, y + 34); c.stroke(); R(c, '#2b2218', sx + sw - 1, y + 34, 12, 3); }
     R(c, '#3d7fd0', x + 90, y + 10, 16, 60); R(c, '#5fb7e0', x + 92, y + 12, 12, 56); R(c, '#e0b021', x + 86, y + 4, 24, 10);
   }
-  function displayCar(c, x, y, color, kit, angle, t) {
+  function displayCar(c, x, y, color, kit, angle, t, model = 'SEDAN') {
     const S = root.NightshiftSprites;
-    if (S?.car) { S.car({ x, y, angle, color, speed: 0, model: 'SEDAN', condition: 100, id: 'show-' + x }); if (kit) root.NightshiftPets?.decals?.(c, { x, y, angle }, kit); }
+    if (S?.car) { S.car({ x, y, angle, color, speed: 0, model, condition: 100, id: 'show-' + x }); if (kit) root.NightshiftPets?.decals?.(c, { x, y, angle }, kit); }
   }
 
   // ---------------- panels ----------------
@@ -219,9 +219,10 @@
   function openShowroom() {
     const p = P(), mine = ownedCars(), kits = root.NightshiftPets?.state?.kits || {};
     head('🏎️ PRESTIGE MOTORS', `Body kits for the cars you own: real stat boosts plus parts you can see. Fitted on the spot. Cash ${money(p?.cash || 0)}`);
+    if (root.NightshiftCars) pnl.append(row('🔑', 'Showroom · buy a car', 'Ten models from a $5k hatch to a $290k hypercar. Delivered to your Midtown apartment.', btn('go', 'SHOWROOM', () => { pnl.hidden = true; root.NightshiftCars.openDealer(); })));
     if (!mine.length) { pnl.append(el('div', { className: 'sub' }, 'You don\'t own a car yet. Buy one in the city (MORE → CAR near a garage), then come back.')); return; }
     for (const car of mine) {
-      pnl.append(el('h3', {}, `${car.id.toUpperCase()} · ${(car.model || root.NightshiftVehicles?.model?.(car)?.name || 'CAR')}${kits[car.id] ? ' · ' + PD.KIT[kits[car.id]].name.toUpperCase() : ''}`));
+      pnl.append(el('h3', {}, `${root.NightshiftCarsData?.fromModel(car.model)?.name.toUpperCase() || car.id.toUpperCase() + ' · ' + (car.model || root.NightshiftVehicles?.model?.(car)?.name || 'CAR')}${kits[car.id] ? ' · ' + PD.KIT[kits[car.id]].name.toUpperCase() : ''}`));
       for (const k of PD.KITS) {
         const has = kits[car.id] === k.id;
         pnl.append(row(k.icon, k.name, `${k.desc} · engine ×${k.engine} · grip ×${k.handling}${k.armor < 1 ? ` · armor ×${k.armor}` : ''}`, has ? el('span', { className: 'okc' }, 'FITTED') : btn('go', money(k.price), () => { const r = root.NightshiftPets.buyKit(car.id, k.id, true); say(r.ok ? `${k.icon} ${k.name} fitted to your car` : r.reason); openShowroom(); }, (p?.cash || 0) < k.price)));
@@ -255,7 +256,7 @@
       { const left = BI.cooldownLeft(root.NightshiftBreakin?.state, MANSION.id, 'mansion'); out.push({ x: 1640, y: 384, r: 50, action: left ? 'LOCKED' : 'BREAK IN', label: left ? `Estate on lockdown · ${Math.ceil(left / 60000)} min` : 'The Halvorsen Estate · guards, a dog, safes and art', sign: 'THE ESTATE', icon: '🏛️', color: left ? '#7d8796' : '#ff8a7a', lift: 44, use: () => root.NightshiftBreakin?.start({ id: MANSION.id, type: 'mansion', name: MANSION.name, from: 'suburbs', door: { x: 1640, y: 384 } }) }); }
       out.push({ x: MALL.x + MALL.w / 6, y: MALL.y + MALL.h + 16, r: 50, action: 'PAWN', label: 'Golden Pawn · fence stolen goods', sign: 'PAWN', icon: '💍', color: '#e3c25a', lift: 80, use: openPawn });
       out.push({ x: MALL.x + MALL.w / 2, y: MALL.y + MALL.h + 16, r: 50, action: 'PETS', label: 'Paws & Claws · adopt pets, pet food', sign: 'PETS', icon: '🐾', color: '#7cc7ff', lift: 80, use: () => root.NightshiftPets?.openPets(true) });
-      out.push({ x: SHOW.x + SHOW.w / 2, y: SHOW.y + SHOW.h + 16, r: 60, action: 'KITS', label: 'Prestige Motors · body kits for your cars', sign: 'PRESTIGE MOTORS', icon: '🏎️', color: '#e3c25a', lift: 110, use: openShowroom });
+      out.push({ x: SHOW.x + SHOW.w / 2, y: SHOW.y + SHOW.h + 16, r: 60, action: 'CARS', label: 'Prestige Motors · buy cars + body kits', sign: 'PRESTIGE MOTORS', icon: '🏎️', color: '#e3c25a', lift: 110, use: openShowroom });
       out.push({ x: DREAM.x + DREAM.w / 2, y: DREAM.y - 70, r: 60, action: root.NightshiftPets?.state?.dream ? 'GO IN' : 'FOR SALE', label: root.NightshiftPets?.state?.dream ? 'Your dream house · furnish it, park your cars' : `Dream house for sale · ${money(PD.DREAM_HOUSE)}`, sign: root.NightshiftPets?.state?.dream ? 'YOUR PLACE' : `FOR SALE · ${money(PD.DREAM_HOUSE)}`, icon: '🏡', color: '#7cdeb5', lift: 12, use: () => (root.NightshiftPets?.state?.dream && Z.zones().dreamhome ? Z.enter('dreamhome') : openDream()) });
       return out;
     },
@@ -275,13 +276,13 @@
       add(612, (c) => { R(c, '#5d646b', 1600, 560, 16, 22); R(c, '#9fd0e8', 1602, 562, 12, 8); R(c, '#2b2f33', 1620, 600, 60, 4); R(c, '#e0473a', 1620 + (Math.sin(t) > 0 ? 0 : 40), 598, 20, 3); }); // guard booth + barrier
       add(MALL.y + MALL.h, (c) => c.drawImage(lit ? SPR.mallL : SPR.mall, MALL.x - 10, MALL.y - 10));
       add(SHOW.y + SHOW.h, (c) => { c.drawImage(lit ? SPR.showL : SPR.show, SHOW.x - 10, SHOW.y - 10); });
-      add(SHOW.y + SHOW.h - 30, (c) => { displayCar(c, SHOW.x + 120, SHOW.y + SHOW.h - 32, '#e3c25a', 'lux', t * 0.3, t); displayCar(c, SHOW.x + 300, SHOW.y + SHOW.h - 32, '#c84659', 'gt', -t * 0.3, t); });
-      for (let k = 0; k < 6; k++) { const x = LOT.x + 65 + k * 110, kit = PD.KITS[k % PD.KITS.length].id; add(LOT.y + 72, (c) => displayCar(c, x, LOT.y + 64, ['#1d2433', '#f1efe8', '#3d99d6', '#ff8a3d', '#8fd14f', '#6d73be'][k], kit, Math.PI / 2, t)); }
+      add(SHOW.y + SHOW.h - 30, (c) => { displayCar(c, SHOW.x + 120, SHOW.y + SHOW.h - 32, '#ff8a1a', null, t * 0.3, t, 'CX:vortex'); displayCar(c, SHOW.x + 300, SHOW.y + SHOW.h - 32, '#e8eef4', null, -t * 0.3, t, 'CX:phantom'); });
+      for (let k = 0; k < 6; k++) { const x = LOT.x + 65 + k * 110, kit = PD.KITS[k % PD.KITS.length].id; add(LOT.y + 72, (c) => { const m = root.NightshiftCarsData?.CARS?.[[0, 2, 3, 4, 6, 7][k]]; displayCar(c, x, LOT.y + 64, m ? m.colors[k % m.colors.length] : ['#1d2433', '#f1efe8', '#3d99d6', '#ff8a3d', '#8fd14f', '#6d73be'][k], m ? null : kit, Math.PI / 2, t, m ? 'CX:' + m.id : 'SEDAN'); }); }
       add(LOT.y - 4, (c) => { for (let k = 0; k < 14; k++) { const x = LOT.x + k * 50; R(c, ['#e0473a', '#e3c25a', '#3d7fd0'][k % 3], x, LOT.y - 26 + Math.sin(t * 3 + k) * 1.5, 8, 6); } c.strokeStyle = '#9aa3ab'; c.beginPath(); c.moveTo(LOT.x, LOT.y - 26); c.lineTo(LOT.x + 700, LOT.y - 26); c.stroke(); });
       // dream house + your cars on display
       add(DREAM.y + DREAM.h, (c) => c.drawImage(lit ? SPR.dreamL : SPR.dream, DREAM.x - 10, DREAM.y - 10));
       const dreamOwned = root.NightshiftPets?.state?.dream, mine = dreamOwned ? ownedCars().slice(0, 3) : [];
-      mine.forEach((car, i) => add(DREAM.y - 10, (c) => displayCar(c, DREAM.x + 75 + i * 90, DREAM.y - 32, car.color, root.NightshiftPets?.state?.kits?.[car.id], Math.PI / 2, t)));
+      mine.forEach((car, i) => add(DREAM.y - 10, (c) => displayCar(c, DREAM.x + 75 + i * 90, DREAM.y - 32, car.color, root.NightshiftPets?.state?.kits?.[car.id], Math.PI / 2, t, car.model || 'SEDAN')));
       if (!dreamOwned) add(DREAM.y - 40, (c) => { R(c, '#5a3d22', DREAM.x + DREAM.w / 2 - 1, DREAM.y - 54, 3, 22); R(c, '#e8e2d0', DREAM.x + DREAM.w / 2 - 22, DREAM.y - 66, 44, 14); R(c, '#c0473f', DREAM.x + DREAM.w / 2 - 20, DREAM.y - 64, 40, 3); });
       add(PARK.y + 110, (c) => playset(c, t));
       for (const tr of TREES) if (tr.x > view.x - 60 && tr.x < view.x + view.w + 60 && tr.y > view.y && tr.y < view.y + view.h) add(tr.y, (c) => { const s2 = treeFor(tr); c.drawImage(s2, tr.x - s2.width / 2, tr.y - s2.height + 6); });

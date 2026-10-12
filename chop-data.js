@@ -34,8 +34,10 @@
     const h = hotList(now), mOk = h.model === model, cOk = h.color === family(color);
     return mOk && cOk ? 2 : mOk ? 1.35 : cOk ? 1.15 : 1;
   }
+  // Collection models (cars-data.js, names like 'CX:vortex') carry their own chop value.
+  const baseOf = (model) => MODELS[model] ?? root.NightshiftCarsData?.chopBase?.(model) ?? 500;
   function value(model, condition, color, now = Date.now(), priceMod = 1) {
-    const base = MODELS[model] ?? 500, c = Math.max(0, Math.min(100, Number(condition) || 0));
+    const base = baseOf(model), c = Math.max(0, Math.min(100, Number(condition) || 0));
     return Math.round(base * (0.35 + 0.65 * c / 100) * hotMult(model, color, now) * priceMod);
   }
   // Parts from stripping a car (deterministic from a seed so tests can check it).
@@ -63,12 +65,12 @@
     const v = value(car.model, car.condition, car.color, now, priceMod), hot = hotMult(car.model, car.color, now) >= 1.35;
     if (kind === 'chop') { wallet.cash += v; s.lift.push(now); s.stats.chopped += 1; s.stats.earned += v; if (hot) s.stats.hot += 1; return { ok: true, cash: v, items: {}, hot }; }
     if (kind === 'strip') { const cash = Math.round(v * 0.3), items = strip(car.model, car.condition, seed); wallet.cash += cash; s.lift.push(now); s.stats.stripped += 1; s.stats.earned += cash; return { ok: true, cash, items, hot }; }
-    if (kind === 'revin') { const price = Math.round((MODELS[car.model] ?? 500) * REVIN_MULT); if (!(wallet.cash >= price)) return { ok: false, reason: `Re-VIN costs $${price.toLocaleString()}` }; wallet.cash -= price; s.stats.revin += 1; return { ok: true, cash: -price, items: {}, keep: true }; }
+    if (kind === 'revin') { const price = Math.round(baseOf(car.model) * REVIN_MULT); if (!(wallet.cash >= price)) return { ok: false, reason: `Re-VIN costs $${price.toLocaleString()}` }; wallet.cash -= price; s.stats.revin += 1; return { ok: true, cash: -price, items: {}, keep: true }; }
     return { ok: false, reason: 'Unknown deal' };
   }
-  const revinPrice = (model) => Math.round((MODELS[model] ?? 500) * REVIN_MULT);
+  const revinPrice = (model) => Math.round(baseOf(model) * REVIN_MULT);
 
-  const api = Object.freeze({ MODELS, FAMILIES, LIFT, HOT_WINDOW, REVIN_MULT, family, hotList, hotMult, value, strip, clean, liftFree, liftWait, deal, revinPrice });
+  const api = Object.freeze({ MODELS, FAMILIES, LIFT, HOT_WINDOW, REVIN_MULT, family, hotList, hotMult, value, strip, clean, liftFree, liftWait, deal, revinPrice, baseOf });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftChopData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

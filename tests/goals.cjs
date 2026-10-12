@@ -33,7 +33,7 @@ assert.equal(G.next(st, ctx).goal.id, 'scav1', 'NEXT stays on the first unfinish
 // A veteran save catches up one goal at a time without double-paying.
 const vet = G.clean({}), big = { walked: 1e6, shots: 1e4, inCar: 1, delivery: 30, salvage: 20, home: 1, batches: 9, sold: 80,
   earned: 2e6, carsOwned: 4, maxSkill: 50, totalLevel: 300, escapes: 9, properties: 3, casinoWins: 5, casinoWagered: 30000, weaponsOwned: 10, scrapGathered: 50, leafPicked: 50, trimmed: 9, cooked: 9, pressed: 9, gunsCrafted: 20, gunsSold: 9, pillsSold: 30, lockup: 3, bagLevel: 4, realGuns: 5, tuneLevels: 12, tuneBestCar: 9, raceMedals: 3, raceGolds: 3, homeItems: 5, respectRank: 7, fishCaught: 60, koi: 1, jobsDone: 30, labCooked: 5, heists: 10, gymSessions: 2, clubSold: 3, fronts: 5, eventsDone: 30, stashes: 30, fightWins: 5, fightLadder: 5, modsFitted: 10, marketProfit: 1e5,
-  chopped: 12, hotChops: 3, breakins: 6, cleanJobs: 5, lootHauled: 9000, harvested: 9, mealsCooked: 3, mealsSold: 3, pets: 2, kits: 1, dream: 1, style: 170, garageCars: 4, contracts: 4, silentContracts: 3 };
+  chopped: 12, hotChops: 3, breakins: 6, cleanJobs: 5, lootHauled: 9000, harvested: 9, mealsCooked: 3, mealsSold: 3, pets: 2, kits: 1, dream: 1, style: 170, garageCars: 4, contracts: 4, silentContracts: 3, carModels: 6, exotics: 2 };
 const order = []; let g; while ((g = G.step(vet, big))) order.push(g.id);
 assert.deepEqual(order, D.GOALS.map((x) => x.id), 'every goal completes exactly once, in order');
 assert.equal(G.next(vet, big), null);
