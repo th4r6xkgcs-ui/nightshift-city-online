@@ -9,7 +9,7 @@
   // Tutorial goals come first and teach one system each; milestones keep the grind going.
   const GOALS = [
     // ---- first session ----
-    { id: 'walk', tier: 'Start', title: 'Hit the streets', hint: 'Move with the left stick (WASD on keyboard).',
+    { id: 'walk', tier: 'Start', title: 'Hit the streets', hint: 'Walk to your apartment door and USE EXIT, then move with the left stick (WASD on keyboard).',
       progress: (c) => [Math.min(c.walked, 400), 400], reward: { cash: 25, xp: { athletics: 30 } } },
     { id: 'shoot', tier: 'Start', title: 'Test your piece', hint: 'Aim with the right stick and FIRE a few rounds.',
       progress: (c) => [Math.min(c.shots, 5), 5], reward: { cash: 25, xp: { shooting: 20 } } },
@@ -19,7 +19,7 @@
       progress: (c) => [Math.min(c.delivery, 1), 1], reward: { cash: 100, xp: { charisma: 30 } } },
     { id: 'salvage1', place: 'salvage', tier: 'Start', title: 'Scavenge', hint: 'Find a SALVAGE CRATE and press SEARCH.',
       progress: (c) => [Math.min(c.salvage, 1), 1], reward: { cash: 60, xp: { luck: 30 } } },
-    { id: 'home', place: 'apartment', tier: 'Start', title: 'A place of your own', hint: 'MORE → HOME to buy your apartment. Deliveries pay for it.',
+    { id: 'home', place: 'apartment', tier: 'Start', title: 'A place of your own', hint: 'Your Midtown apartment is home base: REST in bed, STYLE, STORE items. Tap HOME near it to go inside.',
       progress: (c) => [has(c.home), 1], reward: { cash: 250, xp: { charisma: 40 } } },
     { id: 'batch1', place: 'property', tier: 'Start', title: 'Start farming', hint: 'MORE → BIZ: own a property, start a batch, collect it.',
       progress: (c) => [Math.min(c.batches, 1), 1], reward: { cash: 150, xp: { farming: 60 } } },

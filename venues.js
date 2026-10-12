@@ -80,6 +80,9 @@
     if (cur.kind === 'gym') renderGym(cash); else renderClub(cash);
     panel.scrollTop = scroll;
   }
+  const minute = () => root.NightshiftEnvironment?.state?.minute ?? 720;
+  const nightBonus = () => root.NightshiftLifeData?.clubPremiumBonus(minute()) || 0;
+  const gymFee = () => Math.round(V.GYM.fee * (root.NightshiftLifeData?.gymFeeMult(minute()) ?? 1));
   let tab = 'train';
   function renderGym(cash) {
     if (!gym.on && !fight.f) {
@@ -96,8 +99,8 @@
         const b = el('button', { className: 'go' + (gym.workout === id ? ' on' : ''), type: 'button' }, name); b.onclick = () => { gym.workout = id; render(); }; row.append(b);
       }
       panel.append(row, el('div', { className: 'msg' }, gym.msg));
-      const startB = el('button', { className: 'big', type: 'button', disabled: wait > 0 || cash < V.GYM.fee }, wait > 0 ? `CATCH YOUR BREATH · ${wait}s` : `START SET · ${money(V.GYM.fee)}`);
-      startB.onclick = () => { const pl = P(); if (!pl || pl.cash < V.GYM.fee) return; pl.cash -= V.GYM.fee; gameSave(); gym.on = true; gym.rep = 0; gym.good = 0; gym.zone = V.sweet(0); gym.start = performance.now(); gym.msg = 'Tap REP when the bar is in the green!'; render(); loop(); };
+      const startB = el('button', { className: 'big', type: 'button', disabled: wait > 0 || cash < gymFee() }, wait > 0 ? `CATCH YOUR BREATH · ${wait}s` : `START SET · ${money(gymFee())}`);
+      startB.onclick = () => { const pl = P(); if (!pl || pl.cash < gymFee()) return; pl.cash -= gymFee(); gameSave(); gym.on = true; gym.rep = 0; gym.good = 0; gym.zone = V.sweet(0); gym.start = performance.now(); gym.msg = 'Tap REP when the bar is in the green!'; render(); loop(); };
       panel.append(startB);
     } else {
       panel.append(el('div', { className: 'msg' }, `${gym.msg} · rep ${gym.rep}/${V.GYM.reps} · good ${gym.good}`));
@@ -201,13 +204,13 @@
     const L = root.NightshiftLabData, lab = root.NightshiftLab?.state, id = cur.id;
     const wait = Math.max(0, Math.ceil(((state.clubAt[id] || 0) + V.CLUB.cooldownMs - Date.now()) / 1000));
     const risk = V.bustChance(mod('stealth.heat'));
-    panel.append(el('div', { className: 'sub' }, `Sell lab product at ${Math.round((V.CLUB.premium - 1) * 100)}%+ over value · up to ${V.CLUB.maxPerVisit} per visit · bust risk ${Math.round(risk * 100)}% per sale (Stealth lowers it)`));
+    panel.append(el('div', { className: 'sub' }, `${nightBonus() ? '🌙 CLUB NIGHT · ' : '☀️ Quiet hours (better after 21:00) · '}Sell lab product at ${Math.round((V.CLUB.premium + nightBonus() - 1) * 100)}%+ over value · up to ${V.CLUB.maxPerVisit} per visit · bust risk ${Math.round(risk * 100)}% per sale (Stealth lowers it)`));
     if (!L || !lab || !Object.keys(lab.stash).length) panel.append(el('div', { className: 'msg' }, 'You have nothing to sell. Cook product at a ⚗️ LAB first.'));
     else if (wait > 0) panel.append(el('div', { className: 'msg' }, `The room is watching you. Come back in ${wait}s.`));
     else {
       const row = el('div', { className: 'row' });
       for (const [pid, n] of Object.entries(lab.stash)) {
-        const pr = L.PRODUCTS[pid], price = V.clubPrice(pr.value, mod('charisma.jobPay'));
+        const pr = L.PRODUCTS[pid], price = V.clubPrice(pr.value, mod('charisma.jobPay'), nightBonus());
         const b = el('button', { className: 'go', type: 'button' }, `${pr.icon} ${pr.name} ×${n} · ${money(price)}`);
         b.onclick = () => sell(pid, price); row.append(b);
       }
