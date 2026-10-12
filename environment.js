@@ -53,6 +53,7 @@ function grade(night,now){
    for(const f of src.fronts){const p=screenOf(f.x,f.y);lmx.save();lmx.translate(p.x,p.y);lmx.scale(Math.max(1,f.w/110),.8);hole(lmx,0,0,(f.big?58:34)*z,f.big?.75:.35);lmx.restore()}
    for(const c of src.cars){const p=screenOf(c.car.x,c.car.y);lmx.save();lmx.translate(p.x,p.y);lmx.rotate(Number.isFinite(c.car.angle)?c.car.angle:0);lmx.scale(z,z);const reach=c.reach+70,gr=lmx.createLinearGradient?.(24,0,reach,0);if(gr?.addColorStop){gr.addColorStop(0,'rgba(0,0,0,.95)');gr.addColorStop(1,'rgba(0,0,0,0)');lmx.fillStyle=gr;lmx.beginPath();lmx.moveTo(24,-10);lmx.lineTo(reach,-48);lmx.lineTo(reach,48);lmx.lineTo(24,10);lmx.closePath();lmx.fill()}hole(lmx,0,0,40,.5);lmx.restore()}
    for(const d of src.dots){const p=screenOf(d.x,d.y);hole(lmx,p.x,p.y,d.r*z,.9)}
+   const lit=root.NightshiftWorld?.litWindows?.()||[];for(const wv of lit){const p=screenOf(wv.x,wv.y);lmx.fillStyle='rgba(0,0,0,.85)';lmx.fillRect(p.x-wv.w*z/2,p.y-wv.h*z/2,wv.w*z,wv.h*z);hole(lmx,p.x,p.y+wv.h*z,26*z,.35)}
    if(typeof player!=='undefined'){const p=screenOf(player.x,player.y);hole(lmx,p.x,p.y,(player.car?60:75)*z,.6)}
    g.drawImage(lm,0,0);
    // coloured light on top (additive)
@@ -61,6 +62,7 @@ function grade(night,now){
    for(const f of src.fronts){const p=screenOf(f.x,f.y);glow(g,p.x,p.y,(f.big?70:44)*z,f.color,(f.big?.2:.1)*night)}
    for(const c of src.cars){const p=screenOf(c.car.x,c.car.y),a=Number.isFinite(c.car.angle)?c.car.angle:0;for(const side of [-1,1]){const hx=p.x+(Math.cos(a)*26-Math.sin(a)*side*8)*z,hy=p.y+(Math.sin(a)*26+Math.cos(a)*side*8)*z;glow(g,hx,hy,16*z,'#fff1c4',.5*night);const tx=p.x+(-Math.cos(a)*27-Math.sin(a)*side*8)*z,ty=p.y+(-Math.sin(a)*27+Math.cos(a)*side*8)*z;glow(g,tx,ty,(c.brake?22:12)*z,'#ff4a3a',(c.brake?.55:.3)*night)}}
    for(const d of src.dots){const p=screenOf(d.x,d.y);glow(g,p.x,p.y,d.r*z,d.color,.5)}
+   for(const wv of lit){const p=screenOf(wv.x,wv.y);glow(g,p.x,p.y+4*z,30*z,wv.c,.16*night)}
    g.globalCompositeOperation='source-over';
   }
  }
