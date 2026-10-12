@@ -204,8 +204,11 @@
     const s = st(), now = Date.now();
     PLOTS.forEach((pl, i) => {
       const leased = s && i < s.plots.length, p = leased ? s.plots[i] : null;
-      if (!leased) { // overgrown plot + FOR LEASE stake
-        R(c, '#5a7a3a', pl.x, pl.y, pl.w, pl.h); for (let k = 0; k < 24; k++) R(c, '#6e9a48', pl.x + ((k * 37) % pl.w), pl.y + ((k * 23) % pl.h), 1, 4);
+      if (!leased) { // fallow plot: weedy soil, corner stakes + rope, FOR LEASE on the next one
+        R(c, '#3a2a1a', pl.x - 2, pl.y - 2, pl.w + 4, pl.h + 4); R(c, '#6a5638', pl.x, pl.y, pl.w, pl.h);
+        for (let k = 0; k < 30; k++) { const wx = pl.x + 3 + ((k * 37) % (pl.w - 6)), wy = pl.y + 3 + ((k * 23) % (pl.h - 6)); R(c, k % 3 ? '#6e9a48' : '#88b05a', wx, wy, 1, 4); R(c, '#6e9a48', wx + 1, wy + 1, 2, 1); }
+        c.strokeStyle = '#d8c89a88'; c.lineWidth = 1; c.setLineDash([3, 3]); c.strokeRect(pl.x + 1.5, pl.y + 1.5, pl.w - 3, pl.h - 3); c.setLineDash([]);
+        for (const [sx, sy] of [[0, 0], [pl.w, 0], [0, pl.h], [pl.w, pl.h]]) { R(c, '#5a3d22', pl.x + sx - 1, pl.y + sy - 6, 3, 8); R(c, '#e0473a', pl.x + sx - 1, pl.y + sy - 7, 3, 2); }
         if (i === (s?.plots.length || 0)) { R(c, '#5a3d22', pl.x + pl.w / 2 - 1, pl.y + 10, 2, 16); R(c, '#e8dcc0', pl.x + pl.w / 2 - 16, pl.y + 4, 32, 10); c.fillStyle = '#2f6b3f'; c.font = 'bold 6px monospace'; c.textAlign = 'center'; c.fillText('FOR LEASE', pl.x + pl.w / 2, pl.y + 11); c.textAlign = 'left'; }
         return;
       }
@@ -429,7 +432,7 @@
     ...TREES.map((t) => ({ x: t.x - 5, y: t.y - 8, w: 10, h: 8 })), ...ORCH.map((t) => ({ x: t.x - 4, y: t.y - 6, w: 8, h: 6 })),
   ];
   Z.register({
-    id: 'farm', name: 'Harlow Fields', tagline: 'COUNTRYSIDE · FARMING · FRESH AIR', w: MAP.w, h: MAP.h, bg: '#3f6a2e', spawn: { x: 150, y: 640, angle: 0 }, solids,
+    id: 'farm', name: 'Harlow Fields', tagline: 'COUNTRYSIDE · FARMING · FRESH AIR', w: MAP.w, h: MAP.h, zoom: 0.82, bg: '#3f6a2e', spawn: { x: 150, y: 640, angle: 0 }, solids,
     travel: { fare: 8, desc: 'Farm country. Lease plots, raise animals, mill flour, cook meals, and the corn hides a field of something greener.', spawn: { x: 150, y: 640, angle: 0 } },
     ground, targets,
     onEnter() { ensureSprites(); initAnimals(); try { root.NightshiftSkills?.gain('farming', 1, 'visit'); } catch { /* n/a */ } },
