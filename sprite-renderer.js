@@ -127,7 +127,7 @@ function gunArm(ctx,p,L){
  const id=root.NightshiftWeapons?.state?.equipped||'pistol',mods=root.NightshiftWeapons?.state?.mods?.[id]||[];
  ctx.save();ctx.rotate(p.angle||0);
  rounded(shade(L.shirt,L.style==='jacket'?-.35:0),3,-3,8,5,2);rounded(L.skin,10,-2.5,4,4,1.5);
- const metal='#1a2128',hi='#8d979b',wood='#5b3d28',woodL='#7a5532',tape='#8b9399',chrome='#b9c2c7';
+ const SKP=root.NightshiftWeapons?.skinPalette?.(id),metal=SKP?.st||'#1a2128',hi=SKP?.hi||'#8d979b',wood=SKP?.sl||'#5b3d28',woodL=SKP?.hi||'#7a5532',tape=SKP?.sl||'#8b9399',chrome=SKP?.hi||'#b9c2c7';
  // Held guns, top-down, barrel along +x (one shape per craftable gun; unknown ids fall back by length).
  const G={
   pipe:()=>{rect(tape,11,-3,13,2.6);rect(chrome,11,-3,13,.8);rect('#2a2a2a',10,-1,3,3.5)},
