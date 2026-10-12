@@ -33,7 +33,14 @@ Gameplay, inventory and the inspection studios all draw from the same definition
   - `idle` 4 frames, 380 ms each.
   - `walk` 8 frames, driven by `walkTicks / 2.5`.
   - `run` 8 frames, driven by `walkTicks / 1.8`, with lean.
-  - `hold` overlay (`'short'` | `'long'`): arms come up to chest height in front of the body; long guns put the support hand on the handguard. The gun is drawn at `NightshiftCharacters.holdHand(dir, hold)`.
+  - `crouch` 4 frames (hands on knees) and `sneak` 8 frames (crouched walk): the body drops 4.5 px and the legs bend at a real knee. The player sneaks automatically inside break-ins unless sprinting; NPCs sheltering from rain sometimes crouch.
+  - `sit` 4 frames: the body drops 6.5 px, with thighs forward and hands on the knees. People sitting on a bench are drawn at the seat facing the street (`p.seat` from `prop-art.js`).
+  - `hold` overlay (`'short'` | `'long'`): arms come up to chest height in front of the body; long guns put the support hand on the handguard. The gun is drawn at `NightshiftCharacters.holdHand(dir, hold, anim)`, which follows the crouch.
+  - **Transitions:**
+    - **Turning:** steps through the in-between directions at 45 ms each instead of snapping.
+    - **Getting into a car:** the player walks to the driver's door and ducks in, fading out over 0.38 s.
+    - **Getting out of a car:** the player crouches for 0.26 s, then stands.
+    - **Drawing or switching a gun:** it swings up from the hip over 0.22 s.
 - **Layer order (compose):**
   1. hood/bag behind
   2. far arm (profile)
@@ -79,6 +86,25 @@ Gameplay, inventory and the inspection studios all draw from the same definition
   - Drawn behind the body when facing away.
   - Smoothing is used only when the sprite would be smaller than 1.6 device px per grid px.
 
+## Pets (`pet-art.js`)
+- **Grid:** 48×36, side view, mirrored for left; feet at y = 32. World scale is 0.74 world px per grid px.
+- **Pipeline:** same as the guns: shaded parts, auto-bevel and an ink outline.
+- **Species (11):** each has its own anatomy.
+  - Dogs: shiba (curled tail, cream mask), lab (floppy ears, otter tail), husky (blue eyes, mask, plume), rottweiler (tan points, stub tail).
+  - Cats: tabby, black cat, tiger cub (stripes, belly).
+  - Macaw, barn owl (face disc), raccoon (mask, ringed tail), capuchin (curly tail).
+  - Dogs wear a collar with a gold tag; cats wear a blue collar.
+- **Poses:** walk (4 frames), idle (2 frames: tail wag, tongue or blink), sit (2 frames, after 1.5 s standing still).
+- **Hook:** `pets.js drawPet` uses it everywhere: the city, zones and the apartment. Codex's second pet pass is switched off so pets aren't drawn twice.
+
+## Street props (`prop-art.js`)
+- **Detail:** 2× (1 grid px = 0.5 world px), with a 2 px outline pad.
+- **Kinds (11):** the 9 Codex props (hydrant, mailbox, vending, dumpster with a graffiti tag, flower cart, barrel, crate, bench, ATM) plus trash can and planter.
+- **Hook:** Codex's `detailed-art.js` routes its prop/pet calls through `NightshiftDetailedArt.prop/pet` (a 12-line edit on rpg-play). `prop-art.js` loads right after it (`LATE_SCRIPTS` in `online/build-online.cjs`), so the cached street layer and the building fronts use the new art from the first frame.
+- **City benches:** 50 benches along the sidewalk lines where people idle (`citizen-routines.js` goals).
+  - They skip buildings, blocked tiles and anything within 56 px of a door or prompt.
+  - NPCs who stop on a bench sit down. The player sits after standing still on one for 1 s.
+
 ## Vehicles
 - **Bodies:** 13 top-down bodies. The 10 collection models are baked at 4×; city sedan, compact and van at 3×.
 - **Baked layers:**
@@ -111,8 +137,7 @@ Gameplay, inventory and the inspection studios all draw from the same definition
 - **Weapon bake:** about 3 ms per gun+paint+mods variant, then cached.
 
 ## Not done (honest list)
-- Sitting, crouching and vehicle enter/exit animations: not drawn yet. `ANIMS` has room; add keys in `geom()`.
-- Equip and turning transitions: not done; the game snaps to the new direction.
+- Getting into a car is a fade at the door, not a door-opening animation (the car art has no open doors).
 - Character "rotation" in the studio uses the 8 authored directions; there are no in-between angles.
-- Pets and street props are still Codex v0.55 `detailed-art.js` and were not redone in this pass.
+- Building facades, trees and signs are still Codex v0.55 art (good already). Interiors are Codex's too.
 - Before/after comparison: `docs/art/before-after-characters.png`. Codex's v0.55 people are clean, hand-tuned sprites; the layered system trades a little of that polish for 44 wearable items and per-NPC variety. `NightshiftCharacters.enabled = false` switches back instantly for comparison.

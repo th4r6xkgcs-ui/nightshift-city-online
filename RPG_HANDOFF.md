@@ -535,3 +535,21 @@ The full spec is in `ART_SPEC.md`, and sheets and screenshots are in `docs/art/`
   - A "style" goal tier.
   - Pets and props in the same premium pipeline.
   - Optional: let the car meet show the styled car portrait.
+
+### Overhaul part 2 (owner: "get to it")
+- **Animations (`character-art.js`):**
+  - Poses: crouch, sneak (automatic in break-ins unless sprinting) and sit (on benches).
+  - Getting into and out of cars: the player ducks into the driver's door (drawn by a `S.car` wrapper) and crouches when getting out.
+  - Smooth turning through the in-between directions.
+  - Gun swings up on equip (`weapon-art.js`), and the hands follow the crouch.
+- **Pets (`pet-art.js`):** 11 species redrawn with 8 poses each. `pets.js` draws them; Codex's duplicate pet pass is a no-op.
+- **Props (`prop-art.js`):** 11 premium street props replace Codex's, through `NightshiftDetailedArt.prop`, plus 50 sit-able city benches.
+  - **Codex file edit, on rpg-play:** `detailed-art.js` calls `api.prop`/`api.pet` instead of its local functions (6 lines). This went on rpg-play rather than art-pass, because art-pass predates Codex v0.55 and merging v0.55 into it conflicts.
+  - **Load order:** `online/build-online.cjs` gained `LATE_SCRIPTS` (loaded right after `detailed-art.js`).
+- **Tests:** `tests/world-art.cjs` (pets × 8 poses, 11 props). The full suite reports **111 suites PASS**.
+- **Playwright:**
+  - A break-in shows the sneak stance with the Whisper SMG.
+  - Benches: 50 placed, and the player sits.
+  - The Character Studio, Vehicle Studio and weapon pages were re-run.
+  - No page errors.
+- **Sheets:** `docs/art/pets-sheet.png`, `poses-crouch-sneak-sit.png`, `props-benches-pets.png`, `sneaking-in-breakin.png`.
