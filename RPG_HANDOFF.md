@@ -353,3 +353,9 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
   - **❓ dock button:** opens a "What can I do?" panel grouped into MAKE MONEY, GET STRONGER and HAVE FUN, each entry with a how-to line and GPS/OPEN, plus "replay the tour".
   - **MORE grid:** every Codex button gets an emoji icon and a short caption via CSS (`#actions.expanded>#id::before/::after`). Compact in landscape.
   - The GitHub Pages site is redeployed with all of this.
+- **Sharpness and signs**
+  - **Art-pass branch, `game.js` `resize()`:**
+    - The canvas backing store renders at `min(2, devicePixelRatio)`, CSS size stays W×H, and `g.setTransform(dpr…)`; all game coordinates stay in CSS px.
+    - `fx.js` steps the scale 2 → 1.5 → 1 (`NightshiftRenderScale` plus a resize event) if more than 35% of frames take over 26 ms over 4 s.
+  - **Night readability:** ambient darkness lowered to 0.72 and a wider light around the player.
+  - **Signs:** `NightshiftSign(ctx, x, y, icon, text, color, {glow})` in `fx.js` draws one world-sign style (glass pill, icon disc, display font, pointer). It's used by the casino, gun shop, tuning, lab, fishing, gym/clubs, bank vaults, race starts and city events.
