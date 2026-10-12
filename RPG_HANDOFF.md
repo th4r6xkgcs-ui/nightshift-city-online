@@ -359,3 +359,10 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
     - `fx.js` steps the scale 2 → 1.5 → 1 (`NightshiftRenderScale` plus a resize event) if more than 35% of frames take over 26 ms over 4 s.
   - **Night readability:** ambient darkness lowered to 0.72 and a wider light around the player.
   - **Signs:** `NightshiftSign(ctx, x, y, icon, text, color, {glow})` in `fx.js` draws one world-sign style (glass pill, icon disc, display font, pointer). It's used by the casino, gun shop, tuning, lab, fishing, gym/clubs, bank vaults, race starts and city events.
+- **Ambient life and prompts**
+  - `fx.js` adds:
+    - Pigeon flocks in daytime that scatter when you walk close, drive fast nearby or fire.
+    - Steam from street vents at night or in rain.
+    - Drifting cloud shadows in daytime.
+  - Art-pass branch: Codex interaction prompts ("👆 CAR/HOME/RACE…") and the GPS target now use `NightshiftSign`.
+  - Race start signs moved below the ring.
