@@ -29,11 +29,11 @@
     if (!p || !H?.enter || performance.now() - t0 < 900) return; // let saves load first
     if (p.car) { p.car.speed = 0; p.car = null; }
     p.x = DOOR.x; p.y = DOOR.y;
-    if (H.kind?.() === 'home' || H.enter('home')) {
+    if (H.kind?.() === 'home' || H.enter('home', { x: 140, y: 178 })) {
       spawned = true; clearInterval(spawnTimer);
       const first = !state.welcomed; state.welcomed = true; persist();
       setTimeout(() => say(first ? '🏠 Welcome home. This apartment is yours: REST in bed, STYLE at the wardrobe, STORE items. Walk to the door at the bottom and USE EXIT to hit the streets.'
-        : `🏠 You wake up at home · ${L.hhmm(minute())} · walk to the door and USE EXIT`), 400);
+        : `🏠 You wake up in bed · ${L.hhmm(minute())} · walk to the door at the bottom and USE EXIT`), 400);
       if (first) setTimeout(() => text('mom', 'Proud of you for getting your own place, baby. Eat something and call me sometime ❤️'), 9000);
       setTimeout(() => text('rico', 'Yo, you up? Check your 📱 HUSTLE phone, I put some work on there for you.'), first ? 20000 : 6000);
     }
