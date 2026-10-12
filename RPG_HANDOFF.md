@@ -345,3 +345,6 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
   - `fishing.js`:
     - Water at both spots is wide, with drifting shimmer and a foam edge (harbor: 380 px; canal: the full west strip).
     - Plank pier deck on posts and a moored boat that bobs.
+- **Public play link, approved by the owner** (the Claude artifact viewer asks for an iOS update on the owner's iPhone): https://th4r6xkgcs-ui.github.io/nightshift-city-online/
+  - Served by GitHub Pages from the `gh-pages` branch, which holds static output of `node online/build-online.cjs <dir>` from `claude/rpg-play` plus `.nojekyll`.
+  - To update, rebuild and force-push `gh-pages`.
