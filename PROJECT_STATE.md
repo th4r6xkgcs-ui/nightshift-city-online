@@ -1,10 +1,12 @@
-# Current project state — v0.52
+# Current project state — v0.53
 
-Canonical combined client: `codex/crew-transport-v52`, based on v0.50.1. Dependency-free Canvas/localStorage, mobile-first, separate from Nightshift Garage. Private static preview includes exact Claude RPG rpg-core 472505c modules; no multiplayer backend is deployed in this preview.
+Canonical combined client: `codex/city-reactions-v53`, based on v0.52. Dependency-free Canvas/localStorage, mobile-first, separate from Nightshift Garage. Private static preview includes exact Claude RPG rpg-core 8b6c4c3 modules; no multiplayer backend is deployed in this preview.
+
+Latest batch adds Claude respect/fishing/Hustle/lab/weapon-mod systems, saved contact familiarity, a 24-event journal and crash loyalty consequences. Detailed contracts: CLIENT_HANDOFF_V53.md.
 
 Current gameplay includes gang membership/custom founding, local corner influence, bounded recruits and passive physical followers, loyalty/escort jobs, noncombat rival pressure, premium street customers, existing production/dealer economy and RPG progression. Ordinary walking/driving/combat/police/courier/interiors continue to work.
 
-Checks: 84 suites plus root syntax; 75 static assets. Ten simulated minute crew soak and physical escort completion pass. Customer transactions share existing inventory, market demand and sales ledger. Atlas overflow avoids repeated canvas rebuilding at the eight-atlas cap.
+Checks: 88 suites plus root syntax; 86 static assets. Ten simulated minute crew soak and physical escort completion pass. Customer transactions share existing inventory, market demand and sales ledger. Atlas overflow avoids repeated canvas rebuilding at the eight-atlas cap.
 
 Transport: followers board nearby stopped vehicles, with safe exits and on-foot resumption. See CLIENT_HANDOFF_V52.md.
 

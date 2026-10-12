@@ -1,5 +1,5 @@
 /* Client integration for exact Claude RPG modules; no module internals modified. */
 (function(root){'use strict';
-function paused(){return ['#skPanel','#glPanel'].some(id=>root.document?.querySelector(id)?.hidden===false)||[root.NightshiftGangLife,root.NightshiftDailies,root.NightshiftWeapons,root.NightshiftCasino,root.NightshiftTuning,root.NightshiftHomeUpgrades].some(module=>module?.paused?.()===true)}
+function paused(){return ['#skPanel','#glPanel'].some(id=>root.document?.querySelector(id)?.hidden===false)||[root.NightshiftJournal,root.NightshiftJobs,root.NightshiftFishing,root.NightshiftLab,root.NightshiftGangLife,root.NightshiftDailies,root.NightshiftWeapons,root.NightshiftCasino,root.NightshiftTuning,root.NightshiftHomeUpgrades].some(module=>module?.paused?.()===true)}
 root.NightshiftRPG={paused};
 })(globalThis);

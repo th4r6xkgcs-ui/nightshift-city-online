@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict'),boot=require('./harness.cjs'),storage=new Map(),run=boot(storage,{now:1000});
+run('globalThis.memory=NightshiftMemory.clean();globalThis.log=NightshiftJournal.clean()');
+assert.equal(run('NightshiftMemory.remember(memory,"constructor","meet",1000)'),false);
+assert.equal(run('NightshiftMemory.remember(memory,"south-recruiter","meet",1000)'),true);assert.equal(run('memory.people["south-recruiter"].trust'),0);
+run('for(let i=0;i<4;i++)NightshiftMemory.remember(memory,"south-recruiter","help",1000+i)');assert.equal(run('NightshiftMemory.relation(memory.people["south-recruiter"])'),'FAMILIAR');
+assert.equal(run('NightshiftMemory.remember(memory,"south-recruiter","disturbance",2000)'),true);assert.equal(run('NightshiftMemory.remember(memory,"south-recruiter","disturbance",2001)'),false);
+assert.equal(run('NightshiftMemory.clean({people:{"south-recruiter":{trust:1000,lastAt:1e12}}},1000).people["south-recruiter"].trust'),100);
+run('for(let i=0;i<100;i++)NightshiftJournal.add(log,"crew","event "+i,1000+i)');assert.equal(run('log.entries.length'),24);assert.equal(run('log.entries[0].text'),'event 76');
+assert.equal(run('NightshiftJournal.add(log,"bad","bad",1000)'),false);
+run('player.x=720;player.y=1080;player.cash=1000;player.car=null;player.heat=0;NightshiftCrews.state.crews.south.rep=20;NightshiftInventory.state.pocket.scrap=2;NightshiftGangLife.open("south-recruiter");NightshiftGangLife.perform({action:"join"});NightshiftGangLife.perform({action:"work"})');
+assert.equal(run('NightshiftMemory.state.people["south-recruiter"].help'),1);assert.equal(run('NightshiftJournal.state.entries.length'),2);
+const cash=run('player.cash');run('NightshiftGangLife.perform({action:"work"})');assert.equal(run('NightshiftJournal.state.entries.length'),2);assert.equal(run('player.cash'),cash);
+run('NightshiftCrewOps.perform({action:"recruit",id:"nico"});NightshiftGangLife.close();NightshiftCitizens.alert({x:700,y:1064},1000,{kind:"crash",radius:160})');assert.equal(run('NightshiftCrewOps.state.roster.nico.loyalty'),58);
+run('NightshiftCitizens.alert({x:700,y:1064},1001,{kind:"crash",radius:160})');assert.equal(run('NightshiftCrewOps.state.roster.nico.loyalty'),58);
+const reloaded=boot(storage,{now:1100});assert.equal(reloaded('NightshiftMemory.state.people["south-recruiter"].help'),1);assert.equal(reloaded('NightshiftCrewOps.state.roster.nico.loyalty'),58);assert.ok(reloaded('NightshiftJournal.state.entries.length')>=4);
+run('NightshiftJournal.open();globalThis.journalStart=JSON.stringify({x:player.x,y:player.y,ammo:player.ammo});keys.w=true;fire(2000);frame(2000)');assert.equal(run('NightshiftRPG.paused()'),true);assert.equal(run('JSON.stringify({x:player.x,y:player.y,ammo:player.ammo})'),run('journalStart'));run('NightshiftJournal.close()');
+for(const key of ['nightshift-city-npc-memory-v1','nightshift-city-journal-v1'])assert.ok(run('NightshiftBackups.KEYS.includes('+JSON.stringify(key)+')'));
+console.log('PASS: named memory bounds/prototype guard, relationship growth, disturbance throttling, bounded journal, success-only events, crash loyalty, reload and journal modal/backup integration');
