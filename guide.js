@@ -27,7 +27,7 @@
     progress: ['📈', 'Reputation'], search: ['🔍', 'Search crate'], controls: ['🎮', 'Controls'], journal: ['📓', 'City journal'], street: ['🧥', 'Gangs & corners'], loot: ['💰', 'Pick up loot'], glove: ['🧤', 'Car glovebox'] };
   const css = el('style');
   css.textContent = `
-  body #actions.expanded>button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px;line-height:1.1}
+  body #actions.expanded>button{min-height:74px!important;height:auto!important;padding:6px 4px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px;line-height:1.1}
   body #actions.expanded>button[hidden]{display:none!important}
   ${Object.entries(MORE).map(([id, [ic, cap]]) => `#actions.expanded>#${id}::before{content:'${ic}';font-size:20px;line-height:1}#actions.expanded>#${id}::after{content:'${cap}';font:500 9px ui-sans-serif,system-ui,sans-serif;letter-spacing:0;color:#9fb0c8;text-transform:none}`).join('\n')}
   #actions.expanded>button[aria-label="Customize character"]::before{content:'👕';font-size:20px;line-height:1}#actions.expanded>button[aria-label="Customize character"]::after{content:'Change your look';font:500 9px ui-sans-serif,system-ui,sans-serif;color:#9fb0c8}
