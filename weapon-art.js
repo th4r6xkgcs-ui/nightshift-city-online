@@ -222,7 +222,7 @@
   // ---------------- held-gun install (outermost person wrapper, after Codex detailed-art) ----------------
   /* global S, g */
   function installHeld() {
-    let Sx; try { Sx = S; } catch { return false; } if (!Sx || !root.NightshiftDetailedArt || Sx.__weaponArt) return !!(Sx && Sx.__weaponArt);
+    const Sx = root.NightshiftSprites; if (!Sx || !root.NightshiftDetailedArt || Sx.__weaponArt) return !!(Sx && Sx.__weaponArt);
     const person = Sx.person;
     Sx.person = function (p, isPlayer, options = {}) {
       const armed = isPlayer && options.weapon !== false && !options.noWeapon && root.NightshiftInventory?.state?.pocket?.pistol > 0;
