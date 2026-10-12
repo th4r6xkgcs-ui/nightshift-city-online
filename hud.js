@@ -65,7 +65,7 @@
   #nsL #jobPanel{position:static!important;max-width:none!important;border-radius:12px}
   /* right stack */
   #nsR #mmWrap{position:relative!important;top:auto!important;left:auto!important;right:auto!important}
-  #nsR .cap{font:700 9.5px var(--disp);letter-spacing:.1em;color:var(--hud-dim);text-align:center;width:104px;margin-top:-3px;text-shadow:0 1px 3px #000}
+  #nsR .cap{font:700 9.5px var(--disp);letter-spacing:.1em;color:var(--hud-dim);text-align:center;white-space:nowrap;min-width:104px;margin-top:-3px;text-shadow:0 1px 3px #000}
   #nsR #wpPill{position:static!important;max-width:min(200px,44vw)!important;border-radius:12px!important;background:var(--hud-glass)!important;border:1px solid var(--hud-line)!important;font-family:var(--disp)!important;box-shadow:0 6px 16px #0007!important}
   @media (orientation:portrait){#nsR #lfRadio{position:static!important;transform:none!important;max-width:min(46vw,260px)!important}}
   /* bottom bars */
