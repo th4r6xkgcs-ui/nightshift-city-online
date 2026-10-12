@@ -66,7 +66,29 @@
     dog: { hp: 30, dmg: 7, rate: 700, spread: 0, speed: 2.1, sight: 170, cone: 2.4, armed: false, melee: true, name: 'Guard dog' },
     guard: { hp: 70, dmg: 11, rate: 650, spread: 0.1, speed: 1.3, sight: 260, cone: 1.25, armed: true, name: 'Guard' },
     cop: { hp: 80, dmg: 12, rate: 600, spread: 0.09, speed: 1.6, sight: 300, cone: 1.5, armed: true, name: 'Police' },
+    // Hitman contracts (hitman-data.js): the mark and the muscle they hired.
+    mark: { hp: 60, dmg: 8, rate: 850, spread: 0.18, speed: 1.1, sight: 220, cone: 1.3, armed: true, name: 'Mark' },
+    bodyguard: { hp: 85, dmg: 12, rate: 620, spread: 0.09, speed: 1.35, sight: 270, cone: 1.35, armed: true, name: 'Bodyguard' },
   };
+  // Where the mark spends their time: the room furthest (by doorways) from the back door.
+  function farRoom(L) {
+    const adj = {}; for (const d of L.doors) if (!d.entry) { (adj[d.a] = adj[d.a] || []).push(d.b); (adj[d.b] = adj[d.b] || []).push(d.a); }
+    const dist = { [L.entryRoom]: 0 }, q = [L.entryRoom];
+    while (q.length) { const c = q.shift(); for (const n of adj[c] || []) if (!(n in dist)) { dist[n] = dist[c] + 1; q.push(n); } }
+    let best = L.rooms[0]; for (const R0 of L.rooms) if ((dist[R0.i] ?? -1) > (dist[best.i] ?? -1)) best = R0;
+    return best;
+  }
+  // Adds the contract's mark + bodyguards to a generated layout (pure; same seed → same placement).
+  function addMark(L, c, rnd = Math.random) {
+    const home = farRoom(L), adj = L.doors.filter((d) => !d.entry && (d.a === home.i || d.b === home.i)).map((d) => (d.a === home.i ? d.b : d.a));
+    const near = L.rooms[adj.length ? adj[Math.floor(rnd() * adj.length)] : home.i];
+    const pt = (R0) => ({ x: Math.round(R0.x + R0.w / 2 + (rnd() - 0.5) * 60), y: Math.round(R0.y + R0.h / 2 + (rnd() - 0.5) * 40), room: R0.i });
+    const route = [pt(home), pt(home), pt(near)];
+    const mark = { id: 'mark', ...GUARDS.mark, kind: 'mark', hp: c.hp || GUARDS.mark.hp, armed: c.armed !== false, x: route[0].x, y: route[0].y, route, name: c.name || 'Mark', color: c.color || '#7a2a2a' };
+    const out = [mark];
+    for (let k = 0; k < (c.guards | 0); k++) { const r2 = [pt(k % 2 ? near : home), pt(home)]; out.push({ id: 'bg' + k, kind: 'bodyguard', ...GUARDS.bodyguard, x: r2[0].x, y: r2[0].y, route: r2 }); }
+    return out;
+  }
   const WALL = 12, PAD = 70, DOOR = 52;
 
   function generate(type = 'house', seed = 1) {
@@ -167,7 +189,7 @@
     return s;
   }
 
-  const api = Object.freeze({ TYPES, ROOMS, FURN, CONTAINERS, LOOT, FENCE, GUARDS, WALL, PAD, DOOR, generate, roomAt, path, connected, rollLoot, cooldownLeft, clean, rngOf });
+  const api = Object.freeze({ TYPES, ROOMS, FURN, CONTAINERS, LOOT, FENCE, GUARDS, WALL, PAD, DOOR, generate, roomAt, path, connected, farRoom, addMark, rollLoot, cooldownLeft, clean, rngOf });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftBreakinData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

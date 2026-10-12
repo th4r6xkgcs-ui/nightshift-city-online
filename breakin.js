@@ -29,6 +29,7 @@
   const O = (c, col, x, y, rx, ry) => { c.fillStyle = col; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.fill(); };
   const C = (c, col, x, y, r) => { c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); };
 
+  const HM = () => root.NightshiftHitman || null;
   let job = null; // { id, type, L, from, door, guards, loot:{id:true}, bag:{cash,items}, alarmAt, policeAt, search, kills }
 
   // ---------------- art: floors, walls, furniture, containers ----------------
@@ -113,10 +114,28 @@
       if (d < (clear ? radius : radius * 0.55)) { g.state = 'investigate'; setTarget(g, { x, y }); g.until = performance.now() + 9000; g.reaction = 0; if (kind === 'shot') g.until += 4000; }
     }
   }
+  // The mark bolts for the back door once the alarm has been going a while (straight away if unarmed).
+  function markFlee(g, dt, now, api) {
+    if (g.state !== 'flee') {
+      if (!job.alarmAt || now - job.alarmAt < (g.armed === false ? 1500 : 9000)) return false;
+      g.state = 'flee'; g.fleeStep = 0; say(`🏃 ${g.name} is running for the back door! Stop them before they get out.`);
+      const d0 = job.L.doors.find((q) => q.entry); g.fleePts = [{ x: d0.x, y: d0.y - 34 }, { x: d0.x, y: d0.y + 40 }]; setTarget(g, g.fleePts[0]);
+    }
+    const goal = g.path?.[0] || g.fleePts[g.fleeStep];
+    if (goal) {
+      const gx = goal.x - g.x, gy = goal.y - g.y, gd = Math.hypot(gx, gy), sp = g.speed * 1.45;
+      if (gd < 8) { if (g.path?.length) g.path.shift(); else if (g.fleeStep === 0) { g.fleeStep = 1; g.path = [g.fleePts[1]]; } }
+      else { const sx = (gx / gd) * sp * dt, sy = (gy / gd) * sp * dt; if (g.fleeStep === 1 || !api.blocked(g.x + sx, g.y, 9)) g.x += sx; if (g.fleeStep === 1 || !api.blocked(g.x, g.y + sy, 9)) g.y += sy; g.angle = Math.atan2(gy, gx); g.moving = true; g.walk = (g.walk || 0) + dt; }
+    }
+    if (!api.visible(g.x, g.y) && now - (g.lastEcho || 0) > 300) { g.lastEcho = now; api.echo(g.x, g.y, '#ffd970', 'step'); }
+    if (g.fleeStep === 1 && g.y > job.L.exit.y + 6) { g.dead = true; g.gone = true; job.markGone = true; say(`💨 ${g.name} got away. Contract blown.`); }
+    return true;
+  }
   function guardsUpdate(dt, now, api) {
     const pos = api.pos, sneaking = !pos.moving || !pos.sprint;
     for (const g of job.guards) {
       if (g.dead) continue;
+      if (g.kind === 'mark' && markFlee(g, dt, now, api)) continue;
       const d = dist(g, pos), ang = Math.atan2(pos.y - g.y, pos.x - g.x);
       let da = ang - g.angle; while (da > Math.PI) da -= Math.PI * 2; while (da < -Math.PI) da += Math.PI * 2;
       const sight = g.sight * (sneaking && d > 90 && g.state !== 'alert' ? 0.7 : 1) * (job.dark ? 0.8 : 1);
@@ -133,7 +152,7 @@
         else if (g.lastSeen) { if (!g.target || dist(g.target, g.lastSeen) > 10) setTarget(g, g.lastSeen); if (dist(g, g.lastSeen) < 14 || now - g.lastSeen.t > 7000) { g.state = 'search'; g.until = now + 6000; } }
         if (sees && now >= g.reaction && now >= (g.nextShot || 0)) {
           if (g.melee) { if (d < 26) { g.nextShot = now + g.rate; try { root.NightshiftRecovery?.damage?.(g.dmg, now); } catch { /* n/a */ } api.fx('blood', pos.x, pos.y, 260); } }
-          else { g.nextShot = now + g.rate * (0.8 + Math.random() * 0.5); api.enemyShot(g.x + Math.cos(ang) * 14, g.y + Math.sin(ang) * 14, ang, g.dmg, 11, g.spread + (pos.moving ? 0.05 : 0), 560); hear(g.x, g.y, 260, api, 'shot'); }
+          else if (g.armed !== false) { g.nextShot = now + g.rate * (0.8 + Math.random() * 0.5); api.enemyShot(g.x + Math.cos(ang) * 14, g.y + Math.sin(ang) * 14, ang, g.dmg, 11, g.spread + (pos.moving ? 0.05 : 0), 560); hear(g.x, g.y, 260, api, 'shot'); }
         }
       } else if (g.state === 'investigate' || g.state === 'search') {
         if (g.state === 'search' && (!g.target || dist(g, g.target) < 10)) { const base = g.lastSeen || g; setTarget(g, { x: base.x + (Math.random() - 0.5) * 160, y: base.y + (Math.random() - 0.5) * 120 }); }
@@ -200,6 +219,7 @@
     state.robbed[j.id] = Date.now(); state.stats.jobs += 1; if (!j.alarmAt) state.stats.clean += 1; state.stats.loot += Math.round(bagValue()); state.stats.kills += j.kills;
     persist(); gameSave();
     try { root.NightshiftSkills?.gain('stealth', j.alarmAt ? 40 : 120, 'breakin'); } catch { /* optional */ }
+    if (j.contract) { try { HM()?.resolve?.({ killed: j.markDown, alarm: !!j.alarmAt, otherKills: j.otherKills, escaped: j.markGone }); } catch (e) { console.error(e); } }
     const n = Object.values(j.bag.items).reduce((a, b) => a + b, 0);
     say(`${j.alarmAt ? '🚨 Got out' : '🤫 Clean job'} · ${money(j.bag.cash)} cash + ${n} item${n === 1 ? '' : 's'}${lost ? ` (${lost} didn't fit your bag)` : ''}${j.alarmAt ? ' · heat up' : ''}`);
     job = null;
@@ -207,15 +227,18 @@
   }
   function start(target) {
     const p = P(); if (!p) return false;
-    const left = B.cooldownLeft(state, target.id, target.type);
+    const contract = HM()?.contractFor?.(target.id) || null;
+    const left = contract ? 0 : B.cooldownLeft(state, target.id, target.type);
     if (left > 0) { say(`🔒 They've beefed up security since last time · try again in ${Math.ceil(left / 60000)} min`); return false; }
     const day = Math.floor(Date.now() / 3600000);
     const L = B.generate(target.type, (hashStr(target.id) + day * 7919) >>> 0);
-    job = { id: target.id, type: target.type, L, from: target.from, door: target.door, guards: L.guards.map((g) => ({ ...g, angle: Math.random() * 6, state: 'patrol', ri: 0 })), looted: {}, bag: { cash: 0, items: {} }, alarmAt: 0, policeAt: 0, search: null, kills: 0, dark: (root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment?.state?.minute ?? 720) || 0) > 0.5 };
+    const extra = contract ? B.addMark(L, contract, B.rngOf((hashStr(contract.id) ^ L.seed) >>> 0)) : [];
+    job = { id: target.id, type: target.type, L, from: target.from, door: target.door, contract, markDown: false, markGone: false, otherKills: 0, guards: [...L.guards, ...extra].map((g) => ({ ...g, angle: Math.random() * 6, state: 'patrol', ri: 0 })), looted: {}, bag: { cash: 0, items: {} }, alarmAt: 0, policeAt: 0, search: null, kills: 0, dark: (root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment?.state?.minute ?? 720) || 0) > 0.5 };
     const def = makeZone(job, target);
     Z.register(def);
     Z.enter('breakin', L.spawn, {});
-    say(`🤫 ${target.name}: sneak in, search for loot (gold glints), and get out the back door. Sprinting and gunfire are loud.`);
+    say(contract ? `🎯 Contract: ${contract.name} is inside with ${contract.guards} bodyguard${contract.guards === 1 ? '' : 's'}. Find the gold ▼, take them down, walk out the back door. Quiet pays +50%.`
+      : `🤫 ${target.name}: sneak in, search for loot (gold glints), and get out the back door. Sprinting and gunfire are loud.`);
     return true;
   }
   const hashStr = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
@@ -236,13 +259,13 @@
       },
       drawGround(c, t, api) {
         for (const l of L.loot) container(c, l, !!j.looted[l.id], t, api.visible(l.x, l.y));
-        for (const g of j.guards) if (g.dead) { O(c, '#4a0e12aa', g.x + 4, g.y + 2, 14, 7); if (api.visible(g.x, g.y)) { if (g.kind === 'dog') { O(c, '#5a3a22', g.x, g.y, 12, 5); } else { R(c, g.kind === 'cop' ? '#1f3a6a' : '#2b2f33', g.x - 12, g.y - 5, 24, 10); C(c, '#c99a7a', g.x + 14, g.y, 4); } } }
+        for (const g of j.guards) if (g.dead && !g.gone) { O(c, '#4a0e12aa', g.x + 4, g.y + 2, 14, 7); if (api.visible(g.x, g.y)) { if (g.kind === 'dog') { O(c, '#5a3a22', g.x, g.y, 12, 5); } else { R(c, g.kind === 'cop' ? '#1f3a6a' : g.kind === 'mark' ? g.color : '#2b2f33', g.x - 12, g.y - 5, 24, 10); C(c, '#c99a7a', g.x + 14, g.y, 4); } } }
       },
       props(api) { return L.furniture.filter((f) => !f.flat).map((f) => ({ y: f.y + f.h, draw: (c) => FURN_ART[f.kind]?.(c, f) })); },
       actors(api) {
         return j.guards.filter((g) => !g.dead).map((g) => (g.kind === 'dog'
           ? { x: g.x, y: g.y, draw: (c) => dogArt(c, g, performance.now() / 1000) }
-          : { x: g.x, y: g.y, angle: g.angle, moving: g.moving, walkTicks: g.walk || 0, id: g.id, color: g.kind === 'cop' ? '#1f3a6a' : g.kind === 'guard' ? '#2b2f33' : '#7a5a3a', role: g.kind === 'cop' ? 'officer' : g.kind === 'guard' ? 'security' : null, armed: true, hp: g.hp }));
+          : { x: g.x, y: g.y, angle: g.angle, moving: g.moving, walkTicks: g.walk || 0, id: g.id, color: g.kind === 'cop' ? '#1f3a6a' : g.kind === 'guard' ? '#2b2f33' : g.kind === 'bodyguard' ? '#15181d' : g.kind === 'mark' ? g.color : '#7a5a3a', role: g.kind === 'cop' ? 'officer' : g.kind === 'guard' || g.kind === 'bodyguard' ? 'security' : null, armed: g.armed !== false, hp: g.hp }));
       },
       targets(api) {
         const out = [];
@@ -250,20 +273,26 @@
         return out;
       },
       exits: [{ x: L.exit.x, y: L.exit.y, r: 44, action: 'ESCAPE', label: 'Back door · leave with your loot', sign: 'EXIT', icon: '🚪', color: '#7cdeb5', lift: 6, use: (api) => finish(api) }],
-      update(dt, now, api) { guardsUpdate(dt, now, api); searchTick(now, api); if (P()?.hp <= 0) { state.stats.caught += 1; persist(); job = null; } },
+      update(dt, now, api) { guardsUpdate(dt, now, api); searchTick(now, api); if (P()?.hp <= 0) { state.stats.caught += 1; persist(); if (job?.contract) { try { HM()?.resolve?.({ killed: false, alarm: true, otherKills: 0, died: true }); } catch { /* optional */ } } job = null; } },
       onNoise(x, y, radius, api, kind) { hear(x, y, radius, api, kind); },
       hit(b, api) {
         for (const g of j.guards) {
           if (g.dead) continue;
           if (Math.hypot(b.x - g.x, b.y - (g.y - 12)) < 13) {
             g.hp -= b.dmg; g.state = 'alert'; g.lastSeen = { x: api.pos.x, y: api.pos.y, t: performance.now() }; g.reaction = Math.min(g.reaction || 0, performance.now() + 200); alarm(performance.now());
-            if (g.hp <= 0) { g.dead = true; j.kills += 1; if (g.kind !== 'dog') j.bag.cash += Math.round(20 + Math.random() * 80); api.float(g.x, g.y - 30, g.kind === 'dog' ? '🐕' : '✖', '#ff5a6a'); }
+            if (g.hp <= 0) {
+              g.dead = true; j.kills += 1;
+              if (g.kind === 'mark') { j.markDown = true; api.float(g.x, g.y - 34, '🎯 MARK DOWN', '#ffd970'); say(`🎯 ${g.name} is down. Walk out the back door to get paid.`); try { root.NightshiftAudio?.play('impact'); } catch { /* optional */ } }
+              else { j.otherKills += 1; if (g.kind !== 'dog') j.bag.cash += Math.round(20 + Math.random() * 80); api.float(g.x, g.y - 30, g.kind === 'dog' ? '🐕' : '✖', '#ff5a6a'); }
+            }
             return true;
           }
         }
         return false;
       },
       drawTop(c, t, api) {
+        const mk = j.contract && j.guards.find((g) => g.kind === 'mark' && !g.dead);
+        if (mk && api.visible(mk.x, mk.y)) { const bob = Math.sin(t * 6) * 2, x = mk.x, y = mk.y - 44 + bob; c.save(); c.fillStyle = '#000000aa'; c.beginPath(); c.moveTo(x - 8, y - 1); c.lineTo(x + 8, y - 1); c.lineTo(x, y + 10); c.closePath(); c.fill(); c.fillStyle = '#ffd970'; c.beginPath(); c.moveTo(x - 7, y - 3); c.lineTo(x + 7, y - 3); c.lineTo(x, y + 7); c.closePath(); c.fill(); c.fillStyle = '#fff6c8'; c.fillRect(x - 4, y - 2, 4, 2); c.font = '700 9px "Chakra Petch",system-ui'; c.textAlign = 'center'; c.fillStyle = '#000'; c.fillText(mk.name.toUpperCase(), x + 1, y - 7); c.fillStyle = '#ffd970'; c.fillText(mk.name.toUpperCase(), x, y - 8); c.restore(); }
         const s = j.search; if (!s) return;
         const l = L.loot.find((q) => q.id === s.id); if (!l) return; const f = Math.min(1, (performance.now() - s.t0) / s.ms), x = api.pos.x, y = api.pos.y - 46;
         c.save(); c.fillStyle = '#05080fcc'; c.beginPath(); c.arc(x, y, 13, 0, Math.PI * 2); c.fill(); c.strokeStyle = '#ffd970'; c.lineWidth = 4; c.lineCap = 'round'; c.beginPath(); c.arc(x, y, 10, -Math.PI / 2, -Math.PI / 2 + f * Math.PI * 2); c.stroke(); c.restore();
@@ -272,7 +301,8 @@
         // HUD strip: hot bag value + alarm countdown
         const now = performance.now(), n = Object.values(j.bag.items).reduce((a, b2) => a + b2, 0);
         c.save(); c.font = '700 12px "Chakra Petch",system-ui'; c.textAlign = 'center';
-        const txt = `🔥 HOT BAG ${money(j.bag.cash)} + ${n} item${n === 1 ? '' : 's'} · get to the 🚪 back door`;
+        const txt = j.contract ? (j.markGone ? `💨 ${j.contract.name} GOT AWAY · contract blown · 🔥 bag ${money(j.bag.cash)}` : j.markDown ? `🎯 MARK DOWN · get to the 🚪 back door to get paid ${money(j.contract.pay)}+` : `🎯 FIND ${j.contract.name.toUpperCase()} (gold ▼) · ${money(j.contract.pay)} · quiet +50%`)
+          : `🔥 HOT BAG ${money(j.bag.cash)} + ${n} item${n === 1 ? '' : 's'} · get to the 🚪 back door`;
         const w2 = c.measureText(txt).width + 24; c.fillStyle = '#0d1320e0'; c.fillRect(Wd / 2 - w2 / 2, 8, w2, 24); c.fillStyle = '#ffe9a8'; c.fillText(txt, Wd / 2, 25);
         if (j.policeAt) { const left = Math.max(0, Math.ceil((j.policeAt - now) / 1000)); const flash = Math.sin(now / 150) > 0; const t2 = left > 0 ? `🚨 POLICE IN ${left}s` : '🚔 POLICE INSIDE'; c.fillStyle = flash ? '#c0202a' : '#1f3a8a'; const w3 = c.measureText(t2).width + 24; c.fillRect(Wd / 2 - w3 / 2, 36, w3, 24); c.fillStyle = '#fff'; c.fillText(t2, Wd / 2, 53); }
         c.restore();
@@ -286,10 +316,10 @@
   const E = root.NightshiftEncounters;
   if (E && !E.__breakin) {
     const locs = E.locations, use = E.use, draw = E.draw;
-    E.locations = function () { const list = locs.apply(this, arguments) || []; return P()?.hp > 0 ? [...list, ...WAREHOUSES.map((w) => ({ id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🔦 BACK DOOR', action: nightNow() ? 'BREAK IN' : 'LOCKED', hint: `${w.name} · break in at night (21:00–05:00)` }))] : list; };
+    E.locations = function () { const list = locs.apply(this, arguments) || []; return P()?.hp > 0 ? [...list, ...WAREHOUSES.map((w) => ({ id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🔦 BACK DOOR', action: nightNow() || HM()?.contractFor?.(w.id) ? 'BREAK IN' : 'LOCKED', hint: `${w.name} · break in at night (21:00–05:00)` }))] : list; };
     E.use = function (id) {
       const w = WAREHOUSES.find((q) => q.id === id);
-      if (w) { if (!nightNow()) { say('🔒 Too many workers around. Come back after 21:00.'); return true; } start({ id: w.id, type: 'warehouse', name: w.name, from: 'city', door: { x: w.x, y: w.y } }); return true; }
+      if (w) { if (!nightNow() && !HM()?.contractFor?.(w.id)) { say('🔒 Too many workers around. Come back after 21:00.'); return true; } start({ id: w.id, type: 'warehouse', name: w.name, from: 'city', door: { x: w.x, y: w.y } }); return true; }
       return use.apply(this, arguments);
     };
     E.draw = function () { const r = draw.apply(this, arguments); try { drawDoors(); } catch { /* cosmetic */ } return r; };
@@ -301,6 +331,7 @@
       if (Math.abs(p.x - w.x) > 700 || Math.abs(p.y - w.y) > 500) continue;
       const x = w.x, y = w.y;
       R(ctx, '#2a2d30', x - 13, y - 34, 26, 30); R(ctx, '#4a5058', x - 11, y - 32, 22, 26); R(ctx, '#9aa3ab', x + 5, y - 20, 3, 3); R(ctx, '#c9b14a', x - 13, y - 36, 26, 3);
+      if (HM()?.contractFor?.(w.id)) { C(ctx, '#ffd970', x + 9, y - 30, 2); root.NightshiftSign?.(ctx, x, y - 48, '🎯', 'CONTRACT · GO IN', '#ffd970', { glow: true }); continue; }
       const lockedC = B.cooldownLeft(state, w.id, 'warehouse') > 0;
       C(ctx, nightNow() && !lockedC ? '#7cdeb5' : '#ff5a6a', x + 9, y - 30, 1.6);
       root.NightshiftSign?.(ctx, x, y - 48, '🔦', lockedC ? 'BACK DOOR · HOT' : nightNow() ? 'BACK DOOR · BREAK IN' : 'BACK DOOR · NIGHTS', nightNow() && !lockedC ? '#ff8a7a' : '#7d8796');

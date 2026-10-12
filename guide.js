@@ -99,6 +99,7 @@
         ['🍳', 'Cooking & buffs', 'Cook at your kitchen (or the farmhouse): meals give buffs like faster running or more XP. Eat from the 🎒.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
         ['🍽️', 'Diner back door', 'The diner buys your cooked meals and fresh produce.', 'GPS', () => gps({ x: 1600, y: 948 }, 'Diner back door')],
         ['🔦', 'Break-ins', 'Suburb houses, the gated estate, and two city warehouses (nights). Dark inside: guards show as red echoes. Loot is only yours once you walk out.', 'GPS', () => gps(nearest(R.NightshiftBreakin?.WAREHOUSES), 'Warehouse back door')],
+        ['🎯', 'Hitman contracts', 'After your first break-in the Broker texts you. Take a contract, find the mark (gold ▼) inside a house, warehouse or the estate, walk out. Quiet pays +50%.', 'OPEN', open2(() => R.NightshiftHitman.open())],
         ['💍', 'Golden Pawn', 'In Palm Grove. Fences the jewellery, electronics and art you steal.', null],
         ['🐕', 'Pets', 'Paws & Claws in Palm Grove. Pets follow you everywhere and give a perk while fed. Dogs sniff out stashes.', null],
         ['🏡', 'Dream house', 'Palm Grove, $85,000. Furnish 15 slots, raise your Style tier: deals pay more. Sleep for an XP boost.', null],

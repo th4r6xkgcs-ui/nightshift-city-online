@@ -208,6 +208,7 @@
     const sh = root.NightshiftStashes;
     if (sh && sh.count() < sh.total) tile('📦', 'STASHES', sh.state.rumor ? 'GPS rumor' : `Rumor ${money(root.NightshiftStashesData.RUMOR_PRICE)}`, () => { if (sh.buyRumor()) panel.hidden = true; });
     const su = root.NightshiftSupply, sd = root.NightshiftSupplyData;
+    { const hm = root.NightshiftHitman; if (hm) { const a = hm.state.active; tile('🎯', 'CONTRACTS', !hm.unlocked() ? 'Locked' : a ? `${a.name.split(' ')[0]} · active` : root.NightshiftHitmanData.rankOf(hm.state.done).name, () => { panel.hidden = true; hm.open(); }); } }
     if (su && sd) tile('🎒', 'BACKPACK', `${sd.weightOf(su.state.bag)}/${sd.cap(su.state)} · map`, () => { panel.hidden = true; su.openBag(); });
     panel.append(apps, el('h2', { style: 'margin-top:12px;font-size:14px' }, '💼 JOBS'));
     panel.append(el('div', { className: 'sub' }, `New offers in ~${next} min · ${state.done} jobs done · ${money(state.earned)} earned · Respect bonus +${rank() * 5}%`));
