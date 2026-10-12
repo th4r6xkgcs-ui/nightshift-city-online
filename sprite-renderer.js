@@ -56,7 +56,7 @@ function lookFor(p,isPlayer,role,profileIn){
  const shirt=profile?.shirt||(role==='ped'?pick(SHIRTS,5):p.color||'#799f98');
  if(role==='officer')return {shirt:'#2a3f6e',skin:pick(SKINS,3),hair:pick(HAIRS,7),pants:'#1d2a44',shoes:'#15171c',style:'uniform',hairdo:'short',beard:false,hat:'police',bag:null,accent:'#d9b44a'};
  return {shirt,skin:profile?.skin||(isPlayer?'#c79977':pick(SKINS,3)),hair:profile?.hair||pick(HAIRS,7),pants:profile?.pants||(isPlayer?'#273543':pick(PANTS,11)),shoes:profile?.shoes||(isPlayer?'#c5cbbb':pick(SHOES,13)),
-  style:isPlayer?'jacket':(()=>{const st=pick(STYLES,17);return st==='tank'&&['#e2b75c','#e07a3a','#e4e0d6'].includes(shirt)?'tee':st})(),hairdo:isPlayer?'short':pick(HAIRDO,19),beard:!isPlayer&&((seed>>>23)%5===0),hat:profile?.hat&&profile.hat!=='none'?profile.hat:null,bag:profile?.bag&&profile.bag!=='none'?profile.bag:null,accent:pick(['#e8d36a','#d9e4ef','#e07a6a','#7fd1c2'],25)};
+  style:isPlayer?(profile?.outfit||'jacket'):(()=>{const st=pick(STYLES,17);return st==='tank'&&['#e2b75c','#e07a3a','#e4e0d6'].includes(shirt)?'tee':st})(),hairdo:isPlayer?(profile?.hairdo||'short'):pick(HAIRDO,19),beard:!isPlayer&&((seed>>>23)%5===0),hat:profile?.hat&&profile.hat!=='none'?profile.hat:null,bag:profile?.bag&&profile.bag!=='none'?profile.bag:null,accent:pick(['#e8d36a','#d9e4ef','#e07a6a','#7fd1c2'],25)};
 }
 function shadowAt(ctx,x,y){ctx.fillStyle='#05080f55';ctx.beginPath();ctx.ellipse(x+1,y+15,9,3.2,0,0,Math.PI*2);ctx.fill()}
 function drawPersonDirect(p,isPlayer=false,options={}){
@@ -213,5 +213,5 @@ function furniture(f){
  g.restore();
 }
 
-root.NightshiftSprites={car:drawCar,person:drawPerson,furniture,pose,look:lookFor,shade,atlasStats:()=>({count:atlasCache.size,limit:MAX_ATLASES,width:CELL_W*8,height:CELL_H*8})};
+root.NightshiftSprites={personTo:(ctx,p,isPlayer,options={})=>drawPersonDirect(p,isPlayer,{...options,context:ctx}),car:drawCar,person:drawPerson,furniture,pose,look:lookFor,shade,atlasStats:()=>({count:atlasCache.size,limit:MAX_ATLASES,width:CELL_W*8,height:CELL_H*8})};
 })(globalThis);
