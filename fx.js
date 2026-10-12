@@ -120,5 +120,42 @@
   if (E && typeof E.draw === 'function' && !E.__fx) { const d = E.draw; E.draw = function () { try { drawGround(); } catch { /* cosmetic */ } return d.apply(this, arguments); }; E.__fx = true; }
   if (FB && typeof FB.draw === 'function' && !FB.__fxDraw) { const d = FB.draw; FB.draw = function () { const r = d.apply(this, arguments); try { drawTop(); } catch { /* cosmetic */ } return r; }; FB.__fxDraw = true; }
 
+  // ---- adaptive sharpness: the game renders at up to 2x pixel density; if frames get slow, step down ----
+  (function adapt() {
+    let frames = 0, t0 = performance.now(), last = t0, slow = 0;
+    const steps = [2, 1.5, 1];
+    function tick(now) {
+      if (!document.hidden && now - last < 250) { frames++; slow += now - last > 26 ? 1 : 0; }
+      last = now;
+      if (now - t0 > 4000) {
+        const cur = Number(root.NightshiftRenderScale) || Math.min(2, root.devicePixelRatio || 1);
+        if (frames > 60 && slow / frames > 0.35 && cur > 1) {
+          root.NightshiftRenderScale = steps.find((x) => x < cur - 0.01) || 1;
+          try { root.dispatchEvent(new Event('resize')); } catch { /* n/a */ }
+        }
+        frames = 0; slow = 0; t0 = now;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  // ---- world sign: one consistent look for every place label (Claude modules call root.NightshiftSign) ----
+  const SIGN_FONT = "700 10px 'Chakra Petch',ui-sans-serif,system-ui,sans-serif";
+  root.NightshiftSign = function (ctx, cx, cy, icon, text, color = '#ffcf5a', opts = {}) {
+    if (!ctx) return;
+    ctx.save(); ctx.font = SIGN_FONT; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    const tw = ctx.measureText ? ctx.measureText(text).width : text.length * 6, w = Math.round(tw + (icon ? 30 : 16)), h = 18, x = Math.round(cx - w / 2), y = Math.round(cy - h / 2);
+    const rr = (px, py, pw, ph, r) => { ctx.beginPath(); ctx.moveTo(px + r, py); ctx.arcTo(px + pw, py, px + pw, py + ph, r); ctx.arcTo(px + pw, py + ph, px, py + ph, r); ctx.arcTo(px, py + ph, px, py, r); ctx.arcTo(px, py, px + pw, py, r); ctx.closePath(); };
+    ctx.fillStyle = '#05080f66'; rr(x + 1, y + 3, w, h, 9); ctx.fill();
+    ctx.shadowColor = color; ctx.shadowBlur = opts.glow ?? 6;
+    ctx.fillStyle = '#0c111ef0'; rr(x, y, w, h, 9); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.strokeStyle = color; ctx.lineWidth = 1.5; rr(x + 0.5, y + 0.5, w - 1, h - 1, 8.5); ctx.stroke();
+    if (icon) { ctx.fillStyle = color + '33'; ctx.beginPath(); ctx.arc(x + 10, cy, 7, 0, Math.PI * 2); ctx.fill(); ctx.font = '10px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText(icon, x + 10, cy + 0.5); ctx.font = SIGN_FONT; ctx.textAlign = 'left'; }
+    ctx.fillStyle = opts.textColor || '#f2f6fc'; ctx.fillText(text, x + (icon ? 21 : 8), cy + 0.5);
+    ctx.beginPath(); ctx.moveTo(cx - 4, y + h); ctx.lineTo(cx + 4, y + h); ctx.lineTo(cx, y + h + 5); ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+    ctx.restore();
+  };
+
   root.NightshiftFx = Object.freeze({ shake, stats: () => ({ marks: marks.length, smoke: smoke.length, trauma }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

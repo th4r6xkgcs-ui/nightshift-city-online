@@ -54,11 +54,7 @@
     ctx.save();
     ctx.fillStyle = '#9b1f3a'; ctx.fillRect(d.x - 14, d.y - 16, 28, 14);
     ctx.fillStyle = '#3a2a18'; ctx.fillRect(x - 2, y + 9, 4, 12);
-    ctx.fillStyle = '#1a0f22ee'; ctx.fillRect(x - 34, y - 11, 68, 20);
-    ctx.shadowColor = '#ff4fd8'; ctx.shadowBlur = 8 + 4 * Math.sin(t * 3);
-    ctx.strokeStyle = '#ff4fd8'; ctx.lineWidth = 2; ctx.strokeRect(x - 34, y - 11, 68, 20);
-    ctx.shadowBlur = 0; ctx.fillStyle = '#ffd970'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('LUCKY 7', x, y - 1);
+    root.NightshiftSign?.(ctx, x, y - 1, '🎰', 'LUCKY 7 CASINO', '#ff4fd8', { glow: 8 + 4 * Math.sin(t * 3) });
     for (let i = 0; i < 6; i++) { ctx.fillStyle = (Math.floor(t * 6) + i) % 3 === 0 ? '#fff3b0' : '#7a5a20'; ctx.fillRect(x - 30 + i * 12, y + 6, 3, 2); }
     ctx.restore();
   }

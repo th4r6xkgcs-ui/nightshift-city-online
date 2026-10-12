@@ -208,10 +208,7 @@
     const x = d.x - 82, y = d.y - 6;
     ctx.save();
     ctx.fillStyle = '#3a2a18'; ctx.fillRect(x - 2, y + 9, 4, 12);
-    ctx.fillStyle = '#15110ce8'; ctx.fillRect(x - 36, y - 11, 72, 20);
-    ctx.strokeStyle = '#ffb347'; ctx.lineWidth = 2; ctx.strokeRect(x - 36, y - 11, 72, 20);
-    ctx.fillStyle = '#ffd27a'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('⌖ GUN SHOP', x, y - 1);
+    root.NightshiftSign?.(ctx, x, y - 1, '🔫', 'GUN SHOP', '#ffb347');
     ctx.fillStyle = '#5a4630'; ctx.fillRect(d.x - 14, d.y - 16, 28, 14);
     ctx.restore();
   }

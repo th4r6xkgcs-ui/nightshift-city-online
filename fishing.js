@@ -67,9 +67,7 @@
       ctx.fillStyle = '#c0473f'; ctx.fillRect(-21, 3, 36, 2); ctx.fillStyle = '#6b4a2e'; ctx.fillRect(-16, -4, 22, 8); ctx.fillStyle = '#2b3a52'; ctx.fillRect(-4, -3, 6, 6);
       ctx.restore();
       ctx.fillStyle = '#ff5161'; ctx.beginPath(); ctx.arc(s.x + (pier ? 30 : 30), (pier ? wy + 22 : s.y + 12) + Math.sin(t * 3) * 2, 3, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = '#10141ccc'; ctx.fillRect(s.x - 46, s.y - 34, 92, 16);
-      ctx.fillStyle = '#9fe0ff'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('🎣 ' + s.name.toUpperCase(), s.x, s.y - 26);
+      root.NightshiftSign?.(ctx, s.x, s.y - 26, '🎣', s.name.toUpperCase(), '#4fc3ff');
     }
     ctx.restore();
   }
