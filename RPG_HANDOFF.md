@@ -315,3 +315,13 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
     - Old saves validate to `short`/`jacket`, which is the previous look.
   - `ui-skin.js` (Claude, loads after `fx.js`): CSS-only "night glass" HUD, district label, toasts and action buttons. In landscape, toasts are smaller and sit at the top.
   - The goal card hint shows for 15 s when a goal changes, then collapses.
+- **Minimap and compatibility**
+  - `minimap.js` (Claude, loads after `ui-skin.js`): a round 104 px radar, north-up, about 520 px world radius. Tap it to open the full map.
+    - The base is drawn once from `NightshiftWorld.ground` plus building rects at 1/5 scale.
+    - Shows the GPS route and target, the tracked goal, the city event, the phone job (red for hits), the stash-rumor circle, an active heist, home, and police (flashing).
+    - Off-view markers clamp to the rim.
+    - Wanted stars sit along the bottom, and the rim flashes red/blue when heat ≥ 0.5.
+    - Placement: landscape, left of the weapon pill; portrait, under the 📱 button (below the radio when it's shown). Hidden indoors and while any RPG panel is open.
+  - Art branch: `NightshiftMap.target()` and `NightshiftMap.path()` are read-only. New: `NightshiftJobs.target()`.
+  - `starter-home.js` now also polyfills `Array/String#at`, `Object.hasOwn`, `findLast`, canvas `roundRect` and `ellipse` for older iPhones.
+  - Portrait toasts sit at 58% height (below the player).
