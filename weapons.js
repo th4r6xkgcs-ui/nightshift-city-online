@@ -124,6 +124,8 @@
   }
   install();
   setInterval(install, 1000);
+  // On load, fit the loaded magazine to the gun in hand (extra rounds go back to the reserve).
+  try { const p = P(), cs = CS(), w = current(); if (p && cs && W.BY_ID[state.equipped] && p.ammo > w.mag) { const r = W.fitMagazine(p.ammo, cs.reserve, w.mag); p.ammo = r.ammo; cs.reserve = r.reserve; } } catch { /* game not loaded */ }
   setInterval(() => { const p = P(); if (p && p.hp <= 0 && state.armor > 0) { state.armor = 0; persist(); renderPill(); } }, 500); // armor is lost when you go down
 
   // ---- durability ----
