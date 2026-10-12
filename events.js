@@ -36,7 +36,7 @@
     if (!made) return null;
     ev = made; ev.pay = V.scale(ev.pay, rank());
     const T = V.TYPES[ev.type];
-    say(`${T.icon} CITY EVENT · ${T.name} · ${hint()} · ${Math.round(dist(p, ev) / 10)}m away`);
+    say(`🌆 ${T.icon} ${T.name} · ${Math.round(dist(p, ev) / 10)}m · follow the cyan arrow`);
     try { root.NightshiftAudio?.play('pickup'); } catch { /* sound optional */ }
     render(); return { type: ev.type, x: ev.x, y: ev.y };
   }
