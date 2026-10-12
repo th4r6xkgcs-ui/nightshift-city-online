@@ -27,6 +27,7 @@
     { key: 'earned10k', label: 'Money earned ($10k)', per: 1, cap: 200 },
     { key: 'fronts', label: 'Front businesses', per: 60, cap: 300 },
     { key: 'heists', label: 'Bank heists', per: 40, cap: 400 },
+    { key: 'events', label: 'City events', per: 10, cap: 300 },
   ];
   function points(c) {
     let total = 0;

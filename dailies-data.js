@@ -18,6 +18,7 @@
     { id: 'races', text: 'Finish {n} street race(s)', stat: 'raceRuns', n: [1, 2, 3], cash: 250, xp: 'driving' },
     { id: 'jobs', text: 'Finish {n} Hustle phone job(s)', stat: 'jobsDone', n: [1, 2, 3], cash: 200, xp: 'charisma' },
     { id: 'gym', text: 'Finish {n} gym set(s)', stat: 'gymSessions', n: [1, 2, 2], cash: 150, xp: 'toughness' },
+    { id: 'events', text: 'Finish {n} city event(s)', stat: 'eventsDone', n: [1, 1, 2], cash: 300, xp: 'luck' },
     { id: 'fish', text: 'Land {n} catches', stat: 'fishCaught', n: [4, 6, 10], cash: 50, xp: 'fishing' },
     { id: 'earn', text: 'Earn ${n}', stat: 'earned', n: [1500, 2500, 4000], cash: 0.2, xp: 'charisma' },
   ];
