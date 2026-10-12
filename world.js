@@ -227,6 +227,36 @@ function road(){litWindows.length=0;
  if(!groundCache||cacheWidth!==world.w||cacheHeight!==world.h){const canvas=root.document?.createElement?.('canvas');const ctx=canvas?.getContext?.('2d');if(ctx){canvas.width=world.w;canvas.height=world.h;ctx.imageSmoothingEnabled=false;ground(ctx,world.w,world.h);groundCache=canvas;cacheWidth=world.w;cacheHeight=world.h}}
  if(groundCache)g.drawImage(groundCache,0,0);else ground(g,world.w,world.h);
 }
+// Roof detail (art pass): deterministic per building; draws into the free strip at the roof's south edge (y+74..y+104,
+// x+146..x+232), which is clear of every type's utilities. Night: skylights feed the lightmap, antennas blink red.
+function roofBase(x,y,w,h){
+ const top=y+8,bot=y+h-66;
+ for(let yy=top+14;yy<bot;yy+=22)rect(g,'#0a182622',x+7,yy,w-14,1);
+ let s=(x*73+y*151)>>>0;const rnd=()=>{s=(s*1103515245+12345)>>>0;return (s>>>8)/16777216};
+ for(let i=0;i<34;i++){const px=x+8+rnd()*(w-16)|0,py=top+rnd()*(bot-top-2)|0;rect(g,i%3?'#ffffff0c':'#0a14201f',px,py,2,2)}
+}
+function roofTop(b,night,kind){
+ const {x,y,w,h}=b,t=performance.now()/1000,seed=((x*31+y*17)>>>0)%97,rain=root.NightshiftEnvironment?.weather?.(root.NightshiftEnvironment.state?.minute??720)||0;
+ if(rain>.25){g.fillStyle='#a9cfe02a';for(const [px,py,rw] of [[x+40,y+96,16],[x+92,y+99,11],[x+176,y+66,9]]){g.beginPath();g.ellipse(px,py,rw,3.5,0,0,Math.PI*2);g.fill()}}
+ if(kind==='industrial'){
+  for(const [k,cx] of [[0,x+163],[1,x+193]]){const cy=y+88;rect(g,'#10202c66',cx-9,cy-7,20,20);g.fillStyle='#6f8a8c';g.beginPath();g.arc(cx,cy,9,0,Math.PI*2);g.fill();g.fillStyle='#43595f';g.beginPath();g.arc(cx,cy,7,0,Math.PI*2);g.fill();
+   g.strokeStyle='#a6bcb8';g.lineWidth=1.2;const a=t*(2.2+k*.7)+seed;for(let i=0;i<4;i++){const q=a+i*Math.PI/2;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(q)*6.5,cy+Math.sin(q)*6.5);g.stroke()}
+   g.fillStyle='#c5d3cc';g.beginPath();g.arc(cx,cy,1.6,0,Math.PI*2);g.fill()}
+ }else if(kind==='residential'){
+  const tx=x+204,ty=y+88;rect(g,'#10202c66',tx-10,ty-4,26,16);rect(g,'#3a2f2a',tx-9,ty+4,2,8);rect(g,'#3a2f2a',tx+8,ty+4,2,8);
+  g.fillStyle='#7b5f4a';g.beginPath();g.arc(tx,ty,11,0,Math.PI*2);g.fill();g.fillStyle='#a07c5f';g.beginPath();g.arc(tx,ty,8,0,Math.PI*2);g.fill();
+  g.strokeStyle='#5c4636';g.lineWidth=1;g.beginPath();g.arc(tx,ty,5,0,Math.PI*2);g.stroke();rect(g,'#c9a27e',tx-1,ty-9,2,4);
+  const dx=x+163,dy=y+86;rect(g,'#2a3843',dx-1,dy+2,3,8);g.fillStyle='#cfd6d6';g.beginPath();g.ellipse(dx,dy,7,5,-.5,0,Math.PI*2);g.fill();g.fillStyle='#9aa6a8';g.beginPath();g.ellipse(dx+1,dy+1,4,3,-.5,0,Math.PI*2);g.fill();rect(g,'#5c6a70',dx-5,dy-4,1,4);
+ }else{
+  const sx=x+150,sy=y+80,lit=night>.2&&seed%4!==0;rect(g,'#13232f',sx-2,sy-2,34,20);
+  if(lit){rect(g,'#f3c77a',sx,sy,30,16);if(litWindows.length<120)litWindows.push({x:sx+15,y:sy+8,w:30,h:16,c:'#ffd38a'})}else rect(g,'#3f6e80',sx,sy,30,16);
+  rect(g,lit?'#fff0c255':'#b8dce455',sx+2,sy+2,10,3);rect(g,'#1c3442',sx+14,sy,2,16);rect(g,'#1c3442',sx,sy+7,30,2);
+  const hx=x+194,hy=y+83;rect(g,'#10202c66',hx+2,hy+3,15,15);rect(g,'#77857f',hx,hy,14,14);rect(g,'#4d5b59',hx+2,hy+2,10,10);rect(g,'#b5bfb4',hx+9,hy+6,2,3);
+ }
+ if(seed%3!==0){const ax=x+w-13,ay=y+14;rect(g,'#0f1c2866',ax-2,ay+26,7,4);rect(g,'#4a5560',ax,ay,2,28);rect(g,'#4a5560',ax-4,ay+8,10,1);rect(g,'#4a5560',ax-3,ay+15,8,1);
+  const on=night>.2&&((t+seed*.13)%1.6)<.5;g.fillStyle=on?'#ff3b3b':'#6b2a2a';g.beginPath();g.arc(ax+1,ay,2.2,0,Math.PI*2);g.fill();
+  if(on){g.save();g.globalCompositeOperation='lighter';const gr=g.createRadialGradient?g.createRadialGradient(ax+1,ay,0,ax+1,ay,12):null;if(gr){gr.addColorStop(0,'#ff3b3b88');gr.addColorStop(1,'#ff3b3b00');g.fillStyle=gr;g.beginPath();g.arc(ax+1,ay,12,0,Math.PI*2);g.fill()}g.restore()}}
+}
 function building(b){
  if(typeof camera!=='undefined'&&(b.x+b.w+48<camera.x||b.y+b.h+48<camera.y||b.x>camera.x+W/camera.zoom||b.y>camera.y+H/camera.zoom))return;
  const {x,y,w,h,name}=b,night=root.NightshiftEnvironment?.darkness(root.NightshiftEnvironment.state?.minute??720)||0,district=districtStyle(x,y);
@@ -238,6 +268,7 @@ function building(b){
  g.fillStyle='#101b2c55';g.beginPath();g.moveTo(x+12,y+15);g.lineTo(x+w+28,y+27);g.lineTo(x+w+28,y+h+24);g.lineTo(x+19,y+h+24);g.closePath();g.fill();
  rect(g,'#172735',x-2,y-2,w+4,h+4);wash(g,face,x,y,w,h,'#ffffff12','#13263855');wash(g,roof,x+5,y+5,w-10,h-68,'#ffffff0d','#0e243a66');
  rect(g,'#ffffff18',x+6,y+6,w-12,3);rect(g,'#10253677',x+w-11,y+9,6,h-71);rect(g,trim,x,y,w,5);rect(g,'#d6d5bf44',x,y+5,5,h-66);
+ try{roofBase(x,y,w,h)}catch{}
  if(industrial){
   for(let yy=y+10;yy<front-5;yy+=16){rect(g,'#a6bbb222',x+10,yy,w-20,1);rect(g,'#10273444',x+10,yy+3,w-20,1)}
   for(let k=0;k<3;k++){const xx=x+20+k*70;rect(g,'#172c3b',xx+4,y+26,47,27);rect(g,'#87aaa8',xx,y+20,47,27);rect(g,'#375b6b',xx+3,y+24,41,19);rect(g,'#b9d4c055',xx+5,y+25,12,16);rect(g,'#adc4b6',xx+20,y+23,2,20)}
@@ -255,6 +286,7 @@ function building(b){
   if(club){rect(g,'#1e263f',x+133,y+24,77,47);rect(g,'#8d649f',x+139,y+28,65,3);for(let k=0;k<4;k++)rect(g,'#5e4777',x+141+k*16,y+39,9,21)}
   if(bank){rect(g,'#97a8a4',x+141,y+21,68,50);rect(g,'#cfccb4',x+145,y+25,60,5);rect(g,'#496473',x+145,y+32,60,34)}
  }
+ try{roofTop(b,night,industrial?'industrial':residential?'residential':'shop')}catch{}
  // Cornice and masonry establish a facade instead of a flat roof with a label.
  rect(g,'#162c3b',x,front-7,w,7);rect(g,trim,x-1,front-8,w+2,3);rect(g,'#ffffff24',x+1,front-5,w-2,1);
  for(let yy=front+3;yy<y+h-2;yy+=14){rect(g,'#16263812',x+4,yy,w-8,1);for(let xx=x+5+((yy/7|0)%2)*12;xx<x+w-4;xx+=25)rect(g,'#1428380b',xx,yy,1,7)}
