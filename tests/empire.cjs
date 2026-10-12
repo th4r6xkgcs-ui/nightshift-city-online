@@ -1,0 +1,23 @@
+// Empire (Claude-owned): front businesses, passive income cap, managers, discounts, save.
+const assert = require('node:assert/strict');
+const M = require('../empire-data.js');
+const H = 3600000, T = 1e12;
+const s = M.clean({}, T), w = { cash: 50000 };
+assert.equal(M.totalPending(s, T), 0);
+assert.deepEqual(M.buy(s, w, 'laundromat', 1, T), { ok: true, price: 15000 });
+assert.equal(M.buy(s, w, 'laundromat', 1, T).reason, 'Already yours');
+assert.equal(M.buy(s, { cash: 10 }, 'carwash', 1, T).reason, 'Not enough cash');
+assert.equal(M.pending(s, 'laundromat', T + 2 * H), 900);
+assert.equal(M.pending(s, 'laundromat', T + 20 * H), 450 * 8, 'income caps at capHours');
+assert.equal(M.collect(s, T + 2 * H), 900); assert.equal(M.pending(s, 'laundromat', T + 2 * H), 0); assert.equal(s.collected, 900);
+console.log('PASS: buying fronts, accrual, cap, collect');
+const r = M.hire(s, w, 'laundromat', 1, T + 3 * H);
+assert.equal(r.ok, true); assert.equal(r.price, 7500); assert.equal(r.paidOut, 450, 'income at the old rate is banked first');
+assert.equal(M.rate(M.BY_ID.laundromat, 1), 675); assert.equal(M.perHour(s), 675);
+M.hire(s, { cash: 1e9 }, 'laundromat'); M.hire(s, { cash: 1e9 }, 'laundromat');
+assert.equal(M.hire(s, { cash: 1e9 }, 'laundromat').reason, 'Fully staffed'); assert.equal(M.rate(M.BY_ID.laundromat, 3), 1125);
+assert.equal(M.buy(M.clean({}, T), { cash: 1e6 }, 'tower', 0.7, T).price, 175000, 'charisma discount');
+for (const f of M.FRONTS) assert.ok(f.price / f.perHour >= 30 && f.price / f.perHour <= 40, f.id + ' pays back in 30-40 hours (long-term investment)');
+const d = M.clean({ fronts: { cabs: { owned: true, mgr: 9, since: 9e15 }, bogus: { owned: true }, club: { owned: false } }, collected: -5 }, T);
+assert.deepEqual(Object.keys(d.fronts), ['cabs']); assert.equal(d.fronts.cabs.mgr, 3); assert.equal(d.fronts.cabs.since, T, 'future timestamps reset'); assert.equal(d.collected, 0);
+console.log('PASS: managers, rates, discount, payback window, save cleaning');

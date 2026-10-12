@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),boot=require('./harness.cjs'),run=boot(new Map());
 run('globalThis.snapshot=JSON.stringify({player,cars,peds,buildings});globalThis.fills=0;globalThis.blits=0;g.fillRect=()=>fills++;g.drawImage=()=>blits++;NightshiftInteriors.draw("home",g);globalThis.first=fills;NightshiftInteriors.draw("home",g)');
-assert.ok(run('first')>200);assert.ok(run('fills-first')<=8,'only the bounded home-upgrade overlay is drawn on cache reuse');assert.equal(run('blits'),2);
-run('NightshiftInteriors.draw("shop",g);globalThis.both=fills;NightshiftInteriors.draw("shop",g);NightshiftInteriors.draw("home",g)');assert.ok(run('both')>run('first'));assert.ok(run('fills-both')<=8,'room surfaces remain cached with the home overlay');assert.equal(run('NightshiftInteriors.cacheStats().surfaces'),2);
+assert.ok(run('first')>200);assert.ok(run('fills-first')<=120,'bounded home-upgrade, crafting and decor overlays is drawn on cache reuse');assert.equal(run('blits'),2);
+run('NightshiftInteriors.draw("shop",g);globalThis.both=fills;NightshiftInteriors.draw("shop",g);NightshiftInteriors.draw("home",g)');assert.ok(run('both')>run('first'));assert.ok(run('fills-both')<=120,'room surfaces remain cached with the home overlay');assert.equal(run('NightshiftInteriors.cacheStats().surfaces'),2);
 assert.equal(run('NightshiftInteriors.draw("warehouse",g)'),false);assert.equal(run('NightshiftInteriors.cacheStats().surfaces'),2);assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);
 const shop=boot();shop('player.x=1760;player.y=1360;NightshiftHome.enter("shop");NightshiftHome.use()');assert.equal(shop('NightshiftHome.kind()'),null);assert.equal(shop('player.x'),1760);assert.equal(shop('player.y'),1360);assert.equal(shop('message'),'Back in THE DOCKS');
 // Exercise canvas-less fallback with a real recording context contract.

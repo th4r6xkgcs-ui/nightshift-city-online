@@ -1,0 +1,207 @@
+/* City events in game (Claude-owned). Requires events-data.js.
+ * Every 2.5–4 minutes (when nothing else big is running) a timed event appears on a road somewhere in the city:
+ * a toast, a cyan world marker + guide arrow, and a HUD bar with the countdown. Types: dropped briefcase,
+ * stalled armored truck (hold position to crack it; cops respond), mystery package (grab + deliver), pop-up
+ * checkpoint sprint (in a car). Pays cash (+5% per Respect rank) and skill XP. Events are session-only.
+ * Save (stats): nightshift-events-v1. API: NightshiftEvents.{state, active, spawn, dismiss, paused} */
+(function (root) {
+  'use strict';
+  if (!root.document) return;
+  const V = root.NightshiftEventsData;
+  const KEY = 'nightshift-events-v1';
+  let state = V.clean({});
+  try { state = V.clean(JSON.parse(localStorage.getItem(KEY) || '{}')); } catch { /* fresh */ }
+  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode */ } };
+  /* eslint-disable no-undef */
+  const P = () => { try { return player; } catch { return null; } };
+  const G = () => { try { return g; } catch { return null; } };
+  const gameSave = () => { try { if (typeof save === 'function') save(); } catch { /* not ready */ } };
+  /* eslint-enable no-undef */
+  const say = (t) => { try { root.say?.(t); } catch { /* no toast */ } };
+  const money = (n) => '$' + Math.round(n).toLocaleString();
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const rank = () => root.NightshiftRespect?.state?.reached || 0;
+  const COLOR = '#4fe3ff';
+
+  let ev = null, nextAt = performance.now() + 60000, last = performance.now(), lastReport = 0, seq = 0;
+  // Something else owns the player's attention: don't spawn on top of it, and freeze timers while a panel is open.
+  const busy = () => !!(root.NightshiftHeists?.active?.() || root.NightshiftRaces?.active?.());
+  const MODULES = ['NightshiftHome', 'NightshiftLife', 'NightshiftMarket', 'NightshiftJobs', 'NightshiftCasino', 'NightshiftFishing', 'NightshiftVenues', 'NightshiftHeists', 'NightshiftEmpire', 'NightshiftWeapons', 'NightshiftRespect', 'NightshiftLab', 'NightshiftGoals'];
+  const panelOpen = () => MODULES.some((m) => { try { return !!root[m]?.paused?.(); } catch { return false; } });
+
+  function spawn(type) {
+    const p = P(); if (!p) return null;
+    let made = null;
+    for (let i = 0; i < 20 && !made; i++) { const e = V.make(Date.now() + ':' + (seq++), p); if (!type || e.type === type) made = e; }
+    if (!made) return null;
+    ev = made; ev.pay = V.scale(ev.pay, rank());
+    const T = V.TYPES[ev.type];
+    say(`🌆 ${T.icon} ${T.name} · ${Math.round(dist(p, ev) / 10)}m · follow the cyan arrow`);
+    try { root.NightshiftAudio?.play('pickup'); } catch { /* sound optional */ }
+    render(); return { type: ev.type, x: ev.x, y: ev.y };
+  }
+  function hint() {
+    if (!ev) return '';
+    if (ev.type === 'briefcase') return `grab it (${money(ev.pay)}${ev.hot ? ', might be hot' : ''})`;
+    if (ev.type === 'truck') return ev.stage === 'crack' ? 'stay next to the truck' : `crack it for ~${money(ev.pay)} (cops will come)`;
+    if (ev.type === 'package') return ev.stage === 'carry' ? 'deliver to the marker' : `grab it, rush it across town (${money(ev.pay)}+)`;
+    return ev.stage === 'run' ? `gate ${ev.progress + 1}/${ev.gates.length}` : 'drive into the start in a car';
+  }
+  function end(res) {
+    const T = V.TYPES[ev.type], p = P();
+    if (res.result === 'done') {
+      const pay = res.pay || 0;
+      try { root.NightshiftGoals?.notePayout?.(pay); } catch { /* optional */ }
+try { root.NightshiftLedger?.tag('events'); } catch { /* optional */ } 
+      if (p) p.cash = Math.min(100000000, p.cash + pay);
+      for (const [sk, xp] of Object.entries(T.xp)) try { root.NightshiftSkills?.gain(sk, xp, 'event'); } catch { /* optional */ }
+      if (ev.type === 'briefcase' && ev.hot && p) { p.heat = Math.min(5, (p.heat || 0) + 1.5); try { root.NightshiftCrime?.report?.({ x: p.x, y: p.y }, performance.now(), 'theft'); } catch { /* optional */ } }
+      state.done++; state.earned = Math.min(1e10, state.earned + pay); state.byType[ev.type] = (state.byType[ev.type] || 0) + 1; persist(); gameSave();
+      say(`${T.icon} EVENT DONE · ${res.msg} · +${money(pay)}`);
+      try { root.NightshiftAudio?.play('pickup'); } catch { /* sound optional */ }
+    } else { state.missed++; persist(); say(`${T.icon} ${res.msg}`); }
+    ev = null; nextAt = performance.now() + V.nextGap(); render();
+  }
+  function tick() {
+    const now = performance.now(), dt = Math.min(1, (now - last) / 1000); last = now;
+    const p = P(); if (!p || document.hidden) return;
+    if (panelOpen()) { nextAt += dt * 1000; return; }
+    if (!ev) { if (now >= nextAt) { if (busy() || p.hp <= 0) nextAt = now + 20000; else spawn(); } return; }
+    if (p.hp <= 0 && ev.stage !== 'open') return end({ result: 'fail', msg: 'you went down — event lost' });
+    const res = V.step(ev, { dt, pos: { x: p.x, y: p.y }, inCar: !!p.car });
+    if (ev.type === 'truck' && ev.stage === 'crack' && dist(p, ev) < V.RADIUS.truck) {
+      p.heat = Math.max(p.heat || 0, 2);
+      if (now - lastReport > 4000) { lastReport = now; try { root.NightshiftCrime?.report?.({ x: ev.x, y: ev.y }, now, 'robbery'); } catch { /* optional */ } }
+    }
+    if (!res) return;
+    if (res.result === 'stage') { say(`${V.TYPES[ev.type].icon} ${res.msg}`); render(); return; }
+    end(res);
+  }
+  setInterval(tick, 100);
+
+  // ---- world drawing (through the encounters draw hook, like jobs/heists) ----
+  function drawWorld() {
+    const ctx = G(), p = P(); if (!ctx || !p || !ev) return;
+    const t = performance.now() / 1000, T = V.TYPES[ev.type], tgt = V.target(ev);
+    ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    if (ev.type === 'sprint' && ev.stage === 'run') ev.gates.forEach((gt, i) => {
+      if (i < ev.progress) return;
+      ctx.globalAlpha = i === ev.progress ? 1 : 0.4; ctx.strokeStyle = COLOR; ctx.lineWidth = 4;
+      ctx.globalAlpha *= 0.5; ctx.beginPath(); ctx.arc(gt.x, gt.y, V.RADIUS.gate, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = i === ev.progress ? 1 : 0.4;
+      drawGate(ctx, gt.x, gt.y, i + 1, t);
+    });
+    ctx.globalAlpha = 1;
+    // marker: pulsing ring + icon plate
+    const r = (ev.type === 'truck' ? V.RADIUS.truck : 46) + 4 * Math.sin(t * 5);
+    ctx.strokeStyle = COLOR; ctx.lineWidth = 3; ctx.setLineDash?.([8, 6]); ctx.lineDashOffset = -t * 30;
+    ctx.beginPath(); ctx.arc(tgt.x, tgt.y, r, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash?.([]);
+    if (ev.type === 'truck' && ev.stage === 'crack') { // crack progress arc
+      ctx.strokeStyle = '#ffcf4a'; ctx.lineWidth = 6; ctx.beginPath();
+      ctx.arc(ev.x, ev.y, V.RADIUS.truck + 10, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (ev.progress / T.hold)); ctx.stroke();
+    }
+    if (!(ev.type === 'sprint' && ev.stage === 'run')) {
+      const carry = ev.type === 'package' && ev.stage === 'carry';
+      root.NightshiftSign?.(ctx, tgt.x, tgt.y - r - 17, carry ? '📍' : ev.type === 'sprint' ? '🏁' : T.icon, carry ? 'DROP OFF' : ev.type === 'sprint' ? 'SPRINT START' : T.name.toUpperCase(), COLOR, { glow: 8 + 4 * Math.sin(t * 5) });
+      if (ev.type === 'truck') drawTruck(ctx, ev.x, ev.y, t, ev.stage === 'crack' ? ev.progress / T.hold : 0);
+      if (ev.type === 'briefcase') drawBriefcase(ctx, ev.x, ev.y + Math.sin(t * 4) * 2);
+      if (ev.type === 'package' && ev.stage === 'open') drawPackage(ctx, ev.x, ev.y + Math.sin(t * 4) * 2);
+    }
+    if (dist(p, tgt) > 110) { // guide arrow (cyan, outside the pink job arrow radius)
+      const a = Math.atan2(tgt.y - p.y, tgt.x - p.x), rr = p.car ? 90 : 66;
+      ctx.translate(p.x + Math.cos(a) * rr, p.y + Math.sin(a) * rr); ctx.rotate(a);
+      ctx.fillStyle = COLOR; ctx.strokeStyle = '#00141a'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(-6, -7); ctx.lineTo(-2, 0); ctx.lineTo(-6, 7); ctx.closePath(); ctx.stroke(); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // ---- pixel props (art pass): armored truck, briefcase, package, checkpoint gate ----
+  const R = (ctx, c, x, y, w, h) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
+  function drawTruck(ctx, x, y, t, open) {
+    ctx.save(); ctx.translate(Math.round(x), Math.round(y));
+    R(ctx, '#05080f66', -30, -13, 64, 30); // shadow
+    R(ctx, '#0b0f17', -33, -16, 66, 32); // outline
+    R(ctx, '#5f6b63', -32, -15, 46, 30); R(ctx, '#77837a', -32, -15, 46, 4); R(ctx, '#46504a', -32, 11, 46, 4); // box
+    for (let i = -28; i < 12; i += 8) R(ctx, '#4e5852', i, -11, 1, 22); // panel ribs
+    R(ctx, '#c9a646', -24, -3, 22, 6); R(ctx, '#1e2228', -21, -2, 16, 4); R(ctx, '#e8d27a', -20, -2, 4, 1); // gold stripe + plate
+    R(ctx, '#3a4442', 14, -14, 18, 28); R(ctx, '#4d5a56', 14, -14, 18, 3); // cab
+    R(ctx, '#7fb2c9', 25, -11, 5, 22); R(ctx, '#c9e6f0', 26, -10, 1, 8); // windshield
+    R(ctx, '#f4e9b4', 31, -12, 2, 4); R(ctx, '#f4e9b4', 31, 8, 2, 4); // headlights
+    R(ctx, '#151a1f', -26, -18, 9, 3); R(ctx, '#151a1f', 4, -18, 9, 3); R(ctx, '#151a1f', -26, 15, 9, 3); R(ctx, '#151a1f', 4, 15, 9, 3); // wheels
+    // rear doors swing open with crack progress; cash glints inside
+    const o = Math.max(0, Math.min(1, open)), d = Math.round(o * 9);
+    R(ctx, '#2b2f2c', -33, -14, 3, 28);
+    if (o > 0.05) { R(ctx, '#1b1f1c', -32, -10, 4, 20); R(ctx, '#3f8f4f', -31, -7, 3, 4); R(ctx, '#3f8f4f', -31, 1, 3, 4); if (Math.sin(t * 9) > 0.6) R(ctx, '#fff7c2', -30, -6, 1, 1); }
+    R(ctx, '#56615a', -33 - d, -14, 2, 13); R(ctx, '#56615a', -33 - d, 1, 2, 13);
+    if (Math.sin(t * 6) > 0) R(ctx, '#ff5a4a', 12, -16, 3, 2); // hazard
+    ctx.restore();
+  }
+  function drawBriefcase(ctx, x, y) {
+    ctx.save(); ctx.translate(Math.round(x), Math.round(y));
+    R(ctx, '#05080f55', -8, 6, 18, 3); R(ctx, '#0b0f17', -9, -6, 18, 13);
+    R(ctx, '#5a3a22', -8, -5, 16, 11); R(ctx, '#7a5233', -8, -5, 16, 3); R(ctx, '#3f2816', -8, 4, 16, 2);
+    R(ctx, '#0b0f17', -3, -9, 6, 4); R(ctx, '#5a3a22', -2, -8, 4, 2); R(ctx, '#d9b44a', -6, -1, 2, 2); R(ctx, '#d9b44a', 4, -1, 2, 2);
+    ctx.restore();
+  }
+  function drawPackage(ctx, x, y) {
+    ctx.save(); ctx.translate(Math.round(x), Math.round(y));
+    R(ctx, '#05080f55', -8, 7, 18, 3); R(ctx, '#0b0f17', -9, -8, 18, 16);
+    R(ctx, '#b88a55', -8, -7, 16, 14); R(ctx, '#d1a56c', -8, -7, 16, 3); R(ctx, '#8f6a3f', -8, 4, 16, 3);
+    R(ctx, '#e2dccb', -1, -7, 2, 14); R(ctx, '#e2dccb', -8, -1, 16, 2); R(ctx, '#c0473f', 3, 2, 4, 3);
+    ctx.restore();
+  }
+  function drawGate(ctx, x, y, n, t) {
+    ctx.save(); ctx.translate(Math.round(x), Math.round(y));
+    for (const sx of [-58, 52]) { R(ctx, '#0b0f17', sx - 1, -34, 8, 40); R(ctx, '#d9dee6', sx, -33, 6, 38); R(ctx, '#9aa3ad', sx + 4, -33, 2, 38); }
+    R(ctx, '#0b0f17', -59, -46, 118, 15);
+    for (let i = 0; i < 29; i++) R(ctx, (i + Math.floor(t * 4)) % 2 ? '#f2f4f7' : '#111419', -58 + i * 4, -45, 4, 6), R(ctx, (i + Math.floor(t * 4)) % 2 ? '#111419' : '#f2f4f7', -58 + i * 4, -39, 4, 6);
+    R(ctx, '#0b0f17', -10, -58, 20, 13); R(ctx, '#4fe3ff', -9, -57, 18, 11);
+    ctx.fillStyle = '#04141a'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(n), 0, -51);
+    ctx.restore();
+  }
+  const E = root.NightshiftEncounters;
+  if (E && !E.__events) { const draw = E.draw; E.draw = function () { const r = draw.apply(this, arguments); try { drawWorld(); } catch { /* cosmetic */ } return r; }; E.__events = true; }
+
+  // ---- HUD ----
+  const css = document.createElement('style');
+  css.textContent = `#evHud{position:fixed;left:50%;top:58px;transform:translateX(-50%);z-index:24;pointer-events:none;background:#061c22dd;border:1px solid ${COLOR};border-radius:10px;color:#fff;font:700 12px ui-monospace,Menlo,monospace;padding:6px 12px;max-width:94vw}
+  #evHud[hidden]{display:none} #evHud i{display:block;height:3px;margin-top:4px;background:${COLOR};border-radius:2px}`;
+  document.head.appendChild(css);
+  const hud = document.createElement('div'); hud.id = 'evHud'; hud.hidden = true; document.body.append(hud);
+  function place() {
+    const job = document.querySelector('#jbHud'), jr = job && !job.hidden ? job.getBoundingClientRect() : null;
+    if (innerWidth > innerHeight) {
+      let bottom = 14 + (jr && jr.height ? jr.height + 6 : 0) + (root.NightshiftRaces?.active?.() ? 38 : 0);
+      Object.assign(hud.style, { top: 'auto', bottom: `calc(${bottom}px + env(safe-area-inset-bottom, 0px))`, left: '50%', transform: 'translateX(-50%)', maxWidth: 'calc(100vw - 2 * min(34vw, 300px))' });
+    } else {
+      const a = jr && jr.height ? jr : (document.querySelector('#dyChip') || document.querySelector('#glCard'))?.getBoundingClientRect();
+      Object.assign(hud.style, { top: Math.round((a?.bottom || 200) + 8) + 'px', bottom: 'auto', left: '12px', transform: 'none', maxWidth: 'calc(100vw - 24px)' });
+    }
+  }
+  function render() {
+    const p = P();
+    if (!ev || !p) { hud.hidden = true; return; }
+    const T = V.TYPES[ev.type];
+    let left, total;
+    if (ev.type === 'package' && ev.stage === 'carry') { left = ev.timer; total = T.deliver; }
+    else if (ev.type === 'sprint' && ev.stage === 'run') { left = ev.timer; total = ev.limit; }
+    else if (ev.type === 'truck' && ev.stage === 'crack') { left = T.hold - ev.progress; total = T.hold; }
+    else { left = ev.life; total = T.life; }
+    hud.hidden = false; place();
+    const suffix = ev.type === 'truck' && ev.stage === 'crack' ? `cracking ${Math.round((ev.progress / T.hold) * 100)}%` : `${Math.ceil(Math.max(0, left))}s`;
+    hud.textContent = `${T.icon} ${hint()} · ${suffix} · ${Math.round(dist(p, V.target(ev)) / 10)}m`;
+    const bar = document.createElement('i');
+    bar.style.width = Math.round(Math.max(0, Math.min(1, ev.type === 'truck' && ev.stage === 'crack' ? ev.progress / T.hold : left / total)) * 100) + '%';
+    hud.append(bar);
+  }
+  setInterval(render, 250);
+
+  root.NightshiftEvents = Object.freeze({
+    get state() { return state; },
+    active: () => (ev ? { type: ev.type, stage: ev.stage, x: ev.x, y: ev.y, pay: ev.pay, life: ev.life, progress: ev.progress, timer: ev.timer, to: ev.to, gates: ev.gates } : null),
+    spawn: (type) => (ev ? null : spawn(type)),
+    dismiss: () => { if (ev) { ev = null; nextAt = performance.now() + V.nextGap(); render(); } },
+    next: () => Math.max(0, Math.round((nextAt - performance.now()) / 1000)),
+    paused: () => false,
+  });
+})(typeof globalThis !== 'undefined' ? globalThis : this);

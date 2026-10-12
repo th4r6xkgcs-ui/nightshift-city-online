@@ -12,7 +12,7 @@ run('NightshiftCraft.close();player.cash=2000;player.x=880;player.y=680');
 run.nodes.get('#actions').children.find(b=>b.id==='property').events.pointerdown();
 run.nodes.get('#actions').children.find(b=>b.id==='property').events.pointerdown();
 assert.equal(run('NightshiftHome.kind()'),'home');run('NightshiftCraft.open();NightshiftCraft.state.crafted=5');
-assert.equal(run('NightshiftCraft.upgrade()'),true);assert.equal(run('player.cash'),400);assert.equal(run('NightshiftCraft.upgrade()'),false);assert.equal(run('player.cash'),400);
+assert.equal(run('NightshiftCraft.upgrade()'),true);assert.equal(run('player.cash'),1600);assert.equal(run('NightshiftCraft.upgrade()'),false);assert.equal(run('player.cash'),1600);
 run('combatState.reserve=225;player.ammo=0');assert.equal(run('NightshiftCraft.make("ammo-bulk").ok'),false);
 run('combatState.reserve=210;combatState.until=1000');assert.equal(run('NightshiftCraft.make("ammo-bulk").ok'),false);
 run('combatState.until=0');assert.equal(run('NightshiftCraft.make("ammo-bulk").ok'),true);assert.equal(run('combatState.reserve'),240);

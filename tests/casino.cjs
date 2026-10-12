@@ -36,3 +36,18 @@ for (const bad of [0, 9, 1001, 50.5, NaN, -10, '50']) assert.equal(C.spinSlots(b
 assert.equal(C.spinRoulette(50, 'purple'), null); assert.equal(C.spinRoulette(50, 37), null); assert.equal(C.spinRoulette(50, -1), null);
 assert.ok(C.spinSlots(10) && C.spinSlots(1000) && C.spinRoulette(10, 'red'));
 console.log('PASS: casino bet and choice validation');
+
+// Blackjack: hand values, results, and a basic-strategy simulation stays below 100% return.
+assert.deepEqual(C.handValue([1, 13]), { total: 21, soft: true }); assert.equal(C.isBlackjack([1, 12]), true);
+assert.deepEqual(C.handValue([1, 1, 9]), { total: 21, soft: true }); assert.deepEqual(C.handValue([10, 6, 1]), { total: 17, soft: false });
+assert.equal(C.bjResult([10, 9], [10, 8]), 2); assert.equal(C.bjResult([10, 8], [10, 8]), 1); assert.equal(C.bjResult([10, 9, 5], [10, 2]), 0);
+assert.equal(C.bjResult([1, 10], [10, 9]), 2.5); assert.equal(C.bjResult([1, 10], [1, 10]), 1); assert.equal(C.bjResult([10, 9], [10, 6, 9]), 2);
+let st2 = 7; const rnd = () => { st2 = (st2 * 16807) % 2147483647; return st2 / 2147483647; };
+let back = 0; const N = 60000;
+for (let i = 0; i < N; i++) {
+  const h = C.dealHand(rnd), up = Math.min(10, h.dealer[0]);
+  while (true) { const v = C.handValue(h.player).total; if (v >= 17 || (v >= 13 && up <= 6) || (v === 12 && up >= 4 && up <= 6)) break; h.player.push(C.draw(rnd)); }
+  C.dealerPlay(h.dealer, rnd); back += C.bjResult(h.player, h.dealer);
+}
+const rtp = back / N; assert.ok(rtp > 0.9 && rtp < 1.0, 'blackjack return with simple strategy: ' + rtp);
+console.log(`PASS: blackjack rules; simple strategy returns ${(rtp * 100).toFixed(1)}% (house keeps an edge)`);

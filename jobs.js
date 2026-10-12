@@ -64,6 +64,7 @@
   function finish(pay, note) {
     const o = active.offer, p = P();
     const total = J.scale(pay, rank());
+    try { root.NightshiftLedger?.tag('jobs'); } catch { /* optional */ } 
     if (p) p.cash = Math.min(100000000, p.cash + total);
     for (const [sk, xp] of Object.entries(J.TYPES[o.type].xp)) try { root.NightshiftSkills?.gain(sk, xp, 'job'); } catch { /* optional */ }
     state.done++; state.earned += total; state.byType[o.type] = (state.byType[o.type] || 0) + 1; persist(); gameSave();
@@ -160,6 +161,8 @@
   #jbPanel button{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;border-radius:8px;font:700 12px ui-monospace,Menlo,monospace}
   #jbPanel .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px} #jbPanel .x{background:#3a1840;border:1px solid #ff4fd8;padding:6px 10px}
   #jbPanel .sub{color:#d6a9cc;font-size:11px} #jbPanel .o{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#2a1232;border:1px solid #4a2156;border-radius:10px;padding:9px 10px;margin-top:7px}
+  #jbPanel .apps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 6px} #jbPanel .app{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;background:#2a1232;border:1px solid #4a2156;border-radius:14px}
+  #jbPanel .app .ic{font-size:24px} #jbPanel .app .nm{font-size:10px;letter-spacing:.06em;color:#ffd6f4} #jbPanel .app .in{font-size:10px;font-weight:500;color:#7cdeb5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
   #jbPanel .o .b{min-width:0} #jbPanel .pay{color:#7cdeb5;font-weight:700} #jbPanel .go{padding:8px 12px;background:linear-gradient(#ffc2f1,#e04fc0);color:#2a0022} #jbPanel .go[disabled]{opacity:.4;pointer-events:none}`;
   document.head.appendChild(css);
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
@@ -167,9 +170,10 @@
   const hud = el('div', { id: 'jbHud', hidden: true });
   const panel = el('div', { id: 'jbPanel', hidden: true, role: 'dialog', ariaLabel: 'Hustle phone' });
   document.body.append(btn, hud, panel);
-  btn.onclick = () => { if (panel.hidden) { try { root.releaseControls?.(); } catch { /* n/a */ } panel.hidden = false; renderPanel(); } else panel.hidden = true; };
+  btn.onclick = () => { if (panel.hidden) { try { root.releaseControls?.(); } catch { /* n/a */ } panel.hidden = false; lastPanel = ''; renderPanel(); } else panel.hidden = true; };
   function render() {
-    btn.textContent = active ? `📱 ${J.TYPES[active.offer.type].icon} ON JOB` : '📱 HUSTLE';
+    const unread = root.NightshiftLife?.state?.unread || 0;
+    btn.textContent = (active ? `📱 ${J.TYPES[active.offer.type].icon} ON JOB` : '📱 HUSTLE') + (unread ? ` · 📩${unread}` : '');
     const pill = document.querySelector('#wpPill');
     if (pill) { const r = pill.getBoundingClientRect(); if (r.height) { btn.style.top = Math.round(r.bottom + 6) + 'px'; btn.style.right = Math.max(12, Math.round(innerWidth - r.right)) + 'px'; } }
     if (!active) { hud.hidden = true; return; }
@@ -193,7 +197,24 @@
     const top = el('div', { className: 'top' }), x = el('button', { className: 'x', type: 'button' }, 'CLOSE'); x.onclick = () => { panel.hidden = true; };
     top.append(el('h2', {}, '📱 HUSTLE'), x);
     const next = Math.ceil((J.SLOT_MS - (Date.now() % J.SLOT_MS)) / 60000);
-    panel.append(top, el('div', { className: 'sub' }, `New offers in ~${next} min · ${state.done} jobs done · ${money(state.earned)} earned · Respect bonus +${rank() * 5}%`));
+    // Header first, then app tiles (a phone home screen), then the job list and city guide.
+    panel.append(top);
+    const apps = el('div', { className: 'apps' }), tile = (icon, name, info, fn) => { const b = el('button', { className: 'app', type: 'button' }); b.append(el('span', { className: 'ic' }, icon), el('span', { className: 'nm' }, name), el('span', { className: 'in' }, info)); b.onclick = fn; apps.append(b); };
+    const emp = root.NightshiftEmpire, pend = emp?.pending?.() || 0;
+    if (emp) tile('📈', 'EMPIRE', pend ? `${money(pend)} ready` : 'Fronts', () => { panel.hidden = true; emp.open(); });
+    const lf = root.NightshiftLife;
+    if (lf) tile('📩', 'MESSAGES', lf.state.unread ? `${lf.state.unread} new` : 'Inbox', () => { panel.hidden = true; lf.open(); });
+    const mk = root.NightshiftMarket;
+    if (mk) { const v = mk.value(); tile('💹', 'MARKET', v ? money(v) : 'Stocks', () => { panel.hidden = true; mk.open(); }); }
+    const sh = root.NightshiftStashes;
+    if (sh && sh.count() < sh.total) tile('📦', 'STASHES', sh.state.rumor ? 'GPS rumor' : `Rumor ${money(root.NightshiftStashesData.RUMOR_PRICE)}`, () => { if (sh.buyRumor()) panel.hidden = true; });
+    const su = root.NightshiftSupply, sd = root.NightshiftSupplyData;
+    { const lg = root.NightshiftLedger; if (lg) { const s = lg.session(), net = Object.values(s.earned).reduce((a, b) => a + b, 0) - Object.values(s.spent).reduce((a, b) => a + b, 0); tile('📊', 'LEDGER', `${net >= 0 ? '+' : '-'}${money(Math.abs(net))} today`, () => { panel.hidden = true; lg.open(); }); } }
+    { const cx = root.NightshiftCars; if (cx) tile('🚗', 'MY CARS', cx.rare() && !cx.rare().stolen ? '⭐ rare spotted' : `${root.NightshiftCarsData.models(cx.state).size}/${root.NightshiftCarsData.CARS.length} collected`, () => { panel.hidden = true; cx.open(); }); }
+    { const hm = root.NightshiftHitman; if (hm) { const a = hm.state.active; tile('🎯', 'CONTRACTS', !hm.unlocked() ? 'Locked' : a ? `${a.name.split(' ')[0]} · active` : root.NightshiftHitmanData.rankOf(hm.state.done).name, () => { panel.hidden = true; hm.open(); }); } }
+    if (su && sd) tile('🎒', 'BACKPACK', `${sd.weightOf(su.state.bag)}/${sd.cap(su.state)} · map`, () => { panel.hidden = true; su.openBag(); });
+    panel.append(apps, el('h2', { style: 'margin-top:12px;font-size:14px' }, '💼 JOBS'));
+    panel.append(el('div', { className: 'sub' }, `New offers in ~${next} min · ${state.done} jobs done · ${money(state.earned)} earned · Respect bonus +${rank() * 5}%`));
     if (active) {
       const o = el('div', { className: 'o' }), ab = el('button', { className: 'go', type: 'button' }, 'ABANDON');
       ab.onclick = () => { fail('abandoned'); lastPanel = ''; renderPanel(); };
@@ -221,12 +242,16 @@
   function places() {
     const p = P() || { x: 0, y: 0 }, out = [], near = (list) => (list || []).filter(Boolean).sort((a, b) => dist(a, p) - dist(b, p))[0];
     const add = (key, label, pos) => { if (pos && Number.isFinite(pos.x) && Number.isFinite(pos.y)) out.push({ key, label, x: pos.x, y: pos.y }); };
+    const ev = root.NightshiftEvents?.active?.(), evT = ev && root.NightshiftEventsData?.TYPES[ev.type];
+    if (ev && evT) add('event', `🌆 LIVE: ${evT.icon} ${evT.name}`, ev.stage === 'carry' ? ev.to : ev.stage === 'run' ? ev.gates[ev.progress] : ev);
     add('casino', '🎰 Lucky 7 Casino', root.NightshiftCasino?.door?.());
     add('guns', '⌖ Gun shop', root.NightshiftWeapons?.door?.());
     add('tune', '🔧 Tuning garage', near(root.NightshiftTuning?.sites?.()));
     for (const s of root.NightshiftFishingData?.SPOTS || []) add('fish-' + s.id, '🎣 ' + s.name, s);
     for (const l of root.NightshiftLab?.sites?.() || []) add(l.id, l.label, l);
     for (const r of root.NightshiftRaces?.starts?.() || []) add('race-' + r.id, '🏁 ' + (root.NightshiftRacesData?.BY_ID?.[r.id]?.name || 'Race'), r);
+    for (const v of root.NightshiftHeists?.vaults?.() || []) add('bank-' + v.id, '🏦 ' + v.name + ' (heist)', v);
+    for (const v of root.NightshiftVenues?.places?.() || []) add('venue-' + v.id, (v.kind === 'gym' ? '🏋️ ' : '🪩 ') + v.name, v);
     add('home', '🏠 Your apartment', { x: 880, y: 680 });
     for (const m of root.NightshiftBusinessRules?.MARKETS || []) add('m-' + m.id, '💰 ' + m.name, m);
     for (const pr of root.NightshiftBusinessRules?.PROPERTIES || []) add('p-' + pr.id, '🏚️ ' + pr.name, pr);
@@ -235,5 +260,5 @@
   setInterval(render, 250);
   addEventListener('keydown', (e) => { if (!panel.hidden && e.key === 'Escape') panel.hidden = true; });
 
-  root.NightshiftJobs = Object.freeze({ get state() { return state; }, active: () => (active ? { type: active.offer.type, phase: active.phase, offer: active.offer } : null), open: () => btn.click(), close: () => { panel.hidden = true; }, paused: () => !panel.hidden, accept });
+  root.NightshiftJobs = Object.freeze({ target: () => { const o = objective(); return o && Number.isFinite(o.x) ? { x: o.x, y: o.y, hit: active?.offer.type === 'hit' } : null; }, get state() { return state; }, active: () => (active ? { type: active.offer.type, phase: active.phase, offer: active.offer } : null), open: () => btn.click(), close: () => { panel.hidden = true; }, paused: () => !panel.hidden, accept });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
