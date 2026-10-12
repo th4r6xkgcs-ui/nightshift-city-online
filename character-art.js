@@ -370,8 +370,9 @@
     const person = S.person, personTo = S.personTo;
     const ours = (ctx, p, isPlayer, options = {}) => {
       if (!api.enabled || !p) return false;
-      const o = outfitFor(p, isPlayer, options.role), hold = options.hold || '', d0 = hold && Number.isFinite(p.angle) ? dirOfAngle(p.angle) : dirOf(p, isPlayer), d = hold ? d0 : smoothDir(p, d0), { anim, f } = animOf(p, isPlayer);
-      draw(ctx, o, p.x, p.y, d, anim, f, 2, hold);
+      const o = outfitFor(p, isPlayer, options.role), hold = options.hold || '', d0 = hold && Number.isFinite(p.angle) ? dirOfAngle(p.angle) : dirOf(p, isPlayer), { anim, f } = animOf(p, isPlayer);
+      const seat = anim === 'sit' && p.seat ? p.seat : null, d = seat ? 2 : hold ? d0 : smoothDir(p, d0); // seated people face the street
+      draw(ctx, o, seat ? seat.x : p.x, seat ? seat.y : p.y, d, anim, f, 2, hold);
       if (!isPlayer && !options.hideHealth && Number.isFinite(p.hp) && p.hp < (p.maxHp || 40) && p.hp > 0) { ctx.fillStyle = '#182832'; ctx.fillRect(p.x - 13, p.y - 33, 26, 4); ctx.fillStyle = '#dd9884'; ctx.fillRect(p.x - 13, p.y - 33, 26 * Math.max(0, p.hp / (p.maxHp || 40)), 3); }
       return true;
     };

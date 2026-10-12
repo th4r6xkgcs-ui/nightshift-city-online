@@ -1,13 +1,13 @@
 /* Premium pet sprites (Claude-owned). Same pixel pipeline as weapon-art.js (shaded parts, auto-bevel, ink outline).
  * Side view facing right, mirrored for left. Poses: walk (4 frames), idle (tail wag, 2 frames), sit (2 frames).
  * Every species gets real anatomy: near/far legs, paws, collars with tags, ear shapes, markings, tails per breed.
- * Grid 48x34, feet on y=30, anchor (24, 30); drawn at 0.62 world px per grid px (~30 px long, like the old pets).
+ * Grid 48x36 (design grid 48x34 + 2 rows of headroom), feet on y=32, anchor (24, 32); drawn at 0.74 world px per grid px (~30 px long, like the old pets).
  * API: NightshiftPetArt.{build, sprite, draw, SPECIES} */
 (function (root) {
   'use strict';
   const WA = () => root.NightshiftWeaponArt || (typeof require === 'function' ? (() => { try { return require('./weapon-art.js'); } catch { return null; } })() : null);
   const PD = () => root.NightshiftPetsData || (typeof require === 'function' ? (() => { try { return require('./pets-data.js'); } catch { return null; } })() : null);
-  const PW = 48, PH = 34, AX = 24, AY = 30, K = 0.62;
+  const PW = 48, PH = 36, AX = 24, AY = 32, K = 0.74, TOP = 2; // drawn on a 48x34 design grid, shifted down TOP rows for ear room
 
   function tools(b) {
     const X = WA().pix, R = (hex, hi) => X.ramp(hex, hi), dk = (hex, t = 0.28) => X.mix(hex, '#000000', t);
@@ -106,7 +106,7 @@
   function raccoon(b, d, pose) {
     const { R, dk, E, S } = tools(b), M = R(d.colors[0]), M2 = R(d.colors[1]), far = R(dk(d.colors[0], 0.3)), f = pose.frame, sw = (k) => Math.round(Math.sin(f * Math.PI / 2 + k) * 2);
     // ringed tail
-    const tail = pose.sit ? [[13, 27], [8, 28], [4, 26 + (pose.wag ? -1 : 0)]] : [[12, 18], [7, 19], [3, 17 + (pose.wag ? -2 : 0)]];
+    const tail = pose.sit ? [[13, 27], [9, 28], [5, 26 + (pose.wag ? -1 : 0)]] : [[12, 18], [8, 19], [5, 17 + (pose.wag ? -2 : 0)]];
     S(M, tail, [4, 3.4]); for (let i = 0; i < 3; i++) { const p0 = tail[0], p1 = tail[tail.length - 1], t = 0.25 + i * 0.27, x = Math.round(p0[0] + (p1[0] - p0[0]) * t), y = Math.round(p0[1] + (p1[1] - p0[1]) * t); b.L(M2[1], x, y - 1, 1, 3); }
     if (pose.sit) { E(M, 18, 24, 7, 6); b.P(M, [[13, 22], [25, 13], [30, 14], [30, 22], [22, 28], [13, 28]]); leg(b, null, M2, 27, 20, 30, 3, M2); }
     else { leg(b, null, M2, 15 + sw(Math.PI), 22, 30, 3, M2); leg(b, null, M2, 28 - sw(Math.PI), 22, 30, 3, M2); b.P(M, [[12, 16], [29, 15], [33, 18], [32, 23], [15, 25], [11, 21]]); b.P(far, [[15, 23], [30, 22], [30, 24], [15, 25]], { matte: true }); leg(b, null, M2, 17 + sw(0), 22, 30, 3, M2); leg(b, null, M2, 30 - sw(0), 21, 30, 3, M2); }
@@ -118,7 +118,7 @@
   }
   function bird(b, d, pose) { // macaw
     const { R, E, S } = tools(b), M = R(d.colors[0]), M2 = R(d.colors[1]), hop = !pose.sit && pose.frame % 2 ? -1 : 0, y0 = hop;
-    S(M2, [[19, 24 + y0], [14, 30 + y0], [11, 33 + y0]], [4, 2.4]); b.L(R('#f2c84a')[2], 15, 28 + y0, 1, 2); // long tail
+    S(M2, [[19, 24 + y0], [15, 29 + y0], [12, 31 + y0]], [4, 2.4]); b.L(R('#f2c84a')[2], 15, 28 + y0, 1, 2); // long tail
     b.L('#59616b', 20, 27 + y0, 1, 3); b.L('#59616b', 24, 27 + y0, 1, 3); b.L('#3d4a55', 19, 30, 3, 1); b.L('#3d4a55', 23, 30, 3, 1); // feet
     E(M, 22, 19 + y0, 6, 8.5);
     b.P(M2, [[16, 15 + y0], [23, 15 + y0], [22, 26 + y0], [17, 24 + y0]]); b.L(R('#f2c84a')[2], 17, 15 + y0, 6, 1); // wing with a yellow band
@@ -162,6 +162,7 @@
     };
     const pose = { frame: Number(key[1]) || 0, sit: key[0] === 's', wag: key[0] !== 'w' && key[1] === '1' };
     const fn = SPECIES[D.kind] || dog; fn(b, D, pose, id);
+    b.px = [...new Array(TOP * PW).fill(null), ...b.px.slice(0, (PH - TOP) * PW)];
     X.outline(b, '#0e1116');
     return { px: b.px, w: PW, h: PH };
   }
