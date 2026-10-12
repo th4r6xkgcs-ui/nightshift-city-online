@@ -15,7 +15,7 @@
   const row = el('div', { className: 'pkRow' }), tapBtn = el('button', { type: 'button', className: 'pkTap' }, 'TAP'), altBtn = el('button', { type: 'button', className: 'pkAlt' }, '');
   row.append(altBtn, tapBtn); wrap.append(head, cv, row); document.body.append(wrap);
   document.head.append(el('style', {}, `
-  #pkWrap{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:60;width:min(380px,94vw);padding:10px 12px 12px;border-radius:18px;background:linear-gradient(180deg,#141a24f6,#0b0f16f8);border:1px solid #ffffff26;box-shadow:0 18px 50px #000c;color:#eef3f9;font:12px var(--body,system-ui);touch-action:none;user-select:none}
+  #pkWrap{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:60;width:min(340px,92vw);padding:9px 11px 11px;border-radius:18px;background:linear-gradient(180deg,#141a24f6,#0b0f16f8);border:1px solid #ffffff26;box-shadow:0 18px 50px #000c;color:#eef3f9;font:12px var(--body,system-ui);touch-action:none;user-select:none}
   #pkWrap[hidden]{display:none} #pkWrap .pkHead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px} #pkWrap .pkHead b{font:800 13px var(--disp,system-ui);letter-spacing:.1em;color:#ffd970} #pkWrap .pkHead span{color:#9fb3c8;font-size:11px}
   #pkWrap canvas{display:block;width:100%;height:auto;border-radius:12px;background:#0a0d12}
   #pkWrap .pkRow{display:flex;gap:8px;margin-top:8px} #pkWrap button{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;border-radius:12px;font:800 13px var(--disp,system-ui);letter-spacing:.08em;padding:12px}
