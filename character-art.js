@@ -26,7 +26,7 @@
     else { bob = [0, -0.3, -0.5, -0.3][k]; }
     const SW = (12.5 - 4 * side * (1 - Math.abs(sy))) * bw, cx = sx * lean * 0.6;
     const g = { sx, sy, side, front: sy > 0.25, back: sy < -0.25, profile: side > 0.85, bw, stride, bob, arm, lean, k, anim, SW, cx,
-      shY: -11 + bob, waY: 1 + bob, hipY: 3 + bob, footY: 13, headX: cx + sx * (1 + lean * 0.5), headY: -18 + bob, blink: anim === 'idle' && k === 3 };
+      shY: -12.5 + bob, waY: -0.5 + bob, hipY: 1.5 + bob, footY: 14, headX: cx + sx * (1 + lean * 0.5), headY: -19.5 + bob, blink: anim === 'idle' && k === 3 };
     const spread = 2.7 * bw * (1 - 0.65 * side);
     g.legs = [-1, 1].map((s) => { const st = s * stride; return { s, hx: cx * 0.5 + s * spread, hy: g.hipY, fx: s * spread + sx * st * 0.9, fy: g.footY + sy * st * 0.35 - (anim !== 'idle' && st > 0 ? Math.min(1.5, st * 0.3) : 0), near: s * sx * -1 + sy * 0.01 }; });
     g.arms = [-1, 1].map((s) => { const sw = s * arm, spreadA = 1 - side * 0.8 * (1 - Math.abs(sy) * 0.6); return { s, x: cx + s * (g.SW / 2 - 0.6) * spreadA, y: g.shY + 1.2, hx: cx + s * (g.SW / 2 + 0.2) * spreadA + sx * sw * 0.7 - (anim === 'run' ? s * 0.6 : 0), hy: g.shY + (anim === 'run' ? 8.5 : 11.5) + sy * sw * 0.25 }; });
@@ -50,7 +50,7 @@
   function torsoPts(g, top, bot, widen = 0) { const w1 = g.SW / 2 + widen, w2 = g.SW / 2 - 1.2 * g.bw + widen; return [[g.cx - w1, top], [g.cx + w1, top], [g.cx + w2, bot], [g.cx - w2, bot]]; }
   function drawLeg(g, L, col, w = 4.2) { limb(col, g.cx * 0.5 + L.hx, L.hy, L.fx, L.fy - 1.5, w * g.bw, w * 0.85 * g.bw); }
   function drawArm(g, A, col, wTop = 3.4, upto = 1) { const e = at([A.x, A.y], [A.hx, A.hy], upto); limb(col, A.x, A.y, e[0], e[1], wTop, wTop * 0.88); }
-  function hand(g, A, col) { O(col, A.hx, A.hy + 0.6, 1.7, 1.6); O(shade(col, 0.15), A.hx - 0.4, A.hy + 0.1, 0.6, 0.5); }
+  function hand(g, A, col) { O(col, A.hx, A.hy + 0.5, 1.3, 1.25); O(shade(col, 0.18), A.hx - 0.4, A.hy + 0.1, 0.5, 0.4); }
   function head(g, o, skin) {
     const x = g.headX, y = g.headY, hw = 4.8 - g.side * 0.5;
     R(shade(skin, -0.12), x - 1.5, y + 3.5, 3, 3.5); // neck
@@ -67,19 +67,27 @@
     }
   }
   // ---------------- hair & facial hair ----------------
+  // Hair is split: the mass behind the head (drawn before it) and the front/top (after it).
+  function hairBack(g, o) {
+    const x = g.headX, y = g.headY, col = W.HAIR_COLORS[o.hairColor], hi = shade(col, 0.22), dk = shade(col, -0.25), st = o.hair;
+    if (st === 'afro' || st === 'curly') { const r = st === 'afro' ? 6.9 : 5.9; O(dk, x, y - 1.4, r + 0.3, r * 0.9 + 0.3); O(col, x, y - 1.8, r, r * 0.88); for (let i = 0; i < (st === 'afro' ? 12 : 8); i++) { const a = i * 0.62; O(i % 2 ? hi : dk, x + Math.cos(a) * r * 0.72, y - 1.8 + Math.sin(a) * r * 0.6, 1.1, 1); } }
+    if (st === 'long') { for (const s of [-1, 1]) limb(dk, x + s * 4, y - 1, x + s * 4.4, y + 6.5, 3, 2.4); if (g.back) R(col, x - 4.6, y - 1, 9.2, 7.6); }
+    if (st === 'locs' || st === 'braids') { const n = st === 'braids' ? 8 : 6; for (let i = 0; i < n; i++) { const t = i / (n - 1), lx = x - 4.8 + t * 9.6; limb(i % 2 ? col : dk, lx, y - 2, lx + (t - 0.5) * 1.6, y + 7.5 + (i % 2), 1.5, 1.1); if (st === 'braids') R(hi, lx - 0.3, y + 2 + (i % 3), 0.6, 0.6); } }
+    if (st === 'ponytail' && !g.front) { const tx = x - g.sx * 4.2, ty = y - 1; limb(col, tx, ty, tx - g.sx * 2.2, ty + 7.5 + (g.anim !== 'idle' ? Math.sin(g.k) * 0.8 : 0), 2.6, 1.3); }
+  }
   function hair(g, o) {
     const x = g.headX, y = g.headY, col = W.HAIR_COLORS[o.hairColor], hi = shade(col, 0.25), dk = shade(col, -0.25), st = o.hair;
-    if (st === 'bald') { O('#ffffff22', x - 1, y - 3, 2, 1); return; }
-    const cap = (h, extraW = 0) => { c.save(); c.beginPath(); c.ellipse(x, y - 0.6, 5.2 + extraW, 5.6, 0, 0, Math.PI * 2); c.clip(); R(col, x - 7, y - 7, 14, h); R(hi, x - 3 - g.sx, y - 5.6, 3, 1); c.restore(); };
-    if (st === 'buzz') { c.save(); c.globalAlpha = 0.75; cap(g.back ? 9 : 4.4); c.restore(); return; }
-    if (st === 'fade') { cap(g.back ? 6 : 4); if (!g.back) { R(shade(col, 0.35), x - 4.8, y - 1.5, 1, 2); R(shade(col, 0.35), x + 3.8, y - 1.5, 1, 2); } return; }
-    if (st === 'short') { cap(g.back ? 8.5 : 4.6); if (!g.back) poly(col, [[x - 4.6 + g.sx * 2, y - 3], [x + 1 + g.sx * 2, y - 4.2], [x - 1.5 + g.sx * 2, y - 1.8]]); return; }
-    if (st === 'curly' || st === 'afro') { const r = st === 'afro' ? 6.6 : 5.6; O(col, x, y - (st === 'afro' ? 2.2 : 1.6), r, r * 0.85); for (let i = 0; i < (st === 'afro' ? 10 : 7); i++) { const a = i * 0.7; O(i % 2 ? hi : dk, x + Math.cos(a) * r * 0.6, y - 2 + Math.sin(a) * r * 0.45, 1, 0.9); } if (!g.back) { c.save(); c.globalCompositeOperation = 'destination-out'; O('#000', x + g.sx * 2.4, y + 2.4, 3.8 * Math.max(0.6, g.sy), 3.2); c.restore(); } return; }
-    if (st === 'locs' || st === 'braids') { cap(g.back ? 8 : 4.6); const n = st === 'braids' ? 7 : 5; for (let i = 0; i < n; i++) { const t = i / (n - 1), lx = x - 4.6 + t * 9.2; if (!g.back && Math.abs(lx - x - g.sx * 2.4) < 3.2) continue; limb(i % 2 ? col : dk, lx, y - 2, lx + (t - 0.5) * 1.5, y + 7 + (i % 2), 1.4, 1.1); if (st === 'braids') R(hi, lx - 0.3, y + 1, 0.6, 0.6); } return; }
-    if (st === 'bun') { cap(g.back ? 7 : 4.4); O(col, x - g.sx * 1.2, y - 6.6, 2.4, 2); O(hi, x - g.sx * 1.2 - 0.6, y - 7.2, 0.8, 0.6); return; }
-    if (st === 'ponytail') { cap(g.back ? 7.5 : 4.6); const tx = x - g.sx * 4.2, ty = y - 1; limb(col, tx, ty, tx - g.sx * 2, ty + 7 + (g.anim !== 'idle' ? Math.sin(g.k) : 0), 2.4, 1.2); return; }
-    if (st === 'long') { cap(g.back ? 9 : 4.6); for (const s of [-1, 1]) limb(col, x + s * 4.2, y - 1.5, x + s * 4.6, y + 6, 2.6, 2); if (g.back) R(col, x - 4.4, y - 1, 8.8, 7); return; }
-    if (st === 'mohawk') { R(shade(col, 0.4), x - 4.6, y - 2.5, 9.2, 0.6); for (let i = 0; i < 5; i++) R(i % 2 ? col : hi, x - 1.1 - g.sx * 0.5, y - 7.6 + i * 1.6, 2.2, 1.8); return; }
+    if (st === 'bald') { O('#ffffff26', x - 1.2, y - 3.2, 2, 1); return; }
+    const cap = (h) => { c.save(); c.beginPath(); c.ellipse(x, y - 0.6, 5.25, 5.7, 0, 0, Math.PI * 2); c.clip(); R(col, x - 7, y - 7, 14, h); R(hi, x - 3 - g.sx, y - 5.8, 3, 0.9); R(dk, x - 7, y - 7 + h - 0.6, 14, 0.6); c.restore(); };
+    if (st === 'buzz') { c.save(); c.globalAlpha = 0.7; cap(g.back ? 9 : 4.2); c.restore(); return; }
+    if (st === 'fade') { cap(g.back ? 6 : 4.2); if (!g.back) { R(shade(col, 0.45), x - 5, y - 1.8, 1, 2.2); R(shade(col, 0.45), x + 4, y - 1.8, 1, 2.2); } return; }
+    if (st === 'short') { cap(g.back ? 8.5 : 4.6); if (!g.back) poly(col, [[x - 4.4 + g.sx * 2, y - 3.2], [x + 1.2 + g.sx * 2, y - 4.4], [x - 1.4 + g.sx * 2, y - 1.6]]); return; }
+    if (st === 'curly' || st === 'afro') { cap(g.back ? 9 : 3.6); if (!g.back) for (let i = 0; i < 5; i++) O(i % 2 ? hi : dk, x - 3.6 + i * 1.8 + g.sx, y - 4.4 + (i % 2) * 0.6, 1, 0.9); return; }
+    if (st === 'locs' || st === 'braids') { cap(g.back ? 8 : 4.4); for (let i = 0; i < 4; i++) R(dk, x - 3.4 + i * 2.2, y - 5.4, 0.5, 3); if (g.back) for (let i = 0; i < 6; i++) limb(i % 2 ? col : dk, x - 4 + i * 1.6, y - 1, x - 4.2 + i * 1.7, y + 7, 1.4, 1.1); return; }
+    if (st === 'bun') { cap(g.back ? 7 : 4.4); O(dk, x - g.sx * 1.2, y - 6.5, 2.6, 2.1); O(col, x - g.sx * 1.2, y - 6.8, 2.3, 1.8); O(hi, x - g.sx * 1.2 - 0.6, y - 7.4, 0.8, 0.6); return; }
+    if (st === 'ponytail') { cap(g.back ? 7.5 : 4.6); if (g.front) { const tx = x - g.sx * 4.2; limb(dk, tx, y - 1, tx - g.sx * 1.2, y + 5, 2, 1.2); } return; }
+    if (st === 'long') { cap(g.back ? 9 : 4.8); if (!g.back) { poly(col, [[x - 4.6 + g.sx * 2.4, y - 3.4], [x + 1.6 + g.sx * 2.4, y - 4.6], [x + 4.6, y - 2], [x - 2 + g.sx * 2.4, y - 2]]); for (const s of [-1, 1]) if (!(g.profile && s * g.sx > 0)) limb(col, x + s * 4.3, y - 1.5, x + s * 4.5, y + 5.5, 2.4, 1.8); } return; }
+    if (st === 'mohawk') { c.save(); c.globalAlpha = 0.5; cap(g.back ? 8 : 3.6); c.restore(); for (let i = 0; i < 5; i++) R(i % 2 ? col : hi, x - 1.1 - g.sx * 0.5, y - 7.8 + i * 1.6, 2.2, 1.9); return; }
   }
   function facial(g, o, skin) {
     if (g.back || o.facial === 'none') return; const x = g.headX + g.sx * 2.2, y = g.headY, col = shade(W.HAIR_COLORS[o.hairColor], 0.05), w = g.profile ? 3 : 4.6;
@@ -235,6 +243,8 @@
     if (g.back && o.bag) bagBack(g, o);
     for (const A of g.profile ? [arms[1]] : arms) armLayer(g, o, skin, A);
     // head stack
+    const hoodOn = o.outer?.id === 'hoodie' && o.outer.hood, maskOn = o.face?.id === 'skimask';
+    if (!hoodOn && !maskOn) hairBack(g, o);
     head(g, o, skin);
     const masked = skimask(g, o), hoodUp = o.outer?.id === 'hoodie' && o.outer.hood;
     if (hoodUp && g.back) { hood(g, o, false); }
@@ -242,7 +252,8 @@
     else { faceLayer(g, o); if (o.head && o.head.id !== 'durag') headwear(g, o); }
   }
   // 1px ink outline around everything (on the 2× canvas), then a soft top-left rim.
-  function outline(cv) {
+  function outline(cv, passes = 1) { for (let i = 0; i < passes; i++) outline1(cv); }
+  function outline1(cv) {
     const x = cv.getContext('2d'), w = cv.width, h = cv.height, img = x.getImageData(0, 0, w, h), d = img.data, out = new Uint8ClampedArray(d);
     const ink = [0x11, 0x15, 0x1c];
     for (let y = 1; y < h - 1; y++) for (let xx = 1; xx < w - 1; xx++) {
@@ -259,7 +270,7 @@
     cv = document.createElement('canvas'); cv.width = CELL.w * scale; cv.height = CELL.h * scale;
     const x = cv.getContext('2d'); x.scale(scale, scale); x.translate(CELL.ax, CELL.ay); x.lineCap = 'round';
     try { compose(x, o, dir, anim, k); } catch (e) { console.error(e); }
-    try { outline(cv); } catch { /* tainted/unsupported */ }
+    try { outline(cv, Math.max(1, Math.round(scale / 2.5))); } catch { /* tainted/unsupported */ }
     frames.set(key, cv); if (frames.size > MAX_FRAMES) frames.delete(frames.keys().next().value);
     return cv;
   }
