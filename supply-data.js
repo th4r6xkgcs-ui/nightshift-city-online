@@ -99,7 +99,7 @@
   function clean(raw, now = Date.now()) {
     const s = { version: 1, bag: cleanBag(raw?.bag), locker: cleanBag(raw?.locker), bagLevel: int(raw?.bagLevel, BAGS.length - 1),
       lockup: int(raw?.lockup, LOCKUP.levels.length), stock: {}, promoter: { sold: 0, at: 0 }, arms: { sold: 0, at: 0 },
-      stats: { gathered: 0, processed: 0, crafted: 0, gunsCrafted: 0, gunsSold: 0, earned: 0, pillsSold: 0 }, by: {}, newLife: raw?.newLife === true, started: Number.isFinite(raw?.started) ? raw.started : now };
+      stats: { gathered: 0, processed: 0, crafted: 0, gunsCrafted: 0, realCrafted: 0, gunsSold: 0, earned: 0, pillsSold: 0 }, by: {}, newLife: raw?.newLife === true, started: Number.isFinite(raw?.started) ? raw.started : now };
     for (const sp of GATHER) {
       const r = raw?.stock?.[sp.id];
       s.stock[sp.id] = { n: int(r?.n, sp.stock, sp.stock), at: Number.isFinite(r?.at) && r.at <= now ? r.at : now };
