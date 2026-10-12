@@ -306,3 +306,12 @@ Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,w
     - Lit windows now punch through the night lightmap (`NightshiftWorld.litWindows()`).
     - `NightshiftHome.enter(kind, spawn)` takes an optional in-room spawn point; the player wakes up at (252,172) beside the bed with a clear path to the door.
     - New `NightshiftHome.leave()`; regression scripts use it.
+- **Art pass 3**
+  - **Character creator** (art-pass, `home.js`):
+    - New profile keys `hairdo` (8) and `outfit` (5); more skins (7), shirts (8) and hair colours (6).
+    - Text swatches for the hat, bag, hairdo and outfit keys.
+    - The preview draws the real sprite (front, side and back) via `NightshiftSprites.personTo`.
+    - Creator z-index raised to 60 so it sits above the HUD chips.
+    - Old saves validate to `short`/`jacket`, which is the previous look.
+  - `ui-skin.js` (Claude, loads after `fx.js`): CSS-only "night glass" HUD, district label, toasts and action buttons. In landscape, toasts are smaller and sit at the top.
+  - The goal card hint shows for 15 s when a goal changes, then collapses.
