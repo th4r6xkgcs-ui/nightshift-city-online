@@ -160,6 +160,8 @@
   #jbPanel button{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;border-radius:8px;font:700 12px ui-monospace,Menlo,monospace}
   #jbPanel .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px} #jbPanel .x{background:#3a1840;border:1px solid #ff4fd8;padding:6px 10px}
   #jbPanel .sub{color:#d6a9cc;font-size:11px} #jbPanel .o{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#2a1232;border:1px solid #4a2156;border-radius:10px;padding:9px 10px;margin-top:7px}
+  #jbPanel .apps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 6px} #jbPanel .app{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;background:#2a1232;border:1px solid #4a2156;border-radius:14px}
+  #jbPanel .app .ic{font-size:24px} #jbPanel .app .nm{font-size:10px;letter-spacing:.06em;color:#ffd6f4} #jbPanel .app .in{font-size:10px;font-weight:500;color:#7cdeb5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
   #jbPanel .o .b{min-width:0} #jbPanel .pay{color:#7cdeb5;font-weight:700} #jbPanel .go{padding:8px 12px;background:linear-gradient(#ffc2f1,#e04fc0);color:#2a0022} #jbPanel .go[disabled]{opacity:.4;pointer-events:none}`;
   document.head.appendChild(css);
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
@@ -194,15 +196,19 @@
     const top = el('div', { className: 'top' }), x = el('button', { className: 'x', type: 'button' }, 'CLOSE'); x.onclick = () => { panel.hidden = true; };
     top.append(el('h2', {}, '📱 HUSTLE'), x);
     const next = Math.ceil((J.SLOT_MS - (Date.now() % J.SLOT_MS)) / 60000);
+    // Header first, then app tiles (a phone home screen), then the job list and city guide.
+    panel.append(top);
+    const apps = el('div', { className: 'apps' }), tile = (icon, name, info, fn) => { const b = el('button', { className: 'app', type: 'button' }); b.append(el('span', { className: 'ic' }, icon), el('span', { className: 'nm' }, name), el('span', { className: 'in' }, info)); b.onclick = fn; apps.append(b); };
     const emp = root.NightshiftEmpire, pend = emp?.pending?.() || 0;
-    if (emp) { const eb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `📈 EMPIRE${pend ? ` · ${money(pend)} to collect` : ' · front businesses & passive income'}`); eb.onclick = () => { panel.hidden = true; emp.open(); }; panel.append(eb); }
+    if (emp) tile('📈', 'EMPIRE', pend ? `${money(pend)} ready` : 'Fronts', () => { panel.hidden = true; emp.open(); });
     const lf = root.NightshiftLife;
-    if (lf) { const n = lf.state.unread; const lb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `📩 MESSAGES${n ? ` · ${n} new` : ''}`); lb.onclick = () => { panel.hidden = true; lf.open(); }; panel.append(lb); }
+    if (lf) tile('📩', 'MESSAGES', lf.state.unread ? `${lf.state.unread} new` : 'Inbox', () => { panel.hidden = true; lf.open(); });
     const mk = root.NightshiftMarket;
-    if (mk) { const v = mk.value(); const mb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `💹 MARKET${v ? ` · portfolio ${money(v)}` : ' · trade NightCoin & city stocks'}`); mb.onclick = () => { panel.hidden = true; mk.open(); }; panel.append(mb); }
+    if (mk) { const v = mk.value(); tile('💹', 'MARKET', v ? money(v) : 'Stocks', () => { panel.hidden = true; mk.open(); }); }
     const sh = root.NightshiftStashes;
-    if (sh && sh.count() < sh.total) { const rb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, sh.state.rumor ? `📦 STASH RUMOR · GPS to the circle · ${sh.count()}/${sh.total} found` : `📦 BUY A STASH RUMOR · ${money(root.NightshiftStashesData.RUMOR_PRICE)} · ${sh.count()}/${sh.total} found`); rb.onclick = () => { if (sh.buyRumor()) panel.hidden = true; }; panel.append(rb); }
-    panel.append(top, el('div', { className: 'sub' }, `New offers in ~${next} min · ${state.done} jobs done · ${money(state.earned)} earned · Respect bonus +${rank() * 5}%`));
+    if (sh && sh.count() < sh.total) tile('📦', 'STASHES', sh.state.rumor ? 'GPS rumor' : `Rumor ${money(root.NightshiftStashesData.RUMOR_PRICE)}`, () => { if (sh.buyRumor()) panel.hidden = true; });
+    panel.append(apps, el('h2', { style: 'margin-top:12px;font-size:14px' }, '💼 JOBS'));
+    panel.append(el('div', { className: 'sub' }, `New offers in ~${next} min · ${state.done} jobs done · ${money(state.earned)} earned · Respect bonus +${rank() * 5}%`));
     if (active) {
       const o = el('div', { className: 'o' }), ab = el('button', { className: 'go', type: 'button' }, 'ABANDON');
       ab.onclick = () => { fail('abandoned'); lastPanel = ''; renderPanel(); };
