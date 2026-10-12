@@ -126,7 +126,7 @@
     ['#glCard', 'YOUR NEXT GOAL', 'Not sure what to do? Do this. A yellow arrow points to it. Tap the card for all goals.'],
     ['#nsDock', 'YOUR APPS', '⭐ skills · rank · 📅 daily challenges · 📱 phone (jobs, messages, market) · ❓ help.'],
     ['#mmWrap', 'MINIMAP', 'Markers show jobs, events, goals and cops. Tap it for the big map and GPS.'],
-    ['#more', 'MORE', 'Everything else: bag, car, map, businesses, crafting, saves.'],
+    ['#more', 'MORE', 'Everything else: bag, car, map, businesses, crafting, saves. Turn on 🔊 SOUND here for music, radio and city sounds.'],
   ];
   const spot = el('div', { id: 'gdSpot', hidden: true }), tip = el('div', { id: 'gdTip', hidden: true });
   document.body.append(spot, tip);
