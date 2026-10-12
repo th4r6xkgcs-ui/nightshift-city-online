@@ -221,3 +221,15 @@ Also:
 Tests: 12 RPG suites, 42 PASS lines (`tests/{skills,goals,skill-effects,casino,weapons,tuning,races,home-upgrades,dailies,respect,fishing,jobs-lab}.cjs`). Every browser flow (skills, guns, casino, home, tuning, fishing autoplay, taxi/hit/lab/drop) passes on v0.51 with no page errors.
 - **Weapon mods** (weapons-data.js `MODS`, `effective()`, `buyMod()`): Extended mag (+50%, capped at 30), Laser grip (spread ×0.5), Scope (range ×1.35, spread ×0.6) and Suppressor (heat per shot ×0.3 via a microtask after the game's +0.08; 80% of `Crime.report(...,'gunshot')` calls are skipped; `Citizens.alert` radius 260 → 70). Bought per gun in the gun shop; the 🔇 shows on the weapon pill. Verified: 6 pistol shots give heat 0.48 unsuppressed vs 0.144 suppressed. Hooks added: `NightshiftCrime.report` and `NightshiftCitizens.alert`.
 - **City guide** on the HUSTLE phone: every activity spot (casino, gun shop, tuning, fishing, labs, races, home, dealers, properties) with a GPS button (`NightshiftMap.navigate`).
+
+## Batches after the owner's "go full-on" directive
+- **Bank heists** (`heists*.js`): HEIST USE points at both BANKs (door x−60), drawn as a VAULT sign. Needs a carried pistol. Hold within 95 px for 25 s (Stealth shortens it) while `Crime.report(...,'robbery')` repeats every 6 s and heat stays ≥ 2.5. Then escape: heat reaching 0 or getting within 110 px of the apartment pays $6–9k × Respect × Luck. 20 min cooldown per bank (10 min after a failure). Save: `nightshift-heists-v1`.
+- **Venues** (`venues*.js`):
+  - Iron Works Gym (CLOTHING at 1400,1435; door x−70): $50 per set, a 10-rep timing minigame → Speed/Toughness XP and +25 HP for 7+ clean reps; 60 s cooldown.
+  - Clubs Velvet (520,1435) and Neon Room (960,415): sell lab product at 1.3× (Charisma raises it), 4 per visit, 12% bust chance (Stealth lowers it; a bust adds +2 heat and loses the product). Buying a round gives Charisma XP.
+  - Save: `nightshift-venues-v1`.
+- **Body armor** (weapons): Kevlar 50 ($500) or Heavy 100 ($1,300); soaks 70% of each hit; refunded if the game ignored the hit; lost on death. Shown as 🛡️ on the weapon pill. Fixed a double-wrap: weapons.js now marks its hook installs on the module objects.
+- **Empire** (`empire*.js`): 5 front businesses ($15k–$250k) earning $450–$7,000/h in real time (offline too), capped at 8–10 h; managers add +50% each, up to 3. Opened from 📱 HUSTLE → 📈 EMPIRE. Save: `nightshift-empire-v1`.
+- **Blackjack** in the casino: infinite deck, dealer stands on 17, 3:2 blackjack, double down. Returns 96% with simple strategy (test). The whole hand settles at the end; closing mid-hand stands.
+- **Lifetime stats** in the Respect panel. Chips now sit below Codex's `#crimeStatus` while it's visible.
+- New goals: gym, club, 2 heist, 2 empire. Respect now also counts fronts and heists.
