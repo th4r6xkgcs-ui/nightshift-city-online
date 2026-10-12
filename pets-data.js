@@ -11,6 +11,11 @@
     { id: 'tabby', name: 'Tabby cat', kind: 'cat', icon: '🐈', price: 1200, colors: ['#d8843a', '#a0582a'], perk: { 'farming.growTime': 0.9 }, desc: 'Pest control: crops grow 10% faster' },
     { id: 'blackcat', name: 'Black cat', kind: 'cat', icon: '🐈‍⬛', price: 1600, colors: ['#1e1a22', '#3a3440'], perk: { 'luck.casino': 1.05, 'luck.rare': 1.1 }, desc: 'Bad luck for others: +5% slots, +10% finds' },
     { id: 'parrot', name: 'Macaw', kind: 'bird', icon: '🦜', price: 2600, colors: ['#e0473a', '#3d7fd0'], perk: { 'dealing.price': 1.05, 'charisma.shopPrice': 0.95 }, desc: 'Smooth talker: +5% sale prices, -5% shop prices' },
+    // exotic
+    { id: 'raccoon', name: 'Raccoon', kind: 'raccoon', icon: '🦝', price: 3400, colors: ['#7d8288', '#2b2f33'], perk: { 'crafting.speed': 0.9 }, desc: 'Tiny thief hands: crafting 10% faster' },
+    { id: 'owl', name: 'Barn owl', kind: 'owl', icon: '🦉', price: 3800, colors: ['#b0844a', '#f2e6cc'], perk: { 'stealth.heat': 0.9 }, desc: 'Night watch: 10% less heat' },
+    { id: 'monkey', name: 'Capuchin', kind: 'monkey', icon: '🐒', price: 6500, colors: ['#5a3d22', '#e8c9a0'], perk: { 'athletics.speed': 1.05, 'luck.rare': 1.1 }, desc: 'Parkour pal: +5% run speed, +10% lucky finds' },
+    { id: 'tiger', name: 'Tiger cub', kind: 'cat', icon: '🐯', price: 25000, colors: ['#e8833a', '#f4ede0'], perk: { 'toughness.damageTaken': 0.92, 'dealing.price': 1.04 }, desc: 'Nobody haggles with a tiger: +4% sales, -8% damage taken' },
   ];
   const PET = Object.fromEntries(PETS.map((p) => [p.id, p]));
   const FEED_HOURS = 6, FOOD_PRICE = 25, MAX_PETS = 3;

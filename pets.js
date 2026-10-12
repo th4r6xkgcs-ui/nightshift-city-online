@@ -59,6 +59,28 @@
     const D2 = D.PET[id]; if (!D2) return;
     const [main, second] = D2.colors, dir = Math.cos(pet.angle) >= 0 ? 1 : -1, x = pet.x, y = pet.y, mv = pet.moving, sitting = !mv && performance.now() - pet.sit > 1500;
     const bob = mv ? Math.sin(pet.walk * 0.9) * 1.2 : 0, wag = Math.sin(t * (sitting ? 6 : 14)) * 3;
+    if (D2.kind === 'owl') {
+      const flap = mv ? Math.sin(t * 14) * 4 : 0, hop = mv ? Math.abs(Math.sin(pet.walk * 0.6)) * 3 : 0;
+      O(c, '#00000030', x + 2, y + 2, 6, 2);
+      O(c, main, x, y - 8 - hop, 6, 8); O(c, second, x + 1 * dir, y - 6 - hop, 4, 6); // body + chest
+      for (let k = 0; k < 3; k++) R(c, '#8a6430', x + (k - 1) * 2, y - 5 + k * 2 - hop, 1, 1);
+      O(c, main, x - 6 * dir, y - 8 - hop - flap * 0.3, 3, 6 + Math.abs(flap) * 0.3); // wing
+      O(c, main, x, y - 18 - hop, 6.5, 5.5); O(c, second, x + 0.5 * dir, y - 18 - hop, 5, 4.2); // heart-shaped face
+      for (const ex of [-2.2, 2.2]) { C(c, '#1b1410', x + ex + dir, y - 18.5 - hop, 1.7); C(c, '#ffd23a', x + ex + dir, y - 18.5 - hop, 1.1); C(c, '#1b1410', x + ex + dir, y - 18.5 - hop, 0.6); }
+      R(c, '#c99a2a', x + dir - 0.5, y - 16.5 - hop, 1, 2); R(c, '#e0b021', x - 2, y - 0.5 - hop, 1.5, 2); R(c, '#e0b021', x + 1, y - 0.5 - hop, 1.5, 2);
+      return;
+    }
+    if (D2.kind === 'monkey') {
+      const sw = mv ? Math.sin(pet.walk * 0.8) * 2 : 0, swing = Math.sin(t * 2) * 3;
+      O(c, '#00000032', x + 2, y + 1, 8, 2.5);
+      c.strokeStyle = main; c.lineWidth = 1.6; c.lineCap = 'round'; c.beginPath(); c.moveTo(x - 4 * dir, y - 6); c.bezierCurveTo(x - 14 * dir, y - 4, x - 14 * dir, y - 18 + swing, x - 8 * dir, y - 20 + swing); c.stroke(); // curly tail
+      R(c, main, x - 4, y - 4 + sw, 2.4, 5); R(c, main, x + 2, y - 4 - sw, 2.4, 5); // legs
+      O(c, main, x, y - 9, 5, 6.5); O(c, second, x + 1 * dir, y - 8, 2.8, 4); // body + belly
+      R(c, main, x + 4 * dir - 1, y - 12 - sw, 2, 7); R(c, main, x - 5 * dir - 1, y - 12 + sw, 2, 7); // arms
+      C(c, main, x + 1 * dir, y - 18, 5); C(c, '#4a3018', x - 3.5 * dir, y - 19, 1.8); C(c, '#4a3018', x + 5.5 * dir, y - 19, 1.8); // head + ears
+      O(c, second, x + 2 * dir, y - 17, 3.4, 3); C(c, '#111', x + 1 * dir, y - 18, 0.8); C(c, '#111', x + 3.5 * dir, y - 18, 0.8); R(c, '#8a5a3a', x + 1.5 * dir, y - 15.5, 2, 0.8);
+      return;
+    }
     if (D2.kind === 'bird') {
       const flap = Math.sin(t * 16) * 5;
       O(c, '#00000030', x + 2, y + 24, 6, 2);
@@ -67,7 +89,7 @@
       R(c, '#e0b021', x - 2 * dir, y + 6, 2, 6); R(c, second, x - 1 * dir, y + 6, 2, 8);
       return;
     }
-    const cat = D2.kind === 'cat', big = D2.id === 'rottweiler' || D2.id === 'husky' ? 1.15 : D2.id === 'shiba' ? 0.95 : 1;
+    const cat = D2.kind === 'cat', coon = D2.kind === 'raccoon', tiger = D2.id === 'tiger', big = D2.id === 'rottweiler' || D2.id === 'husky' ? 1.15 : D2.id === 'shiba' ? 0.95 : tiger ? 1.3 : coon ? 0.95 : 1;
     c.save(); c.translate(x, y); c.scale(big, big);
     O(c, '#00000038', 2, 2, 11, 3.5);
     if (sitting) {
@@ -79,7 +101,14 @@
       C(c, main, 10 * dir, -11 + bob * 0.3, 4.5);
     }
     const hx = sitting ? 2 * dir : 10 * dir, hy = sitting ? -15 : -11 + bob * 0.3;
-    if (cat) { c.fillStyle = main; c.beginPath(); c.moveTo(hx - 4, hy - 2); c.lineTo(hx - 3, hy - 8); c.lineTo(hx, hy - 4); c.lineTo(hx + 3, hy - 8); c.lineTo(hx + 4, hy - 2); c.fill(); C(c, '#7cdeb5', hx + 1.5 * dir, hy, 0.9); R(c, '#e8a0a0', hx + 3 * dir, hy + 1, 1, 1); }
+    if (tiger) { // stripes on the body, round ears, white muzzle, black-striped head
+      const st = '#1b1410';
+      if (sitting) { for (const k of [-3, 0, 3]) R(c, st, k - 0.5, -12 + Math.abs(k) * 0.4, 1, 6); } else { for (const k of [-6, -3, 0, 3, 6]) R(c, st, k * dir - 0.5, -11 + bob * 0.3, 1, 5); }
+      C(c, main, hx - 3, hy - 4, 2.2); C(c, main, hx + 3, hy - 4, 2.2); C(c, '#1b1410', hx - 3, hy - 4, 1); C(c, '#1b1410', hx + 3, hy - 4, 1);
+      O(c, second, hx + 2 * dir, hy + 1.5, 3, 2.2); R(c, st, hx - 1, hy - 3.5, 1, 2); R(c, st, hx + 1, hy - 3.5, 1, 2); C(c, '#c9e86a', hx + 1.5 * dir, hy - 0.5, 0.9); R(c, '#e8a0a0', hx + 4 * dir, hy + 1, 1, 1);
+    } else if (coon) { // masked face, small round ears
+      C(c, main, hx - 2.5, hy - 4, 1.8); C(c, main, hx + 2.5, hy - 4, 1.8); R(c, second, hx - 3, hy - 1.5, 7, 2.2); C(c, '#f2f2ee', hx + 3 * dir, hy + 1.6, 2); C(c, '#111', hx + 5 * dir, hy + 1.5, 0.9); C(c, '#e8e2d0', hx + 1.2 * dir, hy - 0.6, 0.6);
+    } else if (cat) { c.fillStyle = main; c.beginPath(); c.moveTo(hx - 4, hy - 2); c.lineTo(hx - 3, hy - 8); c.lineTo(hx, hy - 4); c.lineTo(hx + 3, hy - 8); c.lineTo(hx + 4, hy - 2); c.fill(); C(c, '#7cdeb5', hx + 1.5 * dir, hy, 0.9); R(c, '#e8a0a0', hx + 3 * dir, hy + 1, 1, 1); }
     else {
       const floppy = D2.id === 'lab' || D2.id === 'rottweiler';
       if (floppy) { O(c, second, hx - 3 * dir, hy - 1, 2, 3.5); } else { c.fillStyle = main; c.beginPath(); c.moveTo(hx - 3, hy - 2); c.lineTo(hx - 2, hy - 8); c.lineTo(hx + 1, hy - 3); c.fill(); c.beginPath(); c.moveTo(hx + 1, hy - 3); c.lineTo(hx + 3, hy - 8); c.lineTo(hx + 4, hy - 2); c.fill(); }
@@ -89,9 +118,10 @@
     // tail
     c.strokeStyle = cat ? main : D2.id === 'shiba' || D2.id === 'husky' ? second : main; c.lineWidth = cat ? 1.6 : 2.2; c.lineCap = 'round'; c.beginPath();
     const tx = sitting ? -5 * dir : -10 * dir, ty = sitting ? -4 : -9 + bob * 0.3;
-    if (cat) { c.moveTo(tx, ty); c.quadraticCurveTo(tx - 5 * dir, ty - 6, tx - 2 * dir + wag * 0.3, ty - 12); } else if (D2.id === 'shiba' || D2.id === 'husky') { c.moveTo(tx, ty); c.quadraticCurveTo(tx - 6 * dir, ty - 8 + wag * 0.4, tx - 1 * dir, ty - 9); } else { c.moveTo(tx, ty); c.lineTo(tx - 6 * dir, ty - 3 + wag); }
+    if (coon) { c.stroke(); for (let k = 0; k < 5; k++) { O(c, k % 2 ? second : main, tx - (k * 2.4 + 1) * dir, ty - k * 1.6 + wag * 0.15 * k, 2.2, 2); } c.beginPath(); }
+    else if (cat) { c.moveTo(tx, ty); c.quadraticCurveTo(tx - 5 * dir, ty - 6, tx - 2 * dir + wag * 0.3, ty - 12); if (tiger) { c.stroke(); c.strokeStyle = '#1b1410'; c.lineWidth = 1; for (let k = 1; k <= 3; k++) { const u = k / 4, qx = (1 - u) * (1 - u) * tx + 2 * u * (1 - u) * (tx - 5 * dir) + u * u * (tx - 2 * dir + wag * 0.3), qy = (1 - u) * (1 - u) * ty + 2 * u * (1 - u) * (ty - 6) + u * u * (ty - 12); c.beginPath(); c.moveTo(qx - 1.5, qy); c.lineTo(qx + 1.5, qy); c.stroke(); } c.beginPath(); } } else if (D2.id === 'shiba' || D2.id === 'husky') { c.moveTo(tx, ty); c.quadraticCurveTo(tx - 6 * dir, ty - 8 + wag * 0.4, tx - 1 * dir, ty - 9); } else { c.moveTo(tx, ty); c.lineTo(tx - 6 * dir, ty - 3 + wag); }
     c.stroke();
-    if (performance.now() - pet.bark < 1800 && !cat) { c.fillStyle = '#fff'; c.font = 'bold 8px system-ui'; c.fillText('WOOF!', hx + 4 * dir, hy - 10); }
+    if (performance.now() - pet.bark < 1800 && !cat && !coon) { c.fillStyle = '#fff'; c.font = 'bold 8px system-ui'; c.fillText('WOOF!', hx + 4 * dir, hy - 10); }
     c.restore();
     if (pet.point && performance.now() < pet.point.until) { c.save(); c.strokeStyle = '#ffd970'; c.setLineDash([3, 4]); c.globalAlpha = 0.7; c.beginPath(); c.moveTo(x, y - 6); c.lineTo(x + (pet.point.x - x) * 0.35, y + (pet.point.y - y) * 0.35); c.stroke(); c.restore(); }
   }
