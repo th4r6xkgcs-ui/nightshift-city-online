@@ -92,6 +92,7 @@
         ['🔓', 'Steal a car', 'Stand next to any locked car and hold USE until the lock pops. Cops notice.', null],
         ['🔧', "Rusty's chop shop", 'Drive a stolen car into the striped bay behind the scrapyard: chop it for cash, strip it for parts, or re-VIN it and keep it. Check his 🔥 hot list.', 'GPS', () => gps(R.NightshiftChop?.BAY, "Rusty's chop shop")],
         ['🔑', 'Car collection', 'Ten models from a $5k hatch to a $290k hypercar at Prestige Motors (Palm Grove). Rare ones get left on the street: steal one and Rusty re-VINs it. 📱 → 🚗 MY CARS.', 'OPEN', open2(() => R.NightshiftCars.open())],
+        ['🌃', 'Night car meet', 'Westside Courts, 21:00–03:00. Stop a car you own in the ring and SHOW it against five rivals: model, kit, tuning, paint and condition score. Top three win cash and trophies.', 'GPS', () => gps(R.NightshiftCarMeet?.ring, 'Car meet')],
         ['🏁', 'Body kits', 'Prestige Motors in Palm Grove (suburbs) fits GT, muscle, rally and luxury kits to cars you own.', null],
         ['🏎️', 'Show-off garage', 'Buy the dream house in Palm Grove: up to four of your cars park inside, with a show-off score.', null],
       ]],
@@ -111,6 +112,7 @@
         ['⭐', 'Skills', 'Everything you do levels a skill. Tap ⭐ to see perks.', 'OPEN', open2(() => R.NightshiftSkills.open())],
         ['🏋️', 'Gym', 'Timing reps for Speed and Toughness. Half price in the morning.', 'GPS', () => gps(nearest(ven.filter((v) => v.kind === 'gym')), 'Iron Works Gym')],
         ['🔧', 'Car tuning', 'Engine, handling, armor upgrades at a garage.', 'GPS', () => gps(nearest(R.NightshiftTuning?.sites?.()), 'Tuning garage')],
+        ['🛋️', 'Furnish your apartment', 'Walk up to a ✦ sparkle at home and press DECOR. Furniture is yours for both homes; a nicer place makes clients pay more.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
         ['🏠', 'Home upgrades', 'Use the LAPTOP in your apartment for perks.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
       ]],
       ['🎲 HAVE FUN', [
