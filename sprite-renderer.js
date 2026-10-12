@@ -144,11 +144,16 @@ function gunArm(ctx,p,L){
   hunting:()=>{rect(wood,3,-3.5,14,4);rect(woodL,3,-3.5,14,1);rect(metal,15,-3,19,2.6);rect(hi,15,-3,19,.8);rect(chrome,14,-5,1.4,2)},
   carbine:()=>{rect(metal,4,-3.5,7,4);rect(metal,11,-4,15,4.5);rect(hi,12,-4,13,1);rect('#20272c',16,.5,3,6);rect('#3a4148',24,-2.8,5,2)},
   rifle:()=>{rect('#4a3a2c',4,-3.5,8,4);rect(metal,12,-3,20,3);rect(hi,12,-3,20,.8);rect('#11161a',15,-6.5,8,2.5);rect('#7fb6d6',22,-6.3,1,2)},
-  ar:()=>{rect(metal,4,-3.5,8,4);rect(metal,12,-4,16,4.5);rect(hi,13,-4,14,1);rect('#20272c',17,.5,3,6.5);rect('#3a4148',25,-2.5,6,2)}
+  ar:()=>{rect(metal,4,-3.5,8,4);rect(metal,12,-4,16,4.5);rect(hi,13,-4,14,1);rect('#20272c',17,.5,3,6.5);rect('#3a4148',25,-2.5,6,2)},
+  goldhawk:()=>{rect('#b8862a',12,-4,13,4.2);rect('#ffe08a',12,-4,13,1.1);rect('#8a6418',14,-2.4,9,.6);rect('#e8e0c8',12.5,-.2,3,4)},
+  whisper:()=>{rect(metal,10,-4,12,4.5);rect(hi,11,-4,10,1);rect('#20272c',15,.5,2.5,6);rect('#2b3036',22,-3.7,12,3.7);rect('#5a6068',22,-3.7,12,.9);rect('#9a5aff',17,-3.2,2,.8)},
+  dragon:()=>{rect(metal,5,-3.5,7,4);rect(metal,12,-3.5,18,3);rect(hi,12,-3.5,18,1);rect('#5a1a14',15,-.8,6,5);rect('#c0473f',16,0,4,3);rect('#c0392b',29,-3.5,2,3)},
+  reaper:()=>{rect(metal,3,-3.5,10,4);rect(metal,13,-3,23,3);rect(hi,13,-3,23,.8);rect('#11161a',14,-7,9,3);rect('#7fb6d6',22,-6.8,1,2.4);rect(metal,35,-4,3,5)},
+  tiger:()=>{rect('#e8833a',4,-3.5,8,4);rect('#111',6,-3.5,1,4);rect('#111',9,-3.5,1,4);rect(metal,12,-4,16,4.5);rect('#e8833a',19,-4,9,4.5);rect('#111',21,-4,1,4.5);rect('#111',24,-4,1,4.5);rect('#20272c',17,.5,3,6.5);rect('#11161a',13,-6.5,7,2.5);rect('#e3c25a',13,-6.5,7,.7)}
  };
  (G[id]||G.pistol)();
- const len={pipe:24,zip:25,sawnoff:25,pistol:21,compact:19,revolver:23,hawk:25,machine:23,smg:28,pump:30,shotgun:29,hunting:34,carbine:29,rifle:32,ar:31}[id]||21;
- if(mods.includes('suppressor'))rect('#2b3036',len,-3.5,7,3);
+ const len={pipe:24,zip:25,sawnoff:25,pistol:21,compact:19,revolver:23,hawk:25,machine:23,smg:28,pump:30,shotgun:29,hunting:34,carbine:29,rifle:32,ar:31,goldhawk:25,whisper:34,dragon:31,reaper:38,tiger:31}[id]||21;
+ if(mods.includes('suppressor')&&id!=='whisper')rect('#2b3036',len,-3.5,7,3);
  if(mods.includes('grip')){ctx.fillStyle='#ff304055';ctx.fillRect(22,-1.6,40,.8)}
  ctx.restore();
 }
