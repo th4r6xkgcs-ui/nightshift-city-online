@@ -248,6 +248,11 @@ function roofTop(b,night,kind){
   g.strokeStyle='#5c4636';g.lineWidth=1;g.beginPath();g.arc(tx,ty,5,0,Math.PI*2);g.stroke();rect(g,'#c9a27e',tx-1,ty-9,2,4);
   const dx=x+163,dy=y+86;rect(g,'#2a3843',dx-1,dy+2,3,8);g.fillStyle='#cfd6d6';g.beginPath();g.ellipse(dx,dy,7,5,-.5,0,Math.PI*2);g.fill();g.fillStyle='#9aa6a8';g.beginPath();g.ellipse(dx+1,dy+1,4,3,-.5,0,Math.PI*2);g.fill();rect(g,'#5c6a70',dx-5,dy-4,1,4);
  }else{
+  if(b.name!=='CLUB'&&b.name!=='BANK'){const cx0=x+146,cy0=y+26;rect(g,'#0d1b2766',cx0+4,cy0+5,66,40);rect(g,'#8c9c98',cx0,cy0,64,38);rect(g,'#5e706f',cx0+2,cy0+2,60,34);rect(g,'#b7c4bc',cx0,cy0,64,2);
+   for(const [k,fx] of [[0,cx0+16],[1,cx0+47]]){const fy=cy0+19;g.fillStyle='#22313a';g.beginPath();g.arc(fx,fy,12,0,Math.PI*2);g.fill();g.strokeStyle='#7f8f8b';g.lineWidth=1;g.beginPath();g.arc(fx,fy,12,0,Math.PI*2);g.stroke();
+    g.fillStyle='#596b6c';const a=t*(5+k)+seed;for(let i=0;i<3;i++){const q=a+i*2.094;g.beginPath();g.moveTo(fx,fy);g.arc(fx,fy,10,q,q+.7);g.closePath();g.fill()}
+    g.strokeStyle='#9aaaa544';for(const r of [5,9]){g.beginPath();g.arc(fx,fy,r,0,Math.PI*2);g.stroke()}g.fillStyle='#b8c6be';g.beginPath();g.arc(fx,fy,2,0,Math.PI*2);g.fill()}
+   rect(g,'#33434a',cx0+64,cy0+12,10,4);rect(g,'#33434a',cx0+72,cy0+12,4,50)}
   const sx=x+150,sy=y+80,lit=night>.2&&seed%4!==0;rect(g,'#13232f',sx-2,sy-2,34,20);
   if(lit){rect(g,'#f3c77a',sx,sy,30,16);if(litWindows.length<120)litWindows.push({x:sx+15,y:sy+8,w:30,h:16,c:'#ffd38a'})}else rect(g,'#3f6e80',sx,sy,30,16);
   rect(g,lit?'#fff0c255':'#b8dce455',sx+2,sy+2,10,3);rect(g,'#1c3442',sx+14,sy,2,16);rect(g,'#1c3442',sx,sy+7,30,2);
