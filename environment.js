@@ -47,14 +47,14 @@ function grade(night,now){
    if(lm.width!==W||lm.height!==H){lm.width=W;lm.height=H}
    const z=camera.zoom,src=lightSources();
    lmx.globalCompositeOperation='source-over';lmx.clearRect(0,0,W,H);
-   lmx.fillStyle=`rgba(4,7,26,${.8*night})`;lmx.fillRect(0,0,W,H);
+   lmx.fillStyle=`rgba(4,7,26,${.72*night})`;lmx.fillRect(0,0,W,H);
    lmx.globalCompositeOperation='destination-out';
    for(const l of src.lamps){const p=screenOf(l.x,l.y+22);hole(lmx,p.x,p.y,100*z,.92)}
    for(const f of src.fronts){const p=screenOf(f.x,f.y);lmx.save();lmx.translate(p.x,p.y);lmx.scale(Math.max(1,f.w/110),.8);hole(lmx,0,0,(f.big?58:34)*z,f.big?.75:.35);lmx.restore()}
    for(const c of src.cars){const p=screenOf(c.car.x,c.car.y);lmx.save();lmx.translate(p.x,p.y);lmx.rotate(Number.isFinite(c.car.angle)?c.car.angle:0);lmx.scale(z,z);const reach=c.reach+70,gr=lmx.createLinearGradient?.(24,0,reach,0);if(gr?.addColorStop){gr.addColorStop(0,'rgba(0,0,0,.95)');gr.addColorStop(1,'rgba(0,0,0,0)');lmx.fillStyle=gr;lmx.beginPath();lmx.moveTo(24,-10);lmx.lineTo(reach,-48);lmx.lineTo(reach,48);lmx.lineTo(24,10);lmx.closePath();lmx.fill()}hole(lmx,0,0,40,.5);lmx.restore()}
    for(const d of src.dots){const p=screenOf(d.x,d.y);hole(lmx,p.x,p.y,d.r*z,.9)}
    const lit=root.NightshiftWorld?.litWindows?.()||[];for(const wv of lit){const p=screenOf(wv.x,wv.y);lmx.fillStyle='rgba(0,0,0,.85)';lmx.fillRect(p.x-wv.w*z/2,p.y-wv.h*z/2,wv.w*z,wv.h*z);hole(lmx,p.x,p.y+wv.h*z,26*z,.35)}
-   if(typeof player!=='undefined'){const p=screenOf(player.x,player.y);hole(lmx,p.x,p.y,(player.car?60:75)*z,.6)}
+   if(typeof player!=='undefined'){const p=screenOf(player.x,player.y);hole(lmx,p.x,p.y,(player.car?70:95)*z,.65)}
    g.drawImage(lm,0,0);
    // coloured light on top (additive)
    g.globalCompositeOperation='lighter';
