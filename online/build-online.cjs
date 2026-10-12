@@ -30,7 +30,7 @@ function onlineHtml(indexHtml) {
 
 // Claude's RPG layer (skills + goals). Injected before boot.js at build time so
 // Codex's index.html stays untouched; skipped for any script it already lists.
-const RPG_SCRIPTS = ['skills-data.js', 'skills.js', 'weapons-data.js', 'weapons.js', 'skill-effects.js', 'casino-data.js', 'casino.js', 'tuning-data.js', 'tuning.js', 'races-data.js', 'races.js', 'home-data.js', 'home-upgrades.js', 'fishing-data.js', 'fishing.js', 'lab-data.js', 'lab.js', 'jobs-data.js', 'jobs.js', 'heists-data.js', 'heists.js', 'venues-data.js', 'venues.js', 'empire-data.js', 'empire.js', 'events-data.js', 'events.js', 'stashes-data.js', 'stashes.js', 'market-data.js', 'market.js', 'life-data.js', 'life.js', 'supply-data.js', 'supply-art.js', 'supply.js', 'zones.js', 'food-data.js', 'food.js', 'farm.js', 'picks-data.js', 'picks.js', 'breakin-data.js', 'breakin.js', 'safehouse-data.js', 'safehouse.js', 'hitman-data.js', 'hitman.js', 'cars-data.js', 'cars.js', 'carmeet-data.js', 'carmeet.js', 'pets-data.js', 'pets.js', 'suburbs.js', 'chop-data.js', 'chop.js', 'decor-data.js', 'dreamhome.js', 'ledger.js', 'fx.js', 'ui-skin.js', 'minimap.js', 'hud.js', 'guide.js', 'ambience.js', 'goals-data.js', 'goals.js', 'dailies-data.js', 'dailies.js', 'respect-data.js', 'respect.js'];
+const RPG_SCRIPTS = ['skills-data.js', 'skills.js', 'weapons-data.js', 'weapons.js', 'skill-effects.js', 'casino-data.js', 'casino.js', 'tuning-data.js', 'tuning.js', 'races-data.js', 'races.js', 'home-data.js', 'home-upgrades.js', 'fishing-data.js', 'fishing.js', 'lab-data.js', 'lab.js', 'jobs-data.js', 'jobs.js', 'heists-data.js', 'heists.js', 'venues-data.js', 'venues.js', 'empire-data.js', 'empire.js', 'events-data.js', 'events.js', 'stashes-data.js', 'stashes.js', 'market-data.js', 'market.js', 'life-data.js', 'life.js', 'supply-data.js', 'supply-art.js', 'supply.js', 'zones.js', 'food-data.js', 'food.js', 'farm.js', 'picks-data.js', 'picks.js', 'breakin-data.js', 'breakin.js', 'safehouse-data.js', 'safehouse.js', 'hitman-data.js', 'hitman.js', 'cars-data.js', 'cars.js', 'carmeet-data.js', 'carmeet.js', 'pets-data.js', 'pets.js', 'suburbs.js', 'chop-data.js', 'chop.js', 'decor-data.js', 'dreamhome.js', 'ledger.js', 'wardrobe-data.js', 'character-art.js', 'fx.js', 'ui-skin.js', 'minimap.js', 'hud.js', 'guide.js', 'ambience.js', 'goals-data.js', 'goals.js', 'dailies-data.js', 'dailies.js', 'respect-data.js', 'respect.js'];
 // Claude scripts that must run before Codex's modules read their saves (inserted before the first script tag).
 const EARLY_SCRIPTS = ['starter-home.js'];
 function withRpg(html) {
@@ -39,6 +39,8 @@ function withRpg(html) {
   const missing = RPG_SCRIPTS.filter((s) => fs.existsSync(path.join(ROOT, s)) && !html.includes(`src="${s}"`));
   if (!missing.length || !/<script\s+src="boot\.js"/.test(html)) return html;
   const tags = missing.map((s) => `<script src="${s}" defer></script>`).join('');
+  // Claude's premium art layers must load before Codex's detailed-art.js so its held-weapon pass draws on top.
+  if (/<script\s+src="detailed-art\.js"/.test(html)) return html.replace(/<script\s+src="detailed-art\.js"/, (m) => tags + m);
   return html.replace(/<script\s+src="boot\.js"/, (m) => tags + m);
 }
 
