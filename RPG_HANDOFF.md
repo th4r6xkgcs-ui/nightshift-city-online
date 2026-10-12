@@ -489,3 +489,49 @@ All Claude-owned new files. No Codex file was edited except where noted on `clau
 - **Your stash house (`safehouse-data.js`, `safehouse.js`, breakin hooks):** clear every crew member in a trap house → the door offers TAKE OVER ($12k). Store weed/coke (pocket) and pills (backpack) up to 400 each, plus cash; the crew sells 8 weed / 4 coke / 10 pills per real hour at 70% of street price into the stash. Upgrades: door, alarm, cameras, dog, guards (wages $120/h each from the stash), safe (protects 50%/90% of cash). Raids roll every 15 min (cooldown 45 min) when the stash is worth ≥ $3k; odds and losses fall with security. Cameras give a 90 s warning; going in starts `NightshiftBreakin.defend()` — raiders come through the back door, no police, win by dropping them all. Save `nightshift-safehouse-v1` (plain JSON, the shape a future multiplayer raid would read).
 - **Ledger:** `tag('ignore')` for transfers (stash deposits), new category `stash`.
 - **Goals:** `takeover1`. Tests: `tests/picks.cjs`, `tests/safehouse.cjs`, paint jobs in `tests/weapons.cjs`.
+
+## Premium 2.5D art overhaul, Option 3 (owner: "finish this since I'm out of Codex")
+The full spec is in `ART_SPEC.md`, and sheets and screenshots are in `docs/art/`. Everything is in new Claude-owned files, except small hooks in Claude files (`cars.js`, `tuning.js`, `supply*.js`, `weapons.js`, `carmeet*.js`, `hud.js`, `jobs.js`, `guide.js`). No Codex file was edited.
+
+- **Layered characters (`wardrobe-data.js`, `character-art.js`):**
+  - 44 clothing items in 9 slots, each with colours, rarity, condition and options, plus skin, build, hair and facial hair.
+  - An 8-direction renderer with idle, walk, run and a gun-holding pose.
+  - It wraps `NightshiftSprites.person/personTo` for the player and every NPC, with deterministic NPC outfits and uniforms.
+- **Character Studio (`studio.js`, `#csStudio`, save `nightshift-wardrobe-v1`):**
+  - Stage: rotate (buttons or swipe), fit-to-stage zoom (slider, pinch or wheel), idle/walk/run, close-up, hold to COMPARE.
+  - Catalog by category, with thumbnails that show the piece itself (a top is shown without its jacket, a bag from behind).
+  - Item panel: close-up, rarity, condition, equipped state, description, colours, options.
+  - Five saved outfits and five curated looks.
+  - Where to open it:
+    - At home, the apartment wardrobe opens it in WEAR mode (owned pieces only).
+    - The 👕 BOUTIQUE point outside each CLOTHING store opens it in BUY mode (buy one piece or the whole look). Points are nudged so they never stack on another prompt.
+    - 📱 STYLE opens a preview.
+  - It syncs `NightshiftHome.profile` colours.
+- **Weapons (`weapon-art.js`):**
+  - 20 guns built from shaded parts. Attachments (suppressor, scope/red-dot, ext mag/speed-loader/tube, laser grip, reinforcement) are visible on the held gun, the icons and the bench. Paint jobs re-tint metal and polymer.
+  - Held guns: installed as the outermost `S.person` wrapper (after Codex `detailed-art.js`). It passes `noWeapon:true` + `hold` down, so the character raises its arms and the gun sits in its hands. A laser line shows when a laser grip is fitted.
+  - Weapon Inspection bench (`#wiPanel`): zoom, bench/night light, gun picker, stats (preview vs fitted, with green/red deltas), attachment previews with compatibility (fitted / requirements / won't fit crude / built in), paint previews, EQUIP.
+  - Open it by tapping any gun picture, the 🔍 on armory cards, or Guide → Inspect a gun.
+  - Armory cards inside the backpack and bench now have styles (before, they were unstyled there).
+- **Vehicle Studio (`carstyle-data.js`, `carstyle.js`, `#vsPanel`, save `nightshift-carstyle-v1`):**
+  - Options: 16 paints, 6 finishes, 6 wheel styles, 4 tints, 4 spoilers, 3 hoods, 5 liveries × 7 colours, 3 exhausts, 4 headlight colours, 5 underglows. All are baked into `cars.js` and also work on street cars you own.
+  - Turntable: spin or drag, 45° steps, zoom, day/night with headlight beams, hold COMPARE.
+  - Info: tier/rarity colour, body %, plate, show flair.
+  - Where to open it:
+    - Tuning garage → 🎨 STYLE STUDIO: pay only for the changes.
+    - 📱 MY CARS → 🎨 STYLE: preview only.
+  - Flair (0–30) adds to the car meet score.
+- **Tests:** `tests/wardrobe.cjs`, `tests/weapon-art.cjs`, `tests/carstyle.cjs`, all registered in `tests/run.cjs` on rpg-play. The full suite reports **110 suites PASS**. A real bug was fixed: default clothing pieces weren't normalised, so the save wasn't idempotent.
+- **Playwright checks (844×390 and 390×844):**
+  - Studio: open, buy, wear, save, close.
+  - Boutiques: placement.
+  - Apartment wardrobe: hook.
+  - Weapons: held guns at 8 angles, the inspection bench, and backpack icons.
+  - Vehicle Studio: 9 options, then APPLY (cash charged, style saved), and styled street cars in the city.
+  - No page errors.
+- **Deployed:** GitHub Pages `gh-pages` from rpg-play.
+- **Next:**
+  - Sitting, crouch and car enter/exit animations.
+  - A "style" goal tier.
+  - Pets and props in the same premium pipeline.
+  - Optional: let the car meet show the styled car portrait.
