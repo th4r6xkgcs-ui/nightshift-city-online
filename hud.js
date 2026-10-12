@@ -70,6 +70,15 @@
   @media (orientation:portrait){#nsR #lfRadio{position:static!important;transform:none!important;max-width:min(46vw,260px)!important}}
   /* bottom bars */
   #nsBars>div{position:static!important;transform:none!important;max-width:none!important;width:100%!important;top:auto!important;bottom:auto!important;left:auto!important;border-radius:12px!important;font-family:var(--body)!important;font-weight:600!important;box-shadow:0 8px 22px #0007!important}
+  /* touch controls */
+  #pad,#aimPad{background:radial-gradient(circle,#ffffff10 0,#0b111c55 62%,#0b111c88 100%)!important;border:1.5px solid #ffffff2e!important;box-shadow:0 10px 30px #0006,inset 0 0 0 9px #ffffff07,inset 0 0 22px #0008!important;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  #pad::after,#aimPad::after{font:700 8.5px var(--disp)!important;letter-spacing:.22em!important;color:#ffffff8c!important;text-shadow:0 1px 3px #000}
+  #nub{background:radial-gradient(circle at 35% 30%,#d9efff,#4d9bff 52%,#1f4fb0)!important;border:2px solid #ffffffb0!important;box-shadow:0 0 18px #4d9bffaa,inset 0 -3px 6px #0006!important}
+  #aimNub{background:radial-gradient(circle at 35% 30%,#ffe0fb,#ff4fd8 52%,#a01f8a)!important;border:2px solid #ffffffb0!important;box-shadow:0 0 18px #ff4fd8aa,inset 0 -3px 6px #0006!important}
+  #actions>button{border-radius:16px!important;font:700 10px var(--disp)!important;letter-spacing:.07em;background:linear-gradient(180deg,#1d2a40ee,#0e1626ee)!important;border:1.5px solid #ffffff2e!important;box-shadow:0 8px 20px #0007,inset 0 1px 0 #ffffff1c!important;color:#eef3fb!important}
+  #actions>#use{border-color:var(--amber)!important;color:#ffe7a8!important;box-shadow:0 0 14px #ffcf5a44,0 8px 20px #0007!important}
+  #actions>#shoot{border-color:var(--red)!important;color:#ffd0d6!important} #actions>[data-held=true]{filter:brightness(1.35);transform:scale(.95)}
+  #actions>#more{border-color:#ffffff55!important}
   /* toast */
   #toast{font-family:var(--body)!important;font-weight:600}
   body.ns-panel #toast{z-index:80!important;top:auto!important;bottom:calc(16px + env(safe-area-inset-bottom))!important;box-shadow:0 10px 30px #000c!important}

@@ -40,14 +40,33 @@
     ctx.save();
     for (const s of F.SPOTS) {
       if (Math.hypot(p.x - s.x, p.y - s.y) > 700) continue;
-      // water edge + pier planks + a bobbing float
-      const wx = s.id === 'pier' ? s.x - 70 : s.x - 60, wy = s.id === 'pier' ? s.y + 18 : s.y - 70, ww = s.id === 'pier' ? 140 : 50, wh = s.id === 'pier' ? 30 : 140;
-      const grd = ctx.createLinearGradient(wx, wy, wx + ww, wy + wh); grd.addColorStop(0, '#0d3550'); grd.addColorStop(1, '#14567a');
+      // water (wide, animated shimmer + foam edge), pier deck on posts, a moored boat and a bobbing float
+      const pier = s.id === 'pier';
+      const wx = pier ? s.x - 190 : 0, wy = pier ? s.y + 14 : s.y - 160, ww = pier ? 380 : s.x - 14, wh = pier ? 60 : 320;
+      const grd = ctx.createLinearGradient(wx, wy, pier ? wx : wx + ww, pier ? wy + wh : wy); grd.addColorStop(0, '#0f4664'); grd.addColorStop(1, '#0a2c44');
       ctx.fillStyle = grd; ctx.fillRect(wx, wy, ww, wh);
-      ctx.strokeStyle = '#7fd3ff55'; ctx.lineWidth = 1;
-      for (let i = 0; i < 4; i++) { const yy = wy + 6 + i * (wh / 4) + Math.sin(t * 2 + i) * 2; ctx.beginPath(); ctx.moveTo(wx + 4, yy); ctx.lineTo(wx + ww - 4, yy); ctx.stroke(); }
-      ctx.fillStyle = '#7a5532'; for (let i = 0; i < 5; i++) ctx.fillRect(s.x - 20 + i * 9, s.y - 6, 7, 26);
-      ctx.fillStyle = '#ff5161'; ctx.beginPath(); ctx.arc(s.x + 22, (s.id === 'pier' ? wy + 14 : s.y) + Math.sin(t * 3) * 2, 3, 0, Math.PI * 2); ctx.fill();
+      for (let i = 0; i < 26; i++) { // shimmer dashes drifting with time
+        const u = ((i * 97) % 100) / 100, v = ((i * 61) % 100) / 100, dx = ((t * 8 + i * 13) % 40) - 20;
+        const x = wx + u * ww + (pier ? dx : 0), y = wy + v * wh + (pier ? 0 : dx);
+        ctx.fillStyle = i % 3 ? '#5fb7e055' : '#bfe8ff66'; ctx.fillRect(Math.round(x), Math.round(y), pier ? 8 : 2, pier ? 1 : 8);
+      }
+      ctx.fillStyle = '#d8f2ff88'; // foam edge
+      if (pier) for (let x = wx; x < wx + ww; x += 6) ctx.fillRect(x, wy + Math.round(Math.sin(t * 2 + x * 0.15) * 1.5), 4, 2);
+      else for (let y = wy; y < wy + wh; y += 6) ctx.fillRect(wx + ww - 2 + Math.round(Math.sin(t * 2 + y * 0.15) * 1.5), y, 2, 4);
+      // pier deck
+      ctx.fillStyle = '#3b2716'; ctx.fillRect(s.x - 26, s.y - 8, 52, pier ? 52 : 30);
+      ctx.fillStyle = '#7a5532'; for (let i = 0; i < 6; i++) ctx.fillRect(s.x - 24 + i * 8, s.y - 6, 7, pier ? 48 : 26);
+      ctx.fillStyle = '#a07448'; for (let i = 0; i < 6; i++) ctx.fillRect(s.x - 24 + i * 8, s.y - 6, 7, 2);
+      ctx.fillStyle = '#2a1a0e'; for (const px of [-26, 22]) ctx.fillRect(s.x + px, s.y + (pier ? 40 : 18), 4, 6);
+      // moored boat
+      const bx = pier ? s.x + 70 : 22, by = pier ? s.y + 40 + Math.sin(t * 1.6) * 1.5 : s.y + 90 + Math.sin(t * 1.6) * 1.5;
+      ctx.save(); ctx.translate(bx, by); if (!pier) ctx.rotate(Math.PI / 2);
+      ctx.fillStyle = '#05080f88'; ctx.beginPath(); ctx.ellipse(2, 4, 22, 7, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#0b0f17'; ctx.beginPath(); ctx.moveTo(-22, -7); ctx.lineTo(16, -7); ctx.lineTo(24, 0); ctx.lineTo(16, 7); ctx.lineTo(-22, 7); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#e8e2d2'; ctx.beginPath(); ctx.moveTo(-21, -6); ctx.lineTo(15, -6); ctx.lineTo(22, 0); ctx.lineTo(15, 6); ctx.lineTo(-21, 6); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#c0473f'; ctx.fillRect(-21, 3, 36, 2); ctx.fillStyle = '#6b4a2e'; ctx.fillRect(-16, -4, 22, 8); ctx.fillStyle = '#2b3a52'; ctx.fillRect(-4, -3, 6, 6);
+      ctx.restore();
+      ctx.fillStyle = '#ff5161'; ctx.beginPath(); ctx.arc(s.x + (pier ? 30 : 30), (pier ? wy + 22 : s.y + 12) + Math.sin(t * 3) * 2, 3, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = '#10141ccc'; ctx.fillRect(s.x - 46, s.y - 34, 92, 16);
       ctx.fillStyle = '#9fe0ff'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText('🎣 ' + s.name.toUpperCase(), s.x, s.y - 26);
