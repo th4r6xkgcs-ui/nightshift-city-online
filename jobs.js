@@ -248,5 +248,5 @@
   setInterval(render, 250);
   addEventListener('keydown', (e) => { if (!panel.hidden && e.key === 'Escape') panel.hidden = true; });
 
-  root.NightshiftJobs = Object.freeze({ get state() { return state; }, active: () => (active ? { type: active.offer.type, phase: active.phase, offer: active.offer } : null), open: () => btn.click(), close: () => { panel.hidden = true; }, paused: () => !panel.hidden, accept });
+  root.NightshiftJobs = Object.freeze({ target: () => { const o = objective(); return o && Number.isFinite(o.x) ? { x: o.x, y: o.y, hit: active?.offer.type === 'hit' } : null; }, get state() { return state; }, active: () => (active ? { type: active.offer.type, phase: active.phase, offer: active.offer } : null), open: () => btn.click(), close: () => { panel.hidden = true; }, paused: () => !panel.hidden, accept });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
