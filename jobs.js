@@ -207,6 +207,8 @@
     if (mk) { const v = mk.value(); tile('💹', 'MARKET', v ? money(v) : 'Stocks', () => { panel.hidden = true; mk.open(); }); }
     const sh = root.NightshiftStashes;
     if (sh && sh.count() < sh.total) tile('📦', 'STASHES', sh.state.rumor ? 'GPS rumor' : `Rumor ${money(root.NightshiftStashesData.RUMOR_PRICE)}`, () => { if (sh.buyRumor()) panel.hidden = true; });
+    const su = root.NightshiftSupply, sd = root.NightshiftSupplyData;
+    if (su && sd) tile('🎒', 'BACKPACK', `${sd.weightOf(su.state.bag)}/${sd.cap(su.state)} · map`, () => { panel.hidden = true; su.openBag(); });
     panel.append(apps, el('h2', { style: 'margin-top:12px;font-size:14px' }, '💼 JOBS'));
     panel.append(el('div', { className: 'sub' }, `New offers in ~${next} min · ${state.done} jobs done · ${money(state.earned)} earned · Respect bonus +${rank() * 5}%`));
     if (active) {

@@ -61,7 +61,21 @@
   const open2 = (fn) => () => { close(); setTimeout(() => { try { fn(); } catch { /* module missing */ } }, 50); };
   function sections() {
     const R = root, ven = R.NightshiftVenues?.places?.() || [];
+    const SD = R.NightshiftSupplyData, sp = (id) => SD?.GBY?.[id] || SD?.PBY?.[id];
     return [
+      ['🔫 GUNS & CRAFTING (start here)', [
+        ['🔩', 'Scrapyard', 'Collect pipe, scrap metal and springs. Stand in the yard and press COLLECT.', 'GPS', () => gps(sp('scrapyard'), 'Scrapyard')],
+        ['🛠️', 'Home workbench', 'In your apartment. Craft crude guns: the Pipe Pistol is your first. Crude guns fall apart.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
+        ['🔫', 'Gun shop parts counter', 'Barrels, triggers, frames, bolts, springs, lenses. Plus ammo and armor.', 'GPS', () => gps(R.NightshiftWeapons?.door?.(), 'Gun shop')],
+        ['🔧', 'Lockup workshop', 'Buy it ($6,000) to craft real guns, attachments and repairs. Upgrade for SMGs, rifles, the AR.', 'GPS', () => gps(SD?.LOCKUP, 'Lockup')],
+        ['🚚', 'Arms buyer', 'Nights, north-east. Sells your spare guns for cash.', 'GPS', () => gps(SD?.ARMS_BUYER, 'Arms buyer')],
+        ['🎒', 'Backpack', 'Space is limited: make trips, stash at home, buy bigger bags. Shows where everything comes from.', 'OPEN', open2(() => R.NightshiftSupply.openBag())],
+      ]],
+      ['🌿 PRODUCT: collect → process → sell', [
+        ['🌿', 'Weed', 'Pick leaf at the GROW PLOTS → bag it at the TRIM HOUSE → sell to dealers.', 'GPS', () => gps(sp('plots'), 'Grow plots')],
+        ['❄️', 'Coke', 'Snow from the SMUGGLER BOAT (night) + chemicals → MOTEL KITCHEN → dealers pay most.', 'GPS', () => gps(sp('boat'), 'Smuggler boat')],
+        ['💊', 'Pills', 'Chemicals from the PHARMACY DUMPSTER → TRAILER LAB → the PROMOTER at the Neon Room (nights).', 'GPS', () => gps(sp('pharmacy'), 'Pharmacy dumpster')],
+      ]],
       ['💵 MAKE MONEY', [
         ['📱', 'Phone jobs', 'Taxi fares, repos, hits and VIP drops. Open the 📱 phone.', 'OPEN', open2(() => R.NightshiftJobs.open())],
         ['🌆', 'City events', 'Every few minutes something pops up. Rico texts you; follow the cyan arrow.', null],
@@ -71,12 +85,11 @@
         ['⚗️', 'Drug lab', 'Own the Weed Farm or Coke House (MORE → BIZ), cook at the LAB, sell at clubs.', null],
         ['🪩', 'Clubs', 'Sell lab product at a premium, best after 21:00.', 'GPS', () => gps(nearest(ven.filter((v) => v.kind === 'club')), 'Club')],
         ['💹', 'Stock market', 'Buy low, sell high. Read the news. Phone → MARKET.', 'OPEN', open2(() => R.NightshiftMarket.open())],
-        ['📈', 'Front businesses', 'Passive income while you are away. Phone → EMPIRE.', 'OPEN', open2(() => R.NightshiftEmpire.open())],
+        ['📈', 'Front businesses', 'Passive income while you are away, from an $800 shoeshine stand up. Phone → EMPIRE.', 'OPEN', open2(() => R.NightshiftEmpire.open())],
       ]],
       ['💪 GET STRONGER', [
         ['⭐', 'Skills', 'Everything you do levels a skill. Tap ⭐ to see perks.', 'OPEN', open2(() => R.NightshiftSkills.open())],
         ['🏋️', 'Gym', 'Timing reps for Speed and Toughness. Half price in the morning.', 'GPS', () => gps(nearest(ven.filter((v) => v.kind === 'gym')), 'Iron Works Gym')],
-        ['🔫', 'Gun shop', 'New guns, mods, armor, and a workbench for scrap-built mods.', 'GPS', () => gps(R.NightshiftWeapons?.door?.(), 'Gun shop')],
         ['🔧', 'Car tuning', 'Engine, handling, armor upgrades at a garage.', 'GPS', () => gps(nearest(R.NightshiftTuning?.sites?.()), 'Tuning garage')],
         ['🏠', 'Home upgrades', 'Use the LAPTOP in your apartment for perks.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
       ]],
@@ -124,7 +137,8 @@
     ['#use', 'ACTION BUTTON', 'This button changes with what is near you: EXIT, CAR, SHOP, FISH, HEIST… If it glows, tap it.'],
     ['#nsStatus', 'YOU', 'Health, armor, cash and ammo. In a car it shows speed, fuel and damage.'],
     ['#glCard', 'YOUR NEXT GOAL', 'Not sure what to do? Do this. A yellow arrow points to it. Tap the card for all goals.'],
-    ['#nsDock', 'YOUR APPS', '⭐ skills · rank · 📅 daily challenges · 📱 phone (jobs, messages, market) · ❓ help.'],
+    ['#nsDock', 'YOUR APPS', '⭐ skills · 🎒 backpack (what you carry + where to get everything) · rank · 📅 dailies · 📱 phone · ❓ help.'],
+    ['#wpPill', 'YOUR GUN', 'What\'s in your hand and how worn it is. You start unarmed: your first goal walks you through crafting a Pipe Pistol.'],
     ['#mmWrap', 'MINIMAP', 'Markers show jobs, events, goals and cops. Tap it for the big map and GPS.'],
     ['#more', 'MORE', 'Everything else: bag, car, map, businesses, crafting, saves. Turn on 🔊 SOUND here for music, radio and city sounds.'],
   ];

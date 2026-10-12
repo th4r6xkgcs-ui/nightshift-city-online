@@ -142,22 +142,19 @@
     standHere(c, x, y, t, '#7cdeb5', info.stock > 0);
   }
   function container(c, x, y, t, info) {
-    R(c, '#2b3138', x - 70, y - 100, 140, 110); // asphalt yard
-    for (let i = 0; i < 6; i++) R(c, '#c9b14a', x - 66 + i * 24, y + 4, 14, 2);
-    // a stack of closed containers behind
-    for (const [cx2, cy2, col] of [[x - 64, y - 96, '#7a2e2a'], [x - 64, y - 70, '#2e5a7a']]) { shadow(c, cx2, cy2, 60, 22); R(c, col, cx2, cy2, 60, 22); for (let k = 2; k < 60; k += 4) R(c, '#00000022', cx2 + k, cy2, 1, 22); R(c, '#ffffff22', cx2, cy2, 60, 2); }
-    // the open one (front right): doors swung open, crates inside
-    const ox = x - 2, oy = y - 62;
-    shadow(c, ox, oy, 66, 26); R(c, '#2f6b4f', ox, oy, 66, 26); for (let k = 2; k < 66; k += 4) R(c, '#00000024', ox + k, oy, 1, 26); R(c, '#ffffff24', ox, oy, 66, 2);
-    R(c, '#11161b', ox + 44, oy + 3, 20, 20);
+    R(c, '#2b3138', x - 56, y - 104, 112, 114); // asphalt yard squeezed against the east edge
+    for (let i = 0; i < 4; i++) R(c, '#c9b14a', x - 50 + i * 26, y + 4, 14, 2);
+    for (const [cx2, cy2, col] of [[x - 52, y - 100, '#7a2e2a'], [x - 52, y - 76, '#2e5a7a']]) { shadow(c, cx2, cy2, 60, 22); R(c, col, cx2, cy2, 60, 22); for (let k = 2; k < 60; k += 4) R(c, '#00000022', cx2 + k, cy2, 1, 22); R(c, '#ffffff22', cx2, cy2, 60, 2); }
+    const ox = x - 52, oy = y - 48; // the open one: doors swung, crates inside
+    shadow(c, ox, oy, 64, 26); R(c, '#2f6b4f', ox, oy, 64, 26); for (let k = 2; k < 64; k += 4) R(c, '#00000024', ox + k, oy, 1, 26); R(c, '#ffffff24', ox, oy, 64, 2);
+    R(c, '#11161b', ox + 42, oy + 3, 20, 20);
     const f = info.max ? info.stock / info.max : 1;
-    for (let k = 0; k < Math.round(1 + 3 * f); k++) { R(c, '#6b5a3a', ox + 46 + (k % 2) * 8, oy + 5 + Math.floor(k / 2) * 8, 7, 7); R(c, '#8a744a', ox + 46 + (k % 2) * 8, oy + 5 + Math.floor(k / 2) * 8, 7, 1); }
-    R(c, '#2f6b4f', ox + 66, oy - 8, 3, 18); R(c, '#2f6b4f', ox + 66, oy + 16, 3, 18); // doors
-    R(c, '#c9c9c0', ox + 60, oy + 12, 6, 2); // cut padlock chain
-    // pallet + crate in front
-    R(c, '#8a6a40', x + 10, y - 26, 26, 14); for (let k = 0; k < 4; k++) R(c, '#a8834e', x + 10, y - 26 + k * 4, 26, 2);
-    R(c, '#4a5a3a', x + 13, y - 33, 20, 12); R(c, '#5d7048', x + 13, y - 33, 20, 2); R(c, '#2a3320', x + 21, y - 31, 4, 9);
-    if (info.open) { const fl = 0.7 + 0.3 * Math.sin(t * 9) * Math.sin(t * 3.1); R(c, '#2c2c2c', x + 42, y - 30, 8, 5); glow(c, x + 46, y - 34, 34 * fl, '#fff3c055'); light(x + 46, y - 34, 10, 8); }
+    for (let k = 0; k < Math.round(1 + 3 * f); k++) { R(c, '#6b5a3a', ox + 44 + (k % 2) * 8, oy + 5 + Math.floor(k / 2) * 8, 7, 7); R(c, '#8a744a', ox + 44 + (k % 2) * 8, oy + 5 + Math.floor(k / 2) * 8, 7, 1); }
+    R(c, '#2f6b4f', ox + 64, oy - 8, 3, 16); R(c, '#2f6b4f', ox + 64, oy + 18, 3, 16);
+    R(c, '#c9c9c0', ox + 58, oy + 12, 6, 2);
+    R(c, '#8a6a40', x + 18, y - 96, 26, 14); for (let k = 0; k < 4; k++) R(c, '#a8834e', x + 18, y - 96 + k * 4, 26, 2);
+    R(c, '#4a5a3a', x + 21, y - 103, 20, 12); R(c, '#5d7048', x + 21, y - 103, 20, 2); R(c, '#2a3320', x + 29, y - 101, 4, 9);
+    if (info.open) { const fl = 0.7 + 0.3 * Math.sin(t * 9) * Math.sin(t * 3.1); R(c, '#2c2c2c', x + 34, y - 70, 8, 5); glow(c, x + 38, y - 72, 34 * fl, '#fff3c055'); light(x + 38, y - 72, 10, 8); }
     standHere(c, x, y, t, '#ffb347', info.open && info.stock > 0);
   }
   function trim(c, x, y, t, info) {
@@ -236,21 +233,22 @@
     light(x + 30, y - 46, 14, 10);
     standHere(c, x, y, t, '#ffb347', true);
   }
+  function cart(c, x, y, stripeA, stripeB) { // small sidewalk stall: body x-26..x+26, y-34..y-8
+    shadow(c, x - 26, y - 34, 52, 26); R(c, '#3e4a5a', x - 26, y - 30, 52, 22); R(c, '#2b3440', x - 26, y - 10, 52, 2);
+    for (let k = 0; k < 7; k++) R(c, k % 2 ? stripeA : stripeB, x - 28 + k * 8, y - 36, 8, 7);
+    R(c, '#1b1b1b', x - 24, y - 8, 4, 4); R(c, '#1b1b1b', x + 20, y - 8, 4, 4);
+  }
   function hardware(c, x, y, t) {
-    shadow(c, x - 40, y - 64, 80, 40); R(c, '#4b4f55', x - 40, y - 64, 80, 40);
-    for (let k = 0; k < 10; k++) R(c, k % 2 ? '#1b1b1b' : '#e0b021', x - 42 + k * 8.4, y - 70, 8.4, 8); // awning
-    R(c, '#8a6a40', x - 36, y - 60, 72, 20); for (let k = 0; k < 6; k++) for (let j = 0; j < 2; j++) R(c, '#6a5030', x - 32 + k * 12, y - 57 + j * 9, 1, 1);
-    const tools = [['#c0473f', 2, 12], ['#9aa3ab', 3, 14], ['#e0b021', 2, 10], ['#4f7f9a', 3, 13], ['#9aa3ab', 2, 11], ['#5aa64e', 3, 12]];
-    tools.forEach(([col, w, h], i) => R(c, col, x - 30 + i * 11, y - 58, w, h));
-    R(c, '#6b5a3a', x - 38, y - 38, 76, 10); for (let k = 0; k < 5; k++) C(c, '#b9c2c7', x - 30 + k * 14, y - 33, 4); // tape rolls on the counter
-    for (let k = 0; k < 5; k++) C(c, '#7d868c', x - 30 + k * 14, y - 33, 1.5);
+    cart(c, x, y, '#1b1b1b', '#e0b021');
+    const tools = [['#c0473f', 2, 9], ['#9aa3ab', 3, 11], ['#e0b021', 2, 8], ['#4f7f9a', 3, 10], ['#9aa3ab', 2, 9]];
+    tools.forEach(([col, w, h], i) => R(c, col, x - 20 + i * 9, y - 28, w, h));
+    for (let k = 0; k < 3; k++) { C(c, '#b9c2c7', x + 8 + k * 7, y - 14, 3); C(c, '#7d868c', x + 8 + k * 7, y - 14, 1.2); }
+    R(c, '#e8e3d0', x - 22, y - 16, 10, 6); R(c, '#c0473f', x - 21, y - 15, 8, 1);
     standHere(c, x, y, t, '#ffd970', true);
   }
   function bags(c, x, y, t) {
-    shadow(c, x - 34, y - 58, 68, 34); R(c, '#3e4a5a', x - 34, y - 58, 68, 34);
-    for (let k = 0; k < 8; k++) R(c, k % 2 ? '#f2f2f2' : '#3d7fd0', x - 36 + k * 9, y - 64, 9, 7);
-    const cols = ['#c0473f', '#3d7fd0', '#2f6b3f', '#e0a71f', '#6b4a8a'];
-    cols.forEach((col, i) => { const bx = x - 28 + i * 12, sw = Math.sin(t * 1.5 + i) * 0.8; R(c, '#222', bx + 3 + sw, y - 56, 1, 4); R(c, col, bx + sw, y - 52, 9, 12); R(c, '#00000033', bx + sw, y - 44, 9, 4); R(c, '#ffffff33', bx + 1 + sw, y - 51, 3, 2); });
+    cart(c, x, y, '#f2f2f2', '#3d7fd0');
+    ['#c0473f', '#3d7fd0', '#2f6b3f', '#e0a71f', '#6b4a8a'].forEach((col, i) => { const bx = x - 22 + i * 9, sw = Math.sin(t * 1.5 + i) * 0.8; R(c, '#222', bx + 3 + sw, y - 29, 1, 3); R(c, col, bx + sw, y - 26, 8, 11); R(c, '#00000033', bx + sw, y - 19, 8, 4); R(c, '#ffffff33', bx + 1 + sw, y - 25, 3, 2); });
     standHere(c, x, y, t, '#7cc7ff', true);
   }
   function lockup(c, x, y, t, info) {
@@ -282,8 +280,8 @@
     if (s.kind === 'bags') return bags(c, x, y, t, info);
     if (s.kind === 'lockup') return lockup(c, x, y, t, info);
   }
-  const LIFT = { scrapyard: 140, construction: 128, plots: 118, boat: 40, pharmacy: 108, container: 112, trim: 112, kitchen: 140, trailer: 100 };
-  const signLift = (s) => (s.kind === 'gather' || s.kind === 'process' ? LIFT[s.spot.id] || 40 : s.kind === 'lockup' ? 110 : s.kind === 'arms' ? 92 : s.kind === 'promoter' ? 52 : 80);
+  const LIFT = { scrapyard: 140, construction: 128, plots: 118, boat: 40, pharmacy: 108, container: 116, trim: 112, kitchen: 140, trailer: 100 };
+  const signLift = (s) => (s.kind === 'gather' || s.kind === 'process' ? LIFT[s.spot.id] || 40 : s.kind === 'lockup' ? 110 : s.kind === 'arms' ? 92 : s.kind === 'promoter' ? 52 : 48);
 
   // ---------------- apartment workbench (room coords) ----------------
   function drawBench(c, pos, t) {

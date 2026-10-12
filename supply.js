@@ -205,7 +205,7 @@
     const job = act.job; act = null; renderAct();
     const r = job.run(benchCtx(job.where));
     if (!r.ok) { say(r.reason); renderBench(); return; }
-    state.stats.crafted += 1; persist(); gameSave();
+    state.stats.crafted += 1; if (job.gun) state.stats.gunsCrafted += 1; persist(); gameSave();
     xp({ crafting: Math.round(job.seconds * 4) }, 'craft');
     try { root.NightshiftAudio?.play('pickup'); root.NightshiftFeedback?.floating(p.x, p.y - 34, '🛠️ ' + job.label, '#ffb347'); } catch { /* cosmetic */ }
     say(job.done(r));
@@ -395,7 +395,7 @@
         const need = el('div', { className: 'need' }); for (const [k, n] of Object.entries(w.craft.mats)) need.append(chip(k, n, pool[k] || 0)); card.append(need);
         const row = el('div', { className: 'row' });
         row.append(el('span', { className: why ? 'why' : 'okc' }, why || `${Math.round(w.craft.seconds * mod('crafting.speed'))}s${owned ? ' · makes a SPARE' : ''} · worth ${money(w.value)}`));
-        row.append(btn('go', 'CRAFT', () => startCraft({ where: benchWhere, label: w.name, seconds: w.craft.seconds, check: (c) => W.craftBlock(WS().state, w.id, c), run: (c) => WS().craft(w.id, c), done: (r) => r.spare ? `${w.icon} Crafted a spare ${w.name} · sell it at the arms buyer or keep it as backup` : `${w.icon} Crafted ${w.name}! It's in your hand.` }), !!why || busy));
+        row.append(btn('go', 'CRAFT', () => startCraft({ where: benchWhere, gun: true, label: w.name, seconds: w.craft.seconds, check: (c) => W.craftBlock(WS().state, w.id, c), run: (c) => WS().craft(w.id, c), done: (r) => r.spare ? `${w.icon} Crafted a spare ${w.name} · sell it at the arms buyer or keep it as backup` : `${w.icon} Crafted ${w.name}! It's in your hand.` }), !!why || busy));
         card.append(row); cards.append(card);
       }
       benchP.append(cards);
