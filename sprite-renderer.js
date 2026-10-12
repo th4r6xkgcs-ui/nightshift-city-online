@@ -38,56 +38,180 @@ function drawCar(v){
 }
 function rounded(color,x,y,w,h,r=2){const ctx=drawing||g;ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();ctx.fill()}
 function finishPaint(ctx,x,y,w,h){const shade=ctx.createLinearGradient?.(x,y,x,y+h);if(!shade?.addColorStop)return;shade.addColorStop(0,'#ffffff38');shade.addColorStop(.35,'#ffffff08');shade.addColorStop(.65,'#10253508');shade.addColorStop(1,'#071c4055');ctx.fillStyle=shade;ctx.fillRect(x,y,w,h)}
-function drawPersonDirect(p,isPlayer=false,options={}){
- const ctx=options.context||g,previousDrawing=drawing;drawing=ctx;const profile=options.profile??(isPlayer?root.NightshiftHome?.profile:null),shirt=profile?.shirt||p.color||'#799f98',skin=profile?.skin||'#c79977',hair=profile?.hair||'#29262b',pants=profile?.pants||'#273543',shoes=profile?.shoes||'#c5cbbb';
- const {facing,stride}=options.pose||pose(p,isPlayer),front=facing>=1&&facing<=3,back=facing>=5&&facing<=7,side=facing===0||facing===4,look=facing===0||facing===1||facing===7?1.5:facing===3||facing===4||facing===5?-1.5:0;
- ctx.save();ctx.translate(Math.round(p.x),Math.round(p.y));ctx.fillStyle='#101d2838';ctx.beginPath();ctx.ellipse(1,13,9,3.5,0,0,Math.PI*2);ctx.fill();
- // Longer tapered legs, smaller head and continuous clothing silhouettes.
- rounded('#172733',-5.5,1,11,8,2);rounded(pants,-5.5,4,4.5,10+stride,1.5);rounded(pants,1,4,4.5,10-stride,1.5);
- rect('#d0dce718',-4.5,5,1,8);rect('#08172555',3.5,5,1,8);
- rounded('#162532',-6,13+stride,6,3.5,1.5);rounded(shoes,-5.5,13+stride,5,2,1);rounded('#162532',.5,13-stride,6,3.5,1.5);rounded(shoes,1,13-stride,5,2,1);
- rounded('#1b2b36',-7,-11,14,17,3.5);rounded(shirt,-6,-10,12,14,3);
- rounded(shirt,-8,-8,3.5,12+stride/2,1.75);rounded(shirt,4.5,-8,3.5,12-stride/2,1.75);
- rounded(skin,-8,3+stride/2,3,3,1.5);rounded(skin,5,3-stride/2,3,3,1.5);
- rect('#ffffff22',-4.5,-7,1.5,8);rect('#13243144',4,-5,1,8);rect('#162b3d55',-4,3,8,1);
- const lookSeed=[...String(shirt)].reduce((n,ch)=>n+ch.charCodeAt(0),0)%4;
- if(lookSeed===0){rounded('#273d4b',-5,-10,10,4,2);rect('#c7b9a577',0,-5,.8,8);rect('#203541',-7,0,3,3);rect('#203541',5,0,2,3)}
- else if(lookSeed===1){rounded('#182e40',-3,-5,6,4,1);rect('#dfd6bd',-2,-4,4,1)}
- else if(lookSeed===2){rounded('#243a49',-5,-8,3,11,1);rounded('#243a49',2,-8,3,11,1);rect('#d2c3a277',0,-7,1,7)}
- else{rect('#d9c9aa55',-4,-5,8,1);rect('#d9c9aa33',-4,-1,8,1)}
- rounded(skin,-3.5+look/2,-19,7.5,8.5,3);rounded('#edd0a044',-2.5+look/2,-17.5,2,4,1);
- rounded(hair,-4,-21,8.5,5.5,2.5);if(back)rounded(hair,-3.5,-19,8,7,2.5);else{rect('#24313a',look+1,-14,1,1);if(front)rect('#24313a',look-1.5,-14,1,1);rect('#88634f',look,-11.5,2,1);if(side)rounded(skin,look>0?3.5:-4,-16,1.5,3,1)}
- if(profile?.bag&&profile.bag!=='none'){rect('#26383b',-6,-7,1.5,12);rounded('#a58a5b',back?-4:-7,-7,back?9:3,12,2);rect('#d2b078',back?-3:-6,-5,back?7:1,1)}
- if(profile?.hat&&profile.hat!=='none'){rounded(profile.hat==='cap'?'#526575':'#b97562',-4.5,-22,10,5,2);rect('#20333f',look>=0?2:-6,-18,5,1.5)}
- if(isPlayer&&options.weapon!==false&&(!root.NightshiftInventory||root.NightshiftInventory.state.pocket.pistol>0)){ctx.save();ctx.rotate(p.angle||0);rounded(shirt,4,-3,7,5,2);rounded(skin,10,-2,4,3,1);rect('#152a35',13,-3,10,4);rect('#929c9b',14,-3,9,2);rect('#20343d',14,0,3,5);ctx.restore()}
- if(!options.hideHealth&&!isPlayer&&Number.isFinite(p.hp)&&p.hp<(p.maxHp||40)){rect('#182832',-13,-29,26,4);rect('#dd9884',-13,-29,26*Math.max(0,p.hp/(p.maxHp||40)),3)}ctx.restore();drawing=previousDrawing;
+// ---- Art pass (Claude): characters -------------------------------------------------------------
+// Bigger, more readable people: skin/hair/outfit variety per NPC (seeded by id), hair styles, outfits
+// (tee, hoodie, jacket, tank, suit, uniform), shaded clothes, arm swing, walk bob, side-view stride and a
+// crisp 1px outline baked into each atlas. Police get a uniform; the player's gun matches the equipped weapon.
+const SKINS=['#f3cfb1','#e6b58f','#cf9670','#b0774f','#8d5a3b','#6a4129','#4f2f1f'];
+const HAIRS=['#17151a','#2e211a','#4a3324','#7a5434','#b8874e','#d9bf86','#8b8f98','#7d2e24','#3a2a4a'];
+const PANTS=['#25344a','#2f3b55','#3d3a36','#1f2328','#6b6250','#45506a','#5a3e3a'];
+const SHOES=['#d9ddd2','#2a2a2e','#7a4b2f','#c0473f','#e8e0c8','#3a4f7a'];
+const STYLES=['tee','hoodie','jacket','tee','hoodie','suit','jacket','tank'];
+const SHIRTS=['#c84659','#3d7fc6','#e2b75c','#6d73be','#2f8f6a','#e4e0d6','#38404d','#a34a8a','#e07a3a','#4f9fa8','#7a8f3a','#1f2a3a'];
+const HAIRDO=['short','buzz','long','afro','bun','short','curly','bald','long','ponytail'];
+function seedOf(s){let h=2166136261;for(const ch of String(s)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function shade(hex,amt){const n=parseInt(String(hex).slice(1,7),16);if(!Number.isFinite(n))return hex;let r=n>>16&255,gg=n>>8&255,b=n&255;const f=amt<0?(v)=>Math.round(v*(1+amt)):(v)=>Math.round(v+(255-v)*amt);r=f(r);gg=f(gg);b=f(b);return '#'+((1<<24)|(r<<16)|(gg<<8)|b).toString(16).slice(1)}
+function lookFor(p,isPlayer,role,profileIn){
+ const profile=profileIn??(isPlayer?root.NightshiftHome?.profile:null),seed=seedOf(isPlayer?'player':(p.id||p.name||p.color||'npc')),pick=(arr,k)=>arr[(seed>>>k)%arr.length];
+ const shirt=profile?.shirt||(role==='ped'?pick(SHIRTS,5):p.color||'#799f98');
+ if(role==='officer')return {shirt:'#2a3f6e',skin:pick(SKINS,3),hair:pick(HAIRS,7),pants:'#1d2a44',shoes:'#15171c',style:'uniform',hairdo:'short',beard:false,hat:'police',bag:null,accent:'#d9b44a'};
+ return {shirt,skin:profile?.skin||(isPlayer?'#c79977':pick(SKINS,3)),hair:profile?.hair||pick(HAIRS,7),pants:profile?.pants||(isPlayer?'#273543':pick(PANTS,11)),shoes:profile?.shoes||(isPlayer?'#c5cbbb':pick(SHOES,13)),
+  style:isPlayer?'jacket':(()=>{const st=pick(STYLES,17);return st==='tank'&&['#e2b75c','#e07a3a','#e4e0d6'].includes(shirt)?'tee':st})(),hairdo:isPlayer?'short':pick(HAIRDO,19),beard:!isPlayer&&((seed>>>23)%5===0),hat:profile?.hat&&profile.hat!=='none'?profile.hat:null,bag:profile?.bag&&profile.bag!=='none'?profile.bag:null,accent:pick(['#e8d36a','#d9e4ef','#e07a6a','#7fd1c2'],25)};
 }
-const atlasCache=new Map(),MAX_ATLASES=8,CELL_W=48,CELL_H=52;
-function atlasFor(p,isPlayer){
- const profile=isPlayer?root.NightshiftHome?.profile:null,key=JSON.stringify([isPlayer,profile?.shirt||p.color||'#799f98',profile?.skin,profile?.hair,profile?.pants,profile?.shoes,profile?.hat,profile?.bag]);
+function shadowAt(ctx,x,y){ctx.fillStyle='#05080f55';ctx.beginPath();ctx.ellipse(x+1,y+15,9,3.2,0,0,Math.PI*2);ctx.fill()}
+function drawPersonDirect(p,isPlayer=false,options={}){
+ const ctx=options.context||g,previousDrawing=drawing;drawing=ctx;
+ const L=options.look||lookFor(p,isPlayer,options.role,options.profile);
+ const {facing,stride,frame}=options.pose||pose(p,isPlayer),front=facing>=1&&facing<=3,back=facing>=5&&facing<=7,side=facing===0||facing===4,dir=facing===0||facing===1||facing===7?1:facing===3||facing===4||facing===5?-1:0;
+ const bob=stride&&Math.abs(stride)>=3?-1:0,sx=side?stride*0.9:0,sy=side?0:stride*0.6;
+ ctx.save();ctx.translate(Math.round(p.x),Math.round(p.y)+bob);
+ if(!options.noShadow)shadowAt(ctx,0,-bob);
+ const skinD=shade(L.skin,-.18),shirtL=shade(L.shirt,.18),shirtD=shade(L.shirt,-.28),pantsD=shade(L.pants,-.3),hairL=shade(L.hair,.22);
+ // legs (far leg first)
+ const leg=(x,dy,dx,col)=>{rounded(col,x+dx,3,4,10+dy,1.5);rounded(shade(L.shoes,-.35),x+dx-.5,12+dy,5.5,3.5,1.5);rect(L.shoes,x+dx,12+dy,4.5,1.5)};
+ if(side){leg(-2,0,-sx,pantsD);leg(-2,0,sx,L.pants)}else{leg(-5,sy,0,L.pants);leg(1,-sy,0,L.pants);rect(pantsD,-1,4,2,6)}
+ // torso + arms
+ const tw=side?9:12,tx=-tw/2,armSwing=stride*0.7;
+ const bodyCol=L.style==='jacket'||L.style==='suit'?shade(L.shirt,-.35):L.style==='uniform'?L.shirt:L.shirt;
+ const arm=(x,dy,col,hand)=>{rounded(col,x,-8+dy,3.5,11,1.6);rounded(hand,x+.25,2+dy,3,3,1.4)};
+ const sleeve=L.style==='tank'?L.skin:bodyCol;
+ if(side){arm(-1.5-dir*1,-armSwing,shade(sleeve,-.2),skinD)}else arm(tx-2.5,armSwing,shade(sleeve,-.1),L.skin);
+ if(L.style==='hoodie'&&!front)rounded(shade(L.shirt,-.15),-5,-14,10,6,3);
+ rounded(bodyCol,tx,-10,tw,15,3);
+ rect(shade(bodyCol,.16),tx+1,-9,2,12);rect(shade(bodyCol,-.25),tx+tw-2.5,-9,1.5,12);
+ if(front){
+  if(L.style==='jacket'){rect(L.accent==='#d9e4ef'?'#d9e4ef':shirtL,-1.5,-9,3,12);rect(shade(bodyCol,-.4),-2.5,-9,1,12);rect(shade(bodyCol,-.4),1.5,-9,1,12)}
+  else if(L.style==='suit'){rect('#e9ecef',-1.5,-9,3,8);rect(L.shirt,-.5,-8,1.2,7);rect(shade(bodyCol,-.4),-2.5,-9,1,10)}
+  else if(L.style==='hoodie'){rect(shirtD,-3,-1,6,3);rect('#e9e2cf',-1.5,-8,.8,3);rect('#e9e2cf',.8,-8,.8,3);rounded(shade(L.shirt,-.12),-4.5,-11,9,3,1.5)}
+  else if(L.style==='tank'){rect(L.skin,-2,-10,4,2)}
+  else if(L.style==='uniform'){rect(L.accent,2,-7,2,2);rect('#141c2e',tx,2,tw,1.5);rect('#8fa6c8',-4,-9,1,6)}
+  else{rect(L.skin,-1.5,-10,3,1.5);if(((p.id||'').length+(L.shirt||'').length)%2)rect(L.accent,-3,-5,6,2)}
+ }
+ if(back&&L.style==='hoodie')rounded(shade(L.shirt,-.2),-4,-12,8,5,2);
+ rect('#0a0f1a55',tx,3,tw,1.5);
+ if(L.bag){rect('#3b2e22',side?-1:-5,-9,1.5,12);rounded('#a58a5b',back?-4:dir>0?-7:4,-6,back?9:3,10,2)}
+ if(side)arm(-1.5+dir*1,armSwing,sleeve,L.skin);else arm(tx+tw-1,-armSwing,sleeve,L.skin);
+ // neck + head
+ rect(skinD,-1.5,-13,3,3);
+ const hx=side?dir*1:0;
+ rounded(L.skin,-4+hx,-21,8,9,3.2);
+ rect(skinD,(side&&dir<0?-4:2.5)+hx,-15,1.5,3);
+ if(!back){
+  const ey=-16.5;
+  if(front){rect('#1a1d24',-2.2+hx+dir*.6,ey,1.2,1.4);rect('#1a1d24',1.2+hx+dir*.6,ey,1.2,1.4);rect(shade(L.skin,-.3),-.8+hx+dir*.4,-13.8,2,.8)}
+  else{rect('#1a1d24',dir>0?1.5+hx:-2.5+hx,ey,1.2,1.4);rect(skinD,dir>0?3.2+hx:-4.2+hx,-15.5,1,2)}
+  if(L.beard)rounded(shade(L.hair,-.1),-3.5+hx,-14.5,7,3,1.5);
+ }
+ // hair
+ const H=L.hair;
+ switch(L.hairdo){
+  case 'bald':rect(shade(L.skin,.15),-2+hx,-20.5,3,1);break;
+  case 'buzz':rounded(H,-4+hx,-21.5,8,3.5,2);break;
+  case 'afro':rounded(H,-6+hx,-25,12,9,5);rect(hairL,-4+hx,-24,3,1.5);break;
+  case 'curly':rounded(H,-5+hx,-23,10,6,3);for(const cx of [-4,-1,2])rect(hairL,cx+hx,-22.5,1.5,1.5);break;
+  case 'bun':rounded(H,-4.5+hx,-22,9,5,2.5);rounded(H,-2+hx,-26,4,4,2);break;
+  case 'long':rounded(H,-4.5+hx,-22,9,5,2.5);if(back||side)rounded(H,-4.5+hx+(side?-dir*1.5:0),-19,side?5:9,10,2);else{rect(H,-5+hx,-19,2,8);rect(H,3+hx,-19,2,8)}break;
+  case 'ponytail':rounded(H,-4.5+hx,-22,9,5,2.5);if(!front)rounded(H,(side?-dir*5:-1.5)+hx,-19,3,8,1.5);break;
+  default:rounded(H,-4.5+hx,-22,9,5,2.5);rect(hairL,-2.5+hx,-21.5,3,1);if(side)rect(H,(dir>0?-4.5:2.5)+hx,-19,2,4)
+ }
+ if(back&&!['bald','buzz'].includes(L.hairdo))rounded(H,-4+hx,-20,8,6,2.5);
+ if(L.hat==='police'){rounded('#1d2a44',-5+hx,-24,10,5,2);rect('#141c2e',(front?-5:dir>0?0:-6)+hx,-20,side?6:10,1.5);rect('#d9b44a',-1+hx,-23,2,2)}
+ else if(L.hat){rounded(L.hat==='cap'?'#526575':'#b97562',-4.5+hx,-24,9.5,5,2);rect(shade(L.hat==='cap'?'#526575':'#b97562',-.3),(dir>=0?1.5:-6)+hx,-20,5,1.5)}
+ if(isPlayer&&options.weapon!==false&&!options.noWeapon&&(!root.NightshiftInventory||root.NightshiftInventory.state.pocket.pistol>0))gunArm(ctx,p,L);
+ if(!options.hideHealth&&!isPlayer&&Number.isFinite(p.hp)&&p.hp<(p.maxHp||40)){rect('#182832',-13,-31,26,4);rect('#dd9884',-13,-31,26*Math.max(0,p.hp/(p.maxHp||40)),3)}
+ ctx.restore();drawing=previousDrawing;
+}
+// Gun in hand, shaped by the equipped weapon (Claude weapons module) — pistol/revolver short, SMG with mag,
+// shotgun with pump, DMR with scope, AR with stock and mag.
+function gunArm(ctx,p,L){
+ const id=root.NightshiftWeapons?.state?.equipped||'pistol',mods=root.NightshiftWeapons?.state?.mods?.[id]||[];
+ ctx.save();ctx.rotate(p.angle||0);
+ rounded(shade(L.shirt,L.style==='jacket'?-.35:0),3,-3,8,5,2);rounded(L.skin,10,-2.5,4,4,1.5);
+ const metal='#1a2128',hi='#8d979b';
+ if(id==='pistol'||id==='revolver'){rect(metal,12,-3.5,id==='revolver'?11:9,3.5);rect(hi,13,-3.5,id==='revolver'?10:8,1);rect('#2c2420',12.5,-.5,2.5,4);if(id==='revolver')rect('#3a3f45',15,-4.5,4,5.5)}
+ else if(id==='smg'){rect(metal,11,-4,14,4.5);rect(hi,12,-4,12,1);rect('#20272c',16,.5,2.5,6);rect(metal,7,-3,4,3)}
+ else if(id==='shotgun'){rect('#5b3d28',5,-3.5,7,4);rect(metal,12,-3.5,17,3);rect(hi,12,-3.5,17,1);rect('#4a3524',17,-.5,6,2.5)}
+ else if(id==='rifle'){rect('#4a3a2c',4,-3.5,8,4);rect(metal,12,-3,20,3);rect(hi,12,-3,20,.8);rect('#11161a',15,-6.5,8,2.5);rect('#7fb6d6',22,-6.3,1,2)}
+ else{rect(metal,4,-3.5,8,4);rect(metal,12,-4,16,4.5);rect(hi,13,-4,14,1);rect('#20272c',17,.5,3,6.5);rect('#3a4148',25,-2.5,6,2)}
+ if(mods.includes('suppressor'))rect('#2b3036',id==='pistol'||id==='revolver'?21:28,-3.5,7,3);
+ if(mods.includes('grip')){ctx.fillStyle='#ff304055';ctx.fillRect(22,-1.6,40,.8)}
+ ctx.restore();
+}
+const atlasCache=new Map(),MAX_ATLASES=20,CELL_W=44,CELL_H=52,AX=22,AY=34;
+function atlasKey(p,isPlayer,role){const L=lookFor(p,isPlayer,role);return {L,key:JSON.stringify([isPlayer,role||'',L.shirt,L.skin,L.hair,L.pants,L.shoes,L.style,L.hairdo,L.beard,L.hat,L.bag,L.accent])}}
+function atlasFor(p,isPlayer,role){
+ const {L,key}=atlasKey(p,isPlayer,role);
  if(atlasCache.has(key)){const value=atlasCache.get(key);atlasCache.delete(key);atlasCache.set(key,value);return value}
  // Overflow NPC styles draw directly instead of evicting/rebuilding 64-frame atlases every frame.
  if(atlasCache.size>=MAX_ATLASES&&!isPlayer)return null;
  const canvas=root.document?.createElement?.('canvas'),ctx=canvas?.getContext?.('2d');if(!ctx)return null;
  canvas.width=CELL_W*8;canvas.height=CELL_H*8;ctx.imageSmoothingEnabled=false;
- for(let facing=0;facing<8;facing++)for(let frame=0;frame<8;frame++)drawPersonDirect({x:frame*CELL_W+24,y:facing*CELL_H+28,color:p.color,hp:40},isPlayer,{context:ctx,profile,weapon:false,hideHealth:true,pose:{facing,stride:[0,2,3,2,0,-2,-3,-2][frame]}});
- atlasCache.set(key,canvas);if(atlasCache.size>MAX_ATLASES)atlasCache.delete(atlasCache.keys().next().value);return canvas;
+ for(let facing=0;facing<8;facing++)for(let frame=0;frame<8;frame++)drawPersonDirect({x:frame*CELL_W+AX,y:facing*CELL_H+AY,color:p.color,id:p.id,hp:40},isPlayer,{context:ctx,look:L,weapon:false,noShadow:true,hideHealth:true,pose:{facing,frame,stride:[0,2,3,2,0,-2,-3,-2][frame]}});
+ // 1px dark outline around every frame (silhouette stamped behind in 4 directions)
+ if(typeof g==='undefined'||ctx!==g)try{const sil=root.document.createElement('canvas');sil.width=canvas.width;sil.height=canvas.height;const s=sil.getContext('2d');s.drawImage(canvas,0,0);s.globalCompositeOperation='source-in';s.fillStyle='#0a0e17';s.fillRect(0,0,sil.width,sil.height);ctx.globalCompositeOperation='destination-over';for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]])ctx.drawImage(sil,dx,dy);ctx.globalCompositeOperation='source-over'}catch{}
+ atlasCache.set(key,canvas);if(atlasCache.size>MAX_ATLASES)atlasCache.delete(atlasCache.keys().next().value);
+ return canvas;
 }
 function drawPerson(p,isPlayer=false,options={}){
- const atlas=atlasFor(p,isPlayer);if(!atlas)return drawPersonDirect(p,isPlayer,options);
- const state=pose(p,isPlayer);g.save();g.imageSmoothingEnabled=false;g.drawImage(atlas,state.frame*CELL_W,state.facing*CELL_H,CELL_W,CELL_H,Math.round(p.x)-24,Math.round(p.y)-28,CELL_W,CELL_H);
- if(isPlayer&&options.weapon!==false&&(!root.NightshiftInventory||root.NightshiftInventory.state.pocket.pistol>0)){g.translate(Math.round(p.x),Math.round(p.y));g.rotate(p.angle||0);rect(root.NightshiftHome?.profile.shirt||'#799f98',4,-3,7,5);rect(root.NightshiftHome?.profile.skin||'#c79977',10,-2,4,3);rect('#152a35',13,-3,10,4);rect('#929c9b',14,-3,9,2);rect('#20343d',14,0,3,5)}
- g.restore();if(!isPlayer&&Number.isFinite(p.hp)&&p.hp<(p.maxHp||40)){rect('#182832',p.x-13,p.y-29,26,4);rect('#dd9884',p.x-13,p.y-29,26*Math.max(0,p.hp/(p.maxHp||40)),3)}
+ const role=options.role||null,atlas=atlasFor(p,isPlayer,role);
+ if(!atlas)return drawPersonDirect(p,isPlayer,options);
+ const state=pose(p,isPlayer);
+ g.save();g.imageSmoothingEnabled=false;
+ shadowAt(g,Math.round(p.x),Math.round(p.y));
+ g.drawImage(atlas,state.frame*CELL_W,state.facing*CELL_H,CELL_W,CELL_H,Math.round(p.x)-AX,Math.round(p.y)-AY,CELL_W,CELL_H);
+ if(isPlayer&&options.weapon!==false&&(!root.NightshiftInventory||root.NightshiftInventory.state.pocket.pistol>0)){g.translate(Math.round(p.x),Math.round(p.y));const prev=drawing;drawing=g;gunArm(g,p,lookFor(p,true,null));drawing=prev}
+ g.restore();
+ if(!isPlayer&&Number.isFinite(p.hp)&&p.hp<(p.maxHp||40)){rect('#182832',p.x-13,p.y-31,26,4);rect('#dd9884',p.x-13,p.y-31,26*Math.max(0,p.hp/(p.maxHp||40)),3)}
 }
+
+// ---- Art pass (Claude): furniture with real shapes, soft shadows and quiet labels ----
+function label(text,cx,y){
+ const ctx=drawing||g;ctx.save();ctx.font='bold 8px monospace';const w=(ctx.measureText?.(text)?.width||text.length*5)+10;
+ ctx.fillStyle='#0b1018aa';rounded('#0b1018aa',cx-w/2,y-9,w,11,4);ctx.fillStyle='#e9eef7cc';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,cx,y-3.5);ctx.restore()}
 function furniture(f){
- const {x,y,w,h,label}=f;g.save();rect('#101b2c66',x+5,y+7,w,h);rect('#27333d',x-1,y-1,w+2,h+2);rect(f.color,x,y,w,h);rect('#ffffff22',x+2,y+2,w-4,3);rect('#00000022',x+2,y+h-7,w-4,6);
- if(['SNACKS','SUPPLIES','SHELVES'].includes(label)){rect('#30443e',x+6,y+8,w-12,h-16);for(let row=0;row<2;row++){for(let col=0;col<Math.floor((w-18)/14);col++){rect(['#d1aa6c','#83a69b','#b87776','#a8b88d'][col%4],x+10+col*14,y+11+row*19,9,11);rect('#e0d6ba66',x+12+col*14,y+13+row*19,5,2)}rect('#b9b394',x+7,y+23+row*19,w-14,3)}}
- else if(label==='COUNTER'){for(let xx=x+8;xx<x+w-8;xx+=22)rect('#bea08022',xx,y+7,1,h-14);rect('#243d41',x+w-48,y+8,34,25);rect('#7faaa0',x+w-43,y+11,24,10);rect('#a2a695',x+w-41,y+25,21,5);rect('#dbca9d',x+10,y+12,26,17);rect('#967c62',x+12,y+15,22,1)}
- else if(label==='BED'){rect('#313947',x+7,y+9,w-14,h-16);rect('#c1bca3',x+12,y+13,w-24,h-26);rect('#ede0bd',x+17,y+17,36,18);rect('#b8a879',x+18,y+33,34,2);rect('#697f8e',x+57,y+13,w-72,h-26);rect('#8ca0a0',x+60,y+16,6,h-32);rect('#42566a',x+63,y+h-25,w-78,7)}
- else if(label==='SOFA'){rect('#523e45',x+6,y+7,w-12,h-14);for(let k=0;k<3;k++){rect('#b27e7d',x+14+k*(w-30)/3,y+13,(w-38)/3,h-27);rect('#cc9b8966',x+17+k*(w-30)/3,y+15,(w-48)/3,3)}rect('#876269',x+4,y+8,8,h-15);rect('#876269',x+w-12,y+8,8,h-15)}
- else if(label==='KITCHEN'){rect('#b9bba4',x+7,y+8,w-14,h-16);rect('#384d56',x+18,y+14,35,20);rect('#8fa6a1',x+22,y+17,27,13);rect('#454d4e',x+w-51,y+12,34,25);for(const xx of [x+w-44,x+w-31])for(const yy of [y+18,y+30])rect('#1e3036',xx,yy,6,6)}
- else{const count=label==='WARDROBE'?2:3;for(let k=0;k<count;k++){const xx=x+5+k*(w-10)/count;rect('#00000022',xx,y+7,(w-16)/count,h-15);rect('#d0b590',xx+(w-16)/count-7,y+h/2,3,6)}}
- g.fillStyle='#eef3ff';g.font='bold 10px monospace';g.textAlign='center';g.fillText(label,x+w/2,y-7);g.restore();
+ const {x,y,w,h,label:name}=f;g.save();
+ const soft=(ox,oy,ww,hh)=>{g.fillStyle='#0a0f1a33';g.fillRect(x+ox,y+oy,ww,hh)};
+ soft(4,6,w,h);soft(2,3,w,h);
+ if(name==='BED'){
+  rect('#2a2230',x-1,y-1,w+2,h+2);rect('#5b4632',x,y,w,h);rect('#6f5640',x,y,w,10);rect('#7d6248',x+2,y+2,w-4,3); // frame + headboard
+  rect('#e9e3d6',x+6,y+12,w-12,h-18);rect('#ffffff55',x+7,y+13,w-14,2); // sheet
+  rect('#f4efe4',x+10,y+14,30,16);rect('#d9d1c0',x+10,y+27,30,3);rect('#f4efe4',x+w-40,y+14,30,16);rect('#d9d1c0',x+w-40,y+27,30,3); // pillows
+  rect(f.color,x+6,y+38,w-12,h-44);rect(shade(f.color,.2),x+6,y+38,w-12,4);rect(shade(f.color,-.25),x+6,y+h-9,w-12,3); // blanket
+  for(let i=x+12;i<x+w-12;i+=14)rect(shade(f.color,.12),i,y+46,6,h-56);
+  rect('#3b2b20',x+w+6,y+6,20,20);rect('#4c3828',x+w+7,y+7,18,4);rect('#e9d9a6',x+w+12,y+12,8,8);rect('#fff4c8',x+w+14,y+13,4,3); // nightstand + lamp
+ }else if(name==='SOFA'){
+  rect('#2a2230',x-1,y-1,w+2,h+2);rect(shade(f.color,-.3),x,y,w,h);rect(shade(f.color,-.15),x,y,w,16); // back
+  rect(shade(f.color,-.35),x,y+6,12,h-6);rect(shade(f.color,-.35),x+w-12,y+6,12,h-6);rect(shade(f.color,-.1),x+1,y+7,10,4);rect(shade(f.color,-.1),x+w-11,y+7,10,4); // arms
+  const n=3,cw=(w-26)/n;for(let k=0;k<n;k++){const cx=x+13+k*cw;rect(f.color,cx,y+16,cw-2,h-20);rect(shade(f.color,.18),cx+1,y+17,cw-4,3);rect(shade(f.color,-.12),cx,y+h-8,cw-2,3)}
+  rect('#e8c66a',x+16,y+9,12,10);rect('#c96a8a',x+w-30,y+9,12,10); // throw pillows
+ }else if(name==='KITCHEN'){
+  rect('#2a2230',x-1,y-1,w+2,h+2);rect('#d6d2c2',x,y,w,h);rect('#eceadf',x,y,w,4);rect('#9a9888',x,y+h-6,w,6); // counter
+  rect('#8fa3a8',x+12,y+12,30,20);rect('#5f7479',x+15,y+15,24,14);rect('#c7d6da',x+26,y+9,2,6); // sink
+  rect('#2b2f33',x+w-58,y+8,34,30);for(const xx of [x+w-52,x+w-38])for(const yy of [y+13,y+26]){rect('#4a5056',xx,yy,9,9);rect('#1b1e21',xx+2,yy+2,5,5)} // stove
+  rect('#e3e8ea',x+w-20,y-2,18,h+4);rect('#c9d0d3',x+w-20,y+18,18,1);rect('#8a9599',x+w-6,y+4,2,8); // fridge
+  rect('#7fa55a',x+50,y+10,6,6);rect('#c0473f',x+58,y+12,5,5); // produce
+ }else if(name==='WARDROBE'){
+  rect('#2a2230',x-1,y-1,w+2,h+2);rect(f.color,x,y,w,h);rect(shade(f.color,.15),x,y,w,4);
+  rect(shade(f.color,-.25),x+w/2-1,y+4,2,h-6);rect('#d9c38a',x+w/2-6,y+h/2-4,2,8);rect('#d9c38a',x+w/2+4,y+h/2-4,2,8);
+  rect('#a9c3d0',x+6,y+8,w/2-12,h-16);rect('#ffffff44',x+8,y+10,3,h-22); // mirror
+ }else if(name==='STORAGE'){
+  rect('#2a2230',x-1,y-1,w+2,h+2);rect('#5d4a33',x,y,w,h);
+  for(const [cx,cy,cw,ch,c] of [[x+4,y+6,34,26,'#9a7a4f'],[x+42,y+10,36,22,'#86704c'],[x+10,y+36,40,28,'#a8875a']]){rect('#2a2230',cx-1,cy-1,cw+2,ch+2);rect(c,cx,cy,cw,ch);rect(shade(c,.2),cx,cy,cw,3);rect(shade(c,-.3),cx+cw/2-1,cy,2,ch)}
+ }else if(['SNACKS','SUPPLIES','SHELVES'].includes(name)){
+  rect('#2a2230',x-1,y-1,w+2,h+2);rect(shade(f.color,-.35),x,y,w,h);rect(f.color,x+3,y+3,w-6,h-6);
+  for(let row=0;row<2;row++){const yy=y+8+row*(h-14)/2;rect('#d8d4bf',x+5,yy+(h-14)/2-4,w-10,3);
+   for(let col=0;col<Math.floor((w-14)/9);col++){const c=['#d1aa6c','#83a69b','#b87776','#a8b88d','#e0c46a','#7fa3d9'][(col+row*2)%6],hh=8+((col*7+row*3)%5);rect('#1d2228',x+8+col*9,yy+(h-14)/2-4-hh,8,hh);rect(c,x+8+col*9,yy+(h-14)/2-3-hh,7,hh-1);rect('#ffffff44',x+9+col*9,yy+(h-14)/2-2-hh,2,2)}}
+ }else if(name==='COUNTER'){
+  rect('#2a2230',x-1,y-1,w+2,h+2);rect('#7a5838',x,y,w,h);rect('#a67c52',x,y,w,6);rect('#5b4128',x,y+h-6,w,6);
+  for(let xx=x+10;xx<x+w-10;xx+=20)rect('#6b4c30',xx,y+8,1,h-16);
+  rect('#1d2228',x+w-46,y+6,32,24);rect('#69b39a',x+w-43,y+9,26,12);rect('#d7f5e8',x+w-40,y+11,10,2);rect('#a2a695',x+w-41,y+24,22,4); // register
+  rect('#e8dcb5',x+10,y+10,24,16);rect('#c0473f',x+14,y+13,6,4);rect('#7fa55a',x+22,y+15,6,4); // goods
+ }else{
+  rect('#2a2230',x-1,y-1,w+2,h+2);rect(f.color,x,y,w,h);rect('#ffffff22',x+2,y+2,w-4,3);rect('#00000022',x+2,y+h-7,w-4,6);
+ }
+ label(name,x+w/2,y-3);
+ g.restore();
 }
-root.NightshiftSprites={car:drawCar,person:drawPerson,furniture,pose,atlasStats:()=>({count:atlasCache.size,limit:MAX_ATLASES,width:CELL_W*8,height:CELL_H*8})};
+
+root.NightshiftSprites={car:drawCar,person:drawPerson,furniture,pose,look:lookFor,shade,atlasStats:()=>({count:atlasCache.size,limit:MAX_ATLASES,width:CELL_W*8,height:CELL_H*8})};
 })(globalThis);
