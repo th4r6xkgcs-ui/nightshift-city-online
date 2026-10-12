@@ -26,7 +26,7 @@
   const CLUB = { maxPerVisit: 4, premium: 1.3, bustBase: 0.12, bustHeat: 2, roundCost: 100, roundXp: 60, cooldownMs: 3 * 60 * 1000 };
   // Bust chance per sale: lower with Stealth (stealth.heat < 1 means better), never below 3%.
   const bustChance = (stealthHeatMod = 1) => Math.max(0.03, CLUB.bustBase * Math.min(1, stealthHeatMod));
-  const clubPrice = (value, charismaMod = 1) => Math.round(value * CLUB.premium * Math.max(1, charismaMod));
+  const clubPrice = (value, charismaMod = 1, bonus = 0) => Math.round(value * (CLUB.premium + Math.max(0, bonus)) * Math.max(1, charismaMod));
   // ---- Underground fight club (in the gym's back room) ----
   // A ladder of 5 opponents. Each beat the opponent either OPENS up (tap STRIKE) or SWINGS (tap BLOCK) and you
   // have `window` ms to answer. Toughness = more HP and less damage taken; Athletics = a longer reaction window.

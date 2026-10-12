@@ -26,7 +26,7 @@
   let ev = null, nextAt = performance.now() + 60000, last = performance.now(), lastReport = 0, seq = 0;
   // Something else owns the player's attention: don't spawn on top of it, and freeze timers while a panel is open.
   const busy = () => !!(root.NightshiftHeists?.active?.() || root.NightshiftRaces?.active?.());
-  const MODULES = ['NightshiftJobs', 'NightshiftCasino', 'NightshiftFishing', 'NightshiftVenues', 'NightshiftHeists', 'NightshiftEmpire', 'NightshiftWeapons', 'NightshiftRespect', 'NightshiftLab', 'NightshiftGoals'];
+  const MODULES = ['NightshiftHome', 'NightshiftLife', 'NightshiftMarket', 'NightshiftJobs', 'NightshiftCasino', 'NightshiftFishing', 'NightshiftVenues', 'NightshiftHeists', 'NightshiftEmpire', 'NightshiftWeapons', 'NightshiftRespect', 'NightshiftLab', 'NightshiftGoals'];
   const panelOpen = () => MODULES.some((m) => { try { return !!root[m]?.paused?.(); } catch { return false; } });
 
   function spawn(type) {

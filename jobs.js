@@ -169,7 +169,8 @@
   document.body.append(btn, hud, panel);
   btn.onclick = () => { if (panel.hidden) { try { root.releaseControls?.(); } catch { /* n/a */ } panel.hidden = false; lastPanel = ''; renderPanel(); } else panel.hidden = true; };
   function render() {
-    btn.textContent = active ? `📱 ${J.TYPES[active.offer.type].icon} ON JOB` : '📱 HUSTLE';
+    const unread = root.NightshiftLife?.state?.unread || 0;
+    btn.textContent = (active ? `📱 ${J.TYPES[active.offer.type].icon} ON JOB` : '📱 HUSTLE') + (unread ? ` · 📩${unread}` : '');
     const pill = document.querySelector('#wpPill');
     if (pill) { const r = pill.getBoundingClientRect(); if (r.height) { btn.style.top = Math.round(r.bottom + 6) + 'px'; btn.style.right = Math.max(12, Math.round(innerWidth - r.right)) + 'px'; } }
     if (!active) { hud.hidden = true; return; }
@@ -195,6 +196,8 @@
     const next = Math.ceil((J.SLOT_MS - (Date.now() % J.SLOT_MS)) / 60000);
     const emp = root.NightshiftEmpire, pend = emp?.pending?.() || 0;
     if (emp) { const eb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `📈 EMPIRE${pend ? ` · ${money(pend)} to collect` : ' · front businesses & passive income'}`); eb.onclick = () => { panel.hidden = true; emp.open(); }; panel.append(eb); }
+    const lf = root.NightshiftLife;
+    if (lf) { const n = lf.state.unread; const lb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `📩 MESSAGES${n ? ` · ${n} new` : ''}`); lb.onclick = () => { panel.hidden = true; lf.open(); }; panel.append(lb); }
     const mk = root.NightshiftMarket;
     if (mk) { const v = mk.value(); const mb = el('button', { className: 'go', type: 'button', style: 'margin:0 0 8px;width:100%' }, `💹 MARKET${v ? ` · portfolio ${money(v)}` : ' · trade NightCoin & city stocks'}`); mb.onclick = () => { panel.hidden = true; mk.open(); }; panel.append(mb); }
     const sh = root.NightshiftStashes;
