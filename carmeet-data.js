@@ -5,7 +5,7 @@
  * Car = { model, color, kit, tune: { engine, handling, armor }, condition }. */
 (function (root) {
   'use strict';
-  const RING = { x: 228, y: 560, r: 60 };
+  const RING = { x: 228, y: 520, r: 56 };
   const OPEN = { from: 21 * 60, to: 3 * 60 };
   const BASE = { COMPACT: 12, SEDAN: 16, VAN: 13 };
   const TIER_SCORE = { Work: 14, Street: 18, Muscle: 32, Sport: 34, Classic: 44, Exotic: 60, Super: 85, Hyper: 120 };
@@ -37,7 +37,8 @@
     const tot = RIVAL_MODELS.reduce((t, m) => t + m[1], 0);
     for (let i = 0; i < 5; i++) {
       let name; do { name = RIVAL_NAMES[Math.floor(r() * RIVAL_NAMES.length)]; } while (used.has(name)); used.add(name);
-      let x = r() * tot, id = RIVAL_MODELS[0][0]; for (const [m, w] of RIVAL_MODELS) { if ((x -= w) <= 0) { id = m; break; } }
+      let id = RIVAL_MODELS[0][0];
+      for (let tries = 0; tries < 12; tries++) { let x = r() * tot; for (const [m, w] of RIVAL_MODELS) { if ((x -= w) <= 0) { id = m; break; } } if (!out.some((o) => o.id === id)) break; }
       const spec = C?.BY?.[id], color = spec ? spec.colors[Math.floor(r() * spec.colors.length)] : '#888888';
       const kit = r() < 0.45 ? ['gt', 'muscle', 'rally', 'lux'][Math.floor(r() * 4)] : null;
       const tune = { engine: Math.floor(r() * 4), handling: Math.floor(r() * 4), armor: Math.floor(r() * 2) };
