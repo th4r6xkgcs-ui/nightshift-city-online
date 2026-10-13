@@ -18,7 +18,7 @@
     { cops: 6, fire: 'always', cool: 1100, dmg: 10, err: 0.13, speed: 86, hp: 90, swat: true, radius: 560, evade: 13000, spawnMin: 320, every: 4200 },
     { cops: 8, fire: 'always', cool: 900, dmg: 12, err: 0.1, speed: 92, hp: 110, swat: true, radius: 660, evade: 15000, spawnMin: 300, every: 3500 },
   ];
-  const stars = (heat) => (!(heat > 0) ? 0 : Math.max(1, Math.min(5, Math.ceil(heat - 1e-9))));
+  const stars = (heat) => (!(heat > 0) ? 0 : Math.max(1, Math.min(5, Math.round(heat))));
   const level = (heat) => LEVELS[stars(heat)] || null;
   const canFire = (L, armed) => !!L && (L.fire === 'always' || (L.fire === 'armed' && !!armed));
   // Angular error (radians) for one police shot. Moving targets, distance and crouching behind something all help you.
