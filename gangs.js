@@ -25,7 +25,7 @@
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const rnd = (a, b) => a + Math.random() * (b - a);
   const hash = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
-  const members = [], shots = [];
+  const members = [], shots = [], warm = []; // warm: character frames to pre-build while the crew is still off screen
   const blocks = new Map(); // key bx,by -> { gang, bx, by, alertUntil, fightUntil, loiter }
   const st = { spawned: 0, fights: 0, kills: 0, hits: 0 };
 
@@ -41,7 +41,7 @@
           let base = null; try { base = root.NightshiftWardrobeData?.npcOutfit?.(hash(id)); } catch { /* n/a */ }
           members.push({ id, gang: g, block: b, home: { x: sp.x, y: sp.y }, face: sp.face, x: sp.x, y: sp.y, hp: 50, maxHp: 50, angle: Math.atan2(sp.face.y - sp.y, sp.face.x - sp.x), mode: 'hang',
             seated: !!sp.sit, seat: sp.sit ? { x: sp.x, y: sp.y } : null, outfit: D.outfit(base, g, hash(id)), nextShot: 0, path: null, walkTicks: 0, moving: false });
-          st.spawned++;
+          st.spawned++; const mm = members[members.length - 1]; for (const d of [2, 1, 3, 0, 4]) for (let k = 0; k < 6; k += 2) warm.push([mm, d, 'idle', k]);
         });
       } else if (d > 2100 && blocks.has(k)) {
         blocks.delete(k); for (let i = members.length - 1; i >= 0; i--) if (members[i].block.bx === bx && members[i].block.by === by) members.splice(i, 1);
@@ -246,6 +246,7 @@
     let zone = false; try { zone = !!(root.NightshiftZones?.active?.() || root.NightshiftHome?.kind?.()); } catch { /* n/a */ }
     if (env && env.player && !zone && !(root.NightshiftRPG?.paused?.())) {
       ensureBlocks(env.player); refreshNear(env.player);
+      for (let n = 0; n < 2 && warm.length; n++) { const [m, d, a, k] = warm.shift(); try { const C = root.NightshiftCharacters; C?.frame?.(C.outfitFor(m, false), d, a, k); } catch { /* n/a */ } }
       for (let i = members.length - 1; i >= 0; i--) memberTick(env, members[i], now, dt);
       shotsTick(env, dt); turfTick(env, now, dt);
       // members keep out of each other
