@@ -27,13 +27,17 @@
   }
 
   // ---- vision polygon (world space) ----
+  // Only buildings near you matter for sight lines: test against those rects (the game's blocked() scans all 196).
+  let rects = [];
+  function nearRects(p, R) { let B = []; try { B = buildings; } catch { /* n/a */ } rects = B.filter((b) => b.x - 9 < p.x + R && b.x + b.w + 9 > p.x - R && b.y - 9 < p.y + R && b.y + b.h + 9 > p.y - R); return rects; } // eslint-disable-line no-undef
+  const solid = (x, y) => { for (const b of rects) if (x > b.x - 9 && x < b.x + b.w + 9 && y > b.y - 9 && y < b.y + b.h + 9) return true; return false; };
   function ray(env, x, y, a, len) {
     const dx = Math.cos(a), dy = Math.sin(a);
-    for (let d = 10; d < len; d += 9) { let hit = false; try { hit = env.blocked(x + dx * d, y + dy * d); } catch { /* n/a */ } if (hit) return d + 4; }
+    for (let d = 10; d < len; d += 11) if (solid(x + dx * d, y + dy * d)) return d + 5;
     return len;
   }
   function computeVis(env) {
-    const p = env.player, a0 = Number.isFinite(p.angle) ? p.angle : 0, pts = [];
+    const p = env.player, a0 = Number.isFinite(p.angle) ? p.angle : 0, pts = []; nearRects(p, LEN + 20);
     for (let i = 0; i <= RAYS; i++) { const a = a0 - CONE + (2 * CONE * i) / RAYS; pts.push({ a, r: ray(env, p.x, p.y, a, LEN) }); }
     const ring = []; for (let i = 0; i < 24; i++) { const a = (i / 24) * Math.PI * 2; ring.push({ a, r: ray(env, p.x, p.y, a, AROUND) }); }
     st.vis = { x: p.x, y: p.y, a0, pts, ring };
@@ -56,7 +60,7 @@
     let near = false;
     if (st.still > 0.25) {
       near = (env.cars || []).some((c) => Math.abs(c.speed || 0) < 0.5 && Math.hypot(c.x - p.x, c.y - p.y) < 40);
-      if (!near) { try { for (let k = 0; k < 8 && !near; k++) { const a = k * Math.PI / 4; near = env.blocked(p.x + Math.cos(a) * 20, p.y + Math.sin(a) * 20); } } catch { /* n/a */ } }
+      if (!near) { nearRects(p, 60); for (let k = 0; k < 8 && !near; k++) { const a = k * Math.PI / 4; near = solid(p.x + Math.cos(a) * 20, p.y + Math.sin(a) * 20); } }
     }
     const was = p.inCover; p.inCover = near && st.still > 0.25;
     if (p.inCover && !was && st.k > 0.3) { try { root.say?.('🛡️ In cover · shots across the car won\'t reach you'); } catch { /* n/a */ } }
@@ -67,13 +71,13 @@
   function draw() {
     const env = E(); if (!env || inZone() || st.k <= 0.01) return;
     const ctx = env.g, cv = ctx.canvas, cam = env.camera; if (!cam) return;
-    if (!off || off.width !== cv.width || off.height !== cv.height) { off = document.createElement('canvas'); off.width = cv.width; off.height = cv.height; }
+    const hw = Math.ceil(cv.width / 2), hh = Math.ceil(cv.height / 2); if (!off || off.width !== hw || off.height !== hh) { off = document.createElement('canvas'); off.width = hw; off.height = hh; }
     const o = off.getContext('2d'), base = ctx.getTransform();
     let night = 0; try { night = root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment.state?.minute ?? 720) || 0; } catch { /* n/a */ }
     const alpha = Math.min(0.82, (0.5 + night * 0.25) * st.k);
     o.setTransform(1, 0, 0, 1, 0, 0); o.clearRect(0, 0, off.width, off.height);
     o.fillStyle = `rgba(4,6,12,${alpha})`; o.fillRect(0, 0, off.width, off.height);
-    o.setTransform(base); o.globalCompositeOperation = 'destination-out';
+    o.setTransform(base.a / 2, base.b / 2, base.c / 2, base.d / 2, base.e / 2, base.f / 2); o.globalCompositeOperation = 'destination-out';
     const v = st.vis, S = (wx, wy) => [(wx - cam.x) * cam.zoom, (wy - cam.y) * cam.zoom];
     o.fillStyle = '#000'; o.beginPath();
     let [sx, sy] = S(v.x, v.y); o.moveTo(sx, sy);
@@ -83,7 +87,7 @@
     o.closePath(); o.fill();
     // soften the cone edge a little
     o.globalCompositeOperation = 'source-over';
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(off, 0, 0); ctx.restore();
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = true; ctx.drawImage(off, 0, 0, cv.width, cv.height); ctx.restore();
     // echoes
     const now = performance.now(); ctx.save();
     for (let i = st.echoes.length - 1; i >= 0; i--) {
