@@ -125,6 +125,8 @@
   function render() {
     const ch = S.current(state), st = S.stepOf(state), on = state.started && !!ch && !!st;
     document.body.dataset.story = on ? 'on' : 'off'; card.hidden = !on; if (!on) return;
+    let boss = null; if (st.kind === 'squad' && st.boss && spawned?.tag === st.tag) { try { boss = (root.NightshiftGangs?.members?.() || []).find((u) => u.tag === st.tag && u.boss) || null; } catch { /* n/a */ } }
+    if (boss) { const f = Math.max(0, boss.hp / boss.maxHp), h2 = `<span class="t">☠ ${boss.boss.name} · CH ${ch.n}</span><span class="n">${st.label}</span><span class="bar"><i style="width:${Math.round(f * 100)}%;background:linear-gradient(90deg,#ff5a6a,#ffb07a)"></i></span>`; if (h2 !== lastHtml) { card.innerHTML = h2; lastHtml = h2; } return; }
     const pr = progress(st), html = `<span class="t">📖 CH ${ch.n} · ${ch.title.toUpperCase()}</span><span class="n">${st.label}${pr ? ` · ${pr[0]}/${pr[1]}` : ''}</span>${pr ? `<span class="bar"><i style="width:${Math.round(Math.min(1, pr[0] / Math.max(1, pr[1])) * 100)}%"></i></span>` : ''}`;
     if (html !== lastHtml) { card.innerHTML = html; lastHtml = html; }
     // keep the card under whatever sits above it (the goal card position)
