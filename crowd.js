@@ -36,9 +36,10 @@
   }
   // v0.58: people dress for their neighbourhood (suits downtown, polos in the Heights, work gear in Ironworks...)
   const THEMES = {
-    DOWNTOWN: { top: [['buttonup', 0], ['buttonup', 5], ['polo', 1]], outer: [['trench', 1], ['leather', 0], null, null], bottom: [['chinos', 1], ['chinos', 0]], shoes: [['dress', 0], ['dress', 2]], head: [null, null, ['fedora', 1]] },
+    // v0.63: present-day looks — tech/office casual downtown (no trench coats or fedoras), sneakers, earbuds via modern-city.js
+    DOWNTOWN: { top: [['buttonup', 0], ['buttonup', 5], ['polo', 1], ['tee', 1]], outer: [['puffer', 0], ['track', 1], ['bomber', 1], null], bottom: [['chinos', 1], ['chinos', 0], ['joggers', 0]], shoes: [['runners', 0], ['runners', 1], ['dress', 0]], face: [['aviators', 0], null, null], bag: [['backpack', 0], null] },
     'THE HEIGHTS': { top: [['polo', 7], ['polo', 1], ['buttonup', 5]], outer: [['puffer', 4], null, null], bottom: [['chinos', 0], ['chinos', 3]], shoes: [['runners', 0], ['dress', 1]], face: [['aviators', 0], null, null] },
-    'OLD TOWN': { top: [['tee', 7], ['tee', 8], ['longsleeve', 2]], outer: [['denim', 0], ['bomber', 2], null], bottom: [['jeans', 0], ['jeans', 3]], shoes: [['boots', 0], ['boots', 1]], head: [['bucket', 0], null, null] },
+    'OLD TOWN': { top: [['tee', 7], ['tee', 8], ['longsleeve', 2]], outer: [['hoodie', 2], ['bomber', 2], ['track', 0], null], bottom: [['jeans', 0], ['jeans', 3]], shoes: [['hitops', 0], ['runners', 2]], head: [['cap', 0], ['bucket', 0], null] },
     IRONWORKS: { top: [['longsleeve', 8], ['tee', 5]], outer: [['vest', 1], ['vest', 0], null], bottom: [['cargo', 1], ['cargo', 0]], shoes: [['boots', 0], ['boots', 2]], head: [['beanie', 5], ['beanie', 2], null], gloves: [['gloves', 0], null] },
     FAIRVIEW: { top: [['tee', 1], ['tee', 3], ['tee', 7]], outer: [['hoodie', 9], ['hoodie', 3], null], bottom: [['joggers', 9], ['jeans', 2]], shoes: [['runners', 0], ['runners', 1]], bag: [['backpack', 1], null] },
     'THE FLATS': { top: [['tank', 1], ['jersey', 4], ['tee', 6]], outer: [null, null, ['leather', 0]], bottom: [['shorts', 4], ['skirt', 0], ['joggers', 8]], shoes: [['slides', 0], ['hitops', 2]], head: [['durag', 0], ['durag', 1], null], jewelry: [['chain', 0], null] },

@@ -77,6 +77,7 @@
       st.roadBlocks++;
     }
     try { root.NightshiftHD?.ground?.(c, width, height, view); } catch { /* optional */ }
+    try { root.NightshiftModern?.lots?.(c, width, height, view); } catch { /* optional */ } // v0.63 lots
   }
 
   // ---------------- traffic models ----------------
@@ -125,6 +126,7 @@
   function roofExtras(b) {
     let c = null; try { c = g; } catch { return; } // eslint-disable-line no-undef
     if (b.x === 960 && b.y === 755) homeEntrance(c);
+    if (root.NightshiftModern?.on) return; // v0.63: modern-city.js owns rooftops
     const { x, y, w, h, name } = b, reg = region(x, y), s = H(Math.round(x), Math.round(y), 7), top = y + 8, roofH = h - 76; if (roofH < 40) return;
     const water = () => { const wx = x + Math.round(w * 0.55) - 17, wy = top + 12; c.fillStyle = 'rgba(8,12,20,0.35)'; c.beginPath(); c.ellipse(wx + 22, wy + 30, 20, 8, 0, 0, Math.PI * 2); c.fill(); R(c, '#3a2a20', wx + 6, wy + 16, 3, 20); R(c, '#3a2a20', wx + 25, wy + 16, 3, 20); c.fillStyle = '#7a5a3a'; c.beginPath(); c.ellipse(wx + 17, wy + 12, 15, 7, 0, 0, Math.PI * 2); c.fill(); R(c, '#6a4a2e', wx + 2, wy + 2, 30, 11); c.fillStyle = '#9a7650'; c.beginPath(); c.ellipse(wx + 17, wy + 2, 15, 6, 0, 0, Math.PI * 2); c.fill(); R(c, '#2a1f1a', wx + 2, wy + 6, 30, 1); R(c, '#2a1f1a', wx + 2, wy + 10, 30, 1); c.fillStyle = '#5a3a24'; c.beginPath(); c.moveTo(wx + 2, wy + 2); c.lineTo(wx + 17, wy - 8); c.lineTo(wx + 32, wy + 2); c.closePath(); c.fill(); };
     const solar = () => { for (let r = 0; r < 2; r++) for (let k = 0; k < 4; k++) { const sx = x + 20 + k * 26, sy = top + 12 + r * 22; R(c, 'rgba(8,12,20,0.4)', sx + 2, sy + 2, 22, 16); R(c, '#1a2a4a', sx, sy, 22, 16); R(c, '#3a5a8a', sx + 1, sy + 1, 20, 1); for (let q = 1; q < 4; q++) R(c, '#2a3a5a', sx + q * 5.5, sy, 1, 16); R(c, '#2a3a5a', sx, sy + 8, 22, 1); } };
