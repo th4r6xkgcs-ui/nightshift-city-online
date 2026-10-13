@@ -169,7 +169,7 @@
       const boss = i === 0 && o.boss ? o.boss : null, gear0 = o.gear || D.GANG_GEAR, gear = boss ? { ...gear0, dmg: boss.dmg || gear0.dmg * 1.4, err: (gear0.err || 0.12) * 0.75, range: Math.max(gear0.range || 220, 240), cool: gear0.cool } : gear0, hp = boss ? (boss.hp || 260) : (o.hp || gear0.hp + 10);
       const look = hash(g.id) % 1000 + ((i + squadN) % 5), outfit = outfitFor(g.id === 'you' ? P : (D.BY_ID[g.id] ? g : D.GANGS[0]), look, o.gearTier || 1);
       if (boss) { outfit.outer = { id: 'leather', color: 0 }; outfit.jewelry = { id: 'chain', color: 0 }; outfit.face = { id: 'shades', color: 0 }; }
-      out.push(makeUnit({ id: `squad-${b.key}-${i}`, team: g.id, gang: g, block: b, role: 'raider', squad: true, tag: o.tag || null, vs: (o.vs || ['player', 'you']).slice(), home: { x: o.x, y: o.y }, face: { x: o.x, y: o.y + 40 }, x, y, hp, maxHp: hp, gear, outfit, boss: boss ? { name: boss.name } : null, meleeOnly: !!o.meleeOnly || !!boss?.meleeOnly, hunt: o.hunt || 0, onDeath: o.onDeath || null, giveUp: Infinity, angle: Math.PI / 2 }));
+      out.push(makeUnit({ id: `squad-${b.key}-${i}`, team: g.id, gang: g, block: b, role: 'raider', squad: true, tag: o.tag || null, vs: (o.vs || ['player', 'you']).slice(), home: { x: o.x, y: o.y }, face: { x: o.x, y: o.y + 40 }, x, y, hp, maxHp: hp, gear, outfit, alert: true, boss: boss ? { name: boss.name } : null, meleeOnly: !!o.meleeOnly || !!boss?.meleeOnly, hunt: o.hunt || 0, onDeath: o.onDeath || null, giveUp: Infinity, angle: Math.PI / 2 }));
     }
     return out;
   }
