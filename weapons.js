@@ -214,7 +214,7 @@
       const mx = W.maxDur(W.BY_ID[id], state.mods[id] || [], durMul(), W.qOf(state, id)), left = state.cond[id] || 0, f = Math.max(0, Math.min(1, left / mx));
       const bar = el('i', { className: 'dur' }); const fill = el('b'); fill.style.width = Math.round(f * 100) + '%'; fill.style.background = f > 0.5 ? '#7cdeb5' : f > 0.2 ? '#ffd970' : '#ff5a6a'; bar.append(fill); pill.append(bar);
       if (state.spare[id]) pill.append(el('small', {}, ` +${state.spare[id]}`));
-    } else pill.append(el('small', {}, 'craft a gun'));
+    } else { let mw = null; try { mw = root.NightshiftMeleeData?.W?.(root.NightshiftMelee?.state?.equipped); } catch { /* n/a */ } pill.append(el('small', {}, mw && mw.id !== 'fists' ? `${mw.icon} ${mw.name.toLowerCase()} · craft a gun` : 'fists · craft a gun')); }
     if (n > 1) pill.append(el('small', {}, ` ⟳ ${n}`));
   }
   function placePill() {
