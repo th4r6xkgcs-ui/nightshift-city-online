@@ -632,3 +632,31 @@ Everything below is built for a shared world. The world never pauses (no cutscen
 - **Story** (`story-data.js`, `story.js`): 8 chapters (Rico, Nia, Capt. Hale, Vex/the Crown) using goto/squad/event/state/escape steps. Bosses are world squads that spawn when you're near (Knuckles, Marrow, Silk, Vex). The pink story card replaces the goal card while a chapter is active (tap = GPS), and there's a 📖 Story phone app. Save `nightshift-story-v1`.
 - **phone.js**: new contacts (nia, hale, vex, biz) and the Story/Business apps. **weapons.js**: when unarmed, the pill shows your melee weapon.
 - **Checks**: `tests/batch64.cjs` added. `node tests/run.cjs` passes all 114 suites. Playwright confirmed melee KOs, a ped takedown, roll i-frames, the drift chain and skids, gas station service, buying a property, a live robbery spawning, and Story chapter 1 completing end to end (bat reward). Headless fps is 59–60 after warm-up.
+
+## v0.65 Combat mechanics, police engagement, break-ins (owner: "focus on how it would work even in multiplayer")
+- **`combat-core.js`** (pure, meant to run unchanged on a future server) holds the shared combat rules:
+  - **Shots:** seeded mulberry32 randomness, so the same inputs give the same pellets on every machine.
+  - **Damage:** distance falloff by weapon class; armor with penetration per class; stance multipliers (cover ×0.5, roll = dodge, car ×0.4); sneak ×2.5 on unaware targets.
+  - **Life states:** alive → downed → bleeding → killed, plus revive.
+  - **Teams:** `canDamage` gives no friendly fire between players and crews in PvE; 'crews'/'ffa' modes are ready for PvP.
+  - **Network:** the `hitEvent` schema with a 14-field `pack`/`unpack` wire format.
+  - **Server checks:** `validate` (stale time, shooter position, range, fire rate, line of sight, damage cap) and `rewind` (lag compensation from snapshot history).
+- **`authority.js`** is the local stand-in for the server: every city hit goes through it.
+  - `game.js` now hands its player-bullet hit branch to `NightshiftAuthority.bulletHit`. `weapons.js` stamps `ox`, `oy` and `seed` on each bullet.
+  - Damage to the player arrives as `NightshiftRecovery.damage(amount, now, src)`. The `src` gives the direction and the kind; the call sites in crime/gangs/zones/breakin/melee pass it, and the weapons/skill-effects wrappers forward it.
+  - **Features:** red directional damage indicators; taser stun (no moving or shooting); suppression (your rounds make gang members and cops duck and aim worse); a ring log of hit events with `seq`; `ns:event` hit/downed/revived/officer-down/busted.
+  - **Downed state** (city, on foot): 20 s bleed-out with crawling and last-stand shooting. Hold 💉 GET UP with a medkit, or your crew/guards revive you. Cops cuff a downed suspect (BUSTED) and never shoot one. Gangs mostly stop shooting. Bleeding out leads to the old hospital flow. Inside zones, the old death flow still applies.
+  - `skill-effects.js` skips its extra-hit hack while `root.__nsAuthorityHit` is set, which melee also sets.
+- **`police-engage.js`:**
+  - ★1 cops tase you if you run; ★2 tasers unless you're showing a gun; ★3+ lethal force; SWAT get armor (45/60) with a small bar drawn.
+  - Radio call-outs: spot, taser, shots fired, cuffing, officer down (+heat), lost visual.
+  - `respond(x, y, n)` puts units outside a door.
+  - `wanted-data` `bustStep` gets `helpless` (tased or downed: cuffed at any star level in about 0.8 s). `crime.js` passes `helpless`, doesn't fire on downed suspects, and its hit message spam is removed.
+- **Break-ins:**
+  - New `breakin-data` type `store`: sales floor, checkout registers, stockroom, office safe, staff lockers. It has an alarm `panel` (9 s countdown, longer with stealth; disarm with the new `alarm` keypad minigame in `picks-data`) and 2 CCTV cameras with sweeping cones. Getting seen for 0.7 s trips the alarm, and you can shoot a camera out.
+  - Warehouses and mansions get 1 camera.
+  - Every business you don't own in the outer districts gets a 🔦 BREAK IN point at night (21:00–05:00). Leaving with the alarm going emits `breakin-exit`, and police wait outside.
+- **Checks:**
+  - `tests/combat65.cjs` added; `node tests/run.cjs` passes all 115 suites.
+  - Playwright: bullet hit logged via the authority; downed → medkit revive (hp 45); ★2 taser → stun → BUSTED; ★4 downed → cuffed; store break-in zone with panel and cameras.
+  - FPS: city 56–59 headless. Gang fight 40–51 headless; the rAF profile shows the new modules cost under 2 ms per second, so the gap is canvas rendering.
