@@ -42,12 +42,14 @@
     if (kind === 'carpet') for (let x = 0; x < W; x += 8) for (let y = 0; y < H; y += 8) if ((x + y) % 16 === 0) R(c, '#64343f', x, y, 4, 4);
     if (kind === 'marble') for (let x = 0; x < W; x += 40) for (let y = 0; y < H; y += 40) { R(c, ((x + y) / 40) % 2 ? '#c4c8cd' : '#dadde1', x, y, 40, 40); R(c, '#b8bcc2', x, y, 40, 1); }
     if (kind === 'club') for (let x = 0; x < W; x += 24) for (let y = 0; y < H; y += 24) R(c, ((x + y) / 24) % 2 ? '#201a30' : '#171322', x, y, 24, 24);
+    try { root.NightshiftHD?.floor?.(c, kind, W, H); } catch { /* optional */ }
   }
   function walls(c, col, trim) {
     R(c, '#0b0d14', 0, 0, W, 64); R(c, col, 0, 0, W, 60); R(c, shade(col, 0.12), 0, 0, W, 8); R(c, shade(col, -0.25), 0, 52, W, 8); R(c, trim, 0, 58, W, 4); // back wall + baseboard
     R(c, '#0b0d14', 0, 0, 10, H); R(c, shade(col, -0.35), 0, 0, 8, H); R(c, '#0b0d14', W - 10, 0, 10, H); R(c, shade(col, -0.35), W - 8, 0, 8, H); // side walls
     R(c, '#0b0d14', 0, H - 8, W, 8); R(c, shade(col, -0.4), 0, H - 8, W / 2 - 34, 8); R(c, shade(col, -0.4), W / 2 + 34, H - 8, W / 2 - 34, 8); // front wall with the door gap
     R(c, '#2a3a2a', W / 2 - 30, H - 24, 60, 16); R(c, '#3c4c3a', W / 2 - 28, H - 22, 56, 12); // door mat
+    try { root.NightshiftHD?.wall?.(c, W); } catch { /* optional */ }
   }
   const windowPane = (c, x, y, w, h) => { R(c, '#0b0d14', x - 1, y - 1, w + 2, h + 2); R(c, '#2a4a62', x, y, w, h); R(c, '#4f7a96', x, y, w, 3); R(c, '#ffffff33', x + 3, y + 3, 4, h - 6); };
   const sign = (c, txt, x, y, col = '#ffd970') => { c.font = 'bold 13px monospace'; c.textAlign = 'center'; c.fillStyle = '#0b0d14'; c.fillText(txt, x + 1, y + 1); c.fillStyle = col; c.fillText(txt, x, y); };

@@ -217,8 +217,9 @@
   let lm = null;
   function cache(def) {
     if (def._cache) return def._cache;
-    const cv = document.createElement('canvas'); cv.width = def.w; cv.height = def.h;
-    const x = cv.getContext('2d'); x.imageSmoothingEnabled = false;
+    // v0.62: interiors baked at 2x so floors, furniture edges and fine HD detail stay sharp on 3x screens
+    const cv = document.createElement('canvas'); cv.width = def.w * 2; cv.height = def.h * 2;
+    const x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.scale(2, 2);
     try { def.ground?.(x, api); } catch (e) { console.error(e); }
     def._cache = cv; return cv;
   }
@@ -244,7 +245,7 @@
     ctx.fillStyle = d.bg || '#0b0f17'; ctx.fillRect(0, 0, Wd, Hd);
     ctx.scale(z, z); ctx.translate(-cx, -cy);
     const cv = cache(d), sx = Math.max(0, Math.floor(cx)), sy = Math.max(0, Math.floor(cy)), sw = Math.min(d.w - sx, Math.ceil(vw) + 2), shh = Math.min(d.h - sy, Math.ceil(vh) + 2);
-    if (sw > 0 && shh > 0) ctx.drawImage(cv, sx, sy, sw, shh, sx, sy, sw, shh);
+    if (sw > 0 && shh > 0) ctx.drawImage(cv, sx * 2, sy * 2, sw * 2, shh * 2, sx, sy, sw, shh);
     try { d.drawGround?.(ctx, t, api); } catch (e) { console.error(e); }
     const view = { x: cx - 80, y: cy - 120, w: vw + 160, h: vh + 240 };
     const items = [];
