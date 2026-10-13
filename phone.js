@@ -18,6 +18,11 @@
     street: { name: 'Street', icon: '🗣️', role: 'gangs & corners' },
     scanner: { name: 'Police scanner', icon: '🚨', role: 'heat & cops' },
     city: { name: 'City', icon: '🏙️', role: 'deals, rewards, news' },
+    // v0.64 story + business
+    nia: { name: 'Nia', icon: '🔧', role: 'mechanic, drives like a demon' },
+    hale: { name: 'Capt. Hale', icon: '🚔', role: 'Central precinct' },
+    vex: { name: 'Vex', icon: '👑', role: 'runs the Crown' },
+    biz: { name: 'Business', icon: '🏪', role: 'your properties' },
   };
   const CONTACTS = () => ({ ...(root.NightshiftLifeData?.CONTACTS || {}), ...SYS });
   let state = { version: 1, threads: {}, unread: {} };
@@ -161,6 +166,8 @@
       const owned = Object.keys(root.NightshiftGangs?.state?.owned || {}).length;
       shell(el('h2', { textContent: 'Nightshift' }), el('div', { className: 'grid' },
         app('💬', 'Messages', () => open('messages'), unread()),
+        app('📖', 'Story', launch(() => root.NightshiftStory?.open?.())),
+        app('🏪', 'Business', launch(() => root.NightshiftProperty?.open?.()), root.NightshiftProperty?.owned?.() || 0),
         app('📲', 'Hustle', launch(() => root.NightshiftJobs?.open?.())),
         app('🎯', 'Goals', () => open('goals')),
         app('🗺️', 'Map', launch(() => root.NightshiftMap?.open?.())),

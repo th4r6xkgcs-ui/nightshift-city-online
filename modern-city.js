@@ -284,5 +284,5 @@
   }, 250);
   let last = 0; (function tick(now) { const dt = last ? Math.min(0.1, (now - last) / 1000) : 0; last = now; let zone = false; try { zone = !!(root.NightshiftZones?.active?.() || root.NightshiftHome?.kind?.()); } catch { /* n/a */ } if (!zone) ridersTick(dt); requestAnimationFrame(tick); })(performance.now());
   setInterval(() => { try { modernizeCars(); } catch { /* n/a */ } }, 1500);
-  root.NightshiftModern = Object.freeze({ on: true, archetype, lots, draw, stats: () => ({ ...st, riders: riders.length }) });
+  root.NightshiftModern = Object.freeze({ on: true, archetype, brand, lots, draw, stats: () => ({ ...st, riders: riders.length }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

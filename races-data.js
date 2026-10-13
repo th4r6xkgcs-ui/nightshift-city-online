@@ -11,6 +11,13 @@
       points: [[440, 340], [880, 340], [1320, 340], [1760, 340], [1760, 680], [1760, 1020], [1760, 1360]] },
     { id: 'tour', name: 'Grand Tour', tier: 'Legend', reward: 2200, xp: 450,
       points: [[440, 1360], [440, 1020], [440, 680], [440, 340], [880, 340], [1320, 340], [1760, 340], [1760, 680], [1320, 680], [1320, 1020], [1760, 1020], [1760, 1360], [1320, 1360], [880, 1360], [440, 1360]] },
+    // v0.64: courses through the outer districts (all legs on road centre lines, k*440 / k*340)
+    { id: 'fairview', name: 'Fairview Figure', tier: 'Street', reward: 1000, xp: 220, drift: true,
+      points: [[880, 3740], [1320, 3740], [1320, 4080], [1760, 4080], [1760, 3740], [2200, 3740], [2200, 4420], [880, 4420], [880, 3740]] },
+    { id: 'downtown', name: 'Downtown Sprint', tier: 'Pro', reward: 1500, xp: 320,
+      points: [[2640, 680], [3080, 680], [3960, 680], [3960, 1020], [3080, 1020], [3080, 1360], [4400, 1360]] },
+    { id: 'harbor', name: 'Ironworks to Harbor', tier: 'Legend', reward: 2600, xp: 520,
+      points: [[4840, 1700], [5720, 1700], [5720, 2380], [5280, 2380], [5280, 3740], [5720, 3740], [5720, 4420]] },
   ];
   const BY_ID = Object.fromEntries(RACES.map((r) => [r.id, r]));
   const CP_RADIUS = 75, START_RADIUS = 70, COOLDOWN_MS = 90000;
