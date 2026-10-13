@@ -2,7 +2,7 @@
 (function(root){
 'use strict';
 const KEY='nightshift-city-salvage-v1',COOLDOWN=180000,SEARCH_MS=2500;
-const SPOTS=[{id:'alley-west',x:680,y:604},{id:'market-back',x:1120,y:604},{id:'warehouse-east',x:1520,y:604},{id:'south-corner',x:660,y:944},{id:'rail-yard',x:1120,y:944},{id:'dock-crates',x:1580,y:1284},{id:'east-lockup',x:2000,y:944},{id:'west-storage',x:360,y:1280}];
+const SPOTS=[{id:'alley-west',x:770,y:604},{id:'market-back',x:1210,y:604},{id:'warehouse-east',x:1650,y:604},{id:'south-corner',x:770,y:944},{id:'rail-yard',x:1210,y:944},{id:'dock-crates',x:1650,y:1284},{id:'east-lockup',x:2090,y:944},{id:'west-storage',x:360,y:1280}];
 function clean(raw,now=Date.now()){const out={};for(const spot of SPOTS){const n=raw?.[spot.id];if(Number.isSafeInteger(n)&&n>=0)out[spot.id]=Math.min(n,now+COOLDOWN)}return out}
 function available(spot,history,now){return now>=(history[spot.id]||0)}
 function reward(spot){const index=SPOTS.findIndex(s=>s.id===spot.id);return index%3===2?{scrap:2,watch:1}:{scrap:3}}
