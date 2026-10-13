@@ -230,7 +230,7 @@
   }
   function drawActor(ctx, a) {
     if (a.draw) { a.draw(ctx, api); return; }
-    try { root.NightshiftSprites?.person?.({ x: a.x, y: a.y, angle: a.angle ?? Math.PI / 2, moving: !!a.moving, walkTicks: a.walkTicks || 0, moveAngle: a.angle, hp: a.hp ?? 40, color: a.color, id: a.id }, false, { weapon: a.armed ? undefined : false, role: a.role }); } catch { /* sprite optional */ }
+    try { root.NightshiftSprites?.person?.({ x: a.x, y: a.y, angle: a.angle ?? Math.PI / 2, moving: !!a.moving, walkTicks: a.walkTicks || 0, moveAngle: a.angle, hp: a.hp ?? 40, maxHp: a.maxHp, color: a.color, id: a.id, outfit: a.outfit, inCover: a.inCover, seated: a.seated, seat: a.seat }, false, { weapon: a.armed ? undefined : false, role: a.role }); } catch { /* sprite optional */ }
   }
   function frameDraw(now) {
     const c = cur, d = c.def, ctx = G(), Wd = SW(), Hd = SH(), pos = c.pos, t = now / 1000;

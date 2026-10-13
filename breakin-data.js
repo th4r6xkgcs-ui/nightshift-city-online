@@ -12,12 +12,15 @@
     warehouse: { cols: 3, rows: 2, rw: 250, rh: 200, guards: [['guard', 2], ['guard', 0.6]], loot: 9, cooldown: 35, heat: 1.8, police: 60, name: 'Warehouse' },
     // A rival crew's trap house: product, cash being counted, guns. Cops take their time coming here.
     stash: { cols: 3, rows: 2, rw: 215, rh: 180, guards: [['thug', 2], ['thug', 0.7], ['dog', 0.4]], loot: 10, cooldown: 40, heat: 1.4, police: 90, name: 'Stash house' },
+    // v0.59: a street gang's hideout on its turf (gangs.js). Bigger crew, a shot caller, an armory and a counting room.
+    hideout: { cols: 3, rows: 3, rw: 215, rh: 180, guards: [['thug', 3], ['thug', 0.8], ['thug', 0.6], ['boss', 1], ['dog', 0.5]], loot: 13, cooldown: 30, heat: 1.2, police: 120, name: 'Gang hideout' },
   };
   const ROOMS = {
     house: ['kitchen', 'living', 'bedroom', 'bedroom', 'bath', 'office'],
     mansion: ['foyer', 'living', 'kitchen', 'dining', 'bedroom', 'bedroom', 'office', 'gallery', 'bath', 'gym', 'vault', 'lounge'],
     warehouse: ['loading', 'storage', 'storage', 'office', 'armory', 'storage'],
     stash: ['trap', 'cook', 'count', 'bedroom', 'storage', 'cook'],
+    hideout: ['trap', 'count', 'lounge', 'armory', 'storage', 'bedroom', 'cook', 'count', 'trap'],
   };
   // Furniture per room: [kind, w, h, anchor] — anchor: 'n' along top wall, 's' bottom, 'w'/'e' sides, 'c' centre.
   const FURN = {
@@ -80,6 +83,7 @@
     thug: { hp: 60, dmg: 10, rate: 700, spread: 0.12, speed: 1.3, sight: 240, cone: 1.3, armed: true, name: 'Crew member' },
     mark: { hp: 60, dmg: 8, rate: 850, spread: 0.18, speed: 1.1, sight: 220, cone: 1.3, armed: true, name: 'Mark' },
     bodyguard: { hp: 85, dmg: 12, rate: 620, spread: 0.09, speed: 1.35, sight: 270, cone: 1.35, armed: true, name: 'Bodyguard' },
+    boss: { hp: 150, dmg: 13, rate: 560, spread: 0.08, speed: 1.15, sight: 270, cone: 1.4, armed: true, name: 'Shot caller' },
   };
   // Where the mark spends their time: the room furthest (by doorways) from the back door.
   function farRoom(L) {

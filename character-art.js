@@ -329,7 +329,7 @@
   function stance(p, isPlayer) {
     const now = performance.now();
     if (p.seated) return 'sit';
-    if (p.inCover && !p.moving) return 'crouch'; // ducked behind a car / wall (combat-vision.js, crime.js officers, gangs)
+    if ((p.inCover || p.squat) && !p.moving) return 'crouch'; // cover (combat), dice games / knocked down (npc-life.js) // ducked behind a car / wall (combat-vision.js, crime.js officers, gangs)
     if (isPlayer) {
       if (now - carT.exitAt < 260) return 'crouch'; // ducking out of the car door
       if (root.NightshiftZones?.active?.() === 'breakin' && !sprinting()) return 'sneak';

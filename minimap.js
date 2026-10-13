@@ -92,6 +92,14 @@
     // GPS route
     const path = root.NightshiftMap?.path?.() || [];
     if (path.length) { c.strokeStyle = '#ff8da8cc'; c.lineWidth = 2.5 * dpr; c.lineJoin = 'round'; c.beginPath(); const a = to(p.x, p.y); c.moveTo(a.x, a.y); for (const q of path) { const b = to(q.x, q.y); c.lineTo(b.x, b.y); } c.stroke(); }
+    // v0.59: gang turf (your blocks in magenta), the police search area, police cars
+    try {
+      const GD = root.NightshiftGangsData, gs = root.NightshiftGangs?.state;
+      if (GD) for (const g of GD.GANGS) for (const [bx, by] of g.blocks) { const own = gs?.owned?.[bx + ',' + by], a = to(bx * 440 + 66, by * 340 + 66), w = 308 * k, h = 208 * k; if (a.x > px || a.y > px || a.x + w < 0 || a.y + h < 0) continue; c.fillStyle = (own ? '#ff7ad8' : (g.color === '#1d2024' ? '#c9d1d6' : g.color)) + '55'; c.fillRect(a.x, a.y, w, h); c.strokeStyle = (own ? '#ff7ad8' : g.glow) + 'aa'; c.lineWidth = 1 * dpr; c.strokeRect(a.x, a.y, w, h); }
+      const W = root.NightshiftCrime?.wanted;
+      if (W && W.stars > 0 && W.center && !W.seen) { const v = to(W.center.x, W.center.y); c.strokeStyle = Math.floor(now / 400) % 2 ? '#ff4a5acc' : '#4a7affcc'; c.fillStyle = '#ff4a5a18'; c.lineWidth = 2 * dpr; c.setLineDash?.([5 * dpr, 4 * dpr]); c.beginPath(); c.arc(v.x, v.y, (W.radius || 400) * k, 0, Math.PI * 2); c.fill(); c.stroke(); c.setLineDash?.([]); }
+      for (const pc of root.NightshiftPoliceCars?.cars?.() || []) { const v = to(pc.x, pc.y); if (Math.hypot(v.x - cx, v.y - cy) > px / 2) continue; c.fillStyle = Math.floor(now / 200) % 2 ? '#ff4a5a' : '#4a7aff'; c.fillRect(v.x - 3 * dpr, v.y - 2 * dpr, 6 * dpr, 4 * dpr); }
+    } catch { /* optional layers */ }
     // markers (clamped to rim)
     for (const m of markers()) {
       let v = to(m.x, m.y); const dx = v.x - cx, dy = v.y - cy, d = Math.hypot(dx, dy), rim = px / 2 - 7 * dpr, out = d > rim;
@@ -110,7 +118,7 @@
     c.beginPath(); c.moveTo(7 * dpr, 0); c.lineTo(-5 * dpr, -5 * dpr); c.lineTo(-2.5 * dpr, 0); c.lineTo(-5 * dpr, 5 * dpr); c.closePath(); c.stroke(); c.fill();
     c.restore();
     // heat ring
-    const heat = p.heat || 0, lvl = Math.min(5, Math.ceil(heat - 0.05));
+    const heat = p.heat || 0, lvl = root.NightshiftWantedData ? root.NightshiftWantedData.stars(heat) : Math.min(5, Math.ceil(heat - 0.05));
     stars.textContent = lvl > 0 ? '★'.repeat(lvl) + '☆'.repeat(5 - lvl) : '';
     wrap.style.boxShadow = heat >= 0.5 ? `0 6px 18px #0008,0 0 0 2px #0c111e,0 0 0 3px ${Math.floor(now / 300) % 2 ? '#ff4a5a' : '#4a7aff'}` : '';
   }
