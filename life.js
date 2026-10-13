@@ -22,11 +22,20 @@
 
   // ---------- 1) spawn inside the apartment ----------
   const t0 = performance.now();
-  let spawned = false;
+  let spawned = false, resumed = false;
   const spawnTimer = setInterval(() => {
     const p = P(), H = root.NightshiftHome;
     if (spawned || performance.now() - t0 > 15000) { clearInterval(spawnTimer); return; }
     if (!p || !H?.enter || performance.now() - t0 < 900) return; // let saves load first
+    // Returning player who left off out in the city: pick up exactly where you were (the game restores x/y).
+    if (state.welcomed && state.where === 'city') {
+      let bad = !Number.isFinite(p.x) || !Number.isFinite(p.y); try { bad = bad || blocked(p.x, p.y); } catch { /* no collision */ } // eslint-disable-line no-undef
+      if (bad) { p.x = DOOR.x; p.y = DOOR.y; }
+      spawned = true; clearInterval(spawnTimer); resumed = true;
+      setTimeout(() => say(`👋 Welcome back · ${L.hhmm(minute())} · picking up where you left off`), 400);
+      setTimeout(() => text('rico', 'Yo, you back? Work on the 📱 HUSTLE phone if you need it.'), 8000);
+      return;
+    }
     if (p.car) { p.car.speed = 0; p.car = null; }
     p.x = DOOR.x; p.y = DOOR.y;
     if (H.kind?.() === 'home' || H.enter('home', { x: 252, y: 172 })) {
@@ -38,6 +47,10 @@
       setTimeout(() => text('rico', 'Yo, you up? Check your 📱 HUSTLE phone, I put some work on there for you.'), first ? 20000 : 6000);
     }
   }, 150);
+
+  // remember whether you were home or out in the city, so the next session resumes there
+  const noteWhere = () => { if (!spawned) return; const w = root.NightshiftHome?.kind?.() ? 'home' : 'city'; if (state.where !== w) { state.where = w; persist(); } };
+  setInterval(noteWhere, 2000); addEventListener('pagehide', noteWhere); document.addEventListener?.('visibilitychange', noteWhere);
 
   // ---------- 3) contacts & messages ----------
   const msgCss = document.createElement('style');

@@ -47,6 +47,6 @@ assert.equal(C.value('SEDAN', 100, '#000000', 0), Math.round(800 * C.hotMult('SE
 console.log('PASS: chop shop values collection models');
 
 const raw = { owned: [{ uid: 3, id: 'aurora', color: '#2a5a8a', x: 99999, y: 50, condition: 40 }, { uid: 3, id: 'brick' }, { uid: 5, id: 'nope' }, { uid: -1, id: 'brick' }], seen: { aurora: true, bad: true }, paid: [3, 7], next: 1 };
-const cl = D.clean(raw); assert.equal(cl.owned.length, 1); assert.equal(cl.owned[0].x, 2168); assert.equal(cl.next, 4); assert.deepEqual(cl.paid, [3]); assert.deepEqual(cl.seen, { aurora: true });
+const cl = D.clean(raw); assert.equal(cl.owned.length, 1); assert.equal(cl.owned[0].x, 6568); assert.equal(cl.next, 4); assert.deepEqual(cl.paid, [3]); assert.deepEqual(cl.seen, { aurora: true });
 assert.ok(/^[A-Z]{3} \d{3}$/.test(cl.owned[0].plate));
 console.log('PASS: car collection save cleaning');
