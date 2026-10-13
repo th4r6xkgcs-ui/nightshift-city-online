@@ -230,12 +230,12 @@
   // ---- adaptive sharpness: the game renders at up to 2x pixel density; if frames get slow, step down ----
   (function adapt() {
     let frames = 0, t0 = performance.now(), last = t0, slow = 0;
-    const steps = [2, 1.5, 1];
+    const steps = [3, 2.5, 2, 1.5, 1]; // v0.62: full iPhone sharpness (3x) when the device keeps up
     function tick(now) {
       if (!document.hidden && now - last < 250) { frames++; slow += now - last > 26 ? 1 : 0; }
       last = now;
       if (now - t0 > 4000) {
-        const cur = Number(root.NightshiftRenderScale) || Math.min(2, root.devicePixelRatio || 1);
+        const cur = Number(root.NightshiftRenderScale) || Math.min(3, root.devicePixelRatio || 1);
         if (frames > 60 && slow / frames > 0.35 && cur > 1) {
           root.NightshiftRenderScale = steps.find((x) => x < cur - 0.01) || 1;
           try { root.dispatchEvent(new Event('resize')); } catch { /* n/a */ }

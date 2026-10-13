@@ -29,10 +29,9 @@
   function buildBase() {
     const w = WORLD(), bs = B(); if (!bs.length || !root.NightshiftWorld?.ground) return null;
     try {
-      const big = document.createElement('canvas'); big.width = w.w; big.height = w.h; const bx = big.getContext('2d'); if (!bx) return null;
-      root.NightshiftWorld.ground(bx, w.w, w.h);
-      const c = document.createElement('canvas'); c.width = Math.round(w.w * S); c.height = Math.round(w.h * S); const x = c.getContext('2d');
-      x.imageSmoothingEnabled = true; x.drawImage(big, 0, 0, c.width, c.height);
+      // v0.62: draw the city straight into the small canvas (no world-sized temp canvas: iPhones refuse canvases over ~16M px)
+      const c = document.createElement('canvas'); c.width = Math.round(w.w * S); c.height = Math.round(w.h * S); const x = c.getContext('2d'); if (!x) return null;
+      x.save(); x.scale(S, S); root.NightshiftWorld.ground(x, w.w, w.h); x.restore(); x.imageSmoothingEnabled = true;
       x.fillStyle = 'rgba(6,10,20,.35)'; x.fillRect(0, 0, c.width, c.height);
       const tint = { CLUB: '#a04f8f', BANK: '#b39233', CASINO: '#c0485a', DINER: '#b3694b', GARAGE: '#7a6a4a', APARTMENTS: '#4f6f8f' };
       for (const b of bs) {

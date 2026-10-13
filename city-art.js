@@ -76,6 +76,7 @@
       if (x + 440 <= width && y + 340 <= height) curbs(c, x, y);
       st.roadBlocks++;
     }
+    try { root.NightshiftHD?.ground?.(c, width, height, view); } catch { /* optional */ }
   }
 
   // ---------------- traffic models ----------------
