@@ -15,7 +15,7 @@
 (function (root) {
   'use strict';
   const C0 = () => root.NightshiftCharacters, W0 = () => root.NightshiftWardrobeData;
-  const G = 2, CW = 44, CH = 56, AXW = 22, AYW = 36, GW = CW * G, GH = CH * G, AX = AXW * G, AY = AYW * G;
+  const G = 3, CW = 44, CH = 56, AXW = 22, AYW = 36, GW = CW * G, GH = CH * G, AX = AXW * G, AY = AYW * G;
 
   // ---------------- colour ----------------
   const rgb = (h) => { const n = parseInt(String(h).slice(1, 7), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
@@ -455,11 +455,13 @@
   }
 
   // ---------------- canvas + cache ----------------
-  const frames = new Map(), MAX = 420; let stats = { built: 0, ms: 0 };
+  const frames = new Map(), MAX = 360, BUDGET = 6, budget = { t: 0, n: 0 }; let stats = { built: 0, ms: 0 };
   function render(o, dir, anim, f, hold) { const t0 = (typeof performance !== 'undefined' ? performance.now() : 0); const F = build(o, dir, anim, f, hold), col = finish(F); stats.built++; stats.ms += (typeof performance !== 'undefined' ? performance.now() : 0) - t0; return col; }
   function base(o, dir, anim, f, hold) {
     const C = C0(), W = W0(), n = C.ANIMS[anim] || 1, k = ((f % n) + n) % n, key = W.keyOf(o) + '|' + dir + anim + k + '|' + (hold || '');
     let cv = frames.get(key); if (cv) { frames.delete(key); frames.set(key, cv); return cv; }
+    const now = (typeof performance !== 'undefined' ? performance.now() : 0); if (now - budget.t > 12) { budget.t = now; budget.n = 0; }
+    if (++budget.n > BUDGET) { for (let d = 1; d < n; d++) { const alt = frames.get(W.keyOf(o) + '|' + dir + anim + ((k + n - d) % n) + '|' + (hold || '')); if (alt) { stats.deferred = (stats.deferred || 0) + 1; return alt; } } }
     const col = render(o, dir, anim, k, hold); cv = document.createElement('canvas'); cv.width = GW; cv.height = GH;
     const x = cv.getContext('2d'), img = x.createImageData(GW, GH); for (let i = 0; i < col.length; i++) { const c = col[i]; if (!c) continue; const [r, gg, b] = rgb(c); img.data[i * 4] = r; img.data[i * 4 + 1] = gg; img.data[i * 4 + 2] = b; img.data[i * 4 + 3] = 255; }
     x.putImageData(img, 0, 0); frames.set(key, cv); if (frames.size > MAX) frames.delete(frames.keys().next().value); return cv;
@@ -485,7 +487,7 @@
     const o = C.outfitFor(p, isPlayer, opts.role), st = C.stance ? C.stance(p, isPlayer) : '', mv = isPlayer ? (() => { try { return player.moving || p.moving; } catch { return p.moving; } })() : p.moving === true; // eslint-disable-line no-undef
     let sprint = false; try { sprint = isPlayer && typeof run !== 'undefined' && run; } catch { /* n/a */ } // eslint-disable-line no-undef
     const a = st === 'sit' ? 'sit' : st === 'crouch' ? 'crouch' : st === 'sneak' ? (mv ? 'sneak' : 'crouch') : mv ? (sprint ? 'run' : 'walk') : 'idle';
-    const ticks = Number.isFinite(p.walkTicks) ? Math.max(0, p.walkTicks) : 0, fr = mv ? Math.floor(ticks / (a === 'run' ? 1.8 : a === 'sneak' ? 3.2 : 2.5)) : Math.floor(performance.now() / (a === 'idle' ? 380 : 420));
+    const ticks = Number.isFinite(p.walkTicks) ? Math.max(0, p.walkTicks) : 0, fr = mv ? Math.floor(ticks / ((C.RATE || {})[a] || 2.5)) : Math.floor(performance.now() / (a === 'idle' ? ((C.RATE || {}).idle || 380) : 420));
     const hold = opts.hold || '', ang = hold ? p.angle : (mv && Number.isFinite(p.moveAngle) ? p.moveAngle : Number.isFinite(p.angle) ? p.angle : 0), d0 = C.dirOfAngle(ang);
     const seat = a === 'sit' && p.seat ? p.seat : null, d = seat ? 2 : hold ? d0 : (C.smoothDir ? C.smoothDir(p, d0) : d0);
     draw(ctx, o, seat ? seat.x : p.x, seat ? seat.y : p.y, d, a, fr, 2, hold);

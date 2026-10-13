@@ -11,7 +11,9 @@
   const W = root.NightshiftWardrobeData;
   if (!W || !root.document) return;
   const CELL = { w: 44, h: 56, ax: 22, ay: 36 }; // world px; anchor = body centre (feet at +14)
-  const ANIMS = { idle: 4, walk: 8, run: 8, crouch: 4, sneak: 8, sit: 4 };
+  const ANIMS = { idle: 6, walk: 12, run: 10, crouch: 4, sneak: 10, sit: 4 };
+  // frame-advance rates matched to the frame counts (game ticks per frame / ms per frame)
+  const RATE = { walk: 2.5 * 8 / 12, run: 1.8 * 8 / 10, sneak: 3.2 * 8 / 10, idle: 380 * 4 / 6 };
   const INK = '#11151c';
   function shade(hex, amt) { const n = parseInt(String(hex).slice(1, 7), 16); if (!Number.isFinite(n)) return hex; let r = n >> 16 & 255, gg = n >> 8 & 255, b = n & 255; const f = amt < 0 ? (v) => Math.round(v * (1 + amt)) : (v) => Math.round(v + (255 - v) * amt); return '#' + ((1 << 24) | (f(r) << 16) | (f(gg) << 8) | f(b)).toString(16).slice(1); }
   const lum = (h) => { const n = parseInt(String(h).slice(1, 7), 16); return ((n >> 16 & 255) * 0.3 + (n >> 8 & 255) * 0.59 + (n & 255) * 0.11) / 255; };
@@ -21,12 +23,13 @@
     const a = dir * Math.PI / 4, sx = Math.cos(a), sy = Math.sin(a), side = Math.abs(sx), bw = (W.BUILDS.find((b) => b.id === o.build) || W.BUILDS[1]).w;
     const n = ANIMS[anim] || 1, k = ((f % n) + n) % n;
     let stride = 0, bob = 0, arm = 0, lean = 0;
-    if (anim === 'sneak') { stride = [0, 1.4, 2.2, 1.4, 0, -1.4, -2.2, -1.4][k]; bob = [0, -0.3, -0.5, -0.3, 0, -0.3, -0.5, -0.3][k]; arm = -stride * 0.4; lean = 0.8; }
+    const ph = 2 * Math.PI * k / n, sn = Math.sin(ph);
+    if (anim === 'sneak') { stride = 2.2 * sn; bob = -0.5 * Math.abs(sn); arm = -stride * 0.4; lean = 0.8; }
     else if (anim === 'crouch') { bob = [0, -0.2, -0.3, -0.2][k]; }
     else if (anim === 'sit') { bob = [0, -0.2, -0.3, -0.2][k]; }
-    else if (anim === 'walk') { stride = [0, 2, 3, 2, 0, -2, -3, -2][k]; bob = [0, -0.5, -1, -0.5, 0, -0.5, -1, -0.5][k]; arm = -stride * 0.8; }
-    else if (anim === 'run') { stride = [0, 3, 5, 3, 0, -3, -5, -3][k]; bob = [-1, -2, -1.5, 0, -1, -2, -1.5, 0][k]; arm = -stride * 1.1; lean = 1.4; }
-    else { bob = [0, -0.3, -0.5, -0.3][k]; }
+    else if (anim === 'walk') { stride = 3 * sn; bob = -Math.abs(sn); arm = -stride * 0.8; }
+    else if (anim === 'run') { stride = 5 * sn; bob = -1 - Math.sin(2 * ph); arm = -stride * 1.1; lean = 1.4; }
+    else { bob = -0.25 * (1 - Math.cos(ph)); }
     const SW = (12.5 - 4 * side * (1 - Math.abs(sy))) * bw, cx = sx * lean * 0.6;
     const g = { sx, sy, side, front: sy > 0.25, back: sy < -0.25, profile: side > 0.85, bw, stride, bob, arm, lean, k, anim, SW, cx,
       shY: -12.5 + bob, waY: -0.5 + bob, hipY: 1.5 + bob, footY: 14, headX: cx + sx * (1 + lean * 0.5), headY: -19.5 + bob, blink: anim === 'idle' && k === 3 };
@@ -335,7 +338,7 @@
     const st = stance(p, isPlayer), mv = isPlayer ? (() => { try { return player.moving || p.moving; } catch { return p.moving; } })() : p.moving === true; // eslint-disable-line no-undef
     if (st === 'sit') return { anim: 'sit', f: Math.floor(performance.now() / 420 + (hash(p.id || '') % 4)) };
     if (st === 'crouch') return { anim: 'crouch', f: Math.floor(performance.now() / 420) };
-    if (st === 'sneak') return mv ? { anim: 'sneak', f: Math.floor((Number.isFinite(p.walkTicks) ? p.walkTicks : 0) / 3.2) } : { anim: 'crouch', f: Math.floor(performance.now() / 420) };
+    if (st === 'sneak') return mv ? { anim: 'sneak', f: Math.floor((Number.isFinite(p.walkTicks) ? p.walkTicks : 0) / RATE.sneak) } : { anim: 'crouch', f: Math.floor(performance.now() / 420) };
     return animOf0(p, isPlayer);
   }
   // Smooth turning: step through the in-between directions (45 ms each) instead of snapping.
@@ -352,8 +355,8 @@
     const running = isPlayer && moving && (() => { try { return typeof run !== 'undefined' && run; } catch { return false; } })();
     /* eslint-enable no-undef */
     const ticks = Number.isFinite(p.walkTicks) ? Math.max(0, p.walkTicks) : 0;
-    if (!moving) return { anim: 'idle', f: Math.floor(performance.now() / 380 + (hash(p.id || '') % 4)) };
-    return running ? { anim: 'run', f: Math.floor(ticks / 1.8) } : { anim: 'walk', f: Math.floor(ticks / 2.5) };
+    if (!moving) return { anim: 'idle', f: Math.floor(performance.now() / RATE.idle + (hash(p.id || '') % 6)) };
+    return running ? { anim: 'run', f: Math.floor(ticks / RATE.run) } : { anim: 'walk', f: Math.floor(ticks / RATE.walk) };
   }
   const dirOfAngle = (a) => ((Math.round(a / (Math.PI / 4)) % 8) + 8) % 8;
   // where the hands are when holding a gun (world offset from the anchor) — weapon-art puts the gun here
@@ -364,7 +367,7 @@
     const a = moving && Number.isFinite(p.moveAngle) ? p.moveAngle : Number.isFinite(p.angle) ? p.angle : Math.atan2(p.dy || 0, p.dx || 0);
     return ((Math.round(a / (Math.PI / 4)) % 8) + 8) % 8;
   };
-  const api = { enabled: true, CELL, ANIMS, frame, draw, compose, geom, outfitFor, dirOfAngle, holdHand, stance, smoothDir, frames: () => frames.size, clear: () => frames.clear() };
+  const api = { enabled: true, CELL, ANIMS, RATE, frame, draw, compose, geom, outfitFor, dirOfAngle, holdHand, stance, smoothDir, frames: () => frames.size, clear: () => frames.clear() };
   function install() {
     const S = root.NightshiftSprites; if (!S || S.__chars || typeof S.person !== 'function') return !!S?.__chars;
     const person = S.person, personTo = S.personTo;
