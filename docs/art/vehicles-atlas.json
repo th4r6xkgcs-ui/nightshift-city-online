@@ -1,0 +1,261 @@
+{
+  "version": 1,
+  "source": "authoritative Nightshift runtime builders",
+  "width": 1024,
+  "height": 694,
+  "frames": [
+    {
+      "id": "brick",
+      "anchor": [
+        124,
+        78
+      ],
+      "worldSize": [
+        62,
+        39
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#c84659",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 2,
+      "y": 2,
+      "width": 248,
+      "height": 156
+    },
+    {
+      "id": "mule",
+      "anchor": [
+        148,
+        84
+      ],
+      "worldSize": [
+        74,
+        42
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#6a7a5a",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 252,
+      "y": 2,
+      "width": 296,
+      "height": 168
+    },
+    {
+      "id": "ridgeback",
+      "anchor": [
+        144,
+        86
+      ],
+      "worldSize": [
+        72,
+        43
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#1d2433",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 550,
+      "y": 2,
+      "width": 288,
+      "height": 172
+    },
+    {
+      "id": "bulldog",
+      "anchor": [
+        148,
+        84
+      ],
+      "worldSize": [
+        74,
+        42
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#e0473a",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 2,
+      "y": 176,
+      "width": 296,
+      "height": 168
+    },
+    {
+      "id": "kestrel",
+      "anchor": [
+        132,
+        80
+      ],
+      "worldSize": [
+        66,
+        40
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#f1efe8",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 300,
+      "y": 176,
+      "width": 264,
+      "height": 160
+    },
+    {
+      "id": "monarch",
+      "anchor": [
+        152,
+        84
+      ],
+      "worldSize": [
+        76,
+        42
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#7fc8c0",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 566,
+      "y": 176,
+      "width": 304,
+      "height": 168
+    },
+    {
+      "id": "velvet",
+      "anchor": [
+        156,
+        82
+      ],
+      "worldSize": [
+        78,
+        41
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#6a2a8a",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 2,
+      "y": 346,
+      "width": 312,
+      "height": 164
+    },
+    {
+      "id": "aurora",
+      "anchor": [
+        144,
+        82
+      ],
+      "worldSize": [
+        72,
+        41
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#2a5a8a",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 316,
+      "y": 346,
+      "width": 288,
+      "height": 164
+    },
+    {
+      "id": "vortex",
+      "anchor": [
+        144,
+        86
+      ],
+      "worldSize": [
+        72,
+        43
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#ff8a1a",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 606,
+      "y": 346,
+      "width": 288,
+      "height": 172
+    },
+    {
+      "id": "phantom",
+      "anchor": [
+        148,
+        86
+      ],
+      "worldSize": [
+        74,
+        43
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#e8eef4",
+        "style": null
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 2,
+      "y": 520,
+      "width": 296,
+      "height": 172
+    },
+    {
+      "id": "bulldog-styled",
+      "anchor": [
+        148,
+        84
+      ],
+      "worldSize": [
+        74,
+        42
+      ],
+      "animation": "static",
+      "direction": "top-down +x",
+      "configuration": {
+        "color": "#e0473a",
+        "style": {
+          "finish": "gloss",
+          "rims": "gold",
+          "tint": "0",
+          "spoiler": "gt",
+          "hood": "carbon",
+          "livery": "none",
+          "liveryColor": "#f4f1ea",
+          "exhaust": "stock",
+          "lights": "stock",
+          "glow": "none"
+        }
+      },
+      "atlas": "vehicles-atlas.png",
+      "x": 300,
+      "y": 520,
+      "width": 296,
+      "height": 168
+    }
+  ]
+}

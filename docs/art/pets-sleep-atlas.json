@@ -1,0 +1,3880 @@
+{
+  "version": 1,
+  "source": "authoritative Nightshift runtime builders",
+  "width": 1024,
+  "height": 1622,
+  "frames": [
+    {
+      "id": "shiba-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 590,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 688,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 786,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 884,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 2,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 100,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 198,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 296,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 394,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sleep-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sleep",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sleep-atlas.png",
+      "x": 492,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    }
+  ]
+}

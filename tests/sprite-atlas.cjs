@@ -1,15 +1,9 @@
 const assert=require('node:assert/strict'),boot=require('./harness.cjs');const run=boot();
-run('globalThis.rects=0;globalThis.blits=[];g.fillRect=()=>rects++;g.drawImage=(...args)=>blits.push(args.slice(1));globalThis.actor={x:100,y:100,color:"#123456",hp:40,moving:true,walkTicks:0,angle:0};NightshiftSprites.person(actor);globalThis.firstRects=rects;actor.walkTicks=2.5;NightshiftSprites.person(actor)');
-assert.ok(run('firstRects')>100);assert.equal(run('rects'),run('firstRects'));assert.equal(run('blits.length'),2);assert.equal(run('blits[0][0]'),0);assert.equal(run('blits[1][0]'),run('NightshiftSprites.atlasStats().width')/8);
-for(let frame=0;frame<8;frame++)assert.equal(run(`NightshiftSprites.pose({moving:true,walkTicks:${frame}*2.5,angle:0}).frame`),frame);
-assert.equal(run('NightshiftSprites.pose({moving:true,walkTicks:NaN,angle:NaN}).frame'),0);
-assert.equal(run('NightshiftSprites.pose({moving:true,walkTicks:-10,angle:0}).frame'),0);
-run('actor.moving=false;actor.walkTicks=500;NightshiftSprites.person(actor)');assert.equal(run('blits.at(-1)[0]'),0);
-run('actor.angle=Math.PI;NightshiftSprites.person(actor)');assert.equal(run('blits.at(-1)[1]'),4*52);
-run('for(let i=0;i<40;i++)NightshiftSprites.person({...actor,id:"npc-"+i,color:"#"+i.toString(16).padStart(6,"0")})');assert.equal(run('NightshiftSprites.atlasStats().count'),run('NightshiftSprites.atlasStats().limit'));
-run('NightshiftSprites.person(player,true,{weapon:false});globalThis.cached=NightshiftSprites.atlasStats().count;NightshiftHome.profile.shirt="#012345";NightshiftSprites.person(player,true,{weapon:false})');assert.equal(run('NightshiftSprites.atlasStats().count'),run('NightshiftSprites.atlasStats().limit'));
-run('globalThis.before=JSON.stringify({player,cars,peds,buildings});NightshiftSprites.person(player,true);NightshiftSprites.person({...actor,hp:20});NightshiftWorld.building(buildings[0])');assert.equal(run('JSON.stringify({player,cars,peds,buildings})===before'),true);
-console.log('PASS: actual atlas blits/reuse, all eight animation frames, stationary pose, invalid frame normalization, directional rows, bounded LRU/profile changes and no gameplay mutations');
-
-const crowded=boot();crowded('globalThis.canvasAllocations=0;globalThis.originalElement=document.createElement;document.createElement=tag=>{if(tag==="canvas")canvasAllocations++;return originalElement(tag)};for(let i=0;i<15;i++)NightshiftSprites.person({x:100+i,y:100,color:"#"+(1000+i).toString(16),hp:40});NightshiftSprites.person(player,true);globalThis.warmAllocations=canvasAllocations;for(let frame=0;frame<30;frame++){for(let i=0;i<15;i++)NightshiftSprites.person({x:100+i,y:100,color:"#"+(1000+i).toString(16),hp:40});NightshiftSprites.person(player,true)}');assert.equal(crowded('canvasAllocations'),crowded('warmAllocations'));assert.ok(crowded('NightshiftSprites.atlasStats().count')<=crowded('NightshiftSprites.atlasStats().limit'));
-console.log('PASS: crowded NPC styles preserve bounded atlas memory cap without repeated canvas allocation');
+run('globalThis.o=NightshiftWardrobeData.cleanOutfit(NightshiftWardrobeData.DEFAULT);globalThis.a=NightshiftCharacters.frame(o,2,"walk",0);globalThis.b=NightshiftCharacters.frame(o,2,"walk",NightshiftCharacters.ANIMS.walk)');
+assert.equal(run('a===b'),true);assert.equal(run('a.width'),176);assert.equal(run('a.height'),224);
+run('NightshiftWardrobe.outfit();globalThis.testWardrobeSnapshot=JSON.stringify(NightshiftWardrobe.state);globalThis.testGameplaySnapshot=JSON.stringify({player,cars,peds});for(let d=0;d<8;d++)for(let f=0;f<8;f++)NightshiftCharacters.frame(o,d,"walk",f);NightshiftCharacters.frame(o,0,"idle",NaN);NightshiftCharacters.frame(o,0,"walk",-1);NightshiftCharacters.frame(o,0,"crouch",0);NightshiftSprites.person(player,true,{weapon:false})');
+assert.equal(run('JSON.stringify(NightshiftWardrobe.state)===testWardrobeSnapshot'),true);assert.equal(run('JSON.stringify({player,cars,peds})===testGameplaySnapshot'),true);
+run('for(let i=0;i<160;i++){const v=NightshiftWardrobeData.npcOutfit(i);NightshiftCharacters.frame(v,i%8,"walk",i%8,i%2?6:2)}');
+assert.ok(run('NightshiftPremiumArt.stats().count')<=128);assert.ok(run('NightshiftPremiumArt.stats().bytes')<=24*1024*1024);
+assert.ok(run('NightshiftPremiumArt.stats().hits')>0);assert.equal(run('NightshiftCharacters.frame(o,2,"idle",0,6).width'),264);
+console.log('PASS: shared character frame reuse, direction/animation normalization, close-up dimensions, bounded 24 MiB cache and no gameplay/wardrobe mutations');

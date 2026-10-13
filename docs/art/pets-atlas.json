@@ -1,0 +1,1504 @@
+{
+  "version": 1,
+  "source": "authoritative Nightshift runtime builders",
+  "width": 1024,
+  "height": 192,
+  "frames": [
+    {
+      "id": "shiba-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 2,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "shiba-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 52,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "shiba-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 102,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "shiba-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 152,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "shiba-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 202,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "shiba-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 252,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "shiba-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 302,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "shiba-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 352,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "lab-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 402,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "lab-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 452,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "lab-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 502,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "lab-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 552,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "lab-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 602,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "lab-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 652,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "lab-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 702,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "lab-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 752,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "husky-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 802,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "husky-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 852,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "husky-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 902,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "husky-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 952,
+      "y": 2,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "husky-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 2,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "husky-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 52,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "husky-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 102,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "husky-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 152,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "rottweiler-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 202,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "rottweiler-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 252,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "rottweiler-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 302,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "rottweiler-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 352,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "rottweiler-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 402,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "rottweiler-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 452,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "rottweiler-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 502,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "rottweiler-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 552,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tabby-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 602,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tabby-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 652,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tabby-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 702,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tabby-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 752,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tabby-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 802,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tabby-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 852,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tabby-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 902,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tabby-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 952,
+      "y": 40,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "blackcat-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 2,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "blackcat-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 52,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "blackcat-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 102,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "blackcat-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 152,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "blackcat-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 202,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "blackcat-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 252,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "blackcat-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 302,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "blackcat-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 352,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "parrot-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 402,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "parrot-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 452,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "parrot-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 502,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "parrot-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 552,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "parrot-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 602,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "parrot-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 652,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "parrot-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 702,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "parrot-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 752,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "raccoon-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 802,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "raccoon-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 852,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "raccoon-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 902,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "raccoon-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 952,
+      "y": 78,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "raccoon-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 2,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "raccoon-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 52,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "raccoon-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 102,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "raccoon-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 152,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "owl-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 202,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "owl-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 252,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "owl-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 302,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "owl-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 352,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "owl-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 402,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "owl-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 452,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "owl-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 502,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "owl-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 552,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "monkey-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 602,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "monkey-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 652,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "monkey-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 702,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "monkey-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 752,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "monkey-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 802,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "monkey-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 852,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "monkey-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 902,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "monkey-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 952,
+      "y": 116,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tiger-w0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w0",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 2,
+      "y": 154,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tiger-w1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w1",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 52,
+      "y": 154,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tiger-w2",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w2",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 102,
+      "y": 154,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tiger-w3",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "w3",
+      "animation": "walk",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 111,
+      "atlas": "pets-atlas.png",
+      "x": 152,
+      "y": 154,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tiger-i0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i0",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 202,
+      "y": 154,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tiger-i1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "i1",
+      "animation": "idle",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 333,
+      "atlas": "pets-atlas.png",
+      "x": 252,
+      "y": 154,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tiger-s0",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s0",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 302,
+      "y": 154,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "id": "tiger-s1",
+      "anchor": [
+        24,
+        32
+      ],
+      "worldScale": 0.74,
+      "pose": "s1",
+      "animation": "sit",
+      "direction": "right; left uses horizontal mirror",
+      "durationMs": 625,
+      "atlas": "pets-atlas.png",
+      "x": 352,
+      "y": 154,
+      "width": 48,
+      "height": 36
+    }
+  ]
+}

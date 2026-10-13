@@ -1,0 +1,9 @@
+/* Generate likely player frames during idle time, one frame per callback; never change the outfit/save. */
+(function(r){'use strict';const C=r.NightshiftCharacters,W=r.NightshiftWardrobeData;if(!C||!W)return;let signature='',queue=[],scheduled=false;const state={generated:0,callbacks:0,maxFrameMs:0,totalMs:0};
+const now=()=>performance.now();
+function pump(deadline){scheduled=false;if(!queue.length||r.document?.visibilityState==='hidden'||r.NightshiftStudio?.paused?.())return;
+if(deadline&&deadline.timeRemaining()<3&&!deadline.didTimeout){schedule();return}const job=queue.shift(),start=now();C.frame(...job);const dt=now()-start;state.generated++;state.callbacks++;state.totalMs+=dt;state.maxFrameMs=Math.max(state.maxFrameMs,dt);if(queue.length)schedule()}
+function schedule(){if(scheduled)return;scheduled=true;if(typeof r.requestIdleCallback==='function')r.requestIdleCallback(pump,{timeout:750});else setTimeout(()=>pump(),24)}
+function refresh(){if(r.NightshiftStudio?.paused?.()||r.document?.visibilityState==='hidden')return;let p;try{p=player}catch{return}if(!p)return;const o=r.NightshiftWardrobe?.outfit?.()||W.DEFAULT,dir=C.dirOfAngle(p.moving&&Number.isFinite(p.moveAngle)?p.moveAngle:p.angle||0),armed=(r.NightshiftInventory?.state?.pocket?.pistol||0)>0,id=r.NightshiftWeapons?.state?.equipped,hold=armed?(r.NightshiftPremiumPistols?.ids.includes(id)?'short':'long'):'',key=W.keyOf(o)+'|'+dir+'|'+hold;if(key===signature){if(queue.length)schedule();return}signature=key;queue=[];for(const d of [dir,(dir+1)%8,(dir+7)%8])for(const a of ['idle','walk','run'])for(let f=0;f<C.ANIMS[a];f++)queue.push([o,d,a,f,2,hold]);schedule()}
+setInterval(refresh,350);setTimeout(refresh,500);r.NightshiftArtBudget=Object.freeze({refresh,stats:()=>({...state,pending:queue.length,scheduled}),clear:()=>{queue=[];signature=''}});
+})(globalThis);

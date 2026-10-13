@@ -1,0 +1,17 @@
+{
+  "uniqueFrontHaircuts": 12,
+  "headCombinations": 96,
+  "pistols": [
+    "pistol",
+    "compact",
+    "revolver",
+    "hawk",
+    "goldhawk",
+    "machine"
+  ],
+  "attachmentsChangePixels": true,
+  "finishesChangePixels": true,
+  "liveInspectionChangesPixels": true,
+  "heldWorldScalePreserved": true,
+  "pageErrors": []
+}

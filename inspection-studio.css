@@ -1,0 +1,7 @@
+/* Codex mobile finishing for Claude's shared studios. */
+#csStudio canvas,#wiPanel canvas{image-rendering:pixelated}
+#csStudio .rot,#csStudio .x,#csStudio .cats button,#csStudio .acts button,#csStudio .foot button{min-height:44px}
+#csStudio .sw button{width:32px;height:32px}
+#csStudio .bar{padding-bottom:max(6px,env(safe-area-inset-bottom))}
+@media(max-width:640px){#csStudio{grid-template-rows:43% 57%}#csStudio .det canvas{width:80px;height:80px}#csStudio .cats{touch-action:pan-x}#csStudio .top{padding-top:8px}}
+@media(max-height:700px){#csStudio .scroll{min-height:40px}#csStudio .det{max-height:104px;overflow:auto;touch-action:pan-y}#csStudio .det canvas{width:64px;height:64px}#csStudio .sw button{width:28px;height:28px}#csStudio .bar{gap:4px;padding:4px 6px}#csStudio .chip{font-size:10px;padding:7px 8px}#csStudio .top{padding-top:4px}#csStudio .foot .s{display:none}}

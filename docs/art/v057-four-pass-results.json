@@ -1,0 +1,96 @@
+{
+  "claudeArtRef": "741dc7d4d899977f01b29f028a445bd777f627a1",
+  "anims": {
+    "idle": 6,
+    "walk": 12,
+    "run": 10,
+    "crouch": 4,
+    "sneak": 10,
+    "sit": 4
+  },
+  "petDirections": [
+    {
+      "id": "shiba",
+      "directions": 8
+    },
+    {
+      "id": "lab",
+      "directions": 8
+    },
+    {
+      "id": "husky",
+      "directions": 8
+    },
+    {
+      "id": "rottweiler",
+      "directions": 8
+    },
+    {
+      "id": "tabby",
+      "directions": 8
+    },
+    {
+      "id": "blackcat",
+      "directions": 8
+    },
+    {
+      "id": "parrot",
+      "directions": 8
+    },
+    {
+      "id": "raccoon",
+      "directions": 8
+    },
+    {
+      "id": "owl",
+      "directions": 8
+    },
+    {
+      "id": "monkey",
+      "directions": 8
+    },
+    {
+      "id": "tiger",
+      "directions": 8
+    }
+  ],
+  "petAnimationSamples": 352,
+  "petInspector": "live rotation/walk preview, pauses gameplay, no ownership/save changes",
+  "idlePrewarm": {
+    "generated": 68,
+    "callbacks": 68,
+    "maxFrameMs": 12,
+    "totalMs": 256.9000000357628,
+    "pending": 47,
+    "scheduled": true
+  },
+  "frameTimes": {
+    "medianMs": 16.69999999999891,
+    "p95Ms": 33.30000000000109,
+    "samples": 180
+  },
+  "caches": {
+    "characters": {
+      "hits": 2341,
+      "misses": 113,
+      "culled": 2333,
+      "count": 113,
+      "limit": 128,
+      "bytes": 17583104
+    },
+    "pets": {
+      "count": 256,
+      "limit": 256,
+      "bytes": 8650752
+    },
+    "facades": {
+      "hits": 932,
+      "misses": 9,
+      "count": 9,
+      "limit": 24,
+      "bytes": 3649536
+    }
+  },
+  "pageErrors": [],
+  "environment": "Headless Edge, Windows, 390x844 DPR2; physical iPhone pending"
+}

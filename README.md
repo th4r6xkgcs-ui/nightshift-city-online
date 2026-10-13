@@ -1,7 +1,11 @@
 # Nightshift City Online
 Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current build: v0.55 Living Streets
+## Current review build: v0.57 detailed city art
+
+Read [v0.57 handoff](CLIENT_HANDOFF_V57.md). Richer shared character materials, recessed storefronts, vehicle trim and eight-direction pets are present in gameplay. Character, weapon, vehicle and pet inspection use the runtime art. Claude's latest character work is selectively integrated, with approved face/hair/pistol refinements retained. The hosted owner-private preview remains v0.55; the full master roadmap is not complete.
+
+## Hosted build: v0.55 Living Streets
 Private preview hosted separately. Latest release adds detailed pixel guns, pets, architecture and street props, smoother camera, readable crossings and exact current Claude RPG/art integration. Read [v0.55 handoff](CLIENT_HANDOFF_V55.md). Latest combined batch includes respect ranks, fishing, Hustle phone jobs, labs, weapon mods, persistent named-contact memory and a city journal. See CLIENT_HANDOFF_V53.md.
 Dependency-free Canvas client with walking, combat, police pursuit, traffic, vehicles, apartments/shops, production businesses, RPG skills/weapons/goals/dailies and browser-local inventory/progress. Join an NPC gang or found a custom gang, recruit passive followers, build loyalty, escort members, claim local corners and respond to noncombat rival pressure. Street customers request carried stock using shared dealer demand, prices, heat and sales ledgers. This private static preview is single-player; Claude’s separate backend work is not deployed here. Art/audio are procedural. Real iPhone and audio QA remain pending; Edge DOM/viewport checks pass.
 
@@ -10,7 +14,7 @@ Canonical combined branch: `codex/living-streets-v55`, based on v0.52. Crew memb
 ## Run and verify
 Use Node 24 or newer. No npm installation is required. `npm run build` creates a static dist bundle for hosting.
 - `python3 -m http.server 8080` serves the game at localhost:8080.
-- `npm run check` runs 107 suites and syntax-checks every root JavaScript module.
+- `npm run check` runs 113 suites and syntax-checks every root JavaScript module.
 - `npm run test:browser` is a separate harness for a configured browser environment.
 - `node tests/render.cjs /tmp/city.png` optionally renders Canvas with `@napi-rs/canvas`; this verifies neither HTML layout nor touch/audio.
 

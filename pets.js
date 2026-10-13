@@ -57,6 +57,7 @@
   const nameOf = () => state.pets.find((p) => p.id === state.active)?.name || 'Your pet';
   function drawPet(c, t, id = state.active, pet = PET0) {
     const D2 = D.PET[id]; if (!D2) return;
+    if (root.NightshiftPetArt && root.NightshiftPetArt.draw(c, id, { x: pet.x, y: pet.y, angle: pet.angle, moving: pet.moving, walk: (pet.walk || 0) * 0.2 }, t, { sitting: !pet.moving && performance.now() - (pet.sit || 0) > 1500 })) return; // premium sprites (pet-art.js)
     const [main, second] = D2.colors, dir = Math.cos(pet.angle) >= 0 ? 1 : -1, x = pet.x, y = pet.y, mv = pet.moving, sitting = !mv && performance.now() - pet.sit > 1500;
     const bob = mv ? Math.sin(pet.walk * 0.9) * 1.2 : 0, wag = Math.sin(t * (sitting ? 6 : 14)) * 3;
     if (D2.kind === 'owl') {

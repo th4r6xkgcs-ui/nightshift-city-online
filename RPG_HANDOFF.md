@@ -481,3 +481,112 @@ All Claude-owned new files. No Codex file was edited except where noted on `clau
 - **City car restyle (`cars.js`):** every car drawn through `NightshiftSprites.car` (parked, owned, traffic) now uses the baked renderer with `sedan`/`compact`/`van` bodies (cached per model+paint at 3×). `NightshiftCars.setStyleBase(false)` restores Codex's car art instantly.
 - **Ledger (`ledger.js`):** polls `player.cash` every 200 ms and credits each change to a category: explicit `NightshiftLedger.tag(cat)` (set at payout points in Claude modules), else the open panel, else the zone, else "Street & other". 📱 → 📊 LEDGER: session/all-time earned and spent by source, net per hour, and a ways-to-earn list. Save `nightshift-ledger-v1`.
 - **Goals added:** `decor1`, `trap1`, `meet1`, `legend1`, `ride1`, `exotic1`, `hit1`, `silent3`. **Tests:** `tests/carmeet.cjs`, `tests/cars.cjs`, `tests/hitman.cjs`, updated `weapons`, `breakin`, `goals`.
+
+## Batch: lockpicking/safecracking, exotic pets, weapon paint jobs, your own stash house
+- **Picks (`picks-data.js`, `picks.js`):** every back door is a lockpick minigame (house 3 pins → estate 5 pins; Stealth widens the gold zone, Luck adds a spare miss); KICK IT IN skips it but starts the alarm at once. Safes and gun safes are dial minigames (+30% cash, quiet) with DRILL IT as the slow, loud fallback; misses make noise for guards. Panel `#pkWrap` at the bottom; the world keeps running. Walking 100 px from the door cancels.
+- **Exotic pets (`pets-data.js`, `pets.js`):** raccoon (crafting −10% time), barn owl (−10% heat), capuchin (+5% run speed, +10% luck), tiger cub ($25k: +4% sales, −8% damage taken). New draw branches `owl`, `monkey`, `raccoon`, tiger stripes on the cat body.
+- **Weapon paint jobs (`weapons-data.js` `SKINS`, `paint()`; `state.skins`):** 8 finishes applied on the ATTACHMENTS tab (cash + materials). Icons palette-swap K.st/K.sl/K.hi with optional camo (`supply-art.js` `gunIcon(id, w, h, skin)`); held guns read `NightshiftWeapons.skinPalette(id)` (art-pass `gunArm`).
+- **Your stash house (`safehouse-data.js`, `safehouse.js`, breakin hooks):** clear every crew member in a trap house → the door offers TAKE OVER ($12k). Store weed/coke (pocket) and pills (backpack) up to 400 each, plus cash; the crew sells 8 weed / 4 coke / 10 pills per real hour at 70% of street price into the stash. Upgrades: door, alarm, cameras, dog, guards (wages $120/h each from the stash), safe (protects 50%/90% of cash). Raids roll every 15 min (cooldown 45 min) when the stash is worth ≥ $3k; odds and losses fall with security. Cameras give a 90 s warning; going in starts `NightshiftBreakin.defend()` — raiders come through the back door, no police, win by dropping them all. Save `nightshift-safehouse-v1` (plain JSON, the shape a future multiplayer raid would read).
+- **Ledger:** `tag('ignore')` for transfers (stash deposits), new category `stash`.
+- **Goals:** `takeover1`. Tests: `tests/picks.cjs`, `tests/safehouse.cjs`, paint jobs in `tests/weapons.cjs`.
+
+## Premium 2.5D art overhaul, Option 3 (owner: "finish this since I'm out of Codex")
+The full spec is in `ART_SPEC.md`, and sheets and screenshots are in `docs/art/`. Everything is in new Claude-owned files, except small hooks in Claude files (`cars.js`, `tuning.js`, `supply*.js`, `weapons.js`, `carmeet*.js`, `hud.js`, `jobs.js`, `guide.js`). No Codex file was edited.
+
+- **Layered characters (`wardrobe-data.js`, `character-art.js`):**
+  - 44 clothing items in 9 slots, each with colours, rarity, condition and options, plus skin, build, hair and facial hair.
+  - An 8-direction renderer with idle, walk, run and a gun-holding pose.
+  - It wraps `NightshiftSprites.person/personTo` for the player and every NPC, with deterministic NPC outfits and uniforms.
+- **Character Studio (`studio.js`, `#csStudio`, save `nightshift-wardrobe-v1`):**
+  - Stage: rotate (buttons or swipe), fit-to-stage zoom (slider, pinch or wheel), idle/walk/run, close-up, hold to COMPARE.
+  - Catalog by category, with thumbnails that show the piece itself (a top is shown without its jacket, a bag from behind).
+  - Item panel: close-up, rarity, condition, equipped state, description, colours, options.
+  - Five saved outfits and five curated looks.
+  - Where to open it:
+    - At home, the apartment wardrobe opens it in WEAR mode (owned pieces only).
+    - The 👕 BOUTIQUE point outside each CLOTHING store opens it in BUY mode (buy one piece or the whole look). Points are nudged so they never stack on another prompt.
+    - 📱 STYLE opens a preview.
+  - It syncs `NightshiftHome.profile` colours.
+- **Weapons (`weapon-art.js`):**
+  - 20 guns built from shaded parts. Attachments (suppressor, scope/red-dot, ext mag/speed-loader/tube, laser grip, reinforcement) are visible on the held gun, the icons and the bench. Paint jobs re-tint metal and polymer.
+  - Held guns: installed as the outermost `S.person` wrapper (after Codex `detailed-art.js`). It passes `noWeapon:true` + `hold` down, so the character raises its arms and the gun sits in its hands. A laser line shows when a laser grip is fitted.
+  - Weapon Inspection bench (`#wiPanel`): zoom, bench/night light, gun picker, stats (preview vs fitted, with green/red deltas), attachment previews with compatibility (fitted / requirements / won't fit crude / built in), paint previews, EQUIP.
+  - Open it by tapping any gun picture, the 🔍 on armory cards, or Guide → Inspect a gun.
+  - Armory cards inside the backpack and bench now have styles (before, they were unstyled there).
+- **Vehicle Studio (`carstyle-data.js`, `carstyle.js`, `#vsPanel`, save `nightshift-carstyle-v1`):**
+  - Options: 16 paints, 6 finishes, 6 wheel styles, 4 tints, 4 spoilers, 3 hoods, 5 liveries × 7 colours, 3 exhausts, 4 headlight colours, 5 underglows. All are baked into `cars.js` and also work on street cars you own.
+  - Turntable: spin or drag, 45° steps, zoom, day/night with headlight beams, hold COMPARE.
+  - Info: tier/rarity colour, body %, plate, show flair.
+  - Where to open it:
+    - Tuning garage → 🎨 STYLE STUDIO: pay only for the changes.
+    - 📱 MY CARS → 🎨 STYLE: preview only.
+  - Flair (0–30) adds to the car meet score.
+- **Tests:** `tests/wardrobe.cjs`, `tests/weapon-art.cjs`, `tests/carstyle.cjs`, all registered in `tests/run.cjs` on rpg-play. The full suite reports **110 suites PASS**. A real bug was fixed: default clothing pieces weren't normalised, so the save wasn't idempotent.
+- **Playwright checks (844×390 and 390×844):**
+  - Studio: open, buy, wear, save, close.
+  - Boutiques: placement.
+  - Apartment wardrobe: hook.
+  - Weapons: held guns at 8 angles, the inspection bench, and backpack icons.
+  - Vehicle Studio: 9 options, then APPLY (cash charged, style saved), and styled street cars in the city.
+  - No page errors.
+- **Deployed:** GitHub Pages `gh-pages` from rpg-play.
+- **Next:**
+  - Sitting, crouch and car enter/exit animations.
+  - A "style" goal tier.
+  - Pets and props in the same premium pipeline.
+  - Optional: let the car meet show the styled car portrait.
+
+### Overhaul part 2 (owner: "get to it")
+- **Animations (`character-art.js`):**
+  - Poses: crouch, sneak (automatic in break-ins unless sprinting) and sit (on benches).
+  - Getting into and out of cars: the player ducks into the driver's door (drawn by a `S.car` wrapper) and crouches when getting out.
+  - Smooth turning through the in-between directions.
+  - Gun swings up on equip (`weapon-art.js`), and the hands follow the crouch.
+- **Pets (`pet-art.js`):** 11 species redrawn with 8 poses each. `pets.js` draws them; Codex's duplicate pet pass is a no-op.
+- **Props (`prop-art.js`):** 11 premium street props replace Codex's, through `NightshiftDetailedArt.prop`, plus 50 sit-able city benches.
+  - **Codex file edit, on rpg-play:** `detailed-art.js` calls `api.prop`/`api.pet` instead of its local functions (6 lines). This went on rpg-play rather than art-pass, because art-pass predates Codex v0.55 and merging v0.55 into it conflicts.
+  - **Load order:** `online/build-online.cjs` gained `LATE_SCRIPTS` (loaded right after `detailed-art.js`).
+- **Tests:** `tests/world-art.cjs` (pets × 8 poses, 11 props). The full suite reports **111 suites PASS**.
+- **Playwright:**
+  - A break-in shows the sneak stance with the Whisper SMG.
+  - Benches: 50 placed, and the player sits.
+  - The Character Studio, Vehicle Studio and weapon pages were re-run.
+  - No page errors.
+- **Sheets:** `docs/art/pets-sheet.png`, `poses-crouch-sneak-sit.png`, `props-benches-pets.png`, `sneaking-in-breakin.png`.
+
+### Characters v2: pixel renderer (owner: "characters still look too blocky and cheap")
+- **Merged Codex v0.56 (`codex/premium-art-v56`) into rpg-play.** The only conflict was `tests/run.cjs`; I took Codex's list, then added `character-pixel`. Claude modules were identical.
+- **New `character-pixel.js`:** a true pixel-art renderer with lit masks, hue-shifted ramps, clumped hair, detailed faces, contact shadows and coloured outlines. See `ART_SPEC.md` → "Characters v2".
+  - It overrides `NightshiftCharacters.frame/draw` and the person draw, superseding Codex's `premium-art-renderer.js`/`premium-head-art.js`. Those files stay in place but are no longer used for people.
+  - `studio.js` now requests even scales.
+- **Tests:** full suite **112 PASS**.
+- **Playwright:** city NPCs, the Character Studio (landscape and portrait), held guns, and break-in sneak. No page errors.
+- **Deployed** to GitHub Pages.
+
+## v0.57 Bigger city, living crowd, walk-in buildings, wayfinding, crafting help (owner: "bigger world… cars useless… NPCs stack and don't act like NPCs… places should be enterable… I feel lost… crafting needs work… progress should be saved")
+- **Resume on load** (`life.js`/`life-data.js`): `where` (home|city) is saved every 2 s and on pagehide; a returning player spawns where they left off outside ("👋 Welcome back"), not in the apartment.
+- **City ×9** (Codex files edited because Codex is out of usage — see PR #3 note): `city-data.js` 15×15 blocks = 6600×5100; the original 5×5 core is unchanged at the top-left. `world.js` adds 8 named regions (DOWNTOWN, THE HEIGHTS, OLD TOWN, MARKET DISTRICT, IRONWORKS, FAIRVIEW, THE FLATS, HARBOR), a tiled ground cache (1320×1020 tiles, LRU 16) and live street props for on-screen blocks. `game.js`, `environment.js`, `signals.js`, `crime.js`, `inventory.js`, `navigation.js` (windowed A*), `road-navigation.js` (lazy grid), `city-map.js` (whole-city map with district labels), `traffic.js` (loops in every region, only near-player actors tick/draw) follow `NightshiftCityData.WIDTH/HEIGHT`.
+- **Crowd** (`crowd.js`): 46 people kept around the player (far ones re-homed ahead), personal-space separation (no stacking), 22 parked cars recycled kerbside, and errands: idle people walk into nearby doors, stay 8–30 s, come back out.
+- **Interiors** (`interiors.js`): every CORNER SHOP, DINER, CLOTHING, GARAGE, BANK, CLUB, WAREHOUSE and APARTMENTS building has a 🚪 ENTER door (196 in total; the player's own apartment excluded). Each interior is a zone (`in-<type>`) with 2.5D furniture, staff/patrons and USE targets: shop, diner menu, boutique + mirror, tuning + tool chest, teller (market) + vault (heist banks), club venue + dance floor, warehouse crates/pallet (crafting materials, 20-min refill), lobby mailboxes. Save: `nightshift-interiors-v1`.
+- **Wayfinding** (`wayfinding.js`): "ENTERING <DISTRICT>" banners with what the district is good for; a NEAR chip under the goal card (nearest place, arrow, metres); tap → "Around you" list (one per kind, nearest first, what it does, GO = road GPS) + a "getting around" crib.
+- **Workbench** (`supply.js`, Codex-owned, edited): recipes sorted by how close you are; a "Closest: X · still need" tip; missing materials named on the chips; per-recipe "where to get it" (gather spots with odds, hardware counter/gun-shop prices, warehouse/garage interiors) with GPS.
+- **Characters**: `character-pixel.js` now G=3 (132×168 art px per 44×56 cell); `character-art.js` walk 12 / run 10 / sneak 10 / idle 6 frames from smooth curves (`RATE` keeps stride speed); per-frame build budget with cached-pose fallback. Test `sprite-atlas.cjs` updated for the 12-frame loop.
+- Checks: `node tests/run.cjs` → 112 suites PASS. Playwright: all 8 interior types enter/target/exit with no page errors; wayfinding panel + GPS; bench tips; fps unchanged vs G=2 (headless software GL ~30–36 steady).
+
+## v0.58 Districts with identity, street gangs, GTA-style police, Bullet Echo combat, slower early guns (owner: "districts shouldn't look or feel the same… NPC gangs and gang blocks… cops never too overpowered unless pushed… chance to get away… progressively harder like GTA… combat harder to see like Bullet Echo… crouched behind a car you don't get hit… early guns slow firing, low durability")
+- **Districts** (`world.js`, `city-data.js`, `crowd.js`): each of the 8 outer regions has its own lot/facade/roof/trim palette, sidewalk material (granite slabs, grass verges, brick, market tiles, hazard paint, cracked concrete, boardwalk), street furniture (bus shelters, hedges + picket fences, brick planters + lamps, fruit stalls, barrels + pallets, graffiti walls, shipping containers), tree/palm rules, building mix (banks downtown, houses in the suburbs, warehouses east) and footprints (towers 280×190, houses 220×140, sheds 280×160). People are dressed for the neighbourhood (8 seeded looks per region). Core 5×5 unchanged.
+- **Gangs** (`gangs-data.js` pure + `gangs.js`): 6 gangs, each holding 3 blocks (Market Street Mob, Los Diablos, Blue Ridge Kings, Yellow Tape Boys, Violet Saints, Dock Rats). Turf has tags, painted curbs and a flag; crews hang out in their colours (5 looks per gang). Rep per gang: HOSTILE shoots on sight, WARY warns then fights if you loiter (~9 s), shoot on their block or hurt one; FRIENDLY lets you be. TALK: pay respect ($100, +12, 10-min cooldown), friends-only ammo/parts, jobs vs. the rival (3 kills → $350 + rep). Fights: members spread out, take cover behind parked cars, peek and shoot with distance/movement/cover-based misses. Player bullets hit members (game.js bullet loop). Save `nightshift-gangs-v1`.
+- **Police** (`wanted-data.js` pure + `crime.js` edits): stars = round(heat). ★1 one cop, never shoots (wants to arrest); ★2 shoots only if you're armed (fired near them / hurt a cop); ★3 shoots on sight; ★4–5 SWAT (tougher, faster, better shots), up to 8 units. Escape: break line of sight and leave the search circle (300–660 px, centred on where they last saw you; hiding indoors counts) → the evade timer drops one star at a time (7–15 s per star). BUSTED meter at ★1–2 if a cop who sees you is on top of you while you stand still (or you're badly hurt). Status line shows stars + what to do.
+- **Combat vision + cover** (`combat-vision.js`): when engaged (you fire, get hit, police see you, gang fight) the screen closes to an aim cone + small ring, cut by buildings (darker at night); unseen enemy shots leave red/blue echo rings. Standing still next to a parked car or wall = auto-crouch cover: smaller target, shots across the car are stopped. Officers/gang members crouch in cover too (`character-art.js` stance).
+- **Guns** (`weapons-data.js`): pipe 1150 ms/8 shots, zip 680 ms/26, sawn-off 1250 ms/16, street pistol 320 ms/260, compact 260 ms/240, all shakier; new `handling(level)`: shooting level 1 = ×1.25 fire delay / ×1.35 spread → level 10 = ×0.85 / ×0.7 (`weapons.js` passes the skill level).
+- **Perf**: `game.js` blocked() uses a per-block spatial grid; `interactions.js` only line-of-sight-checks candidates within reach (it was tracing to every car/door in the 9× city every frame). Headless fps 30–36 → ~55 normal, ~40 in a gang fight after a short sprite warm-up.
+- Codex-owned files edited: crime.js, game.js, interactions.js, world.js, city-data.js, weapons-data.js, weapons.js; tests weapons.cjs updated, gangs-wanted.cjs added (registered in run.cjs). `node tests/run.cjs` → 113 suites PASS.
+- Not yet: gang hideout interiors with indoor fog fights (break-ins already have Bullet Echo fog indoors), police cars/roadblocks at high stars, map overlay for turf/search circle.
+
+## v0.59 Hideout raids, police vehicles, turf takeovers with guards, NPCs that live (owner: "do one and two… take a gang block, hire people to watch it, give them better gear… make the NPCs really smart from every aspect and have NPCs interact with each other… the world has to feel alive… always something to do or grind for")
+- **Gangs v2** (`gangs.js` rewrite, `gangs-data.js`): every fighter has a team (6 gangs + your crew). Units pick the nearest enemy they can actually see, take cover behind parked cars without sharing spots, flank around you (team-mates split sides), call out ("Flank him!", "Man down!", "Reloading!"), reload after bursts, and ~40% run when badly hurt. Gang-vs-gang **skirmishes** every 100–160 s near you (rival crew rolls up on a corner); helping a side earns that gang's respect.
+- **Takeovers**: clear a gang corner (all locals down), stand on the dashed magenta ring for 20 s while they send reinforcement waves → `claim()`. Your block: magenta tags, MANAGE point (collect income $60 + $15/guard per 5 min, capped at 6 periods), HIRE up to 4 guards ($250), UPGRADE gear (pistol $400 → SMG + vest $900 → carbine + plates $1800). Former owners counterattack every 6–10 min: on screen your guards fight; off screen it's decided by `defendChance(power)`. Lose all guards with raiders on the corner for 15 s and it flips back.
+- **Hideouts**: a RAID door on each gang's first block → `NightshiftBreakin.start({type:'hideout', gang})`: 3×3 rooms, 5 crew in gang colours + a shot caller (150 hp, +$400 on drop) + dog, Bullet Echo fog indoors. Clearing it thins all that gang's corners for 12 min (best time to take one); 30-min cooldown. `breakin.js`/`breakin-data.js` gained the `hideout` type, `boss` guard, gang outfits on guards and `hideoutKill/hideoutDone` hooks; `zones.js` passes outfit/cover/maxHp to actor sprites.
+- **Police cars** (`police-cars.js`): ★3 one patrol car, ★4 two + roadblocks (2 cars across an intersection ~650 px ahead of a moving car, officers behind, 45 s), ★5 three incl. a SWAT van. Cars drive the street grid to the search centre (or you when spotted), drop 2–3 officers into crime.js when you're on foot, and ram you when you're driving (4.5 s cooldown, ×0.65 speed, car damage). Lightbars flash. Minimap shows police cars, the dashed search circle, and gang turf (yours magenta).
+- **NPC life** (`npc-life.js`): conversations between people standing together (live gossip: gangs, your corners, cops, weather, time), phone/smoke/headphones/snack idles, passers-by reactions, witnesses who call 911 (report + heat 3.5 s later, unless heat ≥ 3). Event director (1–2 at a time, 35–70 s apart, weighted by district): MUGGING (STOP IT / shoot the mugger), STREET FIGHT (BET $50 on red), DICE GAME (ROLL $20, 45%·luck), TRAFFIC STOP (cop questions/cuffs someone; reports you if you're wanted), LOST DOG (GRAB → return), BREAKDOWN (HELP), "LOOKING FOR WORK?" (package run to a door 500–1200 px away, pay by distance). Scripted people leave `peds` while scripted; `game.js` lets bullets hit them (`NightshiftNpcLife.hit`). `character-art.js` stance: `p.squat` → crouch.
+- Tests: `gangs-wanted.cjs` adds takeover/guards/income/defence/save checks. `node tests/run.cjs` → 113 suites PASS. Playwright: claim + hire + upgrade + counterattack + skirmish + 7 street events + police cars/roadblock/rams + hideout entry (gang-coloured crew + boss), no page errors. Headless fps ~57 normal / ~54 in a gang fight.

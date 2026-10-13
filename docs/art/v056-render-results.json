@@ -1,0 +1,53 @@
+{
+  "cold64FramesMs": 196.30000001192093,
+  "warm4096FramesMs": 29.80000001192093,
+  "warmFrameUs": 7.275390627910383,
+  "cache": {
+    "hits": 4253,
+    "misses": 427,
+    "count": 64,
+    "limit": 128,
+    "bytes": 10092544
+  },
+  "distinctWalkFrames": 64,
+  "frameTiming": {
+    "medianMs": 16.69999999999891,
+    "p95Ms": 33.19999999999891,
+    "samples": 120
+  },
+  "carVisible": true,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "dpr": 2
+  },
+  "browser": "Headless Microsoft Edge on Windows; not a physical iPhone benchmark",
+  "errors": [],
+  "checks": [
+    "all eight directions",
+    "64 varied walk frames",
+    "bounded shared cache",
+    "live studio rotation, zoom and walking",
+    "unowned preview preserves save",
+    "wear owned items and save outfit through UI",
+    "outfit reload persists",
+    "character, weapon and vehicle inspection",
+    "actual city screenshot"
+  ],
+  "layouts": [
+    {
+      "width": 320,
+      "height": 568,
+      "stageHeight": 112.625,
+      "footerBottom": 557.984375,
+      "documentWidth": 320
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "stageHeight": 236.8125,
+      "footerBottom": 374.40625,
+      "documentWidth": 844
+    }
+  ]
+}

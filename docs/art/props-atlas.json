@@ -1,0 +1,184 @@
+{
+  "version": 1,
+  "source": "authoritative Nightshift runtime builders",
+  "width": 1024,
+  "height": 84,
+  "frames": [
+    {
+      "id": "hydrant",
+      "anchor": [
+        17,
+        42
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 2,
+      "y": 2,
+      "width": 34,
+      "height": 52
+    },
+    {
+      "id": "mailbox",
+      "anchor": [
+        25,
+        46
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 38,
+      "y": 2,
+      "width": 50,
+      "height": 56
+    },
+    {
+      "id": "vending",
+      "anchor": [
+        28,
+        70
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 90,
+      "y": 2,
+      "width": 56,
+      "height": 80
+    },
+    {
+      "id": "dumpster",
+      "anchor": [
+        42,
+        44
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 148,
+      "y": 2,
+      "width": 84,
+      "height": 54
+    },
+    {
+      "id": "flowercart",
+      "anchor": [
+        40,
+        50
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 234,
+      "y": 2,
+      "width": 80,
+      "height": 60
+    },
+    {
+      "id": "barrel",
+      "anchor": [
+        19,
+        36
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 316,
+      "y": 2,
+      "width": 38,
+      "height": 46
+    },
+    {
+      "id": "crate",
+      "anchor": [
+        27,
+        44
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 356,
+      "y": 2,
+      "width": 54,
+      "height": 54
+    },
+    {
+      "id": "bench",
+      "anchor": [
+        47,
+        40
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 412,
+      "y": 2,
+      "width": 94,
+      "height": 50
+    },
+    {
+      "id": "atm",
+      "anchor": [
+        27,
+        64
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 508,
+      "y": 2,
+      "width": 54,
+      "height": 74
+    },
+    {
+      "id": "trashcan",
+      "anchor": [
+        17,
+        36
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 564,
+      "y": 2,
+      "width": 34,
+      "height": 46
+    },
+    {
+      "id": "planter",
+      "anchor": [
+        31,
+        38
+      ],
+      "worldScale": 0.5,
+      "animation": "static",
+      "state": "base",
+      "direction": "three-quarter",
+      "atlas": "props-atlas.png",
+      "x": 600,
+      "y": 2,
+      "width": 62,
+      "height": 48
+    }
+  ]
+}

@@ -1,0 +1,7752 @@
+{
+  "version": 1,
+  "source": "authoritative Nightshift runtime builders",
+  "width": 1024,
+  "height": 3242,
+  "frames": [
+    {
+      "id": "shiba-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 198,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 296,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 394,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 492,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 590,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 688,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 786,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 884,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 2,
+      "y": 3152,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-sit-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "sit",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-sit-atlas.png",
+      "x": 100,
+      "y": 3152,
+      "width": 96,
+      "height": 88
+    }
+  ]
+}

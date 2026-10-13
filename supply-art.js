@@ -400,7 +400,7 @@
       }
     };
   }
-  function gunIcon(id, w = 72, h = 28, skin = null) { const f = GUN[id]; if (!f) return null; const scale = Math.max(2, Math.round(w / 18)); const cv = pixCanvas('g-' + id + (skin && skin !== 'stock' ? '~' + skin : ''), 36, 14, scale, skin && skin !== 'stock' ? skinned(f, skin) : f); cv.style.width = w + 'px'; cv.style.height = Math.round(w * 16 / 38) + 'px'; return cv; }
+  function gunIcon(id, w = 72, h = 28, skin = null, mods = []) { const WA = root.NightshiftWeaponArt; if (WA) { const c = WA.icon(id, w, Math.round(w * 16 / 38), skin, mods || []); if (c) return c; } const f = GUN[id]; if (!f) return null; const scale = Math.max(2, Math.round(w / 18)); const cv = pixCanvas('g-' + id + (skin && skin !== 'stock' ? '~' + skin : ''), 36, 14, scale, skin && skin !== 'stock' ? skinned(f, skin) : f); cv.style.width = w + 'px'; cv.style.height = Math.round(w * 16 / 38) + 'px'; return cv; }
 
   root.NightshiftSupplyArt = Object.freeze({ drawSite, signLift, drawBench, matIcon, gunIcon, GUN_SHAPES: Object.keys(GUN) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

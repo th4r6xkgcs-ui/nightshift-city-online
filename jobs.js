@@ -211,6 +211,7 @@
     const su = root.NightshiftSupply, sd = root.NightshiftSupplyData;
     { const lg = root.NightshiftLedger; if (lg) { const s = lg.session(), net = Object.values(s.earned).reduce((a, b) => a + b, 0) - Object.values(s.spent).reduce((a, b) => a + b, 0); tile('📊', 'LEDGER', `${net >= 0 ? '+' : '-'}${money(Math.abs(net))} today`, () => { panel.hidden = true; lg.open(); }); } }
     { const cx = root.NightshiftCars; if (cx) tile('🚗', 'MY CARS', cx.rare() && !cx.rare().stolen ? '⭐ rare spotted' : `${root.NightshiftCarsData.models(cx.state).size}/${root.NightshiftCarsData.CARS.length} collected`, () => { panel.hidden = true; cx.open(); }); }
+    { const ws = root.NightshiftWardrobe; if (ws) tile('👕', 'STYLE', `${ws.state.owned.length} pieces · try on`, () => { panel.hidden = true; ws.open('home'); }); }
     { const hm = root.NightshiftHitman; if (hm) { const a = hm.state.active; tile('🎯', 'CONTRACTS', !hm.unlocked() ? 'Locked' : a ? `${a.name.split(' ')[0]} · active` : root.NightshiftHitmanData.rankOf(hm.state.done).name, () => { panel.hidden = true; hm.open(); }); } }
     if (su && sd) tile('🎒', 'BACKPACK', `${sd.weightOf(su.state.bag)}/${sd.cap(su.state)} · map`, () => { panel.hidden = true; su.openBag(); });
     panel.append(apps, el('h2', { style: 'margin-top:12px;font-size:14px' }, '💼 JOBS'));

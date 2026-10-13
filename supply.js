@@ -318,7 +318,7 @@
   const el = (t, a = {}, txt) => { const e = document.createElement(t); Object.assign(e, a); if (txt !== undefined) e.textContent = txt; return e; };
   const btn = (cls, txt, fn, dis) => { const b = el('button', { className: cls, type: 'button', disabled: !!dis }, txt); b.onclick = fn; return b; };
   const matIcon = (id, size = 22) => { try { return ART()?.matIcon?.(id, size) || null; } catch { return null; } };
-  const gunIcon = (id, w = 72, h = 30, skin = WS()?.state?.skins?.[id] || null) => { try { const c = ART()?.gunIcon?.(id, w, h, skin) || null; if (c) c.classList.add('gun'); return c; } catch { return null; } };
+  const gunIcon = (id, w = 72, h = 30, skin = WS()?.state?.skins?.[id] || null, mods = WS()?.state?.mods?.[id] || []) => { try { const c = ART()?.gunIcon?.(id, w, h, skin, mods) || null; if (c) { c.classList.add('gun'); if (root.NightshiftWeaponArt) { c.style.cursor = 'zoom-in'; c.title = 'Inspect'; c.addEventListener('click', (e) => { e.stopPropagation(); root.NightshiftWeaponArt.inspect(id); }); } } return c; } catch { return null; } };
   function chip(id, need, have) {
     const c = el('span', { className: 'chip ' + (have >= need ? 'ok' : 'no') });
     const ic = matIcon(id, 16); if (ic) c.append(ic); else c.append(document.createTextNode(S.MATERIALS[id]?.icon || ''));

@@ -1,3 +1,11 @@
+## CURRENT — v0.57 detailed city art (local review, 2026-10-13)
+
+Branch: codex/premium-art-v56, draft PR #43 stacked on codex/living-streets-v55. Read CLIENT_HANDOFF_V57.md. Completed four areas: newer mask-shaded character bodies with approved face/hair/pistol art, cached storefront depth, distinctive car details and eight-direction pets, mobile culling/idle sprite preparation. Added a real pet inspection screen and fixed studio animation cycles and prewarm resume. Claude heads rechecked: rpg-play 741dc7d4 / rpg-core 27aeee15; only completed character art/studio files were selectively integrated. New map/combat/city systems remain separate; further gang/crew expansion is deferred until multiplayer. Local review only; hosted private v0.55 unchanged. No merge or access changes.
+
+## PREVIOUS — v0.56 premium pixel finishing (review build, 2026-10-12)
+
+Branch: codex/premium-art-v56, stacked on v0.55. Exact latest Claude rpg-play a01a9ff2 / rpg-core b34c95c9 integrated; read CLIENT_HANDOFF_V56.md for ownership, assets, tests and remaining master-roadmap gaps. Redrawn faces, 12 distinct haircut silhouettes, six denser pistol designs, finer shared character pixels and animated material details, crisp customized cars, authoritative studios and short-phone layout fixes. 111 suites passed; 151-asset build; real Edge render/studio/save/layout checks passed. This remains a local review build; no new deployment, merges or access changes. Crew expansion remains deferred.
+
 ## CURRENT — v0.55 Living Streets (2026-10-12)
 
 Canonical branch: codex/living-streets-v55, built from verified v0.54 a2750326 and exact Claude rpg-play c31e4976 (rpg-core 556cec53 / art-pass fdc3c36d). Read CLIENT_HANDOFF_V55.md for file ownership, imported module provenance, save contracts and verification limits.
