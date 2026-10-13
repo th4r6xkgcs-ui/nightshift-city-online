@@ -118,10 +118,10 @@
   }
 
   // ---------- HUD: damage direction + downed overlay + GET UP button ----------
-  const cv = document.createElement('canvas'); cv.id = 'authHud'; cv.style.cssText = 'position:fixed;inset:0;width:100vw;height:100dvh;pointer-events:none;z-index:15'; document.body.appendChild(cv);
+  const cv = document.createElement('canvas'); cv.id = 'authHud'; cv.style.cssText = 'position:fixed;inset:0;width:100vw;height:100dvh;pointer-events:none;z-index:22'; document.body.appendChild(cv);
   const ctx = cv.getContext('2d');
   const css = document.createElement('style');
-  css.textContent = `#getUp{position:fixed;left:50%;bottom:calc(var(--control-bottom,16px) + 150px);transform:translateX(-50%);z-index:30;all:unset;box-sizing:border-box;position:fixed;cursor:pointer;padding:10px 18px;border-radius:14px;background:linear-gradient(160deg,#3a1420f0,#200a12f0);border:1px solid #ff6a7a;color:#ffe3e8;font:800 14px ui-monospace,Menlo,monospace;letter-spacing:.05em;box-shadow:0 0 18px #ff3a5a66;touch-action:none}
+  css.textContent = `#getUp{all:unset;box-sizing:border-box;position:fixed;left:50%;bottom:calc(var(--control-bottom,16px) + 40px);transform:translateX(-50%);z-index:30;cursor:pointer;padding:10px 18px;border-radius:14px;background:linear-gradient(160deg,#3a1420f0,#200a12f0);border:1px solid #ff6a7a;color:#ffe3e8;font:800 14px ui-monospace,Menlo,monospace;letter-spacing:.05em;box-shadow:0 0 18px #ff3a5a66;touch-action:none}
   #getUp[hidden]{display:none} #getUp i{display:block;height:4px;margin-top:5px;border-radius:2px;background:#ff6a7a;transform-origin:left;transform:scaleX(0)}`;
   document.head.appendChild(css);
   const btn = Object.assign(document.createElement('button'), { id: 'getUp', type: 'button', hidden: true }); btn.innerHTML = '💉 HOLD TO GET UP<i></i>'; document.body.appendChild(btn);
@@ -143,7 +143,7 @@
     if (downed) {
       const left = Math.max(0, downed.until - now) / R.bleedMs, g2 = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.2, w / 2, h / 2, Math.max(w, h) * 0.7);
       g2.addColorStop(0, 'rgba(80,0,10,0)'); g2.addColorStop(1, `rgba(90,0,12,${0.55 + 0.15 * Math.sin(now / 260)})`); ctx.fillStyle = g2; ctx.fillRect(0, 0, w, h);
-      const bw = Math.min(260, w * 0.4), bx = w / 2 - bw / 2, by = h * 0.2; ctx.fillStyle = 'rgba(10,6,10,0.75)'; ctx.fillRect(bx - 2, by - 18, bw + 4, 28); ctx.fillStyle = '#ff5a6a'; ctx.fillRect(bx, by, bw * left, 6);
+      const bw = Math.min(260, w * 0.4), bx = w / 2 - bw / 2, by = h * 0.62; ctx.fillStyle = 'rgba(10,6,10,0.75)'; ctx.fillRect(bx - 2, by - 18, bw + 4, 28); ctx.fillStyle = '#ff5a6a'; ctx.fillRect(bx, by, bw * left, 6);
       ctx.font = '800 12px ui-monospace,Menlo,monospace'; ctx.textAlign = 'center'; ctx.fillStyle = '#ffe3e8'; ctx.fillText(`DOWN · BLEEDING OUT ${Math.ceil(Math.max(0, downed.until - now) / 1000)}s${revive ? ' · GETTING UP…' : ''}`, w / 2, by - 5);
       btn.hidden = !hasMedkit(); const f = revive?.by === 'medkit' ? Math.min(1, (now - revive.t0) / revive.ms) : 0; btn.querySelector('i').style.transform = `scaleX(${f})`;
     } else btn.hidden = true;
