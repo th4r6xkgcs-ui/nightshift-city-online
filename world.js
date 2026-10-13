@@ -258,16 +258,16 @@ let groundCache=null,cacheWidth=0,cacheHeight=0;
 const litWindows=[];
 // v0.57 (Claude): the ground is cached in 1320x1020 tiles (3x3 blocks), built lazily for what's on screen
 // (a single world-sized canvas would exceed mobile canvas limits now that the city is 6600x5100).
-const TILE_W=1320,TILE_H=1020,tiles=new Map();let tileBuilds=0;
+/* v0.62 (Claude): ground tiles are baked at 2x so road paint, kerbs and cracks stay sharp on 3x phone screens */const TILE_W=660,TILE_H=510,TS=2,tiles=new Map();let tileBuilds=0;
 function groundTile(tx,ty){const k=tx+','+ty;let t=tiles.get(k);if(t){tiles.delete(k);tiles.set(k,t);return t}
- const canvas=root.document?.createElement?.('canvas'),ctx=canvas?.getContext?.('2d');if(!ctx)return null;canvas.width=TILE_W;canvas.height=TILE_H;ctx.imageSmoothingEnabled=false;
- ctx.save();ctx.beginPath();ctx.rect(0,0,TILE_W,TILE_H);ctx.clip();ctx.translate(-tx*TILE_W,-ty*TILE_H);groundView={x:tx*TILE_W,y:ty*TILE_H,w:TILE_W,h:TILE_H};ground(ctx,world.w,world.h);groundView=null;ctx.restore();
- tiles.set(k,canvas);tileBuilds++;while(tiles.size>16)tiles.delete(tiles.keys().next().value);return canvas}
+ const canvas=root.document?.createElement?.('canvas'),ctx=canvas?.getContext?.('2d');if(!ctx)return null;canvas.width=TILE_W*TS;canvas.height=TILE_H*TS;ctx.imageSmoothingEnabled=false;
+ ctx.save();ctx.scale(TS,TS);ctx.beginPath();ctx.rect(0,0,TILE_W,TILE_H);ctx.clip();ctx.translate(-tx*TILE_W,-ty*TILE_H);groundView={x:tx*TILE_W,y:ty*TILE_H,w:TILE_W,h:TILE_H};ground(ctx,world.w,world.h);groundView=null;ctx.restore();
+ tiles.set(k,canvas);tileBuilds++;while(tiles.size>12)tiles.delete(tiles.keys().next().value);return canvas}
 let groundView=null;
 function road(){litWindows.length=0;
  const m=g.getTransform?.(),z=m&&m.a?m.a:1,vx=m?-m.e/z:0,vy=m?-m.f/(m.d||z):0,vw=(g.canvas?.width||W)/z,vh=(g.canvas?.height||H)/(m?.d||z);
  const tx0=Math.max(0,Math.floor(vx/TILE_W)),ty0=Math.max(0,Math.floor(vy/TILE_H)),tx1=Math.min(Math.ceil(world.w/TILE_W)-1,Math.floor((vx+vw)/TILE_W)),ty1=Math.min(Math.ceil(world.h/TILE_H)-1,Math.floor((vy+vh)/TILE_H));
- for(let ty=ty0;ty<=ty1;ty++)for(let tx=tx0;tx<=tx1;tx++){const t=groundTile(tx,ty);if(t)g.drawImage(t,tx*TILE_W,ty*TILE_H)}
+ for(let ty=ty0;ty<=ty1;ty++)for(let tx=tx0;tx<=tx1;tx++){const t=groundTile(tx,ty);if(t)g.drawImage(t,tx*TILE_W,ty*TILE_H,TILE_W,TILE_H)}
 }
 // Roof detail (art pass): deterministic per building; draws into the free strip at the roof's south edge (y+74..y+104,
 // x+146..x+232), which is clear of every type's utilities. Night: skylights feed the lightmap, antennas blink red.
