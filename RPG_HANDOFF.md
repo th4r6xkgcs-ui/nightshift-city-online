@@ -553,3 +553,12 @@ The full spec is in `ART_SPEC.md`, and sheets and screenshots are in `docs/art/`
   - The Character Studio, Vehicle Studio and weapon pages were re-run.
   - No page errors.
 - **Sheets:** `docs/art/pets-sheet.png`, `poses-crouch-sneak-sit.png`, `props-benches-pets.png`, `sneaking-in-breakin.png`.
+
+### Characters v2: pixel renderer (owner: "characters still look too blocky and cheap")
+- **Merged Codex v0.56 (`codex/premium-art-v56`) into rpg-play.** The only conflict was `tests/run.cjs`; I took Codex's list, then added `character-pixel`. Claude modules were identical.
+- **New `character-pixel.js`:** a true pixel-art renderer with lit masks, hue-shifted ramps, clumped hair, detailed faces, contact shadows and coloured outlines. See `ART_SPEC.md` → "Characters v2".
+  - It overrides `NightshiftCharacters.frame/draw` and the person draw, superseding Codex's `premium-art-renderer.js`/`premium-head-art.js`. Those files stay in place but are no longer used for people.
+  - `studio.js` now requests even scales.
+- **Tests:** full suite **112 PASS**.
+- **Playwright:** city NPCs, the Character Studio (landscape and portrait), held guns, and break-in sneak. No page errors.
+- **Deployed** to GitHub Pages.
