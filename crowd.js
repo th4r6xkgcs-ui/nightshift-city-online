@@ -47,8 +47,10 @@
   function dress(p) {
     let reg = null; try { reg = root.NightshiftWorld?.regionAt?.(p.x, p.y); } catch { /* n/a */ }
     const th = reg && THEMES[reg.name]; if (!th) { if (p.outfit && p.themed) { delete p.outfit; p.themed = false; } return; }
-    let base = null; const seed = Math.floor(Math.random() * 1e9); try { base = root.NightshiftWardrobeData?.npcOutfit?.(seed); } catch { /* n/a */ } if (!base) return;
-    const o = JSON.parse(JSON.stringify(base)), pick = (a) => a[Math.floor(Math.random() * a.length)];
+    // 8 looks per neighbourhood (seeded), so the character sprite cache stays bounded
+    const seed = (reg.name.length * 7919 + Math.floor(Math.random() * 8) * 104729) >>> 0; let base = null; try { base = root.NightshiftWardrobeData?.npcOutfit?.(seed); } catch { /* n/a */ } if (!base) return;
+    let x = seed || 1; const r = () => { x = (x * 1664525 + 1013904223) >>> 0; return x / 4294967296; };
+    const o = JSON.parse(JSON.stringify(base)), pick = (a) => a[Math.floor(r() * a.length)];
     for (const slot of ['top', 'outer', 'bottom', 'shoes', 'head', 'face', 'gloves', 'bag', 'jewelry']) if (th[slot]) { const v = pick(th[slot]); o[slot] = v ? { id: v[0], color: v[1] } : null; }
     p.outfit = o; p.themed = true;
   }

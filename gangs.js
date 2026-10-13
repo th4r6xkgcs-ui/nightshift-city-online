@@ -38,9 +38,10 @@
         const b = { gang: g, bx, by, alertUntil: 0, fightUntil: 0, loiter: 0, warned: 0 }; blocks.set(k, b);
         D.spots(bx, by).forEach((sp, i) => {
           const id = `gang-${g.id}-${bx}-${by}-${i}`; if ((state.dead[id] || 0) > Date.now()) return;
-          let base = null; try { base = root.NightshiftWardrobeData?.npcOutfit?.(hash(id)); } catch { /* n/a */ }
+          const look = hash(g.id) % 1000 + (hash(id) % 5); // 5 looks per gang keeps the sprite cache small
+          let base = null; try { base = root.NightshiftWardrobeData?.npcOutfit?.(look); } catch { /* n/a */ }
           members.push({ id, gang: g, block: b, home: { x: sp.x, y: sp.y }, face: sp.face, x: sp.x, y: sp.y, hp: 50, maxHp: 50, angle: Math.atan2(sp.face.y - sp.y, sp.face.x - sp.x), mode: 'hang',
-            seated: !!sp.sit, seat: sp.sit ? { x: sp.x, y: sp.y } : null, outfit: D.outfit(base, g, hash(id)), nextShot: 0, path: null, walkTicks: 0, moving: false });
+            seated: !!sp.sit, seat: sp.sit ? { x: sp.x, y: sp.y } : null, outfit: D.outfit(base, g, look), nextShot: 0, path: null, walkTicks: 0, moving: false });
           st.spawned++; const mm = members[members.length - 1]; for (const d of [2, 1, 3, 0, 4]) for (let k = 0; k < 6; k += 2) warm.push([mm, d, 'idle', k]);
         });
       } else if (d > 2100 && blocks.has(k)) {
