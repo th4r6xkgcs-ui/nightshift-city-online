@@ -375,14 +375,14 @@
     if (h === 'mohawk') { scalp(hy - (back ? -3 : 1.2), 0.42, 3); const pts = prof ? arc(5, sx > 0 ? Math.PI * 1.25 : Math.PI * 1.75, sx > 0 ? Math.PI * 1.85 : Math.PI * 1.15, hx, hy - 0.8, rx - 0.2, ry - 0.2) : [[hx + sx * 0.4, hy - ry - 0.6], [hx + sx * 0.4, hy - ry + 0.8], [hx + sx * 0.4, hy - ry + 2.2]]; for (const [x, y] of pts) lobe(F, hc, x, y - 0.6, 1.2, 1.6, 1); return; }
     const cap = (n, R, rr, row = 0) => arc(n, Math.PI * 1.05, Math.PI * 1.95, hx + sx * 0.3, hy - 1.1 - row, R, (ry - 0.9) * (1 - row * 0.12)).forEach(([x, y], k) => lobe(F, hc, x, y, rr * (0.9 + (k % 2) * 0.2), rr * 0.82, 1));
     if ((h === 'curly' || h === 'afro') && !hat) {
-      const big = h === 'afro'; if (back) { for (let r = 0; r < 3; r++) for (const [x, y] of arc(big ? 7 : 6, Math.PI * 0.9, Math.PI * 2.1, hx, hy + 0.5 - r * 2, rx + (big ? 1.4 : 0) - r, ry - r)) lobe(F, hc, x, y, big ? 2.1 : 1.6, big ? 1.9 : 1.4, 1); return; }
+      const big = h === 'afro'; if (back) { lobe(F, hc, hx, hy - 0.4, rx + (big ? 1 : 0), ry, 0); for (let r = 0; r < 3; r++) for (const [x, y] of arc(big ? 7 : 6, Math.PI * 0.9, Math.PI * 2.1, hx, hy + 0.5 - r * 2, rx + (big ? 1.4 : 0) - r, ry - r)) lobe(F, hc, x, y, big ? 2.1 : 1.6, big ? 1.9 : 1.4, 1); return; }
       cap(big ? 8 : 7, rx + (big ? 1.6 : 0.2), big ? 2.3 : 1.7); cap(big ? 6 : 5, rx - (big ? 0 : 1.2), big ? 2 : 1.5, 1.2); return;
     }
     // under a hat only the temples / nape show
-    if (hat && h !== 'curly' && h !== 'afro') { if (back) for (const [x, y] of arc(4, Math.PI * 0.95, Math.PI * 2.05, hx, hy + 1.6, rx - 0.6, ry - 1.6)) lobe(F, hc, x, y, 1.9, 1.4, 0); else for (const s2 of [-1, 1]) { if (prof && s2 * sx > 0) continue; lobe(F, hc, hx + s2 * (rx - 0.5) + sx * 0.6, hy - 0.6, 1.1, 1.5, 0); } }
-    else if (hat) { /* big hair squashed under the hat brim */ for (const s2 of [-1, 1]) lobe(F, hc, hx + s2 * (rx + 0.2), hy - 0.4, 1.8, 2, 1); }
+    if (hat && h !== 'curly' && h !== 'afro' && !back) { for (const s2 of [-1, 1]) { if (prof && s2 * sx > 0) continue; lobe(F, hc, hx + s2 * (rx - 0.5) + sx * 0.6, hy - 0.6, 1.1, 1.5, 0); } }
+    else if (hat && !back) { /* big hair squashed under the hat brim */ for (const s2 of [-1, 1]) lobe(F, hc, hx + s2 * (rx + 0.2), hy - 0.4, 1.8, 2, 1); }
     // everything else starts with a clumped cap; back views cover the nape
-    else if (back) { for (let r = 0; r < 3; r++) for (const [x, y] of arc(5, Math.PI * 0.95, Math.PI * 2.05, hx, hy + 1.6 - r * 2.2, rx - 0.2 - r * 0.6, ry - 0.6 - r * 0.8)) lobe(F, hc, x, y, 2.2, 1.7, r === 2 ? 1 : 0); }
+    else if (back) { lobe(F, hc, hx, hy - 0.2, rx - 0.1, ry - 0.3, 0); for (let r = 0; r < 3; r++) for (const [x, y] of arc(5, Math.PI * 0.95, Math.PI * 2.05, hx, hy + 1.6 - r * 2.2, rx - 0.2 - r * 0.6, ry - 0.6 - r * 0.8)) lobe(F, hc, x, y, 2.2, 1.7, r === 2 ? 1 : 0); }
     else {
       cap(6, rx - 0.3, 2.1); cap(4, rx - 1.6, 1.8, 1.4);
       if (h === 'ponytail' && !prof) { lobe(F, hc, hx + (sx >= 0 ? -1 : 1) * (rx - 0.2), hy + 3.2, 1, 1.7, 1); { const tie = ellipse(Mask(), hx + (sx >= 0 ? -1 : 1) * (rx - 0.2), hy + 1.6, 0.9, 0.5); layer(F, tie, '#c84659', { soft: 1 }); } }
