@@ -36,7 +36,7 @@
   const blocks = new Map();
   const st = { spawned: 0, fights: 0, kills: 0, hits: 0, skirmishes: 0, raids: 0, claims: 0 };
   const district = (x, y) => { try { return root.NightshiftWorld?.districtName?.(x, y) || ''; } catch { return ''; } };
-  const holdPoint = (b) => ({ x: b.bx * 440 + 118, y: b.by * 340 + 284 });
+  const holdPoint = (b) => ({ x: b.bx * 440 + 118, y: b.by * 340 + 268 });
 
   // ---------- barks: short call-outs over heads ----------
   const BARK = {
@@ -447,9 +447,9 @@
     const env = E(); if (!env) return []; const out = [], now = performance.now();
     for (const b of blocks.values()) {
       const hp0 = holdPoint(b);
-      if (b.owner === P) { const cash = D.pending(state, b.bx, b.by); out.push({ id: 'gang-manage-' + b.key, type: 'gang', x: hp0.x, y: hp0.y + 14, ready: true, color: P.glow, label: '🏴 YOUR CORNER' + (cash ? ' · $' + cash : ''), action: 'MANAGE', hint: 'Your block · collect cash, hire guards, buy them gear' }); continue; }
+      if (b.owner === P) { const cash = D.pending(state, b.bx, b.by); out.push({ id: 'gang-manage-' + b.key, type: 'gang', x: hp0.x, y: hp0.y + 4, ready: true, color: P.glow, label: '🏴 YOUR CORNER' + (cash ? ' · $' + cash : ''), action: 'MANAGE', hint: 'Your block · collect cash, hire guards, buy them gear' }); continue; }
       if (b.fightUntil > now || rel(b.owner) === 'HOSTILE' || !units.some((m) => m.block === b && m.role === 'local')) continue;
-      out.push({ id: 'gang-talk-' + b.owner.id, type: 'gang', x: hp0.x, y: hp0.y + 16, ready: true, color: b.owner.glow, label: '🗣️ ' + b.owner.name.toUpperCase(), action: 'TALK', hint: `${b.owner.name} · ${rel(b.owner).toLowerCase()} · respect, deals, work` });
+      out.push({ id: 'gang-talk-' + b.owner.id, type: 'gang', x: hp0.x + 40, y: hp0.y + 4, ready: true, color: b.owner.glow, label: '🗣️ ' + b.owner.name.toUpperCase(), action: 'TALK', hint: `${b.owner.name} · ${rel(b.owner).toLowerCase()} · respect, deals, work` });
     }
     for (const g of D.GANGS) { const d = hideoutDoor(g), p = env.player; if (!d || Math.abs(d.x - p.x) > 900 || Math.abs(d.y - p.y) > 700) continue; out.push({ id: 'gang-raid-' + g.id, type: 'hideout', x: d.x, y: d.y, ready: true, color: g.glow, label: `🚪 ${g.short} HIDEOUT`, action: 'RAID', hint: `${g.name} hideout · armed crew, a shot caller, the stash · clear it to shake their turf` }); }
     return out;

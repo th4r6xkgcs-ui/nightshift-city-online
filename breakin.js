@@ -388,7 +388,7 @@
   // ---------------- city warehouses (night) ----------------
   const WAREHOUSES = [{ id: 'bi-wh-west', x: 790, y: 470, name: 'Westside warehouse' }, { id: 'bi-wh-docks', x: 1670, y: 1150, name: 'Dockside warehouse' }];
   // Rival crews' trap houses: open any hour, armed crew inside, product + cash + guns.
-  const STASHES = [{ id: 'bi-stash-south', x: 1370, y: 1520, name: 'Southside trap house', type: 'stash' }, { id: 'bi-stash-east', x: 2110, y: 840, name: 'Eastside trap house', type: 'stash' }];
+  const STASHES = [{ id: 'bi-stash-south', x: 1450, y: 1624, name: 'Southside trap house', type: 'stash' }, { id: 'bi-stash-east', x: 2110, y: 840, name: 'Eastside trap house', type: 'stash' }];
   const nightNow = () => { const m = root.NightshiftEnvironment?.state?.minute ?? 720, h = m / 60; return h >= 21 || h < 5; };
   const E = root.NightshiftEncounters;
   if (E && !E.__breakin) {

@@ -52,9 +52,9 @@
   // Where members stand on a block: two corner groups on the front sidewalk, one seat on a stoop.
   function spots(bx, by) {
     const x = bx * BLOCK.w, y = by * BLOCK.h, out = [];
-    const groups = [{ cx: x + 118, cy: y + 278, n: 3 }, { cx: x + 304, cy: y + 278, n: 2 }];
+    const groups = [{ cx: x + 118, cy: y + 266, n: 3 }, { cx: x + 304, cy: y + 266, n: 2 }];
     groups.forEach((gr, gi) => { for (let i = 0; i < gr.n; i++) { const a = (i / gr.n) * Math.PI * 2 + gi; out.push({ x: gr.cx + Math.cos(a) * 15, y: gr.cy + Math.sin(a) * 9, face: { x: gr.cx, y: gr.cy }, group: gi }); } });
-    out.push({ x: x + 330, y: y + 262, sit: true, face: { x: x + 304, y: y + 278 }, group: 1 });
+    out.push({ x: x + 332, y: y + 259, sit: true, face: { x: x + 304, y: y + 266 }, group: 1 });
     return out;
   }
   const relation = (rep) => (rep <= -30 ? 'HOSTILE' : rep >= 30 ? 'FRIENDLY' : 'WARY');
