@@ -12,6 +12,7 @@
     "test:browser": "node tests/browser.cjs",
     "build": "node scripts/build-static.cjs",
     "export:city": "node scripts/export-city.cjs",
-    "test:premium-browser": "node scripts/verify-premium-browser.cjs"
+    "test:premium-browser": "node scripts/verify-premium-browser.cjs",
+    "test:heads-pistols": "node scripts/verify-heads-pistols.cjs"
   }
 }

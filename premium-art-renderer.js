@@ -24,13 +24,13 @@ function finish(c,o,d,a,f,hold){
   if(!['shorts','skirt'].includes(o.bottom?.id)){line(bh,L.hx-.9,L.hy+2,kx-.8,ky);line(bd,kx+.7,ky,L.fx+.7,L.fy-2.1);line(bh,kx-1,ky+.3,kx+.4,ky+.65);if(o.bottom?.id==='cargo'){dot(bd,kx-.9,ky-2.4,1.7,1.5);line(bh,kx-.9,ky-2.4,kx+.8,ky-2.4);dot('#aaa798',kx+.3,ky-2.05)}}
   const sh=color(o.shoes);line(shade(sh,55),L.fx-1.5,L.fy+.5,L.fx+1.35,L.fy+.5,.4);if(!q.back&&o.shoes?.id!=='slides')for(let i=0;i<3;i++)line('#dedad2',L.fx-.7,L.fy-1.8+i*.45,L.fx+.55,L.fy-1.55+i*.45);dot(shade(sh,70),L.fx-1.1,L.fy-.5,.55,.35);
  }
- if(!o.head&&!o.outer?.hood&&o.hair!=='bald'){const hc=W.HAIR_COLORS[o.hairColor];for(let i=0;i<5;i++){const x=q.headX-2.4+i*.95,y=q.headY-4.4+(i%2)*.45;line(shade(hc,28),x,y,x+.4,y+.8)}}
 }
 function frame(outfit,dir,anim,f,scale=2,hold=''){
  const o=W.cleanOutfit(outfit),d=((Math.round(dir||0)%8)+8)%8,a=C.ANIMS[anim]?anim:'idle',n=C.ANIMS[a],k=((Math.floor(Number.isFinite(f)?f:0)%n)+n)%n,key=W.keyOf(o)+'|'+d+'|'+a+'|'+k+'|'+hold+'|'+(scale===6?6:density);
  if(cache.has(key)){const cv=cache.get(key);cache.delete(key);cache.set(key,cv);counts.hits++;return cv}counts.misses++;
  const cv=document.createElement('canvas');const native=scale===6?6:density;cv.width=C.CELL.w*native;cv.height=C.CELL.h*native;
- const c=cv.getContext('2d');c.scale(native,native);c.translate(C.CELL.ax,C.CELL.ay);c.lineCap='round';compose(c,o,d,a,k,hold);
+ const c=cv.getContext('2d',{willReadFrequently:true});c.scale(native,native);c.translate(C.CELL.ax,C.CELL.ay);c.lineCap='round';compose(c,o,d,a,k,hold);
+ root.NightshiftPremiumHeads?.draw(c,o,C.geom(o,d,a,k,hold));
  const silhouette=c.getImageData(0,0,cv.width,cv.height);finish(c,o,d,a,k,hold);
  const img=c.getImageData(0,0,cv.width,cv.height),px=img.data,mask=silhouette.data;
  for(let i=0;i<px.length;i+=4){if(mask[i+3]<128){px[i+3]=0;continue}px[i+3]=255;for(let j=0;j<3;j++)px[i+j]=Math.min(255,Math.round(px[i+j]/4)*4)}
@@ -46,7 +46,7 @@ C.frame=frame;C.draw=draw;C.clear=()=>cache.clear();C.frames=()=>cache.size;
 function personTo(c,p,isPlayer,opts={}){
  const o=C.outfitFor(p,isPlayer,opts.role),mv=!!p.moving,t=performance.now(),st=C.stance(p,isPlayer);let sprint=false;try{sprint=isPlayer&&typeof run!=='undefined'&&run}catch{}
  const a=st==='sit'?'sit':st==='crouch'?'crouch':st==='sneak'?(mv?'sneak':'crouch'):mv?(sprint?'run':'walk'):'idle',f=mv?Math.floor(Math.max(0,p.walkTicks||0)/(a==='run'?1.8:a==='sneak'?3.2:2.5)):Math.floor(t/380);
- const hold=opts.hold||'',ang=hold?p.angle:Number.isFinite(p.moveAngle)&&mv?p.moveAngle:p.angle||0,d=st==='sit'?2:hold?C.dirOfAngle(ang):C.smoothDir(p,C.dirOfAngle(ang)),x=st==='sit'&&p.seat?p.seat.x:p.x,y=st==='sit'&&p.seat?p.seat.y:p.y;
+ const hold=isPlayer&&root.NightshiftPremiumPistols?.ids.includes(root.NightshiftWeapons?.state?.equipped)&&opts.hold==='long'?'short':opts.hold||'',ang=hold?p.angle:Number.isFinite(p.moveAngle)&&mv?p.moveAngle:p.angle||0,d=st==='sit'?2:hold?C.dirOfAngle(ang):C.smoothDir(p,C.dirOfAngle(ang)),x=st==='sit'&&p.seat?p.seat.x:p.x,y=st==='sit'&&p.seat?p.seat.y:p.y;
  draw(c,o,x,y,d,a,f,2,hold);
  if(!isPlayer&&!opts.hideHealth&&p.hp>0&&p.hp<(p.maxHp||40)){c.fillStyle='#182832';c.fillRect(p.x-13,p.y-33,26,4);c.fillStyle='#dd9884';c.fillRect(p.x-13,p.y-33,26*p.hp/(p.maxHp||40),3)}
 }

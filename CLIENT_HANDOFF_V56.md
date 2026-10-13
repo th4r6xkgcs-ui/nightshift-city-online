@@ -2,6 +2,18 @@
 
 Branch: `codex/premium-art-v56`, stacked on verified v0.55 `e56a813429f5d2f2b33ef05cafc73bfbfe920c15`.
 
+## Face, haircut and pistol revision (owner feedback)
+
+Added Codex-owned premium-head-art.js and premium-pistol-art.js; Claude's source modules remain unchanged and refs were rechecked (rpg-play a01a9ff2 remains current).
+
+Faces now use angular jaw/cheek planes, smaller eyes, shaped noses, subtle mouths and directional lighting. All 12 haircut choices have distinct authored silhouettes with directional hair placement; hats, hoods, masks, eyewear and facial hair remain supported. Head art uses the existing head/animation anchors and is drawn before frame alpha/outline processing. The revision sheets compare the actual previous 671a8d2 renderer against this renderer, using isolated browser contexts.
+
+Six pistols (pistol, compact, revolver, hawk, goldhawk, machine) now use twice the native pixel density with revised slides, grip rake, trigger guards, cylinders, sights, hardware and magazine shapes. Existing paint palettes/patterns, attachment pixels, stats, compatibility, ownership and saves remain authoritative. The adapter finishes the original cached sprite objects so the existing inspection and inventory paths display the same art; captured world draw calls normalize the higher native density. Public drawHeld handles other contexts too. Handgun holding stays a short-gun pose. A capture listener tracks inspector selections and primes each requested appearance before its next render; keep this adapter/load order until Claude adds a supported builder hook. Other gun families keep their existing art.
+
+Validation: all 111 regression suites passed; real-browser verification checked 12 distinct frontal haircut sprites, 96 directional appearance samples with binary alpha, six pistol redesigns, attachments and paint changing pixels, live suppressor preview, actual held-world draw size, and zero page errors. The existing browser suite also passed studio/save/reload/mobile layout checks. Build now has 151 playable assets. Latest cold generation: 64 frames in 196.3 ms using willReadFrequently contexts (previous sample ~433 ms); 4,096 warm lookups in 29.8 ms; warm city median 16.7 ms / p95 33.2 ms. Device testing and cold stalls still need attention.
+
+New evidence: docs/art/v056-heads-revision.png, v056-guns-revision.png, v056-heads-pistols-results.json. Run node scripts/verify-heads-pistols.cjs against port 8080 (with Playwright available); test:heads-pistols is the package shortcut. No new deployment or merge.
+
 ## Claude synchronization and ownership
 
 Imported the 79 RPG scripts listed in Claude's current online build from **rpg-play a01a9ff265c51eba59912fec998647eb68e8bf98**, plus its `prop-art.js`, `detailed-art.js` integration delta, `ART_SPEC.md`, `RPG_HANDOFF.md`, and four art tests. Corresponding rpg-core head: **b34c95c91660bb158ed1aba62ac6c19a994bebca**. Existing art-pass head: **fdc3c36d65b07ffd4c233a357e3152a08fd43a9f**. Imported gameplay/art modules retain Claude's exact contents; this does not merge either branch. Coordination remains on PR #3.

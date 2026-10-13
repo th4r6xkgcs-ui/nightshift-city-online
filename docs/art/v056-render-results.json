@@ -1,10 +1,10 @@
 {
-  "cold64FramesMs": 433.19999998807907,
-  "warm4096FramesMs": 38.80000001192093,
-  "warmFrameUs": 9.472656252910383,
+  "cold64FramesMs": 196.30000001192093,
+  "warm4096FramesMs": 29.80000001192093,
+  "warmFrameUs": 7.275390627910383,
   "cache": {
-    "hits": 4318,
-    "misses": 429,
+    "hits": 4253,
+    "misses": 427,
     "count": 64,
     "limit": 128,
     "bytes": 10092544
@@ -12,7 +12,7 @@
   "distinctWalkFrames": 64,
   "frameTiming": {
     "medianMs": 16.69999999999891,
-    "p95Ms": 16.899999999999636,
+    "p95Ms": 33.19999999999891,
     "samples": 120
   },
   "carVisible": true,

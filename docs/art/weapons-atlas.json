@@ -2,7 +2,7 @@
   "version": 1,
   "source": "authoritative Nightshift runtime builders",
   "width": 1024,
-  "height": 82,
+  "height": 198,
   "frames": [
     {
       "id": "pipe",
@@ -124,30 +124,30 @@
     {
       "id": "pistol",
       "anchor": [
-        21,
-        17
+        42,
+        34
       ],
-      "worldScale": 0.5,
+      "worldScale": 0.25,
       "attachmentPoints": {
         "hand": [
-          21,
-          17
+          42,
+          34
         ],
         "muzzle": [
-          34,
-          12
+          68,
+          24
         ],
         "rail": [
-          24,
-          9
+          48,
+          18
         ],
         "under": [
-          27,
-          16
+          54,
+          32
         ],
         "mag": [
-          17,
-          28
+          34,
+          56
         ]
       },
       "animation": "static",
@@ -159,36 +159,36 @@
       "atlas": "weapons-atlas.png",
       "x": 260,
       "y": 2,
-      "width": 84,
-      "height": 38
+      "width": 168,
+      "height": 76
     },
     {
       "id": "compact",
       "anchor": [
-        21,
-        17
+        42,
+        34
       ],
-      "worldScale": 0.5,
+      "worldScale": 0.25,
       "attachmentPoints": {
         "hand": [
-          21,
-          17
+          42,
+          34
         ],
         "muzzle": [
-          30,
-          12
+          60,
+          24
         ],
         "rail": [
-          22,
-          9
+          44,
+          18
         ],
         "under": [
-          23,
-          16
+          46,
+          32
         ],
         "mag": [
-          17,
-          23
+          34,
+          46
         ]
       },
       "animation": "static",
@@ -198,39 +198,39 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 346,
+      "x": 430,
       "y": 2,
-      "width": 84,
-      "height": 38
+      "width": 168,
+      "height": 76
     },
     {
       "id": "revolver",
       "anchor": [
-        21,
-        17
+        42,
+        34
       ],
-      "worldScale": 0.5,
+      "worldScale": 0.25,
       "attachmentPoints": {
         "hand": [
-          21,
-          17
+          42,
+          34
         ],
         "muzzle": [
-          39,
-          11
+          78,
+          22
         ],
         "rail": [
-          27,
-          9
+          54,
+          18
         ],
         "under": [
-          33,
-          14
+          66,
+          28
         ],
         "mag": null,
         "cyl": [
-          23,
-          11
+          46,
+          22
         ]
       },
       "animation": "static",
@@ -240,38 +240,38 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 432,
+      "x": 600,
       "y": 2,
-      "width": 84,
-      "height": 38
+      "width": 168,
+      "height": 76
     },
     {
       "id": "hawk",
       "anchor": [
-        21,
-        18
+        42,
+        36
       ],
-      "worldScale": 0.5,
+      "worldScale": 0.25,
       "attachmentPoints": {
         "hand": [
-          21,
-          18
+          42,
+          36
         ],
         "muzzle": [
-          38,
-          12
+          76,
+          24
         ],
         "rail": [
-          26,
-          9
+          52,
+          18
         ],
         "under": [
-          31,
-          17
+          62,
+          34
         ],
         "mag": [
-          17,
-          23
+          34,
+          46
         ]
       },
       "animation": "static",
@@ -281,38 +281,38 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 518,
+      "x": 770,
       "y": 2,
-      "width": 84,
-      "height": 38
+      "width": 168,
+      "height": 76
     },
     {
       "id": "machine",
       "anchor": [
-        21,
-        17
+        42,
+        34
       ],
-      "worldScale": 0.5,
+      "worldScale": 0.25,
       "attachmentPoints": {
         "hand": [
-          21,
-          17
+          42,
+          34
         ],
         "muzzle": [
-          35,
-          12
+          70,
+          24
         ],
         "rail": [
-          24,
-          9
+          48,
+          18
         ],
         "under": [
-          26,
-          16
+          52,
+          32
         ],
         "mag": [
-          17,
-          29
+          34,
+          58
         ]
       },
       "animation": "static",
@@ -322,10 +322,10 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 604,
-      "y": 2,
-      "width": 84,
-      "height": 38
+      "x": 2,
+      "y": 80,
+      "width": 168,
+      "height": 76
     },
     {
       "id": "pump",
@@ -364,8 +364,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 690,
-      "y": 2,
+      "x": 172,
+      "y": 80,
       "width": 84,
       "height": 38
     },
@@ -406,8 +406,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 776,
-      "y": 2,
+      "x": 258,
+      "y": 80,
       "width": 84,
       "height": 38
     },
@@ -448,8 +448,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 862,
-      "y": 2,
+      "x": 344,
+      "y": 80,
       "width": 84,
       "height": 38
     },
@@ -490,8 +490,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 2,
-      "y": 42,
+      "x": 430,
+      "y": 80,
       "width": 84,
       "height": 38
     },
@@ -532,8 +532,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 88,
-      "y": 42,
+      "x": 516,
+      "y": 80,
       "width": 84,
       "height": 38
     },
@@ -575,8 +575,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 174,
-      "y": 42,
+      "x": 602,
+      "y": 80,
       "width": 84,
       "height": 38
     },
@@ -617,38 +617,38 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 260,
-      "y": 42,
+      "x": 688,
+      "y": 80,
       "width": 84,
       "height": 38
     },
     {
       "id": "goldhawk",
       "anchor": [
-        21,
-        18
+        42,
+        36
       ],
-      "worldScale": 0.5,
+      "worldScale": 0.25,
       "attachmentPoints": {
         "hand": [
-          21,
-          18
+          42,
+          36
         ],
         "muzzle": [
-          38,
-          12
+          76,
+          24
         ],
         "rail": [
-          26,
-          9
+          52,
+          18
         ],
         "under": [
-          31,
-          17
+          62,
+          34
         ],
         "mag": [
-          17,
-          23
+          34,
+          46
         ]
       },
       "animation": "static",
@@ -658,10 +658,10 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 346,
-      "y": 42,
-      "width": 84,
-      "height": 38
+      "x": 774,
+      "y": 80,
+      "width": 168,
+      "height": 76
     },
     {
       "id": "whisper",
@@ -701,8 +701,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 432,
-      "y": 42,
+      "x": 2,
+      "y": 158,
       "width": 84,
       "height": 38
     },
@@ -743,8 +743,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 518,
-      "y": 42,
+      "x": 88,
+      "y": 158,
       "width": 84,
       "height": 38
     },
@@ -786,8 +786,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 604,
-      "y": 42,
+      "x": 174,
+      "y": 158,
       "width": 84,
       "height": 38
     },
@@ -829,8 +829,8 @@
         "mods": []
       },
       "atlas": "weapons-atlas.png",
-      "x": 690,
-      "y": 42,
+      "x": 260,
+      "y": 158,
       "width": 84,
       "height": 38
     }
