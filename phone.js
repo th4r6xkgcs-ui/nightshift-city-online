@@ -31,6 +31,13 @@
   const css = document.createElement('style');
   css.textContent = `
   #livingNotice,#glFlash,#skFlash,#toast{display:none!important}
+  /* v0.61 declutter: MORE only keeps what isn't already on the action button or the phone */
+  #actions.expanded>#business,#actions.expanded>#job,#actions.expanded>#property,#actions.expanded>#progress,#actions.expanded>#search,#actions.expanded>#loot,#actions.expanded>#journal,#actions.expanded>#glove{display:none!important}
+  #wfChip{display:none!important}
+  #inventoryPanel:not([hidden]){display:flex!important;flex-direction:column;gap:2px;font:13px/1.35 ui-monospace,Menlo,monospace!important;background:#0f1830f5!important;border-color:#6f8db3!important;border-radius:14px!important}
+  #inventoryPanel>p:first-child{margin:0 0 6px;font-weight:700;color:#ffd970;letter-spacing:.04em}
+  #inventoryPanel>button:last-child{order:-1;position:sticky;top:0;z-index:2;align-self:flex-end;width:auto!important;height:auto!important;padding:6px 12px!important;margin-bottom:6px;font:700 12px ui-monospace,Menlo,monospace;background:#2c4c7c!important;color:#fff!important;border:1px solid #6f8db3!important;border-radius:8px!important}
+  #inventoryPanel button{font:700 12px ui-monospace,Menlo,monospace;background:#1e2f52;color:#e8eff7;border:1px solid #3f5a85;border-radius:7px;padding:4px 10px;margin-left:6px}
   #glCard{padding:4px 9px!important} #glCard .h,#glCard .bar,#glCard .trk{display:none!important} #glCard .t{font-size:9px!important}
   #wfBan{top:11%!important;font-size:16px!important} #wfBan small{font-size:10px!important}
   #phNotes{position:fixed;z-index:47;left:50%;top:calc(max(8px, env(safe-area-inset-top, 0px)) + 34px);transform:translateX(-50%);display:flex;flex-direction:column;gap:5px;align-items:center;pointer-events:none;width:min(340px,calc(100vw - 340px))}

@@ -249,8 +249,20 @@
 
   // ---- world sign: one consistent look for every place label (Claude modules call root.NightshiftSign) ----
   const SIGN_FONT = "700 10px 'Chakra Petch',ui-sans-serif,system-ui,sans-serif";
+  // v0.61: far-away places show only a small icon pin; the full label appears when you get close (declutters the street)
+  const signPlayer = () => { try { const z = root.NightshiftZones?.active?.() ? root.NightshiftZones.pos?.() : null; return z || player; } catch { return null; } }; // eslint-disable-line no-undef
   root.NightshiftSign = function (ctx, cx, cy, icon, text, color = '#ffcf5a', opts = {}) {
     if (!ctx) return;
+    const pp = signPlayer(), d = pp ? Math.hypot(pp.x - cx, pp.y - cy) : 0;
+    if (!opts.always && d > 210) {
+      if (d > 1100) return;
+      ctx.save(); ctx.globalAlpha = d > 600 ? 0.65 : 0.9;
+      ctx.fillStyle = '#05080f66'; ctx.beginPath(); ctx.arc(cx + 1, cy + 2, 9, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#0c111ef0'; ctx.beginPath(); ctx.arc(cx, cy, 9, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx - 3, cy + 8); ctx.lineTo(cx + 3, cy + 8); ctx.lineTo(cx, cy + 12); ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+      ctx.font = '10px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#fff'; ctx.fillText(icon || '•', cx, cy + 0.5);
+      ctx.restore(); return;
+    }
     ctx.save(); ctx.font = SIGN_FONT; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     const tw = ctx.measureText ? ctx.measureText(text).width : text.length * 6, w = Math.round(tw + (icon ? 30 : 16)), h = 18, x = Math.round(cx - w / 2), y = Math.round(cy - h / 2);
     const rr = (px, py, pw, ph, r) => { ctx.beginPath(); ctx.moveTo(px + r, py); ctx.arcTo(px + pw, py, px + pw, py + ph, r); ctx.arcTo(px + pw, py + ph, px, py + ph, r); ctx.arcTo(px, py + ph, px, py, r); ctx.arcTo(px, py, px + pw, py, r); ctx.closePath(); };

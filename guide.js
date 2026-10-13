@@ -193,6 +193,21 @@
   addEventListener('resize', () => { if (step >= 0) showStep(); });
   // First time outside: run the tour once the HUD is up and no menu is open.
   // (Only after ~1.5 s continuously outside, so it never fires inside the apartment during the spawn hand-off.)
+  // v0.61: no more 9-step blocking tour on your first step outside — just three small hints over the real controls
+  // that fade as soon as you use them (or after a few seconds). The full tour stays in ❓ → REPLAY.
+  function quickHints() {
+    state.toured = true; persist();
+    const css = document.createElement('style');
+    css.textContent = '.qkHint{position:fixed;z-index:30;pointer-events:none;transform:translate(-50%,-100%);background:#0c111ee6;border:1px solid #ffd970;border-radius:10px;color:#fff7dd;font:700 11px/1.25 ui-monospace,Menlo,monospace;padding:5px 9px;white-space:nowrap;transition:opacity .4s;animation:qkB 1.2s ease-in-out infinite}' +
+      '.qkHint::after{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);border:6px solid transparent;border-top-color:#ffd970;border-bottom:0}@keyframes qkB{50%{margin-top:-4px}}';
+    document.head.appendChild(css);
+    const hints = [['#pad', 'Drag to walk · push far to run', 'move'], ['#aimPad', 'Drag to aim · hold to shoot', 'aim'], ['#use', 'Tap when it glows', 'use']].map(([sel, text, k]) => {
+      const t = document.querySelector(sel); if (!t || !t.offsetParent) return null; const r = t.getBoundingClientRect();
+      const h = el('div', { className: 'qkHint' }, text); h.style.left = Math.round(r.left + r.width / 2) + 'px'; h.style.top = Math.round(r.top - 8) + 'px'; document.body.append(h);
+      const done = () => { h.style.opacity = '0'; setTimeout(() => h.remove(), 450); }; t.addEventListener('pointerdown', done, { once: true }); setTimeout(done, k === 'use' ? 9000 : 12000); return h;
+    });
+    void hints;
+  }
   let wasHome = false, outsideSince = 0;
   const isHome = () => !!root.NightshiftHome?.kind?.();
   setInterval(() => {
@@ -201,7 +216,7 @@
     if (!outsideSince) outsideSince = now;
     const ready = wasHome || (root.NightshiftLife?.spawned?.() === false && now > 6000);
     if (!state.toured && step < 0 && ready && now - outsideSince > 1500 && !root.NightshiftHud?.menuOpen?.() && P()) {
-      wasHome = false; setTimeout(() => { if (!state.toured && step < 0 && !isHome()) startTour(); }, 400);
+      wasHome = false; setTimeout(() => { if (!state.toured && step < 0 && !isHome()) quickHints(); }, 400);
     }
   }, 500);
 
