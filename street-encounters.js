@@ -3,10 +3,10 @@
 const KEY='nightshift-city-encounters-v1',WAIT=120000,LEAD_TIME=300000;
 const SITES=[
  {id:'lost-wallet',x:640,y:1300,label:'LOST WALLET',type:'wallet',color:'#e9c57b'},
- {id:'supply-cache',x:1490,y:1050,label:'SUPPLY CACHE',type:'cache',color:'#8fddc4'},
+ {id:'supply-cache',x:1490,y:944,label:'SUPPLY CACHE',type:'cache',color:'#8fddc4'},
  {id:'street-tip',x:1960,y:960,label:'STREET TIP',type:'tip',color:'#c6a4f0'},
- {id:'south-aid',x:760,y:1360,label:'SOUTHSIDE AID CALL',type:'aid',crew:'south',item:'medkit',count:1,color:'#efbb66'},
- {id:'harbor-repair',x:1740,y:1020,label:'HARBOR REPAIR REQUEST',type:'aid',crew:'docks',item:'scrap',count:2,color:'#bf9feb'}
+ {id:'south-aid',x:760,y:1288,label:'SOUTHSIDE AID CALL',type:'aid',crew:'south',item:'medkit',count:1,color:'#efbb66'},
+ {id:'harbor-repair',x:1700,y:944,label:'HARBOR REPAIR REQUEST',type:'aid',crew:'docks',item:'scrap',count:2,color:'#bf9feb'}
 ];
 const TIP_TARGET={id:'tip-drop',x:1740,y:680,label:'INVESTIGATE TIP',type:'lead',color:'#c6a4f0'};
 function clean(raw={},now=Date.now()){

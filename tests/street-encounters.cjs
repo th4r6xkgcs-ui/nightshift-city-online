@@ -4,7 +4,7 @@ assert.equal(run('NightshiftEncounters.clean({ready:{"lost-wallet":1e15}},1000).
 run('player.x=640;player.y=1300;player.hp=100;player.car=null;player.cash=750;player.heat=0;NightshiftEncounters.use("lost-wallet")');
 assert.equal(run('player.cash'),850);assert.equal(run('player.heat'),.3);
 run('NightshiftEncounters.use("lost-wallet")');assert.equal(run('player.cash'),850);
-run('player.x=1490;player.y=1050;NightshiftInventory.state.pocket.medkit=0;NightshiftEncounters.use("supply-cache")');
+run('player.x=1490;player.y=944;NightshiftInventory.state.pocket.medkit=0;NightshiftEncounters.use("supply-cache")');
 assert.equal(run('NightshiftInventory.state.pocket.medkit'),1);
 assert.equal(run('NightshiftBackups.KEYS.includes(NightshiftEncounters.KEY)'),true);
 const bad=boot();bad('player.x=640;player.y=1300;player.car={};NightshiftEncounters.use("lost-wallet")');assert.equal(bad('player.cash'),750);

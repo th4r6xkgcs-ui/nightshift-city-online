@@ -5,9 +5,9 @@ run('interact()');assert.equal(run('player.cash'),750);assert.equal(run('Nightsh
 const fresh=boot(storage,{now:2000});assert.equal(fresh('NightshiftEncounters.state.lead.until'),301000);
 fresh('player.x=1740;player.y=680;player.cash=750;interact()');assert.equal(fresh('player.cash'),800);assert.equal(fresh('NightshiftEncounters.state.lead'),null);fresh('NightshiftEncounters.use("tip-drop")');assert.equal(fresh('player.cash'),800);
 run('player.x=1740;player.y=680;testNow=301000;NightshiftEncounters.use("tip-drop")');assert.equal(run('player.cash'),750);assert.equal(run('NightshiftEncounters.state.lead'),null);
-run('player.x=760;player.y=1360;testNow=400000;player.heat=0;NightshiftInventory.state.pocket.medkit=1;NightshiftCrews.state.crews.south.rep=-25;interact()');assert.equal(run('NightshiftInventory.state.pocket.medkit||0'),0);assert.equal(run('NightshiftCrews.state.crews.south.rep'),-17);
+run('player.x=760;player.y=1288;testNow=400000;player.heat=0;NightshiftInventory.state.pocket.medkit=1;NightshiftCrews.state.crews.south.rep=-25;interact()');assert.equal(run('NightshiftInventory.state.pocket.medkit||0'),0);assert.equal(run('NightshiftCrews.state.crews.south.rep'),-17);
 run('NightshiftEncounters.use("south-aid")');assert.equal(run('NightshiftCrews.state.crews.south.rep'),-17);
-run('player.x=1740;player.y=1020;NightshiftInventory.state.pocket.scrap=1;NightshiftEncounters.use("harbor-repair")');assert.equal(run('NightshiftInventory.state.pocket.scrap'),1);assert.equal(run('NightshiftEncounters.state.ready["harbor-repair"]'),0);
+run('player.x=1700;player.y=944;NightshiftInventory.state.pocket.scrap=1;NightshiftEncounters.use("harbor-repair")');assert.equal(run('NightshiftInventory.state.pocket.scrap'),1);assert.equal(run('NightshiftEncounters.state.ready["harbor-repair"]'),0);
 run('NightshiftInventory.state.pocket.scrap=2;player.heat=2;NightshiftEncounters.use("harbor-repair")');assert.equal(run('NightshiftInventory.state.pocket.scrap'),2);
 run('player.heat=0;interact()');assert.equal(run('NightshiftInventory.state.pocket.scrap||0'),0);assert.equal(run('NightshiftCrews.state.crews.docks.rep'),8);
 const reloaded=boot(storage,{now:400001});assert.equal(reloaded('NightshiftEncounters.state.ready["south-aid"]'),520000);assert.equal(reloaded('NightshiftCrews.state.crews.south.rep'),-17);
@@ -15,7 +15,7 @@ run('player.x=640;player.y=1300;player.cash=100000000;NightshiftEncounters.use("
 run('player.cash=-1;NightshiftEncounters.use("lost-wallet")');assert.equal(run('player.cash'),-1);
 run('player.cash=750;player.hp=NaN;NightshiftEncounters.use("lost-wallet")');assert.equal(run('player.cash'),750);
 run('player.hp=100;player.heat=NaN;NightshiftEncounters.use("lost-wallet")');assert.equal(run('player.cash'),750);
-run('player.x=1490;player.y=1050;player.heat=0;NightshiftInventory.state.pocket.medkit=999;NightshiftEncounters.use("supply-cache")');assert.equal(run('NightshiftEncounters.state.ready["supply-cache"]'),0);
+run('player.x=1490;player.y=944;player.heat=0;NightshiftInventory.state.pocket.medkit=999;NightshiftEncounters.use("supply-cache")');assert.equal(run('NightshiftEncounters.state.ready["supply-cache"]'),0);
 run('NightshiftInventory.state.pocket.medkit=0;NightshiftProgress.open();NightshiftEncounters.use("supply-cache")');assert.equal(run('NightshiftInventory.state.pocket.medkit'),0);
 const clean=run('NightshiftEncounters.clean({ready:{"south-aid":-1,"harbor-repair":1e15},lead:{until:1e15}},1000)');assert.equal(clean.ready['south-aid'],0);assert.equal(clean.ready['harbor-repair'],121000);assert.equal(clean.lead.until,301000);
 const api=run('NightshiftBackups'),old=storage.get('nightshift-city-encounters-v1');api.restore(run.context.localStorage,{format:'nightshift-city-backup',version:1,saves:{'nightshift-city-encounters-v1':JSON.stringify({ready:{'lost-wallet':9999},lead:{until:123456}})}});assert.equal(boot(storage,{now:1000})('NightshiftEncounters.state.lead.until'),123456);api.undo(run.context.localStorage);assert.equal(storage.get('nightshift-city-encounters-v1'),old);
