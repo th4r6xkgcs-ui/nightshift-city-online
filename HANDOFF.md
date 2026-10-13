@@ -1,3 +1,7 @@
+## CURRENT — v0.56 premium pixel finishing (review build, 2026-10-12)
+
+Branch: codex/premium-art-v56, stacked on v0.55. Exact latest Claude rpg-play a01a9ff2 / rpg-core b34c95c9 integrated; read CLIENT_HANDOFF_V56.md for ownership, assets, tests and remaining master-roadmap gaps. Redrawn faces, 12 distinct haircut silhouettes, six denser pistol designs, finer shared character pixels and animated material details, crisp customized cars, authoritative studios and short-phone layout fixes. 111 suites passed; 151-asset build; real Edge render/studio/save/layout checks passed. This remains a local review build; no new deployment, merges or access changes. Crew expansion remains deferred.
+
 ## CURRENT — v0.55 Living Streets (2026-10-12)
 
 Canonical branch: codex/living-streets-v55, built from verified v0.54 a2750326 and exact Claude rpg-play c31e4976 (rpg-core 556cec53 / art-pass fdc3c36d). Read CLIENT_HANDOFF_V55.md for file ownership, imported module provenance, save contracts and verification limits.

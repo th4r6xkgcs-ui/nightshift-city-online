@@ -1,7 +1,11 @@
 # Nightshift City Online
 Independent mobile-first top-down pixel city game, separate from Nightshift Garage.
 
-## Current build: v0.55 Living Streets
+## Current review build: v0.56 premium pixel finishing
+
+Read [v0.56 handoff](CLIENT_HANDOFF_V56.md). The new shared finishing pass integrates Claude’s current modular wardrobe and studios, adds finer native character detail and crisp car sampling, and preserves ownership/saves. Local review build only; hosted owner-private preview remains v0.55. This is an incremental art pass; the full master roadmap is not complete.
+
+## Hosted build: v0.55 Living Streets
 Private preview hosted separately. Latest release adds detailed pixel guns, pets, architecture and street props, smoother camera, readable crossings and exact current Claude RPG/art integration. Read [v0.55 handoff](CLIENT_HANDOFF_V55.md). Latest combined batch includes respect ranks, fishing, Hustle phone jobs, labs, weapon mods, persistent named-contact memory and a city journal. See CLIENT_HANDOFF_V53.md.
 Dependency-free Canvas client with walking, combat, police pursuit, traffic, vehicles, apartments/shops, production businesses, RPG skills/weapons/goals/dailies and browser-local inventory/progress. Join an NPC gang or found a custom gang, recruit passive followers, build loyalty, escort members, claim local corners and respond to noncombat rival pressure. Street customers request carried stock using shared dealer demand, prices, heat and sales ledgers. This private static preview is single-player; Claude’s separate backend work is not deployed here. Art/audio are procedural. Real iPhone and audio QA remain pending; Edge DOM/viewport checks pass.
 
