@@ -347,9 +347,9 @@
   css.textContent = `
   #znFade{position:fixed;inset:0;z-index:95;background:#000;opacity:0;pointer-events:none;transition:opacity .35s}
   #znFade.on{opacity:1;transition:none}
-  #znBanner{position:fixed;left:50%;top:60%;max-width:92vw;transform:translate(-50%,-10px);z-index:30;opacity:0;pointer-events:none;text-align:center;transition:opacity .6s,transform .6s;
-    font:700 24px var(--disp,system-ui);letter-spacing:.12em;color:#fff;text-shadow:0 2px 0 #000,0 0 24px #000c}
-  #znBanner small{display:block;font:600 12px var(--body,system-ui);letter-spacing:.24em;color:#ffd970;margin-top:4px}
+  #znBanner{position:fixed;left:50%;top:calc(max(8px, env(safe-area-inset-top, 0px)) + 6px);max-width:60vw;transform:translate(-50%,-10px);z-index:30;opacity:0;pointer-events:none;text-align:center;transition:opacity .6s,transform .6s;
+    font:700 14px var(--disp,system-ui);letter-spacing:.14em;color:#fff;text-shadow:0 1px 0 #000,0 0 12px #000c}
+  #znBanner small{display:block;font:600 9.5px var(--body,system-ui);letter-spacing:.16em;color:#ffd970;margin-top:2px}
   #znBanner.on{opacity:1;transform:translate(-50%,0)}
   #znTravel{position:fixed;inset:8% 6%;z-index:46;overflow:auto;background:linear-gradient(180deg,#141a24f7,#0b0f16f8);border:1px solid #ffffff24;border-radius:18px;padding:12px 14px;color:#eef3f9;font:13px var(--body,system-ui)}
   #znTravel[hidden]{display:none} #znTravel h2{margin:0 0 4px;font:700 17px var(--disp,system-ui);color:#ffd970;letter-spacing:.05em}
