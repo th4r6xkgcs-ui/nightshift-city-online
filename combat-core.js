@@ -103,7 +103,7 @@
   const RESULTS = ['hurt', 'downed', 'bleeding', 'killed', 'dodged', 'blocked'];
   function hitEvent(o) {
     return { seq: o.seq | 0, t: Math.round(o.t || 0), src: String(o.src || ''), dst: String(o.dst || ''), weapon: String(o.weapon || ''), kind: KINDS.includes(o.kind) ? o.kind : 'bullet',
-      seed: (o.seed >>> 0) || 0, fx: Math.round(o.from?.x || 0), fy: Math.round(o.from?.y || 0), tx: Math.round(o.to?.x || 0), ty: Math.round(o.to?.y || 0),
+      seed: (o.seed >>> 0) || 0, fx: Math.round(o.fx ?? o.from?.x ?? 0), fy: Math.round(o.fy ?? o.from?.y ?? 0), tx: Math.round(o.tx ?? o.to?.x ?? 0), ty: Math.round(o.ty ?? o.to?.y ?? 0),
       hp: Math.round((o.hp || 0) * 10) / 10, armor: Math.round((o.armor || 0) * 10) / 10, result: RESULTS.includes(o.result) ? o.result : 'hurt' };
   }
   const FIELDS = ['seq', 't', 'src', 'dst', 'weapon', 'kind', 'seed', 'fx', 'fy', 'tx', 'ty', 'hp', 'armor', 'result'];
