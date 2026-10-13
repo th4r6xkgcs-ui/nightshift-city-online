@@ -123,5 +123,5 @@
     wrap.style.boxShadow = heat >= 0.5 ? `0 6px 18px #0008,0 0 0 2px #0c111e,0 0 0 3px ${Math.floor(now / 300) % 2 ? '#ff4a5a' : '#4a7aff'}` : '';
   }
   setInterval(draw, 100);
-  root.NightshiftMinimap = Object.freeze({ visible: () => !wrap.hidden, markers: () => markers() });
+  root.NightshiftMinimap = Object.freeze({ visible: () => !wrap.hidden, markers: () => markers(), base: () => base || (base = buildBase()) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
