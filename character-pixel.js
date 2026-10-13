@@ -455,7 +455,7 @@
   }
 
   // ---------------- canvas + cache ----------------
-  const frames = new Map(), MAX = 360, BUDGET = 6, budget = { t: 0, n: 0 }; let stats = { built: 0, ms: 0 };
+  const frames = new Map(), MAX = 520, BUDGET = 6, budget = { t: 0, n: 0 }; let stats = { built: 0, ms: 0 };
   function render(o, dir, anim, f, hold) { const t0 = (typeof performance !== 'undefined' ? performance.now() : 0); const F = build(o, dir, anim, f, hold), col = finish(F); stats.built++; stats.ms += (typeof performance !== 'undefined' ? performance.now() : 0) - t0; return col; }
   function base(o, dir, anim, f, hold) {
     const C = C0(), W = W0(), n = C.ANIMS[anim] || 1, k = ((f % n) + n) % n, key = W.keyOf(o) + '|' + dir + anim + k + '|' + (hold || '');
