@@ -110,8 +110,20 @@
   }
 
   // ---------------- rooftops ----------------
+  // your apartment's side entrance (the HOME point at the corner of the Midtown APARTMENTS block)
+  function homeEntrance(c) {
+    const x = 952, y = 744, t = performance.now() / 1000;
+    c.save();
+    R(c, 'rgba(6,10,18,0.35)', x - 15, y - 5, 34, 22);
+    R(c, '#2a2f36', x - 14, y - 16, 30, 26); R(c, '#4a3a2e', x - 11, y - 13, 24, 20); R(c, '#6a4a32', x - 9, y - 11, 9, 16); R(c, '#6a4a32', x + 2, y - 11, 9, 16); R(c, '#f2c84a', x - 1, y - 4, 1, 3); R(c, '#f2c84a', x + 3, y - 4, 1, 3);
+    R(c, '#c8a050', x - 16, y - 19, 34, 4); R(c, '#e3c27a', x - 16, y - 19, 34, 1);
+    const glow = 0.55 + 0.15 * Math.sin(t * 2); c.fillStyle = `rgba(255,214,120,${glow})`; c.beginPath(); c.arc(x + 1, y - 22, 3, 0, Math.PI * 2); c.fill();
+    R(c, '#7a2e24', x - 12, y + 10, 26, 7); R(c, '#a8553f', x - 11, y + 11, 24, 5); c.fillStyle = '#f2c84a'; c.font = '700 5px monospace'; c.textAlign = 'center'; c.fillText('HOME', x + 1, y + 15);
+    c.restore();
+  }
   function roofExtras(b) {
     let c = null; try { c = g; } catch { return; } // eslint-disable-line no-undef
+    if (b.x === 960 && b.y === 755) homeEntrance(c);
     const { x, y, w, h, name } = b, reg = region(x, y), s = H(Math.round(x), Math.round(y), 7), top = y + 8, roofH = h - 76; if (roofH < 40) return;
     const water = () => { const wx = x + Math.round(w * 0.55) - 17, wy = top + 12; c.fillStyle = 'rgba(8,12,20,0.35)'; c.beginPath(); c.ellipse(wx + 22, wy + 30, 20, 8, 0, 0, Math.PI * 2); c.fill(); R(c, '#3a2a20', wx + 6, wy + 16, 3, 20); R(c, '#3a2a20', wx + 25, wy + 16, 3, 20); c.fillStyle = '#7a5a3a'; c.beginPath(); c.ellipse(wx + 17, wy + 12, 15, 7, 0, 0, Math.PI * 2); c.fill(); R(c, '#6a4a2e', wx + 2, wy + 2, 30, 11); c.fillStyle = '#9a7650'; c.beginPath(); c.ellipse(wx + 17, wy + 2, 15, 6, 0, 0, Math.PI * 2); c.fill(); R(c, '#2a1f1a', wx + 2, wy + 6, 30, 1); R(c, '#2a1f1a', wx + 2, wy + 10, 30, 1); c.fillStyle = '#5a3a24'; c.beginPath(); c.moveTo(wx + 2, wy + 2); c.lineTo(wx + 17, wy - 8); c.lineTo(wx + 32, wy + 2); c.closePath(); c.fill(); };
     const solar = () => { for (let r = 0; r < 2; r++) for (let k = 0; k < 4; k++) { const sx = x + 20 + k * 26, sy = top + 12 + r * 22; R(c, 'rgba(8,12,20,0.4)', sx + 2, sy + 2, 22, 16); R(c, '#1a2a4a', sx, sy, 22, 16); R(c, '#3a5a8a', sx + 1, sy + 1, 20, 1); for (let q = 1; q < 4; q++) R(c, '#2a3a5a', sx + q * 5.5, sy, 1, 16); R(c, '#2a3a5a', sx, sy + 8, 22, 1); } };
