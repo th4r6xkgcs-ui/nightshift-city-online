@@ -75,6 +75,7 @@
   let lastSrc = null;
   function onPlayerDamage(amount, now, src) {
     const p = P(); if (!p) return 'pass';
+    try { if (root.NightshiftMelee?.rolling?.()) return 'pass'; } catch { /* n/a */ } // the roll wrapper dodges it
     if (src && Number.isFinite(src.x)) { const pos = zoneOn() ? (root.NightshiftZones?.pos?.() || p) : p; indicators.push({ a: Math.atan2(src.y - pos.y, src.x - pos.x), t: now, kind: src.kind || 'bullet' }); if (indicators.length > 8) indicators.shift(); lastSrc = src; }
     if (src?.kind === 'taser') { stunUntil = now + 1400; st.stuns++; try { root.NightshiftFeedback?.floating?.(p.x, p.y - 34, '⚡ TASED', '#9fe0ff'); } catch { /* n/a */ } emit({ type: 'stunned', who: 'player' }); }
     st.playerHits++;
