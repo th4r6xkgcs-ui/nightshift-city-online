@@ -57,8 +57,8 @@
     // close in on a driving player: leave the grid and ram
     if (pc && d < 170 && now > c.bumpUntil) {
       const a = Math.atan2(pc.y - c.y, pc.x - c.x); c.angle += Math.atan2(Math.sin(a - c.angle), Math.cos(a - c.angle)) * Math.min(1, dt * 6);
-      c.x += Math.cos(c.angle) * 380 * dt; c.y += Math.sin(c.angle) * 380 * dt; c.speed = 6.3; c.offGrid = true;
-      if (d < 36) { c.bumpUntil = now + 1600; pc.speed = (pc.speed || 0) * 0.45; try { root.NightshiftVehicles?.hit?.(pc); } catch { /* n/a */ } c.x -= Math.cos(c.angle) * 24; c.y -= Math.sin(c.angle) * 24; st.rams++; try { root.say?.('🚓 Rammed by police!'); root.NightshiftCombatVision?.engage?.(4000); } catch { /* n/a */ } }
+      c.x += Math.cos(c.angle) * 360 * dt; c.y += Math.sin(c.angle) * 360 * dt; c.speed = 6; c.offGrid = true;
+      if (d < 36) { c.bumpUntil = now + 4500; pc.speed = (pc.speed || 0) * 0.65; try { root.NightshiftVehicles?.hit?.(pc); } catch { /* n/a */ } c.x -= Math.cos(c.angle) * 24; c.y -= Math.sin(c.angle) * 24; st.rams++; try { root.say?.('🚓 Rammed by police!'); root.NightshiftCombatVision?.engage?.(4000); } catch { /* n/a */ } }
       return;
     }
     if (c.offGrid) { c.at = node(c.x, c.y); c.next = null; c.offGrid = false; }

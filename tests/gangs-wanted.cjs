@@ -28,3 +28,18 @@ assert.ok(!W.bustStep(1.5, { seen: true, near: 10, stars: 4, dt: 1 }).busted, 'n
 const e = (o) => Math.abs(W.aimError(W.LEVELS[3], { rand: 1, ...o }));
 assert.ok(e({ moving: true }) > e({}), 'moving targets are harder to hit'); assert.ok(e({ dist: 300 }) > e({ dist: 50 }));
 console.log('PASS: wanted levels (escalation, escape, busted, accuracy)');
+// takeovers, guards, income, counterattacks (v0.59)
+{
+  const s2 = D.clean({}), t0 = 1e12, w2 = { cash: 3000 };
+  assert.ok(D.claim(s2, 1, 6, 'diablos', t0)); assert.equal(D.ownerOf(s2, 1, 6), 'you'); assert.equal(s2.rep.diablos, -25); assert.equal(D.claim(s2, 1, 6, 'diablos', t0), false, 'already yours');
+  assert.ok(D.hire(s2, 1, 6, w2).ok); assert.ok(D.hire(s2, 1, 6, w2).ok); assert.equal(w2.cash, 2500);
+  assert.ok(D.upgrade(s2, 1, 6, 0, w2).ok); assert.equal(s2.owned['1,6'].guards[0].tier, 1); assert.equal(w2.cash, 2100);
+  for (let i = 0; i < 2; i++) D.hire(s2, 1, 6, w2); assert.equal(D.hire(s2, 1, 6, w2).ok, false, 'max 4 guards');
+  assert.equal(D.pending(s2, 1, 6, t0 + 60000), 0); const inc = D.income(4);
+  assert.equal(D.pending(s2, 1, 6, t0 + 11 * 60000), 2 * inc); assert.equal(D.collect(s2, 1, 6, w2, t0 + 11 * 60000), 2 * inc); assert.equal(D.pending(s2, 1, 6, t0 + 11 * 60000), 0, 'collected');
+  assert.equal(D.pending(s2, 1, 6, t0 + 11 * 60000 + 999 * 60000), 6 * inc, 'income caps so you still have to come by');
+  assert.ok(D.defendChance(s2.owned['1,6']) > D.defendChance({ guards: [] }), 'guards help hold'); assert.ok(D.defendChance({ guards: [{ tier: 3 }, { tier: 3 }, { tier: 3 }, { tier: 3 }] }) > 0.75);
+  const back = D.clean(JSON.parse(JSON.stringify(s2)), t0); assert.equal(back.owned['1,6'].guards.length, 4); assert.equal(D.clean({ owned: { '0,0': { from: 'kings' } } }).owned['0,0'], undefined, 'only real turf can be owned');
+  assert.ok(D.lose(s2, 1, 6)); assert.equal(D.ownerOf(s2, 1, 6), 'diablos');
+  console.log('PASS: turf takeovers (claim, guards, gear, income cap, counterattack odds, save)');
+}
