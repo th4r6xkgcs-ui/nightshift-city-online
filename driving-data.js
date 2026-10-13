@@ -8,7 +8,7 @@
  * The server can run step() for every car later; it only reads/writes plain numbers on the car object. */
 (function (root) {
   'use strict';
-  const DRIFT = { minSpeed: 3.0, minSteer: 0.3, yaw: 0.026, bleed: 0.993, slipMax: 0.62, slipIn: 0.14, slipOut: 0.09, grace: 0.7 };
+  const DRIFT = { minSpeed: 3.0, minSteer: 0.3, yaw: 0.019, bleed: 0.993, slipMax: 0.62, slipIn: 0.14, slipOut: 0.09, grace: 0.7 };
   const NITRO = { max: 100, burn: 34, boost: 1.45, top: 1.3 }; // burn % per second; boost to accel, top to max speed
   const PRICES = { fuelPct: 0.8, repairPct: 1.5, wash: 25, nitro: 120 };
 
@@ -29,6 +29,7 @@
     const slip = Math.abs(car.drift || 0), sp = Math.abs(car.speed || 0);
     if (drifting || slip > 0.18) { chain.points += sp * slip * sec * 60; chain.time += sec; chain.idle = 0; chain.mult = 1 + Math.min(3, Math.floor(chain.time / 2)) * 0.5; return null; }
     if (chain.points <= 0) return null;
+    if (sp < 0.8) { chain.points = 0; chain.time = 0; chain.idle = 0; chain.mult = 1; return null; } // stopped dead (crash): the chain is lost
     chain.idle += sec; if (chain.idle < DRIFT.grace) return null;
     const pts = Math.round(chain.points * chain.mult), out = pts >= 60 ? { points: pts, cash: Math.min(600, Math.floor(pts / 25)), xp: Math.min(120, Math.floor(pts / 40)), time: chain.time } : null;
     chain.points = 0; chain.time = 0; chain.idle = 0; chain.mult = 1;

@@ -53,7 +53,7 @@
     const d = Math.hypot(prop.door.x - p.x, prop.door.y - p.y), G = root.NightshiftGangs;
     if (d < 1200 && G?.squad) {
       const tag = 'rob-' + id + '-' + Date.now().toString(36), gang = gangFor(prop);
-      G.squad({ x: prop.door.x + 30, y: prop.door.y + 4, gang, n: 2 + (Math.random() < 0.5 ? 1 : 0), tag, vs: ['player', 'you'], hunt: 260 });
+      G.squad({ x: prop.door.x + 70, y: prop.door.y + 2, gang, n: 2 + (Math.random() < 0.5 ? 1 : 0), tag, vs: ['player', 'you'], hunt: 0 });
       if (o.guard) G.squad({ x: prop.door.x - 20, y: prop.door.y + 2, gang: root.NightshiftGangsData?.PLAYER, n: 1, tag: tag + '-guard', vs: [gang], gear: root.NightshiftGangsData?.GEAR?.[1], hunt: 200 });
       live = { id, tag, until: performance.now() + 75000, gang };
       text(`🚨 ${name(prop)} is being robbed right now! Get there in 75 seconds.${o.guard ? ' Your guard is holding them off.' : ''}`, prop, true);
