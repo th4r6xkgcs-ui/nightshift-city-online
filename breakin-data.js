@@ -14,6 +14,9 @@
     stash: { cols: 3, rows: 2, rw: 215, rh: 180, guards: [['thug', 2], ['thug', 0.7], ['dog', 0.4]], loot: 10, cooldown: 40, heat: 1.4, police: 90, name: 'Stash house' },
     // v0.59: a street gang's hideout on its turf (gangs.js). Bigger crew, a shot caller, an armory and a counting room.
     hideout: { cols: 3, rows: 3, rw: 215, rh: 180, guards: [['thug', 3], ['thug', 0.8], ['thug', 0.6], ['boss', 1], ['dog', 0.5]], loot: 13, cooldown: 30, heat: 1.2, police: 120, name: 'Gang hideout' },
+    // v0.65: any closed business at night. Alarm panel by the back door (disarm it before the countdown ends),
+    // CCTV cameras that sweep the floor (shoot them out), registers, a stockroom and the manager's safe.
+    store: { cols: 3, rows: 2, rw: 200, rh: 170, guards: [['guard', 0.35]], loot: 9, cooldown: 30, heat: 1.4, police: 45, name: 'Store', alarm: 9, cameras: 2 },
   };
   const ROOMS = {
     house: ['kitchen', 'living', 'bedroom', 'bedroom', 'bath', 'office'],
@@ -21,6 +24,7 @@
     warehouse: ['loading', 'storage', 'storage', 'office', 'armory', 'storage'],
     stash: ['trap', 'cook', 'count', 'bedroom', 'storage', 'cook'],
     hideout: ['trap', 'count', 'lounge', 'armory', 'storage', 'bedroom', 'cook', 'count', 'trap'],
+    store: ['sales', 'sales', 'checkout', 'stockroom', 'office', 'staff'],
   };
   // Furniture per room: [kind, w, h, anchor] — anchor: 'n' along top wall, 's' bottom, 'w'/'e' sides, 'c' centre.
   const FURN = {
@@ -41,6 +45,10 @@
     trap: [['sofa', 90, 34, 's'], ['tv', 70, 16, 'n'], ['rug', 90, 56, 'c', 1], ['mattress', 60, 40, 'w']],
     cook: [['labtable', 120, 28, 'n'], ['labtable', 100, 28, 'c'], ['barrels', 40, 40, 'se']],
     count: [['counttable', 96, 52, 'c'], ['shelf', 26, 80, 'e'], ['chair', 22, 22, 'w']],
+    sales: [['rack', 130, 22, 'n'], ['rack', 130, 22, 'c'], ['cabinet', 60, 24, 's']],
+    checkout: [['counter', 110, 26, 'n'], ['shelf', 26, 80, 'e']],
+    stockroom: [['rack', 140, 22, 'n'], ['crates', 60, 40, 'se'], ['crates', 50, 40, 'sw']],
+    staff: [['table', 60, 40, 'c'], ['shelf', 26, 80, 'w']],
   };
   // Loot containers by room type: [kind, chance]
   const CONTAINERS = {
@@ -49,6 +57,7 @@
     gym: [['locker', 0.6]], vault: [['safe', 1], ['safe', 0.7]], lounge: [['cashbox', 0.7], ['art', 0.4]],
     loading: [['crate', 0.8]], storage: [['crate', 0.9], ['crate', 0.6]], armory: [['gunlocker', 1], ['ammo', 0.9]],
     trap: [['drawer', 0.6], ['cashjar', 0.6]], cook: [['product', 1], ['product', 0.6], ['chemcrate', 0.8]], count: [['cashpile', 1], ['safe', 0.7]],
+    sales: [['shelfgoods', 0.8]], checkout: [['register', 1], ['register', 0.6]], stockroom: [['stockbox', 0.9], ['crate', 0.6]], staff: [['locker', 0.8]],
   };
   // seconds to search; loot: [item, chance, min, max] with item 'cash' for money.
   const LOOT = {
@@ -71,6 +80,9 @@
     product: { seconds: 4, loot: [['weed', 0.8, 2, 5], ['coke', 0.5, 1, 3], ['pills', 0.5, 3, 8]] },
     chemcrate: { seconds: 3, loot: [['chem', 1, 2, 4], ['baggie', 0.8, 4, 10]] },
     cashpile: { seconds: 6, loot: [['cash', 1, 350, 1100]] },
+    register: { seconds: 2.5, loot: [['cash', 1, 60, 260]] },
+    shelfgoods: { seconds: 3, loot: [['gadgets', 0.5, 1, 1], ['jewels', 0.2, 1, 1], ['cash', 0.3, 10, 40]] },
+    stockbox: { seconds: 4, loot: [['gadgets', 0.7, 1, 2], ['metal', 0.4, 1, 3], ['tape', 0.3, 1, 2]] },
   };
   // What the pawn shop pays for stolen goods (per unit).
   const FENCE = { jewels: 180, gadgets: 140, art: 650 };
@@ -175,7 +187,16 @@
       }
     }
     const spawn = { x: ex, y: Y1 + 34, angle: -Math.PI / 2 };
-    return { type, seed, w, h, rooms, walls, doors, furniture, loot, guards, spawn, exit: { x: ex, y: Y1 + 26 }, entryRoom: entryRoom.i, T };
+    // v0.65 security: alarm panel just inside the back door; CCTV in the rooms furthest from it (corner-mounted,
+    // looking into the room, sweeping). Stores have both; warehouses and mansions get a camera too.
+    const cams = [], camN = T.cameras ?? (type === 'warehouse' || type === 'mansion' ? 1 : 0);
+    const byFar = rooms.filter((R0) => R0.i !== entryRoom.i).sort((a, b) => Math.hypot(b.x - ex, b.y - Y1) - Math.hypot(a.x - ex, a.y - Y1));
+    for (let k = 0; k < camN && k < byFar.length; k++) {
+      const R0 = byFar[k], left = r() < 0.5, cx = left ? R0.x + 14 : R0.x + R0.w - 14, cy = R0.y + 14, aim = Math.atan2(R0.y + R0.h / 2 - cy, R0.x + R0.w / 2 - cx);
+      cams.push({ id: 'cam' + k, x: Math.round(cx), y: Math.round(cy), aim, sweep: 0.55, fov: 0.85, range: Math.round(Math.hypot(R0.w, R0.h) * 0.95), room: R0.i, speed: 0.6 + r() * 0.4, phase: r() * 6 });
+    }
+    const panel = T.alarm ? { x: Math.round(ex + (ex - entryRoom.x > entryRoom.w / 2 ? -44 : 44)), y: Math.round(Y1 - 30), seconds: T.alarm } : null;
+    return { type, seed, w, h, rooms, walls, doors, furniture, loot, guards, spawn, exit: { x: ex, y: Y1 + 26 }, entryRoom: entryRoom.i, T, cameras: cams, panel };
   }
   // Room graph path (room centres via doorway points) for guard movement.
   function roomAt(L, x, y) { return L.rooms.find((R0) => x >= R0.x && x <= R0.x + R0.w && y >= R0.y && y <= R0.y + R0.h) || null; }
@@ -190,6 +211,12 @@
     pts.push(to); return pts;
   }
   function connected(L) { const start = L.entryRoom, seen = new Set([start]), q = [start]; while (q.length) { const c = q.shift(); for (const d of L.doors) { if (d.entry) continue; const o = d.a === c ? d.b : d.b === c ? d.a : null; if (o !== null && !seen.has(o)) { seen.add(o); q.push(o); } } } return seen.size === L.rooms.length; }
+  function cameraAngle(cam, t) { return cam.aim + Math.sin(t * cam.speed + cam.phase) * cam.sweep; }
+  function cameraSees(cam, p, t) {
+    if (!cam || cam.broken) return false; const d = Math.hypot(p.x - cam.x, p.y - cam.y); if (d > cam.range) return false;
+    let da = Math.atan2(p.y - cam.y, p.x - cam.x) - cameraAngle(cam, t); while (da > Math.PI) da -= Math.PI * 2; while (da < -Math.PI) da += Math.PI * 2;
+    return Math.abs(da) <= cam.fov / 2;
+  }
   function rollLoot(kind, rnd = Math.random, luck = 1) {
     const t = LOOT[kind]; if (!t) return { cash: 0, items: {} };
     let cash = 0; const items = {};
@@ -204,7 +231,7 @@
     return s;
   }
 
-  const api = Object.freeze({ TYPES, ROOMS, FURN, CONTAINERS, LOOT, FENCE, GUARDS, WALL, PAD, DOOR, generate, roomAt, path, connected, farRoom, addMark, rollLoot, cooldownLeft, clean, rngOf });
+  const api = Object.freeze({ TYPES, ROOMS, FURN, CONTAINERS, LOOT, FENCE, GUARDS, WALL, PAD, DOOR, cameraAngle, cameraSees, generate, roomAt, path, connected, farRoom, addMark, rollLoot, cooldownLeft, clean, rngOf });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftBreakinData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

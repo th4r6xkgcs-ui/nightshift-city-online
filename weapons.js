@@ -41,6 +41,7 @@
   function shapeBullet(b, angle, w) {
     b.vx = Math.cos(angle) * w.speed; b.vy = Math.sin(angle) * w.speed;
     b.life = w.range / w.speed; b.weapon = w.id;
+    if (b.origin) { b.ox = b.origin.x; b.oy = b.origin.y; } b.seed = (Math.random() * 4294967296) >>> 0; // v0.65: authority needs where the shot came from
     return b;
   }
   function patchBullets() {
@@ -107,7 +108,7 @@
         if (!p || !(a0 > 0) || !Number.isFinite(amount) || amount <= 0) return damage.apply(this, arguments);
         const r = W.absorb(a0, amount), hp0 = p.hp;
         state.armor = r.armor;
-        const out = damage.call(this, r.dmg, now);
+        const out = damage.call(this, r.dmg, now, ...Array.prototype.slice.call(arguments, 2));
         if (r.dmg > 0 && p.hp === hp0) state.armor = a0; else { persist(); renderPill(); }
         return out;
       };

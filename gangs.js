@@ -203,9 +203,9 @@
   // ---------- fighting ----------
   function fire(env, u, t, now) {
     const tgt = t.unit || env.player, d = dist(u, tgt), mv = t.unit ? t.unit.moving : env.player.moving, cov = t.unit ? t.unit.inCover : env.player.inCover;
-    const err = u.gear.err * (1 + (mv ? 0.7 : 0) + d / 400) * (cov ? 1.3 : 1);
+    const err = u.gear.err * (1 + (mv ? 0.7 : 0) + d / 400) * (cov ? 1.3 : 1) * ((u.suppressedUntil || 0) > now ? 1.7 : 1);
     const a = Math.atan2(tgt.y - u.y, tgt.x - u.x) + (Math.random() * 2 - 1) * err;
-    shots.push({ x: u.x, y: u.y, vx: Math.cos(a) * 330, vy: Math.sin(a) * 330, life: 1.0, dmg: u.gear.dmg, team: u.team, from: u });
+    shots.push({ x: u.x, y: u.y, ox: u.x, oy: u.y, vx: Math.cos(a) * 330, vy: Math.sin(a) * 330, life: 1.0, dmg: u.gear.dmg, team: u.team, from: u });
     u.nextShot = now + rnd(u.gear.cool[0], u.gear.cool[1]); u.inCover = false; u.angle = a; u.shots = (u.shots || 0) + 1;
     if (u.shots % 6 === 0) { u.nextShot += 1200; bark(u, 'cover'); }
     try { root.NightshiftCombatVision?.shot(u.x, u.y, u.team === 'you' ? 'ally' : 'gang'); } catch { /* n/a */ }
@@ -246,7 +246,7 @@
       if (dP > 24) moveTo(u, p, u.boss ? 82 : 78, dt); else u.moving = false;
       u.angle = Math.atan2(p.y - u.y, p.x - u.x); u.inCover = false;
       if (dP >= 30) u.windUp = 0; else if (!u.windUp) u.windUp = now + 280;
-      if (dP < 30 && now > (u.nextMelee || 0) && now > u.windUp) { u.nextMelee = now + (u.boss ? 1000 : 1350) + Math.random() * 300; u.swingAt = now; if (Math.random() < 0.3) bark(u, 'melee'); const dmg = u.boss ? 13 : 6; try { if (root.NightshiftMelee?.incoming?.(u, dmg) !== false) root.NightshiftRecovery?.damage?.(dmg, now); } catch { /* n/a */ } }
+      if (dP < 30 && now > (u.nextMelee || 0) && now > u.windUp) { u.nextMelee = now + (u.boss ? 1000 : 1350) + Math.random() * 300; u.swingAt = now; if (Math.random() < 0.3) bark(u, 'melee'); const dmg = u.boss ? 13 : 6; try { if (root.NightshiftMelee?.incoming?.(u, dmg) !== false) root.NightshiftRecovery?.damage?.(dmg, now, { x: u.x, y: u.y, team: u.team, kind: 'melee' }); } catch { /* n/a */ } }
       return;
     }
     let reloading = false; try { reloading = onPlayer && combatState.until > now && dP < 330; } catch { /* n/a */ } // eslint-disable-line no-undef
@@ -267,7 +267,7 @@
     }
     const there = u.goal ? moveTo(u, u.goal, u.role === 'guard' ? 70 : 76, dt) : true;
     u.inCover = there && !!u.goal?.car && now < u.nextShot - 400;
-    if (t) { u.angle = Math.atan2(threat.y - u.y, threat.x - u.x); if (now >= u.nextShot && (there || Math.random() < 0.03)) fire(env, u, t, now); }
+    if (t) { u.angle = Math.atan2(threat.y - u.y, threat.x - u.x); if (now >= u.nextShot && (there || Math.random() < 0.03)) { if (!t.unit && p.downed && Math.random() < 0.6) { u.nextShot = now + 1500; if (Math.random() < 0.3) bark(u, 'clear'); } else fire(env, u, t, now); } }
   }
   function shotsTick(env, dt) {
     const p = env.player;
@@ -283,7 +283,7 @@
         if (best.player) {
           const ducked = p.inCover && !p.car && env.cars.some((c) => dist(c, p) < 48 && root.NightshiftNavigation.segmentCircle(s, p, c, 30) !== null);
           if (ducked) { try { root.NightshiftFeedback?.burst?.(p.x + (s.x - p.x) * 0.2, p.y + (s.y - p.y) * 0.2, 'wall'); } catch { /* n/a */ } continue; }
-          try { root.NightshiftRecovery?.damage?.(p.car ? Math.ceil(s.dmg * 0.4) : s.dmg, performance.now()); } catch { /* n/a */ }
+          try { root.NightshiftRecovery?.damage?.(p.car ? Math.ceil(s.dmg * 0.4) : s.dmg, performance.now(), { x: s.ox ?? s.x, y: s.oy ?? s.y, team: s.team, kind: 'bullet' }); } catch { /* n/a */ }
         } else { try { root.NightshiftFeedback?.burst?.(best.unit.x, best.unit.y, 'hit'); } catch { /* n/a */ } damage(best.unit, s.dmg, false, s.from); }
         continue;
       }

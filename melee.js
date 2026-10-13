@@ -34,7 +34,8 @@
     return out;
   }
   function knock(e, dx, dy) { const n = Math.max(1, Math.ceil(Math.hypot(dx, dy) / 4)); for (let i = 0; i < n; i++) { const nx = e.x + dx / n, ny = e.y + dy / n; if (!isBlocked(nx, e.y)) e.x = nx; if (!isBlocked(e.x, ny)) e.y = ny; } }
-  function apply(t, dmg, w, opts) {
+  function apply(t, dmg, w, opts) { root.__nsAuthorityHit = true; try { return apply0(t, dmg, w, opts); } finally { root.__nsAuthorityHit = false; } }
+  function apply0(t, dmg, w, opts) {
     const p = P(), e = t.e, d = Math.max(1, dist(e, p)), kx = (e.x - p.x) / d, ky = (e.y - p.y) / d, kb = opts.finisher ? w.knock * 1.8 : w.knock, stun = opts.finisher ? w.stun * 1.6 : w.stun;
     const now = performance.now();
     try { root.NightshiftFeedback?.burst?.(e.x, e.y - 6, 'hit', Math.atan2(ky, kx)); root.NightshiftFeedback?.floating?.(e.x, e.y - 30, opts.takedown ? 'TAKEDOWN' : '−' + dmg, opts.takedown ? '#ff7ad8' : opts.finisher ? '#ffd970' : '#f9a589'); root.NightshiftFeedback?.hit?.(); root.NightshiftAudio?.play?.('impact'); } catch { /* n/a */ }
@@ -58,7 +59,7 @@
   // ---------- swing ----------
   const fx = { swings: [], dust: [], drops: [] };
   function swing(now = performance.now()) {
-    const p = P(); if (!p || p.hp <= 0 || p.car || paused()) return false;
+    const p = P(); if (!p || p.hp <= 0 || p.car || paused() || p.downed || root.NightshiftAuthority?.stunned?.()) return false;
     try { if (root.NightshiftSafeZones?.protected?.(p)) return false; } catch { /* n/a */ }
     if (rollState) return false;
     const w = D.W(state.equipped); if (!D.ready(combo, w.id, now)) return false;
@@ -84,7 +85,7 @@
   // ---------- roll ----------
   let rollState = null, rollReady = 0, iframesUntil = 0;
   function roll(now = performance.now()) {
-    const p = P(); if (!p || p.hp <= 0 || p.car || paused() || rollState || now < rollReady) return false;
+    const p = P(); if (!p || p.hp <= 0 || p.car || paused() || rollState || now < rollReady || p.downed || root.NightshiftAuthority?.stunned?.()) return false;
     let a = p.angle; try { const ma = p.moving && Number.isFinite(p.moveAngle) ? p.moveAngle : null; if (ma !== null) a = ma; } catch { /* n/a */ }
     rollState = { t0: now, from: { x: p.x, y: p.y }, a, done: 0 }; rollReady = now + D.ROLL.cool; iframesUntil = now + D.ROLL.iframes; st.rolls++;
     emit({ type: 'roll' });

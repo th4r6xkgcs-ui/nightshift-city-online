@@ -155,7 +155,7 @@
   function enemyShot(x, y, a, dmg = 10, speed = 11, spread = 0.06, range = 520) {
     if (!cur) return;
     const aa = a + (Math.random() * 2 - 1) * spread;
-    cur.bullets.push({ x, y, vx: Math.cos(aa) * speed, vy: Math.sin(aa) * speed, life: range / speed, dmg, team: 'enemy' });
+    cur.bullets.push({ x, y, sx: x, sy: y, vx: Math.cos(aa) * speed, vy: Math.sin(aa) * speed, life: range / speed, dmg, team: 'enemy' });
     cur.fx.push({ kind: 'muzzle', x: x + Math.cos(aa) * 16, y: y + Math.sin(aa) * 16, a: aa, t0: performance.now(), life: 70, enemy: true });
     if (cur.def.fog && !visible(x, y)) echo(x, y, '#ff5a6a', 'shot');
   }
@@ -170,7 +170,7 @@
         if (b.team === 'player') { if (c.def.hit?.(b, api)) { dead = true; c.fx.push({ kind: 'blood', x: b.x, y: b.y, t0: now, life: 260 }); } }
         else if (Math.hypot(b.x - c.pos.x, b.y - c.pos.y) < 11) {
           dead = true; c.hurtFlash = now;
-          try { root.NightshiftRecovery?.damage?.(b.dmg, now); } catch { if (p) p.hp -= b.dmg; }
+          try { root.NightshiftRecovery?.damage?.(b.dmg, now, { x: b.sx ?? b.x, y: b.sy ?? b.y, team: 'enemy', kind: 'bullet' }); } catch { if (p) p.hp -= b.dmg; }
         }
       }
       b.life -= dt;

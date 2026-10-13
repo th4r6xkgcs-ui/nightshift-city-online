@@ -6,7 +6,7 @@
  * Escaping: break line of sight, get outside the search circle (centred on where they last saw you), and an
  * evade timer drops you one star at a time. Hiding inside a building counts as being outside the circle.
  * Busted: at ★1-2, if a cop who can see you is right on top of you while you stand still (or you're badly hurt),
- * a BUSTED meter fills; break away and it drains.
+ * a BUSTED meter fills; break away and it drains. Tased or downed (v0.65): cuffed at any level within ~0.8 s.
  * API: NightshiftWantedData.{LEVELS, stars, level, canFire, aimError, evadeStep, bustStep} */
 (function (root) {
   'use strict';
@@ -38,6 +38,8 @@
   }
   // BUSTED meter (seconds). Returns { t, busted }.
   function bustStep(t, o = {}) {
+    // v0.65: a tased or downed suspect can be cuffed at any wanted level (and it's quick)
+    if (o.helpless && (o.near ?? Infinity) < 30 && !o.inCar && (o.stars || 0) >= 1) { const nt = (t || 0) + (o.dt || 0) * 2; return { t: nt, busted: nt >= 1.6 }; }
     const close = o.seen && (o.near ?? Infinity) < 26 && (o.stars || 0) >= 1 && (o.stars || 0) <= 2 && !o.inCar;
     const pinned = close && (!o.moving || (o.hp ?? 100) < 30);
     const nt = pinned ? (t || 0) + (o.dt || 0) : Math.max(0, (t || 0) - (o.dt || 0) * 2);
