@@ -1,6 +1,6 @@
 {
   "name": "nightshift-city-online",
-  "version": "0.55.0",
+  "version": "0.56.0",
   "private": true,
   "engines": {
     "node": ">=24"
@@ -11,6 +11,7 @@
     "serve": "python3 -m http.server 8080",
     "test:browser": "node tests/browser.cjs",
     "build": "node scripts/build-static.cjs",
-    "export:city": "node scripts/export-city.cjs"
+    "export:city": "node scripts/export-city.cjs",
+    "test:premium-browser": "node scripts/verify-premium-browser.cjs"
   }
 }

@@ -64,6 +64,7 @@
     const SD = R.NightshiftSupplyData, sp = (id) => SD?.GBY?.[id] || SD?.PBY?.[id];
     return [
       ['🔫 GUNS & CRAFTING (start here)', [
+        ['🔍', 'Inspect a gun', 'Tap any gun picture (bench, backpack, armory) to inspect it up close: preview attachments and paint jobs, compare stats before you craft.', 'OPEN', open2(() => R.NightshiftWeaponArt.inspect())],
         ['🔩', 'Scrapyard', 'Collect pipe, scrap metal and springs. Stand in the yard and press COLLECT.', 'GPS', () => gps(sp('scrapyard'), 'Scrapyard')],
         ['🛠️', 'Home workbench', 'In your apartment. Craft crude guns: the Pipe Pistol is your first. Crude guns fall apart.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
         ['🔫', 'Gun shop parts counter', 'Barrels, triggers, frames, bolts, springs, lenses. Plus ammo and armor.', 'GPS', () => gps(R.NightshiftWeapons?.door?.(), 'Gun shop')],
@@ -90,6 +91,7 @@
         ['📈', 'Front businesses', 'Passive income while you are away, from an $800 shoeshine stand up. Phone → EMPIRE.', 'OPEN', open2(() => R.NightshiftEmpire.open())],
       ]],
       ['🚗 CARS', [
+        ['🎨', 'Style studio', 'Spin your car on a turntable, preview paint finishes, wheels, wings, liveries, lights and underglow. Apply at any 🔧 GARAGE (park your car there → STYLE STUDIO). Looks score at car meets.', null],
         ['🔓', 'Steal a car', 'Stand next to any locked car and hold USE until the lock pops. Cops notice.', null],
         ['🔧', "Rusty's chop shop", 'Drive a stolen car into the striped bay behind the scrapyard: chop it for cash, strip it for parts, or re-VIN it and keep it. Check his 🔥 hot list.', 'GPS', () => gps(R.NightshiftChop?.BAY, "Rusty's chop shop")],
         ['🔑', 'Car collection', 'Ten models from a $5k hatch to a $290k hypercar at Prestige Motors (Palm Grove). Rare ones get left on the street: steal one and Rusty re-VINs it. 📱 → 🚗 MY CARS.', 'OPEN', open2(() => R.NightshiftCars.open())],
@@ -118,6 +120,7 @@
         ['🏠', 'Home upgrades', 'Use the LAPTOP in your apartment for perks.', 'GPS', () => gps({ x: 950, y: 735 }, 'Your apartment')],
       ]],
       ['🎲 HAVE FUN', [
+        ['👕', 'Style studio', 'Spin your character, zoom in, try on anything for free. Buy at a 👕 BOUTIQUE (outside CLOTHING stores), change at home or Phone → STYLE. Save up to 5 outfits.', 'OPEN', open2(() => R.NightshiftWardrobe.open('home'))],
         ['🎰', 'Casino', 'Slots, roulette and blackjack at the Lucky 7.', 'GPS', () => gps(R.NightshiftCasino?.door?.(), 'Lucky 7 Casino')],
         ['🏁', 'Street races', 'Drive into a 🏁 ring and stop. Win medals.', 'GPS', () => gps(nearest(R.NightshiftRaces?.starts?.()), 'Race start')],
         ['🥊', 'Fight club', 'In the gym: STRIKE on green, BLOCK on red, wait on yellow.', 'GPS', () => gps(nearest(ven.filter((v) => v.kind === 'gym')), 'Fight club')],

@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict'),boot=require('./harness.cjs');const storage=new Map(),run=boot(storage);
-run('globalThis.fillCount=0;globalThis.imageCount=0;g.fillRect=()=>fillCount++;g.drawImage=()=>imageCount++;globalThis.snapshot=JSON.stringify({player,cars,peds,buildings});NightshiftWorld.road();globalThis.firstFill=fillCount;NightshiftWorld.road()');
-assert.ok(run('firstFill')>1000);assert.equal(run('fillCount'),run('firstFill'));assert.equal(run('imageCount'),4);
+run('globalThis.fillCount=0;globalThis.imageCount=0;g.fillRect=()=>fillCount++;g.drawImage=()=>imageCount++;globalThis.snapshot=JSON.stringify({player,cars,peds,buildings});NightshiftWorld.road();globalThis.firstFill=fillCount;globalThis.firstImages=imageCount;NightshiftWorld.road()');
+assert.ok(run('firstFill')>1000);assert.equal(run('fillCount'),run('firstFill'));assert.ok(run('firstImages')>=2);assert.equal(run('imageCount'),run('firstImages')+2);
 assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);
 for(let i=0;i<8;i++)assert.equal(run(`NightshiftSprites.pose({angle:${i}*Math.PI/4,moving:false,walkTicks:20}).facing`),i);
 assert.equal(run('NightshiftSprites.pose({angle:0,moving:false,walkTicks:15}).stride'),0);

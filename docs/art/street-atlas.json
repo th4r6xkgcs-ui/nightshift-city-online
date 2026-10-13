@@ -1,0 +1,7276 @@
+{
+  "version": 1,
+  "source": "wardrobe-data.js + character-art.js + premium-art-renderer.js",
+  "density": 4,
+  "worldCell": {
+    "w": 44,
+    "h": 56,
+    "ax": 22,
+    "ay": 36
+  },
+  "outfit": {
+    "skin": 2,
+    "build": "regular",
+    "hair": "short",
+    "hairColor": 0,
+    "facial": "none",
+    "head": {
+      "id": "cap",
+      "color": 8,
+      "back": true
+    },
+    "face": null,
+    "top": {
+      "id": "tee",
+      "color": 7,
+      "tucked": false
+    },
+    "outer": {
+      "id": "hoodie",
+      "color": 8,
+      "hood": false
+    },
+    "bottom": {
+      "id": "cargo",
+      "color": 3,
+      "pattern": 0
+    },
+    "shoes": {
+      "id": "hitops",
+      "color": 0
+    },
+    "gloves": null,
+    "jewelry": {
+      "id": "chain",
+      "color": 0
+    },
+    "bag": {
+      "id": "sling",
+      "color": 0
+    }
+  },
+  "directions": [
+    "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE"
+  ],
+  "frames": [
+    {
+      "id": "street-idle-E-0",
+      "atlas": "street-idle.png",
+      "x": 0,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-E-1",
+      "atlas": "street-idle.png",
+      "x": 0,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-E-2",
+      "atlas": "street-idle.png",
+      "x": 0,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-E-3",
+      "atlas": "street-idle.png",
+      "x": 0,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SE-0",
+      "atlas": "street-idle.png",
+      "x": 176,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SE-1",
+      "atlas": "street-idle.png",
+      "x": 176,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SE-2",
+      "atlas": "street-idle.png",
+      "x": 176,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SE-3",
+      "atlas": "street-idle.png",
+      "x": 176,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-S-0",
+      "atlas": "street-idle.png",
+      "x": 352,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-S-1",
+      "atlas": "street-idle.png",
+      "x": 352,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-S-2",
+      "atlas": "street-idle.png",
+      "x": 352,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-S-3",
+      "atlas": "street-idle.png",
+      "x": 352,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SW-0",
+      "atlas": "street-idle.png",
+      "x": 528,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SW-1",
+      "atlas": "street-idle.png",
+      "x": 528,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SW-2",
+      "atlas": "street-idle.png",
+      "x": 528,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SW-3",
+      "atlas": "street-idle.png",
+      "x": 528,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-W-0",
+      "atlas": "street-idle.png",
+      "x": 704,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-W-1",
+      "atlas": "street-idle.png",
+      "x": 704,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-W-2",
+      "atlas": "street-idle.png",
+      "x": 704,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-W-3",
+      "atlas": "street-idle.png",
+      "x": 704,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NW-0",
+      "atlas": "street-idle.png",
+      "x": 880,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NW-1",
+      "atlas": "street-idle.png",
+      "x": 880,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NW-2",
+      "atlas": "street-idle.png",
+      "x": 880,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NW-3",
+      "atlas": "street-idle.png",
+      "x": 880,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-N-0",
+      "atlas": "street-idle.png",
+      "x": 1056,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-N-1",
+      "atlas": "street-idle.png",
+      "x": 1056,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-N-2",
+      "atlas": "street-idle.png",
+      "x": 1056,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-N-3",
+      "atlas": "street-idle.png",
+      "x": 1056,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NE-0",
+      "atlas": "street-idle.png",
+      "x": 1232,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285784,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NE-1",
+      "atlas": "street-idle.png",
+      "x": 1232,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285784,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NE-2",
+      "atlas": "street-idle.png",
+      "x": 1232,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285784,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NE-3",
+      "atlas": "street-idle.png",
+      "x": 1232,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "idle",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285784,
+        138.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-0",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-1",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.92,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-2",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        91.16,
+        136
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-3",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.92,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-4",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-5",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        79.96000000000001,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-6",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        77.72,
+        136
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-7",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        79.96000000000001,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-0",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-1",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.88776331257358,
+        139.13137084989847
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-2",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.47168250243145,
+        137.6970562748477
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-3",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.88776331257358,
+        139.13137084989847
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-4",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-5",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.55208655314212,
+        136.86862915010153
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-6",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.96816736328424,
+        134.3029437251523
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-7",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.55208655314212,
+        136.86862915010153
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-0",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-1",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        139.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-2",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-3",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        139.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-4",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-5",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        136.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-6",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        133.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-7",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        136.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-0",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-1",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.55208655314212,
+        139.13137084989847
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-2",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.96816736328424,
+        137.6970562748477
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-3",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.55208655314212,
+        139.13137084989847
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-4",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-5",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.88776331257358,
+        136.86862915010153
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-6",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.47168250243143,
+        134.3029437251523
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-7",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.88776331257358,
+        136.86862915010153
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-0",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-1",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        79.96,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-2",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        77.72,
+        136
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-3",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        79.96,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-4",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-5",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.92,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-6",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        91.16,
+        136
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-7",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.92,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-0",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-1",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.55208655314212,
+        136.86862915010153
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-2",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.96816736328424,
+        134.3029437251523
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-3",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.55208655314212,
+        136.86862915010153
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-4",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-5",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.88776331257358,
+        139.13137084989847
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-6",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.47168250243145,
+        137.6970562748477
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-7",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.88776331257358,
+        139.13137084989847
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-0",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-1",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        136.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-2",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        133.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-3",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        136.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-4",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-5",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        139.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-6",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-7",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        139.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-0",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285784,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-1",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.88776331257357,
+        136.86862915010153
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-2",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.47168250243143,
+        134.3029437251523
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-3",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.88776331257357,
+        136.86862915010153
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-4",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285784,
+        140
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-5",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.5520865531421,
+        139.13137084989847
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-6",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.96816736328424,
+        137.6970562748477
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-7",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 110,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.5520865531421,
+        139.13137084989847
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-0",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        90.2,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-1",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        99.44,
+        120
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-2",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        105.6,
+        122
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-3",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        99.44,
+        128
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-4",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        90.2,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-5",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        80.96000000000001,
+        120
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-6",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.8,
+        122
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-7",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        80.96000000000001,
+        128
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-0",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.49580371764465,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-1",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.02947037580834,
+        122.3334523779156
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-2",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.38524814791748,
+        125.88908729652601
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-3",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.02947037580834,
+        130.3334523779156
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-4",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.49580371764465,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-5",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.96213705948094,
+        117.6665476220844
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-6",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.60635928737182,
+        118.11091270347399
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-7",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.96213705948094,
+        125.6665476220844
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-0",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-1",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        123.3
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-2",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        127.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-3",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        131.3
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-4",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-5",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        116.7
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-6",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        116.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-7",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        124.7
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-0",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.74404614807105,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-1",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.21037948990735,
+        122.3334523779156
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-2",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        60.85460171779821,
+        125.88908729652601
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-3",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.21037948990735,
+        130.33345237791562
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-4",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.74404614807105,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-5",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        78.27771280623475,
+        117.6665476220844
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-6",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.63349057834387,
+        118.11091270347399
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-7",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        78.27771280623475,
+        125.6665476220844
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-0",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.48,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-1",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.24,
+        120
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-2",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.08,
+        122
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-3",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.24,
+        128
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-4",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.48,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-5",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        92.72,
+        120
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-6",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        98.88,
+        122
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-7",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        92.72,
+        128
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-0",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.74404614807105,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-1",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.21037948990735,
+        117.6665476220844
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-2",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        60.85460171779821,
+        118.11091270347399
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-3",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.21037948990735,
+        125.6665476220844
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-4",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.74404614807105,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-5",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        78.27771280623475,
+        122.3334523779156
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-6",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.63349057834388,
+        125.88908729652601
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-7",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        78.27771280623475,
+        130.3334523779156
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-0",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-1",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        116.7
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-2",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        116.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-3",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        124.7
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-4",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-5",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        123.3
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-6",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.60000000000001,
+        127.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-7",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        131.3
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-0",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.49580371764463,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-1",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.02947037580833,
+        117.6665476220844
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-2",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.38524814791747,
+        118.11091270347399
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-3",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.02947037580833,
+        125.6665476220844
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-4",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.49580371764463,
+        124
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-5",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.96213705948094,
+        122.3334523779156
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-6",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.60635928737182,
+        125.88908729652601
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-7",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 80,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.96213705948094,
+        130.33345237791562
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-E-0",
+      "atlas": "street-crouch.png",
+      "x": 0,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        97.02,
+        172.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-E-1",
+      "atlas": "street-crouch.png",
+      "x": 0,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        97.02,
+        172.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-E-2",
+      "atlas": "street-crouch.png",
+      "x": 0,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        97.02,
+        172.2
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-E-3",
+      "atlas": "street-crouch.png",
+      "x": 0,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        97.02,
+        172.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-SE-0",
+      "atlas": "street-crouch.png",
+      "x": 176,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.3486659147798,
+        176.75979797464467
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-SE-1",
+      "atlas": "street-crouch.png",
+      "x": 176,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.3486659147798,
+        176.35979797464466
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-SE-2",
+      "atlas": "street-crouch.png",
+      "x": 176,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.3486659147798,
+        176.15979797464468
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-SE-3",
+      "atlas": "street-crouch.png",
+      "x": 176,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.3486659147798,
+        176.35979797464466
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-S-0",
+      "atlas": "street-crouch.png",
+      "x": 352,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64,
+        178.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-S-1",
+      "atlas": "street-crouch.png",
+      "x": 352,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64,
+        178
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-S-2",
+      "atlas": "street-crouch.png",
+      "x": 352,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64,
+        177.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-S-3",
+      "atlas": "street-crouch.png",
+      "x": 352,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64,
+        178
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-SW-0",
+      "atlas": "street-crouch.png",
+      "x": 528,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.24673231640418,
+        176.75979797464467
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-SW-1",
+      "atlas": "street-crouch.png",
+      "x": 528,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.24673231640418,
+        176.35979797464466
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-SW-2",
+      "atlas": "street-crouch.png",
+      "x": 528,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.24673231640418,
+        176.15979797464468
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-SW-3",
+      "atlas": "street-crouch.png",
+      "x": 528,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.24673231640418,
+        176.35979797464466
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-W-0",
+      "atlas": "street-crouch.png",
+      "x": 704,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.42,
+        172.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-W-1",
+      "atlas": "street-crouch.png",
+      "x": 704,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.42,
+        172.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-W-2",
+      "atlas": "street-crouch.png",
+      "x": 704,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.42,
+        172.2
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-W-3",
+      "atlas": "street-crouch.png",
+      "x": 704,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.42,
+        172.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-NW-0",
+      "atlas": "street-crouch.png",
+      "x": 880,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.24673231640418,
+        168.84020202535532
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-NW-1",
+      "atlas": "street-crouch.png",
+      "x": 880,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.24673231640418,
+        168.44020202535535
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-NW-2",
+      "atlas": "street-crouch.png",
+      "x": 880,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.24673231640418,
+        168.24020202535533
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-NW-3",
+      "atlas": "street-crouch.png",
+      "x": 880,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.24673231640418,
+        168.44020202535535
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-N-0",
+      "atlas": "street-crouch.png",
+      "x": 1056,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64,
+        167.2
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-N-1",
+      "atlas": "street-crouch.png",
+      "x": 1056,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64,
+        166.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-N-2",
+      "atlas": "street-crouch.png",
+      "x": 1056,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64,
+        166.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-N-3",
+      "atlas": "street-crouch.png",
+      "x": 1056,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64,
+        166.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-NE-0",
+      "atlas": "street-crouch.png",
+      "x": 1232,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.3486659147798,
+        168.84020202535532
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-NE-1",
+      "atlas": "street-crouch.png",
+      "x": 1232,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.3486659147798,
+        168.44020202535535
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-NE-2",
+      "atlas": "street-crouch.png",
+      "x": 1232,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.3486659147798,
+        168.24020202535533
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-crouch-NE-3",
+      "atlas": "street-crouch.png",
+      "x": 1232,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "crouch",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.3486659147798,
+        168.44020202535535
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-0",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        96.688,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-1",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        97.9424,
+        146.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-2",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        98.6592,
+        146
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-3",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        97.9424,
+        146.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-4",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        96.688,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-5",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        95.4336,
+        146.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-6",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        94.7168,
+        146
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-7",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        95.4336,
+        146.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-0",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.1331237740543,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-1",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.0201185203747,
+        147.19597979746447
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-2",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.52697266112921,
+        146.62225396744415
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-3",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.0201185203747,
+        147.19597979746447
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-4",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.1331237740543,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-5",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.24612902773389,
+        146.40402020253552
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-6",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        81.73927488697936,
+        145.37774603255585
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-7",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.24612902773389,
+        146.40402020253552
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-0",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-1",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        147.35999999999999
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-2",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        146.88
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-3",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        147.35999999999999
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-4",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-5",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        146.24
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-6",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        145.12
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-7",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        146.24
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-0",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.81875611851827,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-1",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.93176137219785,
+        147.19597979746447
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-2",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.42490723144334,
+        146.62225396744415
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-3",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.93176137219785,
+        147.19597979746447
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-4",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.81875611851827,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-5",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.70575086483868,
+        146.40402020253552
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-6",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.21260500559319,
+        145.37774603255585
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-7",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.70575086483868,
+        146.40402020253552
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-0",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        73.616,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-1",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        72.3616,
+        146.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-2",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.6448,
+        146
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-3",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        72.3616,
+        146.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-4",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        73.616,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-5",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.8704,
+        146.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-6",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        75.5872,
+        146
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-7",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.8704,
+        146.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-0",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.81875611851827,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-1",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.93176137219785,
+        146.40402020253552
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-2",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.42490723144334,
+        145.37774603255585
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-3",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        65.93176137219785,
+        146.40402020253552
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-4",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.81875611851827,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-5",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.70575086483868,
+        147.19597979746447
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-6",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.21260500559319,
+        146.62225396744415
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-7",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.70575086483868,
+        147.19597979746447
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-0",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-1",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        146.24
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-2",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        145.12
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-3",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        146.24
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-4",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-5",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        147.35999999999999
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-6",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        146.88
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-7",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        147.35999999999999
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-0",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.13312377405428,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-1",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.02011852037468,
+        146.40402020253552
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-2",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.52697266112921,
+        145.37774603255585
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-3",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.02011852037468,
+        146.40402020253552
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-4",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        83.13312377405428,
+        148
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-5",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.24612902773387,
+        147.19597979746447
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-6",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 1344,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        81.73927488697936,
+        146.62225396744415
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-7",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 1568,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.24612902773387,
+        147.19597979746447
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-E-0",
+      "atlas": "street-sit.png",
+      "x": 0,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        99.68599999999999,
+        181.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-E-1",
+      "atlas": "street-sit.png",
+      "x": 0,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        99.68599999999999,
+        180.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-E-2",
+      "atlas": "street-sit.png",
+      "x": 0,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        99.68599999999999,
+        180.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-E-3",
+      "atlas": "street-sit.png",
+      "x": 0,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        99.68599999999999,
+        180.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-SE-0",
+      "atlas": "street-sit.png",
+      "x": 176,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.44396281006108,
+        187.8225396744416
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-SE-1",
+      "atlas": "street-sit.png",
+      "x": 176,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.44396281006108,
+        187.02253967444162
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-SE-2",
+      "atlas": "street-sit.png",
+      "x": 176,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.44396281006108,
+        186.6225396744416
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-SE-3",
+      "atlas": "street-sit.png",
+      "x": 176,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.44396281006108,
+        187.02253967444162
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-S-0",
+      "atlas": "street-sit.png",
+      "x": 352,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.66,
+        190.39999999999998
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-S-1",
+      "atlas": "street-sit.png",
+      "x": 352,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.66,
+        189.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-S-2",
+      "atlas": "street-sit.png",
+      "x": 352,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.66,
+        189.2
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-S-3",
+      "atlas": "street-sit.png",
+      "x": 352,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.66,
+        189.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-SW-0",
+      "atlas": "street-sit.png",
+      "x": 528,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.66507394951542,
+        187.8225396744416
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-SW-1",
+      "atlas": "street-sit.png",
+      "x": 528,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.66507394951542,
+        187.02253967444162
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-SW-2",
+      "atlas": "street-sit.png",
+      "x": 528,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.66507394951542,
+        186.6225396744416
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-SW-3",
+      "atlas": "street-sit.png",
+      "x": 528,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.66507394951542,
+        187.02253967444162
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-W-0",
+      "atlas": "street-sit.png",
+      "x": 704,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.886,
+        181.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-W-1",
+      "atlas": "street-sit.png",
+      "x": 704,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.886,
+        180.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-W-2",
+      "atlas": "street-sit.png",
+      "x": 704,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.886,
+        180.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-W-3",
+      "atlas": "street-sit.png",
+      "x": 704,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.886,
+        180.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-NW-0",
+      "atlas": "street-sit.png",
+      "x": 880,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.66507394951542,
+        175.3774603255584
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-NW-1",
+      "atlas": "street-sit.png",
+      "x": 880,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.66507394951542,
+        174.57746032555838
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-NW-2",
+      "atlas": "street-sit.png",
+      "x": 880,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.66507394951542,
+        174.17746032555837
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-NW-3",
+      "atlas": "street-sit.png",
+      "x": 880,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.66507394951542,
+        174.57746032555838
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-N-0",
+      "atlas": "street-sit.png",
+      "x": 1056,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.66,
+        172.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-N-1",
+      "atlas": "street-sit.png",
+      "x": 1056,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.66,
+        172
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-N-2",
+      "atlas": "street-sit.png",
+      "x": 1056,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.66,
+        171.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-N-3",
+      "atlas": "street-sit.png",
+      "x": 1056,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.66,
+        172
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-NE-0",
+      "atlas": "street-sit.png",
+      "x": 1232,
+      "y": 0,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.44396281006108,
+        175.3774603255584
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-NE-1",
+      "atlas": "street-sit.png",
+      "x": 1232,
+      "y": 224,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.44396281006108,
+        174.57746032555838
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-NE-2",
+      "atlas": "street-sit.png",
+      "x": 1232,
+      "y": 448,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.44396281006108,
+        174.17746032555837
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sit-NE-3",
+      "atlas": "street-sit.png",
+      "x": 1232,
+      "y": 672,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sit",
+      "durationMs": 380,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        88.44396281006108,
+        174.57746032555838
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    }
+  ],
+  "renderLayers": [
+    "head",
+    "face",
+    "top",
+    "outer",
+    "bottom",
+    "shoes",
+    "gloves",
+    "jewelry",
+    "bag"
+  ],
+  "collision": "unchanged game actor bounds; sprite bounds are visual only"
+}
