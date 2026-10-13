@@ -140,6 +140,7 @@
     return true;
   }
   // ---------------- doors in the city ----------------
+  const BLURB = { 'CORNER SHOP': 'food, meds, ammo', DINER: 'meals with buffs', CLOTHING: 'clothes & mirror', GARAGE: 'tune your car · scrap', BANK: 'invest · case the vault', CLUB: 'drinks, dancing, cools heat', WAREHOUSE: 'scavenge crafting parts', APARTMENTS: 'check the mailboxes' };
   const homeDoor = { x: 950, y: 735 };
   let doorList = null;
   function doors() { if (doorList) return doorList; doorList = B().map((b, i) => ({ b, i, type: b.name, x: b.x + b.w / 2, y: b.y + b.h + 14 })).filter((d) => T[d.type] && !(d.type === 'APARTMENTS' && Math.hypot(d.x - homeDoor.x, d.y - homeDoor.y) < 120)); return doorList; }
@@ -147,11 +148,11 @@
   function hookDoors() {
     const E = root.NightshiftEncounters; if (!E || E.__interiors) return !!E?.__interiors;
     const locs = E.locations, use = E.use;
-    E.locations = function () { const list = locs.apply(this, arguments) || []; const p = P(); if (!p || p.hp <= 0) return list; const near = doors().filter((d) => Math.abs(d.x - p.x) < 900 && Math.abs(d.y - p.y) < 700); return [...list, ...near.map((d) => ({ id: 'door-' + d.i, type: 'door', x: d.x, y: d.y, ready: true, color: '#9fd4ff', label: '🚪 ' + (T[d.type].title), action: 'ENTER', hint: 'Walk in' }))]; };
+    E.locations = function () { const list = locs.apply(this, arguments) || []; const p = P(); if (!p || p.hp <= 0) return list; const near = doors().filter((d) => Math.abs(d.x - p.x) < 900 && Math.abs(d.y - p.y) < 700); return [...list, ...near.map((d) => ({ id: 'door-' + d.i, type: 'door', x: d.x, y: d.y, ready: true, color: '#9fd4ff', label: '🚪 ' + (T[d.type].title), action: 'ENTER', hint: 'Walk in · ' + (BLURB[d.type] || 'look around') }))]; };
     E.use = function (id) { if (String(id).startsWith('door-')) { const d = doors().find((q) => 'door-' + q.i === id); if (d) { enter(d); return true; } } return use.apply(this, arguments); };
     E.__interiors = true; return true;
   }
   const t1 = setInterval(() => { if (register()) clearInterval(t1); }, 300);
   const t2 = setInterval(() => { if (hookDoors()) clearInterval(t2); }, 300);
-  root.NightshiftInteriors2 = Object.freeze({ enter, doors, TYPES: Object.keys(T) });
+  root.NightshiftInteriors2 = Object.freeze({ enter, doors, TYPES: Object.keys(T), BLURB, title: (ty) => T[ty]?.title || ty });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
