@@ -116,6 +116,19 @@
     c.restore(); st.cars++;
   }
 
+  // ---------- interiors (interiors.js floors/walls, baked at 2x by zones.js) ----------
+  TEX.wood = tile(128, 48, (c) => { for (let y = 0; y < 48; y += 12) { c.fillStyle = 'rgba(0,0,0,0.3)'; c.fillRect(0, y, 128, 1); for (let x = (y / 12) % 2 ? 64 : 20; x < 128; x += 90) c.fillRect(x, y, 1, 12); for (let k = 0; k < 6; k++) { c.strokeStyle = `rgba(${R() < 0.5 ? '40,20,10' : '255,230,200'},0.12)`; c.lineWidth = 0.5; c.beginPath(); const yy = y + 2 + R() * 8; c.moveTo(0, yy); c.bezierCurveTo(40, yy + R() * 3 - 1.5, 80, yy + R() * 3 - 1.5, 128, yy); c.stroke(); } c.fillStyle = 'rgba(255,255,255,0.05)'; c.fillRect(0, y + 1, 128, 1); } });
+  TEX.grout = tile(40, 40, (c) => { c.fillStyle = 'rgba(0,0,0,0.22)'; c.fillRect(0, 0, 40, 1); c.fillRect(0, 0, 1, 40); c.fillStyle = 'rgba(255,255,255,0.18)'; c.fillRect(1, 1, 38, 0.5); for (let i = 0; i < 40; i++) { c.fillStyle = `rgba(0,0,0,${R() * 0.06})`; c.fillRect(R() * 40, R() * 40, 1, 1); } });
+  TEX.carpet = tile(32, 32, (c) => { for (let i = 0; i < 500; i++) { c.fillStyle = `rgba(${R() < 0.5 ? '0,0,0' : '255,255,255'},${R() * 0.1})`; c.fillRect(R() * 32, R() * 32, 1, 1); } });
+  TEX.wallpaper = tile(24, 60, (c) => { c.fillStyle = 'rgba(255,255,255,0.06)'; for (let x = 0; x < 24; x += 12) c.fillRect(x, 0, 1, 60); c.fillStyle = 'rgba(0,0,0,0.08)'; for (let y = 6; y < 60; y += 14) { c.beginPath(); c.arc(6, y, 2, 0, Math.PI * 2); c.fill(); c.beginPath(); c.arc(18, y + 7, 2, 0, Math.PI * 2); c.fill(); } });
+  function floor(c, kind, w, h) {
+    const k = kind === 'wood' || kind === 'lobby' ? 'wood' : kind === 'tile' || kind === 'marble' ? 'grout' : kind === 'carpet' ? 'carpet' : kind === 'concrete' ? 'concrete' : 'carpet';
+    fillPat(c, k, 0.5, 0, 0, w, h, 0.85);
+    // light pooling from the back wall windows + a soft vignette into the corners
+    const gr = c.createRadialGradient(w / 2, h * 0.35, 20, w / 2, h * 0.5, w * 0.7); gr.addColorStop(0, 'rgba(255,240,210,0.10)'); gr.addColorStop(1, 'rgba(0,0,0,0.22)'); c.fillStyle = gr; c.fillRect(0, 0, w, h);
+  }
+  function wall(c, w) { fillPat(c, 'wallpaper', 0.5, 10, 8, w - 20, 44, 0.9); c.fillStyle = 'rgba(255,255,255,0.18)'; c.fillRect(0, 57.5, w, 0.5); c.fillStyle = 'rgba(0,0,0,0.25)'; c.fillRect(10, 62, w - 20, 3); }
+
   // ---------- hooks ----------
   const hook = setInterval(() => {
     const W = root.NightshiftWorld, S = root.NightshiftSprites;
@@ -123,5 +136,5 @@
     if (S && typeof S.car === 'function' && !S.__hd) { const c0 = S.car; S.car = function (v) { const r = c0.apply(this, arguments); try { car(v); } catch { /* cosmetic */ } return r; }; S.__hd = true; }
     if (W?.__hd && S?.__hd) clearInterval(hook);
   }, 250);
-  root.NightshiftHD = Object.freeze({ ground, stats: () => ({ ...st }) });
+  root.NightshiftHD = Object.freeze({ ground, floor, wall, stats: () => ({ ...st }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
