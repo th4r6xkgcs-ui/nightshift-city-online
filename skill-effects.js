@@ -86,16 +86,16 @@
     });
 
     wrap('hurt', REC, 'damage', (o) => function (amount, now) {
-      return o.call(this, Number.isFinite(amount) ? amount * m('toughness.damageTaken') : amount, now);
+      return o.call(this, Number.isFinite(amount) ? amount * m('toughness.damageTaken') : amount, now, ...Array.prototype.slice.call(arguments, 2));
     });
 
     // Bullet hits: the game subtracts 20 right after these calls, so extra damage here still lets it kill.
     wrap('hitPed', CR, 'incident', (o) => function (target, kind) {
-      if (kind === 'violence' && target && Number.isFinite(target.hp)) { target.hp -= extraHit(); hitXp(); }
+      if (kind === 'violence' && target && Number.isFinite(target.hp) && !root.__nsAuthorityHit) { target.hp -= extraHit(); hitXp(); }
       return o.apply(this, arguments);
     });
     wrap('hitCop', CRIME, 'strike', (o) => function (officer) {
-      if (officer && Number.isFinite(officer.hp) && CRIME.officers?.includes?.(officer)) { officer.hp -= extraHit(); hitXp(); }
+      if (officer && Number.isFinite(officer.hp) && CRIME.officers?.includes?.(officer) && !root.__nsAuthorityHit) { officer.hp -= extraHit(); hitXp(); }
       return o.apply(this, arguments);
     });
 

@@ -96,6 +96,9 @@
       case 'chemcrate': box('#2d6fb5', 20, 16, '#55a0e8'); R(c, '#e0b021', x - 6, y - 2, 12, 4); R(c, '#111', x - 2, y - 1, 4, 2); break;
       case 'cashpile': if (!opened) { for (let k = 0; k < 5; k++) { R(c, '#00000033', x - 10 + k * 4 + 1, y - 6 + (k % 2) * 5 + 2, 10, 6); R(c, '#2f6b3f', x - 10 + k * 4, y - 6 + (k % 2) * 5, 10, 6); R(c, '#4f9a5f', x - 10 + k * 4, y - 6 + (k % 2) * 5, 10, 1); R(c, '#e8e2d0', x - 6 + k * 4, y - 6 + (k % 2) * 5, 2, 6); } } else R(c, '#2b2218', x - 10, y - 5, 20, 10); break;
       case 'cashjar': O(c, '#9fc3d6aa', x, y, 6, 8); if (!opened) R(c, '#7cdeb5', x - 3, y - 2, 6, 6); break;
+      case 'register': box('#1d2024', 22, 16, '#3a3f45'); R(c, opened ? '#2b2218' : '#7cdeb5', x - 7, y - 5, 10, 4); R(c, '#9aa3ab', x - 9, y + 2, 18, 3); break;
+      case 'shelfgoods': box('#e8eef3', 22, 12, '#c9d1d6'); if (!opened) { R(c, '#c84659', x - 9, y - 4, 5, 6); R(c, '#3d7fc6', x - 3, y - 4, 5, 6); R(c, '#e2b75c', x + 3, y - 4, 5, 6); } break;
+      case 'stockbox': box('#a8834e', 20, 16, '#c9a26a'); R(c, '#3a2a1a', x - 8, y - 1, 16, 2); break;
       default: box('#6a4a2e', 20, 14, '#8a6440'); C(c, '#c9a24a', x, y + 1, 1.3);
     }
     if (!opened && visible) { const k = 0.5 + 0.5 * Math.sin(t * 5 + x); c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.35 + 0.35 * k; C(c, '#ffd970', x + 8, y - 10, 2 + k * 1.5); c.restore(); }
@@ -113,6 +116,22 @@
   // ---------------- guard AI ----------------
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   function setTarget(g, pt) { g.target = pt; g.path = B.path(job.L, g, pt); }
+  // v0.65 security: alarm panel countdown + CCTV
+  function securityTick(now, api) {
+    const L = job.L;
+    if (L.panel && !job.disarmed && !job.alarmAt && job.armedAt && now >= job.armedAt) { say('🚨 Silent alarm tripped · police are on the way'); alarm(now); }
+    for (const cam of L.cameras || []) {
+      if (cam.broken || job.alarmAt) { cam.seeT = 0; continue; }
+      const sees = B.cameraSees(cam, api.pos, now / 1000) && api.los(cam.x, cam.y, api.pos.x, api.pos.y);
+      cam.seeT = sees ? (cam.seeT || 0) + 1 / 60 : Math.max(0, (cam.seeT || 0) - 1 / 60);
+      if (cam.seeT > 0.7) { say('📹 A camera caught you · alarm!'); api.echo(cam.x, cam.y, '#ff5a6a', 'shot'); alarm(now); }
+    }
+  }
+  function disarm(api) {
+    const PK = root.NightshiftPicks; if (!PK || job.disarmed || job.alarmAt) return;
+    job.picking = 'panel';
+    PK.start({ type: 'alarm', seed: (job.L.seed ^ 0x5a5a) >>> 0, title: 'DISARM THE ALARM', sub: 'Tap in the gold · 4 digits · the clock is running', onDone: (ok, pk) => { if (!job) return; job.picking = null; if (pk?.cancelled) return; if (ok) { job.disarmed = true; api.float(job.L.panel.x, job.L.panel.y - 20, 'ALARM OFF', '#7cdeb5'); try { root.NightshiftSkills?.gain('stealth', 25, 'alarm'); } catch { /* n/a */ } } else { say('🚨 Wrong code · alarm tripped'); alarm(performance.now()); } } });
+  }
   function alarm(now) { if (job.defense) return; if (!job.alarmAt) { job.alarmAt = now; job.policeAt = now + job.L.T.police * 1000; say(`🚨 You've been spotted · police in ${job.L.T.police}s · get out the back door`); try { root.NightshiftAudio?.play('impact'); } catch { /* optional */ } } }
   function hear(x, y, radius, api, kind) {
     if (!job) return;
@@ -159,7 +178,7 @@
         if (sees) { if (g.melee) goal = { x: pos.x, y: pos.y }; else if (d > 150) goal = { x: pos.x, y: pos.y }; else if (d < 80) goal = { x: g.x - Math.cos(ang) * 30, y: g.y - Math.sin(ang) * 30 }; speed *= 1.15; }
         else if (g.lastSeen) { if (!g.target || dist(g.target, g.lastSeen) > 10) setTarget(g, g.lastSeen); if (dist(g, g.lastSeen) < 14 || now - g.lastSeen.t > 7000) { g.state = 'search'; g.until = now + 6000; } }
         if (sees && now >= g.reaction && now >= (g.nextShot || 0)) {
-          if (g.melee) { if (d < 26) { g.nextShot = now + g.rate; try { root.NightshiftRecovery?.damage?.(g.dmg, now); } catch { /* n/a */ } api.fx('blood', pos.x, pos.y, 260); } }
+          if (g.melee) { if (d < 26) { g.nextShot = now + g.rate; try { root.NightshiftRecovery?.damage?.(g.dmg, now, { x: g.x, y: g.y, team: 'enemy', kind: 'melee' }); } catch { /* n/a */ } api.fx('blood', pos.x, pos.y, 260); } }
           else if (g.armed !== false) { g.nextShot = now + g.rate * (0.8 + Math.random() * 0.5); api.enemyShot(g.x + Math.cos(ang) * 14, g.y + Math.sin(ang) * 14, ang, g.dmg, 11, g.spread + (pos.moving ? 0.05 : 0), 560); hear(g.x, g.y, 260, api, 'shot'); }
         }
       } else if (g.state === 'investigate' || g.state === 'search') {
@@ -215,6 +234,7 @@
     hear(l.x, l.y, (SAFES[l.kind] ? 140 : 60) * loud, Z.api, 'step');
   }
   function searchTick(now, api) {
+    if (job.picking === 'panel') { if (dist(api.pos, job.L.panel) > 70) { job.picking = null; root.NightshiftPicks?.cancel?.(); } return; }
     if (job.picking) { const l = job.L.loot.find((q) => q.id === job.picking); if (!l || dist(api.pos, l) > 54) { job.picking = null; root.NightshiftPicks?.cancel?.(); if (l) job.tried[l.id] = false; } return; }
     const s = job.search; if (!s) return;
     const l = job.L.loot.find((q) => q.id === s.id);
@@ -247,7 +267,9 @@
     }
     if (j.gang) { try { root.NightshiftGangs?.hideoutDone?.(j.gang, j.guards.filter((g) => g.kind !== 'cop' && g.kind !== 'dog').every((g) => g.dead), j.kills); } catch (e) { console.error(e); } }
     if (j.type === 'stash' && !j.contract && j.guards.filter((g) => g.kind !== 'cop').every((g) => g.dead)) { try { root.NightshiftSafehouse?.cleared?.(j.id); } catch { /* optional */ } }
-    try { root.NightshiftLedger?.tag('breakin'); } catch { /* optional */ } 
+    try { root.NightshiftLedger?.tag('breakin'); } catch { /* optional */ }
+    if (j.alarmAt && j.from === 'city' && j.door) { const nowE = performance.now(); setTimeout(() => { try { root.dispatchEvent(new CustomEvent('ns:event', { detail: { type: 'breakin-exit', alarm: true, x: j.door.x, y: j.door.y + 20, units: nowE >= j.policeAt ? 3 : 2 } })); } catch { /* n/a */ } }, 900); }
+    try { root.dispatchEvent(new CustomEvent('ns:event', { detail: { type: 'breakin', id: j.id, kind: j.type, alarm: !!j.alarmAt, cash: j.bag.cash, kills: j.kills } })); } catch { /* n/a */ } 
     p.cash += j.bag.cash;
     const items = { ...j.bag.items }, ammo = items.ammo || 0; delete items.ammo;
     // weed/coke go straight into the game's pocket (where dealers look for them)
@@ -305,6 +327,7 @@
     const def = makeZone(job, target);
     Z.register(def);
     Z.enter('breakin', L.spawn, {});
+    if (L.panel && !target.kicked) job.armedAt = performance.now() + L.panel.seconds * 1000 * (1 + 0.5 * Math.max(0, 1 - mod('stealth.heat')));
     if (target.kicked) { const now = performance.now(); setTimeout(() => { if (job) { alarm(performance.now()); hear(L.exit.x, L.exit.y - 40, 420, Z.api, 'shot'); } }, 400); void now; }
     say(contract ? `🎯 Contract: ${contract.name} is inside with ${contract.guards} bodyguard${contract.guards === 1 ? '' : 's'}. Find the gold ▼, take them down, walk out the back door. Quiet pays +50%.`
       : `🤫 ${target.name}: sneak in, search for loot (gold glints), and get out the back door. Sprinting and gunfire are loud.`);
@@ -338,13 +361,15 @@
       },
       targets(api) {
         const out = [];
+        if (L.panel && !j.disarmed && !j.alarmAt && dist(api.pos, L.panel) < 60) out.push({ x: L.panel.x, y: L.panel.y, r: 40, action: j.picking === 'panel' ? '…' : 'DISARM', label: 'Alarm panel · disarm it before the countdown ends', use: () => disarm(api) });
         for (const l of L.loot) if (!j.looted[l.id] && dist(api.pos, l) < 60) out.push({ x: l.x, y: l.y, r: 40, action: j.search?.id === l.id || j.picking === l.id ? '…' : SAFES[l.kind] ? (j.tried?.[l.id] ? 'DRILL' : 'CRACK') : 'SEARCH', label: `Search the ${({ cashjar: 'cash jar', jewelbox: 'jewellery box', gunsafe: 'gun safe', gunlocker: 'gun locker', cashbox: 'cash box', tv: 'TV', art: 'painting', product: 'product stash', chemcrate: 'chemical crate', cashpile: 'counting table' })[l.kind] || l.kind}`, use: () => startSearch(l) });
         return out;
       },
       exits: [{ x: L.exit.x, y: L.exit.y, r: 44, action: j.defense ? 'LEAVE' : 'ESCAPE', label: j.defense ? 'Back door · leaving now lets the raiders win' : 'Back door · leave with your loot', sign: 'EXIT', icon: '🚪', color: '#7cdeb5', lift: 6, use: (api) => finish(api) }],
-      update(dt, now, api) { raidersArrive(now, api); guardsUpdate(dt, now, api); searchTick(now, api); if (P()?.hp <= 0 && job?.defense) { const o = job.defense; job = null; try { o.onEnd?.(false, 0); } catch { /* optional */ } return; } if (P()?.hp <= 0) { state.stats.caught += 1; persist(); if (job?.contract) { try { HM()?.resolve?.({ killed: false, alarm: true, otherKills: 0, died: true }); } catch { /* optional */ } } job = null; } },
+      update(dt, now, api) { raidersArrive(now, api); securityTick(now, api); guardsUpdate(dt, now, api); searchTick(now, api); if (P()?.hp <= 0 && job?.defense) { const o = job.defense; job = null; try { o.onEnd?.(false, 0); } catch { /* optional */ } return; } if (P()?.hp <= 0) { state.stats.caught += 1; persist(); if (job?.contract) { try { HM()?.resolve?.({ killed: false, alarm: true, otherKills: 0, died: true }); } catch { /* optional */ } } job = null; } },
       onNoise(x, y, radius, api, kind) { hear(x, y, radius, api, kind); },
       hit(b, api) {
+        for (const cam of L.cameras || []) if (!cam.broken && Math.hypot(b.x - cam.x, b.y - cam.y) < 11) { cam.broken = true; api.float(cam.x, cam.y - 14, 'CAMERA OUT', '#9fd0ff'); hear(cam.x, cam.y, 110, api, 'step'); return true; }
         for (const g of j.guards) {
           if (g.dead) continue;
           if (Math.hypot(b.x - g.x, b.y - (g.y - 12)) < 13) {
@@ -365,6 +390,12 @@
         return false;
       },
       drawTop(c, t, api) {
+        for (const cam of L.cameras || []) {
+          const a = B.cameraAngle(cam, t), alarmed = !!j.alarmAt;
+          if (!cam.broken) { c.save(); c.globalAlpha = 0.16 + (cam.seeT || 0) * 0.5; c.fillStyle = alarmed ? '#ff5a6a' : cam.seeT > 0 ? '#ffb347' : '#ff8a7a'; c.beginPath(); c.moveTo(cam.x, cam.y); c.arc(cam.x, cam.y, cam.range, a - cam.fov / 2, a + cam.fov / 2); c.closePath(); c.fill(); c.restore(); }
+          c.save(); c.translate(cam.x, cam.y); c.rotate(cam.broken ? 0.9 : a); R(c, '#1b1e22', -5, -4, 12, 8); R(c, cam.broken ? '#3a2a1a' : '#9aa3ab', 5, -2, 4, 4); c.restore(); if (!cam.broken) C(c, Math.sin(t * 6) > 0 ? '#ff3a3a' : '#5a1010', cam.x - 2, cam.y - 2, 1.4);
+        }
+        if (L.panel) { const pn = L.panel, ok = j.disarmed, on = !ok && !j.alarmAt; R(c, '#1b1e22', pn.x - 8, pn.y - 12, 16, 20); R(c, ok ? '#2f8f6a' : j.alarmAt ? '#c0202a' : '#c9a24a', pn.x - 6, pn.y - 10, 12, 5); for (let k = 0; k < 6; k++) R(c, '#5d646b', pn.x - 5 + (k % 3) * 4, pn.y - 3 + Math.floor(k / 3) * 4, 3, 3); if (on && Math.sin(t * 8) > 0) C(c, '#ff3a3a', pn.x + 5, pn.y - 13, 1.6); }
         const mk = j.contract && j.guards.find((g) => g.kind === 'mark' && !g.dead);
         if (mk && api.visible(mk.x, mk.y)) { const bob = Math.sin(t * 6) * 2, x = mk.x, y = mk.y - 44 + bob; c.save(); c.fillStyle = '#000000aa'; c.beginPath(); c.moveTo(x - 8, y - 1); c.lineTo(x + 8, y - 1); c.lineTo(x, y + 10); c.closePath(); c.fill(); c.fillStyle = '#ffd970'; c.beginPath(); c.moveTo(x - 7, y - 3); c.lineTo(x + 7, y - 3); c.lineTo(x, y + 7); c.closePath(); c.fill(); c.fillStyle = '#fff6c8'; c.fillRect(x - 4, y - 2, 4, 2); c.font = '700 9px "Chakra Petch",system-ui'; c.textAlign = 'center'; c.fillStyle = '#000'; c.fillText(mk.name.toUpperCase(), x + 1, y - 7); c.fillStyle = '#ffd970'; c.fillText(mk.name.toUpperCase(), x, y - 8); c.restore(); }
         const s = j.search; if (!s) return;
@@ -379,6 +410,7 @@
         const txt = j.defense ? (left ? `🛡️ RAIDERS LEFT: ${left}${j.toCome ? ` · next in ${Math.max(0, Math.ceil((j.arriveAt - now) / 1000))}s` : ''}` : '🛡️ RAID REPELLED · walk out the 🚪 back door') : j.contract ? (j.markGone ? `💨 ${j.contract.name} GOT AWAY · contract blown · 🔥 bag ${money(j.bag.cash)}` : j.markDown ? `🎯 MARK DOWN · get to the 🚪 back door to get paid ${money(j.contract.pay)}+` : `🎯 FIND ${j.contract.name.toUpperCase()} (gold ▼) · ${money(j.contract.pay)} · quiet +50%`)
           : `🔥 HOT BAG ${money(j.bag.cash)} + ${n} item${n === 1 ? '' : 's'} · get to the 🚪 back door`;
         const w2 = c.measureText(txt).width + 24; c.fillStyle = '#0d1320e0'; c.fillRect(Wd / 2 - w2 / 2, 8, w2, 24); c.fillStyle = '#ffe9a8'; c.fillText(txt, Wd / 2, 25);
+        if (j.L.panel && !j.disarmed && !j.alarmAt && j.armedAt) { const left = Math.max(0, Math.ceil((j.armedAt - now) / 1000)), t3 = `🔔 ALARM ARMED · disarm the panel by the door · ${left}s`; c.fillStyle = Math.sin(now / 200) > 0 ? '#7a5a10' : '#3a2a08'; const w4 = c.measureText(t3).width + 24; c.fillRect(Wd / 2 - w4 / 2, 36, w4, 24); c.fillStyle = '#fff1c4'; c.fillText(t3, Wd / 2, 53); }
         if (j.policeAt) { const left = Math.max(0, Math.ceil((j.policeAt - now) / 1000)); const flash = Math.sin(now / 150) > 0; const t2 = left > 0 ? `🚨 POLICE IN ${left}s` : '🚔 POLICE INSIDE'; c.fillStyle = flash ? '#c0202a' : '#1f3a8a'; const w3 = c.measureText(t2).width + 24; c.fillRect(Wd / 2 - w3 / 2, 36, w3, 24); c.fillStyle = '#fff'; c.fillText(t2, Wd / 2, 53); }
         c.restore();
       },
@@ -389,12 +421,22 @@
   const WAREHOUSES = [{ id: 'bi-wh-west', x: 790, y: 470, name: 'Westside warehouse' }, { id: 'bi-wh-docks', x: 1670, y: 1150, name: 'Dockside warehouse' }];
   // Rival crews' trap houses: open any hour, armed crew inside, product + cash + guns.
   const STASHES = [{ id: 'bi-stash-south', x: 1450, y: 1624, name: 'Southside trap house', type: 'stash' }, { id: 'bi-stash-east', x: 2110, y: 840, name: 'Eastside trap house', type: 'stash' }];
+  // v0.65: any business you don't own can be broken into at night (outer districts; property.js catalog)
+  function storeSites() {
+    const p = P(), PR = root.NightshiftProperty; if (!p || !PR?.catalog || !nightNow()) return [];
+    const owned = PR.state?.props || {};
+    return PR.catalog().filter((q) => !owned[q.id] && Math.abs(q.door.x - p.x) < 600 && Math.abs(q.door.y - p.y) < 420).map((q) => {
+      const id = 'bi-store-' + q.id, left = B.cooldownLeft(state, id, 'store'), name = PR.name?.(q.id) || 'Store';
+      return { id, type: 'breakin', x: q.door.x + 92, y: q.door.y, ready: true, color: '#ff8a7a', label: left ? '🔒 ALARMED' : '🔦 BREAK IN', action: left ? 'HOT' : 'BREAK IN', hint: left ? `${name} · on alert for ${Math.ceil(left / 60000)} min` : `${name} · closed · alarm panel, cameras, registers, a safe`, store: q, name };
+    });
+  }
   const nightNow = () => { const m = root.NightshiftEnvironment?.state?.minute ?? 720, h = m / 60; return h >= 21 || h < 5; };
   const E = root.NightshiftEncounters;
   if (E && !E.__breakin) {
     const locs = E.locations, use = E.use, draw = E.draw;
-    E.locations = function () { const list = locs.apply(this, arguments) || []; return P()?.hp > 0 ? [...list, ...STASHES.map((w) => { const SH = root.NightshiftSafehouse; if (SH?.owns?.(w.id)) return { id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#7cdeb5', label: '🏠 YOUR STASH HOUSE', action: 'STASH', hint: 'Store product + cash · security · your crew sells for you' }; const left = B.cooldownLeft(state, w.id, 'stash'); if (SH?.canTake?.(w.id)) return { id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ffd970', label: '🏚️ EMPTY TRAP HOUSE', action: 'TAKE OVER', hint: `Make it your stash house · ${money(root.NightshiftSafehouseData?.TAKEOVER || 12000)}` }; return { id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🏚️ TRAP HOUSE', action: left && !HM()?.contractFor?.(w.id) ? 'HOT' : 'BREAK IN', hint: left ? `${w.name} · crew on edge for ${Math.ceil(left / 60000)} min` : `${w.name} · armed crew, product, cash` }; }), ...WAREHOUSES.map((w) => ({ id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🔦 BACK DOOR', action: nightNow() || HM()?.contractFor?.(w.id) ? 'BREAK IN' : 'LOCKED', hint: `${w.name} · break in at night (21:00–05:00)` }))] : list; };
+    E.locations = function () { const list = locs.apply(this, arguments) || []; return P()?.hp > 0 ? [...list, ...storeSites(), ...STASHES.map((w) => { const SH = root.NightshiftSafehouse; if (SH?.owns?.(w.id)) return { id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#7cdeb5', label: '🏠 YOUR STASH HOUSE', action: 'STASH', hint: 'Store product + cash · security · your crew sells for you' }; const left = B.cooldownLeft(state, w.id, 'stash'); if (SH?.canTake?.(w.id)) return { id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ffd970', label: '🏚️ EMPTY TRAP HOUSE', action: 'TAKE OVER', hint: `Make it your stash house · ${money(root.NightshiftSafehouseData?.TAKEOVER || 12000)}` }; return { id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🏚️ TRAP HOUSE', action: left && !HM()?.contractFor?.(w.id) ? 'HOT' : 'BREAK IN', hint: left ? `${w.name} · crew on edge for ${Math.ceil(left / 60000)} min` : `${w.name} · armed crew, product, cash` }; }), ...WAREHOUSES.map((w) => ({ id: w.id, type: 'breakin', x: w.x, y: w.y, ready: true, color: '#ff8a7a', label: '🔦 BACK DOOR', action: nightNow() || HM()?.contractFor?.(w.id) ? 'BREAK IN' : 'LOCKED', hint: `${w.name} · break in at night (21:00–05:00)` }))] : list; };
     E.use = function (id) {
+      if (typeof id === 'string' && id.startsWith('bi-store-')) { const site = storeSites().find((q) => q.id === id); if (!site) { say('🔒 Closed for the night · come back after 21:00'); return true; } start({ id, type: 'store', name: site.name, from: 'city', door: { x: site.x, y: site.y } }); return true; }
       const sh = STASHES.find((q) => q.id === id);
       if (sh && (root.NightshiftSafehouse?.owns?.(sh.id) || root.NightshiftSafehouse?.canTake?.(sh.id))) { root.NightshiftSafehouse.open(sh.id); return true; }
       if (sh) { start({ id: sh.id, type: 'stash', name: sh.name, from: 'city', door: { x: sh.x, y: sh.y } }); return true; }

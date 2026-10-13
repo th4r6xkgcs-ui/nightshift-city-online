@@ -13,6 +13,8 @@
     mansion: { kind: 'lock', pins: 5, speed: 1.7, zone: 0.14, misses: 3 },
     safe: { kind: 'safe', pins: 3, speed: 0.55, zone: 0.12, misses: 3 },
     gunsafe: { kind: 'safe', pins: 3, speed: 0.6, zone: 0.11, misses: 3 },
+    store: { kind: 'lock', pins: 3, speed: 1.35, zone: 0.19, misses: 3 }, // v0.65: shop back doors
+    alarm: { kind: 'lock', pins: 4, speed: 1.65, zone: 0.2, misses: 2 },  // v0.65: alarm keypad (fast, few misses)
   };
   const rngOf = (seed) => { let s = (seed >>> 0) || 1; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; };
   // Build a puzzle. stealthMod: the 'stealth.heat' skill modifier (1 = untrained, lower = better); luck: 'luck.rare' (>=1).
