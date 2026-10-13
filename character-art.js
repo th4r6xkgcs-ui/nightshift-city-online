@@ -317,6 +317,7 @@
   const NPC_POOL = 24; // bounded variety keeps the frame cache small
   function outfitFor(p, isPlayer, role) {
     if (isPlayer) return root.NightshiftWardrobe?.outfit?.() || W.cleanOutfit(W.DEFAULT);
+    if (p && p.outfit && typeof p.outfit === 'object') { if (!p.__outfit || p.__outfitSrc !== p.outfit) { const v = W.cleanOutfit(p.outfit); try { Object.defineProperty(p, '__outfit', { value: v, writable: true, configurable: true, enumerable: false }); Object.defineProperty(p, '__outfitSrc', { value: p.outfit, writable: true, configurable: true, enumerable: false }); } catch { return v; } } return p.__outfit; } // explicit outfits (gangs, districts)
     const r = role === 'officer' || p?.role === 'officer' ? 'officer' : role === 'security' ? 'security' : null;
     const k = r ? r + (hash(p?.id || p?.name || '') % 6) : 'n' + (hash(p?.id || p?.name || p?.color || 'npc') % NPC_POOL);
     let o = npc.get(k); if (!o) { o = W.npcOutfit(hash(k) + 7, r); npc.set(k, o); } return o;
@@ -328,6 +329,7 @@
   function stance(p, isPlayer) {
     const now = performance.now();
     if (p.seated) return 'sit';
+    if (p.inCover && !p.moving) return 'crouch'; // ducked behind a car / wall (combat-vision.js, crime.js officers, gangs)
     if (isPlayer) {
       if (now - carT.exitAt < 260) return 'crouch'; // ducking out of the car door
       if (root.NightshiftZones?.active?.() === 'breakin' && !sprinting()) return 'sneak';

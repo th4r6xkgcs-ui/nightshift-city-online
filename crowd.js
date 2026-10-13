@@ -34,10 +34,28 @@
     }
     return null;
   }
+  // v0.58: people dress for their neighbourhood (suits downtown, polos in the Heights, work gear in Ironworks...)
+  const THEMES = {
+    DOWNTOWN: { top: [['buttonup', 0], ['buttonup', 5], ['polo', 1]], outer: [['trench', 1], ['leather', 0], null, null], bottom: [['chinos', 1], ['chinos', 0]], shoes: [['dress', 0], ['dress', 2]], head: [null, null, ['fedora', 1]] },
+    'THE HEIGHTS': { top: [['polo', 7], ['polo', 1], ['buttonup', 5]], outer: [['puffer', 4], null, null], bottom: [['chinos', 0], ['chinos', 3]], shoes: [['runners', 0], ['dress', 1]], face: [['aviators', 0], null, null] },
+    'OLD TOWN': { top: [['tee', 7], ['tee', 8], ['longsleeve', 2]], outer: [['denim', 0], ['bomber', 2], null], bottom: [['jeans', 0], ['jeans', 3]], shoes: [['boots', 0], ['boots', 1]], head: [['bucket', 0], null, null] },
+    IRONWORKS: { top: [['longsleeve', 8], ['tee', 5]], outer: [['vest', 1], ['vest', 0], null], bottom: [['cargo', 1], ['cargo', 0]], shoes: [['boots', 0], ['boots', 2]], head: [['beanie', 5], ['beanie', 2], null], gloves: [['gloves', 0], null] },
+    FAIRVIEW: { top: [['tee', 1], ['tee', 3], ['tee', 7]], outer: [['hoodie', 9], ['hoodie', 3], null], bottom: [['joggers', 9], ['jeans', 2]], shoes: [['runners', 0], ['runners', 1]], bag: [['backpack', 1], null] },
+    'THE FLATS': { top: [['tank', 1], ['jersey', 4], ['tee', 6]], outer: [null, null, ['leather', 0]], bottom: [['shorts', 4], ['skirt', 0], ['joggers', 8]], shoes: [['slides', 0], ['hitops', 2]], head: [['durag', 0], ['durag', 1], null], jewelry: [['chain', 0], null] },
+    HARBOR: { top: [['longsleeve', 7], ['tee', 8]], outer: [['puffer', 0], ['bomber', 0], ['puffer', 3]], bottom: [['cargo', 3], ['jeans', 3]], shoes: [['boots', 1], ['boots', 2]], head: [['beanie', 1], ['beanie', 8], null] },
+  };
+  function dress(p) {
+    let reg = null; try { reg = root.NightshiftWorld?.regionAt?.(p.x, p.y); } catch { /* n/a */ }
+    const th = reg && THEMES[reg.name]; if (!th) { if (p.outfit && p.themed) { delete p.outfit; p.themed = false; } return; }
+    let base = null; const seed = Math.floor(Math.random() * 1e9); try { base = root.NightshiftWardrobeData?.npcOutfit?.(seed); } catch { /* n/a */ } if (!base) return;
+    const o = JSON.parse(JSON.stringify(base)), pick = (a) => a[Math.floor(Math.random() * a.length)];
+    for (const slot of ['top', 'outer', 'bottom', 'shoes', 'head', 'face', 'gloves', 'bag', 'jewelry']) if (th[slot]) { const v = pick(th[slot]); o[slot] = v ? { id: v[0], color: v[1] } : null; }
+    p.outfit = o; p.themed = true;
+  }
   const busy = (p) => p.hp <= 0 || p.crew || p.follow || p.following || p.hostile || p.mode === 'flee' || p.job || p.target || p.customer || p.rival;
   function init(env) {
     const colors = ['#efb57b', '#9ac4a0', '#d5a1d0', '#a6bde6'];
-    while (env.peds.length < CROWD) { const s = sidewalk(env, env.player, 200, 1100); if (!s) break; env.peds.push({ x: s.x, y: s.y, dx: rnd(-1, 1), dy: rnd(-1, 1), hp: 40, t: rnd(0, 100), color: colors[env.peds.length % 4], id: 'crowd-' + env.peds.length }); st.added++; }
+    while (env.peds.length < CROWD) { const s = sidewalk(env, env.player, 200, 1100); if (!s) break; env.peds.push({ x: s.x, y: s.y, dx: rnd(-1, 1), dy: rnd(-1, 1), hp: 40, t: rnd(0, 100), color: colors[env.peds.length % 4], id: 'crowd-' + env.peds.length }); dress(env.peds[env.peds.length - 1]); st.added++; }
     let n = 0; // extra parked cars, kept around you like the crowd (recycled kerbside when far away)
     for (let k = 0; k < PARKED; k++) { const sp = kerb(env, env.player, 250, 1200); if (!sp) continue; const c = { x: sp.x, y: sp.y, angle: Math.PI / 2, color: ['#c84659', '#3d99d6', '#e2b75c', '#b1c4d5', '#6d73be', '#2f8f6a', '#1d2433'][k % 7], speed: 0, owner: false, parkedByCrowd: true }; env.cars.push(c); n++; }
     st.parked = n; ready = true;
@@ -53,7 +71,7 @@
       if (busy(p)) continue;
       if (Math.abs(p.x - pl.x) < FAR && Math.abs(p.y - pl.y) < FAR * 0.8) continue;
       const ahead = { x: pl.x + vx * 500, y: pl.y + vy * 500 }, s = sidewalk(env, ahead, 650, 1050); if (!s) continue;
-      p.x = s.x; p.y = s.y; p.routine = null; p.path = []; p.nextRoute = 0; p.socialUntil = 0; p.moving = false; p.walkTicks = 0; st.recycled++;
+      p.x = s.x; p.y = s.y; p.routine = null; p.path = []; p.nextRoute = 0; p.socialUntil = 0; p.moving = false; p.walkTicks = 0; dress(p); st.recycled++;
     }
   }
   // personal space: push overlapping people apart (on screen only), never into walls or buildings
