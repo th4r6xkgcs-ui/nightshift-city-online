@@ -68,14 +68,47 @@
     // and nobody stands inside the player
     for (const p of list) { const dx = p.x - pl.x, dy = p.y - pl.y, d = Math.hypot(dx, dy); if (d < 13 && d > 0.01 && !pl.car) { try { if (!env.blocked(p.x + dx / d * 2, p.y + dy / d * 2)) { p.x += dx / d * 2; p.y += dy / d * 2; } } catch { /* n/a */ } } }
   }
-  let lastRecycle = 0;
+  // ---- errands: idle people walk into a nearby shop/door, spend a while inside, then come back out ----
+  // (taken out of the AI while scripted, so nothing fights over their position)
+  const errands = []; // { p, door, phase: 'walk'|'inside', until }
+  const idleSince = new WeakMap();
+  function doors(env) { let B = []; try { B = buildings; } catch { /* n/a */ } return B.map((b) => ({ x: b.x + b.w / 2 + (((b.x * 7) % 40) - 20), y: b.y + b.h + 8, name: b.name })); } // eslint-disable-line no-undef
+  function errandTick(env, now, dt) {
+    const pl = env.player;
+    // start errands for people who've idled a while near a door
+    if (errands.length < 8) for (const p of env.peds) {
+      if (busy(p) || p.moving) { idleSince.delete(p); continue; }
+      if (!idleSince.has(p)) { idleSince.set(p, now + 4000 + Math.random() * 9000); continue; }
+      if (now < idleSince.get(p) || Math.abs(p.x - pl.x) > 1000 || Math.abs(p.y - pl.y) > 800) continue;
+      const d = doors(env).filter((q) => Math.hypot(q.x - p.x, q.y - p.y) < 260).sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))[0];
+      idleSince.delete(p); if (!d) continue;
+      const i = env.peds.indexOf(p); if (i < 0) continue; env.peds.splice(i, 1);
+      errands.push({ p, door: d, phase: 'walk', until: 0, path: (() => { try { return NightshiftNavigation.route(p, d, env.blocked); } catch { return [d]; } })() }); // eslint-disable-line no-undef
+      st.errands = (st.errands || 0) + 1; if (errands.length >= 8) break;
+    }
+    for (let k = errands.length - 1; k >= 0; k--) {
+      const e = errands[k], p = e.p;
+      if (e.phase === 'walk') {
+        while (e.path.length && Math.hypot(e.path[0].x - p.x, e.path[0].y - p.y) < 4) e.path.shift();
+        const goal = e.path[0] || e.door, d = Math.hypot(goal.x - p.x, goal.y - p.y);
+        if (!e.path.length && d < 5) { e.phase = 'inside'; e.until = now + 8000 + Math.random() * 22000; p.moving = false; continue; }
+        const sp = Math.min(d, 1.05 * dt), bx = p.x; p.x += (goal.x - p.x) / (d || 1) * sp; p.y += (goal.y - p.y) / (d || 1) * sp; p.moving = true; p.walkTicks = (p.walkTicks || 0) + dt; p.moveAngle = Math.atan2(goal.y - p.y, goal.x - p.x); p.angle = p.moveAngle; void bx;
+      } else if (now > e.until) { // back out onto the street with a fresh plan
+        p.x = e.door.x; p.y = e.door.y + 6; p.routine = null; p.path = []; p.nextRoute = 0; p.moving = false; p.socialUntil = 0; env.peds.push(p); errands.splice(k, 1);
+      }
+    }
+  }
+  function drawErrands() { let ctx; try { ctx = g; } catch { return; } for (const e of errands) if (e.phase === 'walk') { try { NightshiftSprites.person(e.p, false, { hideHealth: true }); } catch { /* n/a */ } } void ctx; } // eslint-disable-line no-undef
+  let lastRecycle = 0, lastT = 0;
   function tick(now) {
     const env = G(); if (env && env.player && Array.isArray(env.peds)) {
       if (!ready && now > 1500) init(env);
-      if (ready) { separate(env); if (now - lastRecycle > 900) { lastRecycle = now; recycle(env); recycleCars(env); } }
+      if (ready) { const dt = lastT ? Math.min(2, (now - lastT) / 16.67) : 1; separate(env); errandTick(env, now, dt); if (now - lastRecycle > 900) { lastRecycle = now; recycle(env); recycleCars(env); } }
+      lastT = now;
     }
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
-  root.NightshiftCrowd = Object.freeze({ stats: () => ({ ...st, people: G()?.peds?.length || 0, cars: G()?.cars?.length || 0 }), CROWD });
+  const hook = setInterval(() => { const E = root.NightshiftEncounters; if (!E || E.__crowd) return; const d0 = E.draw; E.draw = function () { const r = d0.apply(this, arguments); drawErrands(); return r; }; E.__crowd = true; clearInterval(hook); }, 300);
+  root.NightshiftCrowd = Object.freeze({ errands: () => errands.length, stats: () => ({ ...st, inside: errands.filter((e) => e.phase === 'inside').length, people: G()?.peds?.length || 0, cars: G()?.cars?.length || 0 }), CROWD });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
