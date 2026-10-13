@@ -289,7 +289,7 @@
   .spP .row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}
   .spP .go{padding:8px 14px;background:linear-gradient(#ffe08a,#e2a33f);color:#2a1600} .spP .go[disabled]{opacity:.35;pointer-events:none}
   .spP .alt{padding:7px 11px;background:#ffffff10;border:1px solid #ffffff26;color:#eef3f9} .spP .alt[disabled]{opacity:.35;pointer-events:none}
-  .spP .why{font-size:10.5px;color:#ffb0b8} .spP .okc{font-size:10.5px;color:#7cdeb5}
+  .spP .why{font-size:10.5px;color:#ffb0b8} .spP .where{margin:4px 0 2px;font-size:10.5px;color:#d3deea} .spP .where .wl{display:flex;align-items:center;gap:6px;margin:2px 0;flex-wrap:wrap} .spP .where b{color:#ffb0b8} .spP .where .gp{all:unset;cursor:pointer;margin-left:auto;font:700 10px ui-monospace,Menlo,monospace;background:#2c4c7c;color:#fff;border:1px solid #6f8db3;border-radius:6px;padding:2px 7px} .spP .tip{background:#1b2a1f;border:1px solid #3f6a4a;border-radius:9px;padding:6px 9px;margin:6px 0;font-size:11.5px} .spP .tip.ok{color:#7cdeb5} .spP .okc{font-size:10.5px;color:#7cdeb5}
   .spP .prog{position:sticky;top:-12px;z-index:2;margin:-2px 0 8px;padding:8px 10px;border-radius:12px;background:#1d2533;border:1px solid #ffb34766;font:700 12px var(--disp,system-ui)}
   .spP .prog .cap i{background:linear-gradient(90deg,#ffb347,#ffe08a)}
   .spP .place{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:12px;background:#ffffff07;border:1px solid #ffffff12;margin-bottom:5px;font-size:11.5px}
@@ -322,7 +322,7 @@
   function chip(id, need, have) {
     const c = el('span', { className: 'chip ' + (have >= need ? 'ok' : 'no') });
     const ic = matIcon(id, 16); if (ic) c.append(ic); else c.append(document.createTextNode(S.MATERIALS[id]?.icon || ''));
-    c.append(document.createTextNode(`${Math.min(have, need)}/${need}`)); c.title = S.MATERIALS[id]?.name || id;
+    c.append(document.createTextNode(`${Math.min(have, need)}/${need}${have >= need ? '' : ' ' + (S.MATERIALS[id]?.name || id).split(' ').pop().toLowerCase()}`)); c.title = S.MATERIALS[id]?.name || id;
     return c;
   }
   const panel = (id, label) => { const d = el('div', { id, className: 'spP', hidden: true, role: 'dialog', ariaLabel: label }); document.body.append(d); return d; };
@@ -429,6 +429,28 @@
     location.href = location.pathname + '?newlife=1';
   }
 
+
+  // ---- where to get a material (crafting help): gather spots, shops, and walk-in interiors ----
+  function sourcesFor(id) {
+    const p = P() || { x: 0, y: 0 }, out = [];
+    for (const g2 of S.GATHER) { if (g2.zone) continue; const l = g2.loot.find((q) => q[0] === id); if (l) out.push({ name: g2.name, icon: g2.icon, x: g2.x, y: g2.y, how: l[1] >= 0.5 ? 'common' : l[1] >= 0.15 ? 'sometimes' : 'rare', score: l[1] + (g2.heat ? -0.2 : 0) }); }
+    if (S.HARDWARE.some((h) => h.id === id)) out.push({ name: 'Hardware counter', icon: '🧰', x: S.HARDWARE_SITE.x, y: S.HARDWARE_SITE.y, how: 'buy ' + money(S.MATERIALS[id]?.price || 0), score: 0.9 });
+    if (S.PARTS_COUNTER.includes(id)) { const d = root.NightshiftWeapons?.door?.(); if (d) out.push({ name: 'Gun shop parts', icon: '🔫', x: d.x, y: d.y, how: 'buy ' + money(S.MATERIALS[id]?.price || 0), score: 0.6 }); }
+    const IN = root.NightshiftInteriors2, inside = { WAREHOUSE: ['metal', 'pipe', 'tape', 'spring', 'wood'], GARAGE: ['metal', 'spring'] };
+    for (const [type, mats] of Object.entries(inside)) if (mats.includes(id) && IN?.doors) { const d = IN.doors().filter((q) => q.type === type).sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))[0]; if (d) out.push({ name: 'any ' + (IN.title?.(type) || type).toLowerCase(), icon: '🚪', x: d.x, y: d.y, how: 'walk in & search', score: 0.8 }); }
+    return out.map((o) => ({ ...o, d: Math.hypot(o.x - p.x, o.y - p.y) })).sort((a, b) => (b.score - a.score) || (a.d - b.d));
+  }
+  function missingOf(mats, pool) { return Object.entries(mats).filter(([k, n]) => (pool[k] || 0) < n).map(([k, n]) => ({ id: k, n: n - (pool[k] || 0), name: S.MATERIALS[k]?.name || k })); }
+  function whereBox(miss) {
+    const box = el('div', { className: 'where' });
+    for (const m of miss.slice(0, 3)) {
+      const src = sourcesFor(m.id), best = src[0];
+      const line = el('div', { className: 'wl' }); line.append(el('b', {}, `${m.n} ${m.name}`), document.createTextNode(src.length ? ' ← ' + src.slice(0, 3).map((q) => `${q.icon} ${q.name} (${q.how})`).join(' · ') : ' ← rare drop'));
+      if (best) line.append(btn('gp', 'GPS', () => { benchP.hidden = true; gps(best, best.name); }));
+      box.append(line);
+    }
+    return box;
+  }
   // ---- 🛠️ workbench ----
   let benchWhere = 'home', benchTab = 'guns', modGun = null;
   function openBench(where) { benchWhere = where; show(benchP); renderBench(); }
@@ -458,7 +480,12 @@
     const busy = act?.kind === 'craft';
     if (benchTab === 'guns') {
       const cards = el('div', { className: 'cards' });
-      for (const w of W.WEAPONS) {
+      const rank = (w) => { const why = W.craftBlock(wst, w.id, ctx); if (!why) return 0; if (w.tier > lvl || (w.legend && !(wst.learned || []).includes(w.id))) return 100 + w.tier; return why === 'Missing materials' ? 1 + missingOf(w.craft.mats, pool).reduce((a, m) => a + m.n, 0) : 50; };
+      const order = [...W.WEAPONS].sort((a, b) => rank(a) - rank(b));
+      const close = order.find((w) => rank(w) > 0 && rank(w) < 50);
+      if (order.some((w) => rank(w) === 0)) benchP.append(el('div', { className: 'tip ok' }, `✅ You can craft ${order.filter((w) => rank(w) === 0).map((w) => w.name).join(', ')} right now.`));
+      else if (close) { const t = el('div', { className: 'tip' }); t.append(el('div', {}, `🎯 Closest: ${close.name} · still need:`), whereBox(missingOf(close.craft.mats, pool))); benchP.append(t); }
+      for (const w of order) {
         const why = W.craftBlock(wst, w.id, ctx), owned = wst.owned.includes(w.id) && !wst.broken.includes(w.id);
         const card = el('div', { className: 'card' + (w.tier > lvl ? ' lock' : '') + (!why ? ' ready' : '') + (w.legend ? ' legend' : '') + (w.legend && !(wst.learned || []).includes(w.id) ? ' bp' : '') });
         const hd = el('div', { className: 'hd' }); const ic = gunIcon(w.id, 84, 34); if (ic) hd.append(ic);
@@ -471,6 +498,7 @@
         const row = el('div', { className: 'row' });
         row.append(el('span', { className: why ? 'why' : 'okc' }, why || `${Math.round(w.craft.seconds * mod('crafting.speed'))}s${owned ? ' · spare, or upgrades yours if better' : ''} · worth ${money(w.value)}`));
         row.append(btn('go', 'CRAFT', () => startCraft({ where: benchWhere, gun: true, real: w.tier >= 1, label: w.name, seconds: w.craft.seconds, check: (c) => W.craftBlock(WS().state, w.id, c), run: (c) => WS().craft(w.id, { ...c, quality: W.rollQuality(root.NightshiftSkills?.level?.('crafting') ?? 1) }), done: (r) => { const qn = W.QUALITY[r.quality ?? 1].name; return r.upgraded ? `${w.icon} ${qn} ${w.name}! Better than yours: it's in your hand, the old one is a spare.` : r.spare ? `${w.icon} Crafted a spare ${w.name} (yours is as good or better) · sell it or keep it as backup` : `${w.icon} Crafted a ${qn} ${w.name}! It's in your hand.`; } }), !!why || busy));
+        if (why === 'Missing materials' && w.tier <= lvl) card.append(whereBox(missingOf(w.craft.mats, pool)));
         card.append(row); cards.append(card);
       }
       benchP.append(cards);
@@ -487,6 +515,7 @@
           const hd = el('div', { className: 'hd' }); hd.append(el('div', { className: 'pi', style: 'font-size:22px' }, m.icon)); const nm = el('div'); nm.append(el('div', { className: 'nm' }, m.name), el('div', { className: 'tg' }, `${m.tier ? 'LOCKUP LV ' + m.tier : 'ANY BENCH'} · SHOOTING ${m.level}`)); hd.append(nm); card.append(hd);
           card.append(el('div', { className: 'ds' }, m.desc));
           const need = el('div', { className: 'need' }); for (const [k, n] of Object.entries(m.mats)) need.append(chip(k, n, pool[k] || 0)); card.append(need);
+          if (!fitted && why === 'Missing materials') card.append(whereBox(missingOf(m.mats, pool)));
           const row = el('div', { className: 'row' }); row.append(el('span', { className: fitted ? 'okc' : why ? 'why' : 'okc' }, fitted ? 'FITTED ✓' : why || `${m.seconds}s`));
           if (!fitted) row.append(btn('go', 'CRAFT', () => { const gid = modGun; startCraft({ where: benchWhere, label: m.name, seconds: m.seconds, check: (c) => W.modBlock(WS().state, gid, m.id, c), run: (c) => WS().craftMod(gid, m.id, c), done: () => `${m.icon} ${m.name} fitted to your ${W.BY_ID[gid].name}` }); }, !!why || busy));
           card.append(row); cards.append(card);
