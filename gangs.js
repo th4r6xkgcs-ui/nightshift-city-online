@@ -79,7 +79,7 @@
   }
 
   // ---------- AI ----------
-  function canStep(env, x, y) { try { return !env.blocked(x, y); } catch { return true; } }
+  function canStep(env, x, y) { return !solid(x, y); }
   function coverSpot(env, m, threat) {
     let best = null, bd = 1e9;
     for (const c of env.cars) {
@@ -96,7 +96,11 @@
     m.moving = moved; if (moved) { m.walkTicks += dt * 60; m.moveAngle = Math.atan2(dy, dx); }
     return false;
   }
-  function sightTo(env, a, b, range) { try { return root.NightshiftCrime?.sight ? root.NightshiftCrime.sight(a, b, env.blocked, range) : dist(a, b) < range; } catch { return false; } }
+  // cheap line of sight against the buildings around the fight (refreshed each frame)
+  let near = [];
+  function refreshNear(p) { let B = []; try { B = buildings; } catch { /* n/a */ } near = B.filter((b) => Math.abs(b.x + b.w / 2 - p.x) < 700 && Math.abs(b.y + b.h / 2 - p.y) < 600); } // eslint-disable-line no-undef
+  const solid = (x, y) => { for (const b of near) if (x > b.x - 9 && x < b.x + b.w + 9 && y > b.y - 9 && y < b.y + b.h + 9) return true; return false; };
+  function sightTo(env, a, b, range) { const d = dist(a, b); if (d > range) return false; const n = Math.max(1, Math.ceil(d / 10)); for (let i = 1; i < n; i++) if (solid(a.x + (b.x - a.x) * i / n, a.y + (b.y - a.y) * i / n)) return false; return true; }
   function fire(env, m, now) {
     const p = env.player, d = dist(m, p), err = 0.2 * (1 + (p.moving ? 0.7 : 0) + d / 400) * (p.inCover ? 1.3 : 1);
     const a = Math.atan2(p.y - m.y, p.x - m.x) + (Math.random() * 2 - 1) * err;
@@ -241,7 +245,7 @@
     const env = E(); const dt = last ? Math.min(0.1, (now - last) / 1000) : 0; last = now;
     let zone = false; try { zone = !!(root.NightshiftZones?.active?.() || root.NightshiftHome?.kind?.()); } catch { /* n/a */ }
     if (env && env.player && !zone && !(root.NightshiftRPG?.paused?.())) {
-      ensureBlocks(env.player);
+      ensureBlocks(env.player); refreshNear(env.player);
       for (let i = members.length - 1; i >= 0; i--) memberTick(env, members[i], now, dt);
       shotsTick(env, dt); turfTick(env, now, dt);
       // members keep out of each other
