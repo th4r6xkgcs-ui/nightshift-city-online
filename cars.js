@@ -251,7 +251,7 @@
     const geo = root.NightshiftVehicleGeometry, list = CARS();
     for (let r = 0; r < 420; r += 22) for (let a = 0; a < 12; a++) {
       const x = x0 + Math.cos(a * 0.52) * r, y = y0 + Math.sin(a * 0.52) * r, c = { x, y, angle: Math.PI / 2 };
-      if (x < 60 || y < 60 || x > 2140 || y > 1640) continue;
+      if (x < 60 || y < 60 || x > WORLD().w - 60 || y > WORLD().h - 60) continue;
       try { if (geo?.blocked(c, BLD(), WORLD())) continue; } catch { /* no geometry */ }
       if (list.some((o) => Math.hypot(o.x - x, o.y - y) < 70)) continue;
       return { x, y };

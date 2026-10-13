@@ -37,7 +37,7 @@
     const list = Array.isArray(raw?.owned) ? raw.owned : [];
     for (const c of list) {
       if (!c || !BY[c.id] || !Number.isSafeInteger(c.uid) || c.uid < 1 || s.owned.some((o) => o.uid === c.uid)) continue;
-      s.owned.push({ uid: c.uid, id: c.id, color: hex(c.color) ? c.color : BY[c.id].colors[0], x: Number.isFinite(c.x) ? Math.max(32, Math.min(2168, c.x)) : null, y: Number.isFinite(c.y) ? Math.max(32, Math.min(1668, c.y)) : null,
+      s.owned.push({ uid: c.uid, id: c.id, color: hex(c.color) ? c.color : BY[c.id].colors[0], x: Number.isFinite(c.x) ? Math.max(32, Math.min(6568, c.x)) : null, y: Number.isFinite(c.y) ? Math.max(32, Math.min(5068, c.y)) : null,
         angle: Number.isFinite(c.angle) ? c.angle : 0, fuel: Number.isFinite(c.fuel) ? Math.max(0, Math.min(100, c.fuel)) : 100, condition: Number.isFinite(c.condition) ? Math.max(0, Math.min(100, c.condition)) : 100, plate: typeof c.plate === 'string' ? c.plate.slice(0, 8) : plateOf(c.uid) });
       if (s.owned.length >= MAX_OWNED) break;
     }
