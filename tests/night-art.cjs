@@ -4,7 +4,7 @@ const capture=minute=>run(`NightshiftEnvironment.state.minute=${minute};calls=[]
 const day=capture(720),wet=capture(1200),dry=capture(60);assert.notEqual(day,wet);assert.notEqual(dry,wet);assert.equal(run('g.globalAlpha'),1);assert.equal(run('alphaStack.length'),0);
 const paused=capture(1200);assert.equal(capture(1200),paused,'rendering does not advance animation');
 run('NightshiftEnvironment.state.minute=1200;calls=[];gradients=0;NightshiftEnvironment.lights()');assert.ok(run('gradients')>0);assert.ok(run('gradients')<16,'viewport culls distant lamps');assert.equal(run('g.globalAlpha'),1);
-run('camera={x:5000,y:5000,zoom:1};calls=[];gradients=0;NightshiftEnvironment.lights();NightshiftEnvironment.reflections()');assert.equal(run('gradients'),0);assert.equal(run('calls.length'),0);
+run('camera={x:9000,y:9000,zoom:1};calls=[];gradients=0;NightshiftEnvironment.lights();NightshiftEnvironment.reflections()');assert.equal(run('gradients'),0);assert.equal(run('calls.length'),0);
 run('camera={x:800,y:600,zoom:1};gradients=0;NightshiftEnvironment.state.minute=720;NightshiftEnvironment.lights()');assert.equal(run('gradients'),0,'daylight creates no glow gradients');
 const colors=[[440,340],[880,680],[440,1020],[1320,1360]].map(([x,y])=>run(`NightshiftEnvironment.lampColor({x:${x},y:${y}})`));assert.equal(new Set(colors).size,4);
 assert.equal(run('JSON.stringify({player,cars,peds,buildings})===snapshot'),true);

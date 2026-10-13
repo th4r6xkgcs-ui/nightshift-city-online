@@ -1,6 +1,6 @@
 /* Pixel city art: cached ground, layered architecture, unchanged collision catalog. */
 (function(root){'use strict';
-const createBuildings=(width=2200,height=1700)=>NightshiftCityData.createBuildings(width,height);
+const createBuildings=(width,height)=>NightshiftCityData.createBuildings(width,height);
 const hash=(x,y)=>((Math.imul(x|0,73856093)^Math.imul(y|0,19349663))>>>0);
 function rect(ctx,color,x,y,w,h){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
 

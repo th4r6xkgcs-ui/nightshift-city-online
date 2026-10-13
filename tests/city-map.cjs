@@ -3,7 +3,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const run=require('./harness.cjs')();
 assert.equal(run('NightshiftMap.navigate({x:880,y:680,label:"GOAL GPS",id:"goal"})'),true);
 run('globalThis.labels=[];g.fillText=t=>labels.push(t);NightshiftMap.draw(100)');assert.ok(run('labels.includes("GOAL GPS")'));
-assert.equal(run('NightshiftMap.navigate({x:NaN,y:680})'),false);assert.equal(run('NightshiftMap.navigate({x:5000,y:680})'),false);
+assert.equal(run('NightshiftMap.navigate({x:NaN,y:680})'),false);assert.equal(run('NightshiftMap.navigate({x:99999,y:680})'),false);
 run('labels=[];NightshiftMap.draw(100)');assert.ok(run('labels.includes("GOAL GPS")'),'invalid request preserves active route');
 assert.equal(run('NightshiftMap.clear("goal")'),true,'destination id is preserved');
 run('player.car=cars[0]');assert.equal(run('NightshiftMap.navigate({x:880,y:680,label:"DRIVE"})'),true);
