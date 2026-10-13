@@ -14,6 +14,13 @@
   const CROWD = 46, FAR = 1500, SPACE = 15;
   const st = { added: 0, recycled: 0, parked: 0, pushes: 0 };
   let ready = false;
+  const PARKED = 22;
+  function kerb(env, near, minD, maxD) {
+    for (let k = 0; k < 40; k++) { const a = Math.random() * Math.PI * 2, d = rnd(minD, maxD), bx = Math.floor((near.x + Math.cos(a) * d) / 440), by = Math.floor((near.y + Math.sin(a) * d) / 340), x = bx * 440 + 58, y = by * 340 + rnd(140, 220);
+      if (x < 60 || y < 60 || x > env.world.w - 60 || y > env.world.h - 60) continue; try { if (env.blocked(x, y) || env.blocked(x, y - 30) || env.blocked(x, y + 30)) continue; } catch { /* n/a */ }
+      if (env.cars.some((c) => Math.abs(c.x - x) < 30 && Math.abs(c.y - y) < 70)) continue; return { x, y }; }
+    return null;
+  }
   const rnd = (a, b) => a + Math.random() * (b - a);
   // a free sidewalk spot (people idle along y = block*340 + 270, x = block*440 + 100..340)
   function sidewalk(env, near, minD, maxD) {
@@ -31,15 +38,15 @@
   function init(env) {
     const colors = ['#efb57b', '#9ac4a0', '#d5a1d0', '#a6bde6'];
     while (env.peds.length < CROWD) { const s = sidewalk(env, env.player, 200, 1100); if (!s) break; env.peds.push({ x: s.x, y: s.y, dx: rnd(-1, 1), dy: rnd(-1, 1), hp: 40, t: rnd(0, 100), color: colors[env.peds.length % 4], id: 'crowd-' + env.peds.length }); st.added++; }
-    // parked cars outside the old core (the core already has its 20)
-    let n = 0; for (let bx = 0; bx * 440 < env.world.w; bx++) for (let by = 0; by * 340 < env.world.h; by++) {
-      if (bx < 5 && by < 5) continue; if (((bx * 7 + by * 13) % 5) > 1) continue; // ~40% of blocks
-      const x = 180 + bx * 440 + ((bx * 31 + by * 17) % 60) - 30, y = 175 + by * 340; try { if (env.blocked(x, y)) continue; } catch { /* n/a */ }
-      env.cars.push({ x, y, angle: (bx + by) % 2 ? 0 : Math.PI / 2, color: ['#c84659', '#3d99d6', '#e2b75c', '#b1c4d5', '#6d73be', '#2f8f6a', '#1d2433'][(bx * 3 + by) % 7], speed: 0, owner: false }); n++;
-    }
+    let n = 0; // extra parked cars, kept around you like the crowd (recycled kerbside when far away)
+    for (let k = 0; k < PARKED; k++) { const sp = kerb(env, env.player, 250, 1200); if (!sp) continue; const c = { x: sp.x, y: sp.y, angle: Math.PI / 2, color: ['#c84659', '#3d99d6', '#e2b75c', '#b1c4d5', '#6d73be', '#2f8f6a', '#1d2433'][k % 7], speed: 0, owner: false, parkedByCrowd: true }; env.cars.push(c); n++; }
     st.parked = n; ready = true;
   }
   // re-home people who are far away to sidewalks just outside the view, ahead of where you're heading
+  function recycleCars(env) {
+    const pl = env.player.car || env.player;
+    for (const c of env.cars) { if (!c.parkedByCrowd || c === env.player.car || c.owner || c.stolen || Math.abs(c.speed || 0) > 0.1) continue; if (Math.abs(c.x - pl.x) < 1700 && Math.abs(c.y - pl.y) < 1300) continue; const sp = kerb(env, pl, 800, 1300); if (sp) { c.x = sp.x; c.y = sp.y; c.angle = Math.PI / 2; c.condition = 100; } }
+  }
   function recycle(env) {
     const pl = env.player.car || env.player, vx = pl.car ? Math.cos(pl.angle || 0) : 0, vy = pl.car ? Math.sin(pl.angle || 0) : 0;
     for (const p of env.peds) {
@@ -65,7 +72,7 @@
   function tick(now) {
     const env = G(); if (env && env.player && Array.isArray(env.peds)) {
       if (!ready && now > 1500) init(env);
-      if (ready) { separate(env); if (now - lastRecycle > 900) { lastRecycle = now; recycle(env); } }
+      if (ready) { separate(env); if (now - lastRecycle > 900) { lastRecycle = now; recycle(env); recycleCars(env); } }
     }
     requestAnimationFrame(tick);
   }
