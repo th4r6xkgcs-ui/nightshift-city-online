@@ -245,6 +245,7 @@
       try { j.defense.onEnd?.(won, j.bag.cash); } catch (e) { console.error(e); }
       Z.leave(j.door ? { x: j.door.x, y: j.door.y + 30 } : undefined); return;
     }
+    if (j.gang) { try { root.NightshiftGangs?.hideoutDone?.(j.gang, j.guards.filter((g) => g.kind !== 'cop' && g.kind !== 'dog').every((g) => g.dead), j.kills); } catch (e) { console.error(e); } }
     if (j.type === 'stash' && !j.contract && j.guards.filter((g) => g.kind !== 'cop').every((g) => g.dead)) { try { root.NightshiftSafehouse?.cleared?.(j.id); } catch { /* optional */ } }
     try { root.NightshiftLedger?.tag('breakin'); } catch { /* optional */ } 
     p.cash += j.bag.cash;
@@ -300,7 +301,7 @@
     const day = Math.floor(Date.now() / 3600000);
     const L = B.generate(target.type, (hashStr(target.id) + day * 7919) >>> 0);
     const extra = contract ? B.addMark(L, contract, B.rngOf((hashStr(contract.id) ^ L.seed) >>> 0)) : [];
-    job = { id: target.id, type: target.type, L, from: target.from, door: target.door, contract, markDown: false, markGone: false, otherKills: 0, guards: [...L.guards, ...extra].map((g) => ({ ...g, angle: Math.random() * 6, state: 'patrol', ri: 0 })), looted: {}, bag: { cash: 0, items: {} }, alarmAt: 0, policeAt: 0, search: null, kills: 0, dark: (root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment?.state?.minute ?? 720) || 0) > 0.5 };
+    job = { id: target.id, type: target.type, L, from: target.from, door: target.door, contract, markDown: false, markGone: false, otherKills: 0, gang: target.gang || null, guards: [...L.guards, ...extra].map((g, gi) => ({ ...g, angle: Math.random() * 6, state: 'patrol', ri: 0, ...(target.gang && g.kind !== 'dog' && root.NightshiftGangs?.guardOutfit ? { outfit: root.NightshiftGangs.guardOutfit(target.gang, gi, g.kind) } : {}) })), looted: {}, bag: { cash: 0, items: {} }, alarmAt: 0, policeAt: 0, search: null, kills: 0, dark: (root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment?.state?.minute ?? 720) || 0) > 0.5 };
     const def = makeZone(job, target);
     Z.register(def);
     Z.enter('breakin', L.spawn, {});
@@ -333,7 +334,7 @@
       actors(api) {
         return j.guards.filter((g) => !g.dead).map((g) => (g.kind === 'dog'
           ? { x: g.x, y: g.y, draw: (c) => dogArt(c, g, performance.now() / 1000) }
-          : { x: g.x, y: g.y, angle: g.angle, moving: g.moving, walkTicks: g.walk || 0, id: g.id, color: g.kind === 'cop' ? '#1f3a6a' : g.kind === 'guard' ? '#2b2f33' : g.kind === 'bodyguard' ? '#15181d' : g.kind === 'mark' ? g.color : '#7a5a3a', role: g.kind === 'cop' ? 'officer' : g.kind === 'guard' || g.kind === 'bodyguard' ? 'security' : null, armed: g.armed !== false, hp: g.hp }));
+          : { x: g.x, y: g.y, angle: g.angle, moving: g.moving, walkTicks: g.walk || 0, id: g.id, color: g.kind === 'cop' ? '#1f3a6a' : g.kind === 'guard' ? '#2b2f33' : g.kind === 'bodyguard' ? '#15181d' : g.kind === 'mark' ? g.color : '#7a5a3a', role: g.kind === 'cop' ? 'officer' : g.kind === 'guard' || g.kind === 'bodyguard' ? 'security' : null, armed: g.armed !== false, hp: g.hp, maxHp: B.GUARDS[g.kind]?.hp, outfit: g.outfit }));
       },
       targets(api) {
         const out = [];
@@ -354,7 +355,7 @@
             if (g.hp > 0) { g.state = 'alert'; g.lastSeen = { x: api.pos.x, y: api.pos.y, t: performance.now() }; g.reaction = Math.min(g.reaction || 0, performance.now() + 200); alarm(performance.now()); }
             else if (unaware) api.float(g.x, g.y - 46, 'SNEAK ATTACK', '#9fd0ff');
             if (g.hp <= 0) {
-              g.dead = true; j.kills += 1;
+              g.dead = true; j.kills += 1; if (j.gang) { try { root.NightshiftGangs?.hideoutKill?.(j.gang, g); } catch { /* optional */ } if (g.kind === 'boss') { api.float(g.x, g.y - 34, '👑 SHOT CALLER DOWN', '#ffd970'); j.bag.cash += 400; } }
               if (g.kind === 'mark') { j.markDown = true; api.float(g.x, g.y - 34, '🎯 MARK DOWN', '#ffd970'); say(`🎯 ${g.name} is down. Walk out the back door to get paid.`); try { root.NightshiftAudio?.play('impact'); } catch { /* optional */ } }
               else { j.otherKills += 1; if (g.kind !== 'dog') j.bag.cash += Math.round(20 + Math.random() * 80); api.float(g.x, g.y - 30, g.kind === 'dog' ? '🐕' : '✖', '#ff5a6a'); }
             }
