@@ -13,15 +13,15 @@
   'use strict';
   const C = (mats, seconds) => ({ mats, seconds });
   const WEAPONS = [
-    { id: 'pipe', name: 'Pipe Pistol', icon: '🪈', cls: 'crude', tier: 0, level: 1, crude: true, dmg: 24, pellets: 1, rate: 700, mag: 1, spread: 0.07, range: 300, speed: 9, dur: 10, value: 60,
+    { id: 'pipe', name: 'Pipe Pistol', icon: '🪈', cls: 'crude', tier: 0, level: 1, crude: true, dmg: 24, pellets: 1, rate: 1150, mag: 1, spread: 0.13, range: 280, speed: 9, dur: 8, value: 60,
       craft: C({ pipe: 1, metal: 3, spring: 1, tape: 1 }, 8), desc: 'A pipe, a spring and a prayer. One shot, then reload. Falls apart after ~10 shots.' },
-    { id: 'zip', name: 'Zip .22', icon: '🩹', cls: 'crude', tier: 0, level: 1, crude: true, dmg: 14, pellets: 1, rate: 420, mag: 5, spread: 0.06, range: 330, speed: 9, dur: 40, value: 150,
+    { id: 'zip', name: 'Zip .22', icon: '🩹', cls: 'crude', tier: 0, level: 1, crude: true, dmg: 14, pellets: 1, rate: 680, mag: 5, spread: 0.11, range: 310, speed: 9, dur: 26, value: 150,
       craft: C({ pipe: 1, metal: 5, spring: 2, tape: 2, wood: 1 }, 12), desc: 'Taped-together five-shot. Weak, but it holds together for a while.' },
-    { id: 'sawnoff', name: 'Sawn-off', icon: '🪚', cls: 'crude', tier: 0, level: 2, crude: true, dmg: 10, pellets: 5, rate: 900, mag: 2, spread: 0.32, range: 200, speed: 9, dur: 24, value: 190,
+    { id: 'sawnoff', name: 'Sawn-off', icon: '🪚', cls: 'crude', tier: 0, level: 2, crude: true, dmg: 10, pellets: 5, rate: 1250, mag: 2, spread: 0.34, range: 190, speed: 9, dur: 16, value: 190,
       craft: C({ pipe: 2, metal: 6, spring: 2, wood: 2, tape: 1 }, 15), desc: 'Two barrels of spray. Devastating at arm\'s length, useless past it.' },
-    { id: 'pistol', name: 'Street Pistol', icon: '🔫', cls: 'pistol', tier: 1, level: 2, dmg: 20, pellets: 1, rate: 180, mag: 30, spread: 0, range: 450, speed: 10, dur: 500, value: 1050,
-      craft: C({ frame: 1, barrel: 1, trigger: 1, spring: 2, metal: 4 }, 20), desc: 'A proper sidearm with a long stick magazine. Reliable, accurate, lasts.' },
-    { id: 'compact', name: 'Compact 9', icon: '🔹', cls: 'pistol', tier: 1, level: 3, dmg: 18, pellets: 1, rate: 150, mag: 15, spread: 0.035, range: 420, speed: 10, dur: 450, value: 1150,
+    { id: 'pistol', name: 'Street Pistol', icon: '🔫', cls: 'pistol', tier: 1, level: 2, dmg: 20, pellets: 1, rate: 320, mag: 30, spread: 0.04, range: 450, speed: 10, dur: 260, value: 1050,
+      craft: C({ frame: 1, barrel: 1, trigger: 1, spring: 2, metal: 4 }, 20), desc: 'A proper sidearm with a long stick magazine. Steadier and far tougher than anything taped together.' },
+    { id: 'compact', name: 'Compact 9', icon: '🔹', cls: 'pistol', tier: 1, level: 3, dmg: 18, pellets: 1, rate: 260, mag: 15, spread: 0.05, range: 420, speed: 10, dur: 240, value: 1150,
       craft: C({ frame: 1, barrel: 1, trigger: 1, spring: 3, metal: 3 }, 22), desc: 'Small and quick-firing. Hits a little harder than the street pistol, shorter magazine.' },
     { id: 'revolver', name: 'Six-Shot Magnum', icon: '🤠', cls: 'pistol', tier: 1, level: 3, dmg: 45, pellets: 1, rate: 420, mag: 6, spread: 0.015, range: 560, speed: 12, dur: 650, value: 1300,
       craft: C({ frame: 1, barrel: 1, trigger: 1, spring: 2, metal: 8 }, 25), desc: 'Slow and loud, but drops most people in one shot.' },
@@ -140,11 +140,14 @@
   }
 
   // Weapon stats with its mods applied.
-  function effective(w, mods = [], q = 1) {
+  // Handling: shooting level 1 = slow, shaky (rate x1.25, spread x1.35); each level helps; level 10+ = x0.85 / x0.7.
+  function handling(level = 1) { const t = Math.max(0, Math.min(1, ((Number(level) || 1) - 1) / 9)); return { rate: 1.25 - 0.4 * t, spread: 1.35 - 0.65 * t }; }
+  function effective(w, mods = [], q = 1, level = null) {
     const e = { ...w, mods: mods.slice(), quality: q };
+    if (level !== null && w.id !== 'none') { const h = handling(level); e.rate = Math.round(w.rate * h.rate); e.spread = w.spread * h.spread + (w.crude ? 0.02 * h.rate : 0); }
     if (q !== 1 && QUALITY[q]) e.dmg = Math.max(1, Math.round(w.dmg * QUALITY[q].dmg));
     if (mods.includes('extmag')) e.mag = Math.min(30, Math.round(w.mag * 1.5));
-    if (mods.includes('grip')) e.spread = w.spread * 0.5;
+    if (mods.includes('grip')) e.spread = e.spread * 0.5;
     if (mods.includes('scope')) { e.range = Math.round(w.range * 1.35); e.spread = e.spread * 0.6; }
     e.suppressed = mods.includes('suppressor') || !!w.silent;
     return e;
@@ -323,7 +326,7 @@
   const dps = (w) => (w.dmg * w.pellets * 1000) / w.rate;
   const costText = (cost) => Object.entries(cost).map(([k, n]) => `${n} ${k}`).join(' + ');
 
-  const api = Object.freeze({ SKINS, SKIN, paint, WEAPONS, BY_ID, NONE, LEGENDS, BP_WEIGHT, rollBlueprint, learn, PLATE, buildPlate, QUALITY, rollQuality, qOf, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, maxDur, clean, usable, equip, cycle,
+  const api = Object.freeze({ SKINS, SKIN, paint, WEAPONS, BY_ID, NONE, LEGENDS, BP_WEIGHT, rollBlueprint, learn, PLATE, buildPlate, QUALITY, rollQuality, qOf, AMMO_CRATE, ARMOR, ABSORB, absorb, MODS, MOD, SPARE_MAX, effective, handling, maxDur, clean, usable, equip, cycle,
     craftBlock, craft, modBlock, craftMod, wear, repairCost, repair, usedValue, sell, pelletAngles, fitMagazine, dps, costText });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftWeaponsData = api;

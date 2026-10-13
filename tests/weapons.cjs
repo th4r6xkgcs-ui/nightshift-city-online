@@ -71,8 +71,8 @@ assert.equal(W.equip(rs, 'pistol'), false, 'cannot equip a broken gun');
 const rc = W.repairCost(rs, 'pistol'); assert.ok(rc.trigger === 1 && rc.metal > 0 && rc.spring > 0);
 Object.assign(bag, { metal: 20, spring: 5, trigger: 1 });
 assert.equal(W.repair(rs, 'pistol', ctx(0)).reason, 'Repair it at your Lockup workshop');
-assert.ok(W.repair(rs, 'pistol', ctx(1)).ok); assert.deepEqual(rs.broken, []); assert.equal(rs.equipped, 'pistol'); assert.equal(rs.cond.pistol, 500);
-rs.cond.pistol = 250; const half = W.repairCost(rs, 'pistol'); assert.ok(!half.trigger && half.metal < rc.metal, 'partial wear costs less');
+assert.ok(W.repair(rs, 'pistol', ctx(1)).ok); assert.deepEqual(rs.broken, []); assert.equal(rs.equipped, 'pistol'); assert.equal(rs.cond.pistol, 260);
+rs.cond.pistol = 130; const half = W.repairCost(rs, 'pistol'); assert.ok(!half.trigger && half.metal < rc.metal, 'partial wear costs less');
 console.log('PASS: real guns break, repair costs scale with wear, bench tier gates repairs');
 
 // Selling: spares at full value, used guns by condition.
@@ -94,7 +94,7 @@ const e = W.effective(W.BY_ID.smg, ms.mods.smg);
 assert.equal(e.mag, 30); assert.ok(Math.abs(e.spread - 0.09 * 0.5 * 0.6) < 1e-9); assert.equal(e.range, Math.round(380 * 1.35)); assert.equal(e.suppressed, true);
 const cr = W.clean({}); W.craft(cr, 'pipe', { ...ctx(0), have: () => true, spend: () => true });
 assert.equal(W.modBlock(cr, 'pipe', 'scope', ctx(3, 20)), 'Won\'t fit a crude gun');
-assert.ok(W.craftMod(cr, 'pipe', 'reinforce', ctx(0)).ok); assert.equal(cr.cond.pipe, 16); assert.equal(W.maxDur(pipe, cr.mods.pipe), 16);
+assert.ok(W.craftMod(cr, 'pipe', 'reinforce', ctx(0)).ok); assert.equal(cr.cond.pipe, 13); assert.equal(W.maxDur(pipe, cr.mods.pipe), 13);
 console.log('PASS: crafted mods (tier + level gates, crude limits, reinforce durability)');
 
 // Cycling only over working guns; magazine fit; pellets; armor.
@@ -117,11 +117,11 @@ assert.ok(o1[0] > o40[0] && o1[3] < o40[3] && o1[2] < o40[2], 'skill shifts odds
 assert.ok(o40[3] <= 0.2 && o40[0] >= 0.03, 'Masterwork stays rare; Rough never fully disappears');
 const qs = W.clean({}), qbag = { have: () => true, spend: () => true, bench: 3, shooting: 50, durMul: 1 };
 W.craft(qs, 'pistol', { ...qbag, quality: 0 });
-assert.equal(W.qOf(qs, 'pistol'), 0); assert.equal(qs.cond.pistol, Math.round(500 * 0.8));
+assert.equal(W.qOf(qs, 'pistol'), 0); assert.equal(qs.cond.pistol, Math.round(260 * 0.8));
 assert.equal(W.effective(W.BY_ID.revolver, [], 3).dmg, Math.round(45 * 1.1));
 const up = W.craft(qs, 'pistol', { ...qbag, quality: 3 });
 assert.ok(up.upgraded); assert.equal(W.qOf(qs, 'pistol'), 3); assert.equal(qs.spare.pistol, 1, 'the Rough one became a spare');
-assert.equal(qs.cond.pistol, 750, 'masterwork lasts 1.5x');
+assert.equal(qs.cond.pistol, 390, 'masterwork lasts 1.5x');
 assert.ok(W.craft(qs, 'pistol', { ...qbag, quality: 2 }).spare, 'a worse copy is just a spare');
 assert.equal(W.usedValue(qs, 'pistol'), Math.round(1050 * 1.6));
 assert.deepEqual(W.clean(JSON.parse(JSON.stringify(qs))).quality, { pistol: 3 }, 'quality survives save');

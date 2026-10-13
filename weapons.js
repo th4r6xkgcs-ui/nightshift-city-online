@@ -20,7 +20,7 @@
   const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode */ } };
   persist();
   // Equipped gun with its mods applied (mag/spread/range/suppressed). See weapons-data.js effective().
-  const current = () => (W.BY_ID[state.equipped] ? W.effective(W.BY_ID[state.equipped], state.mods?.[state.equipped] || [], W.qOf(state, state.equipped)) : W.NONE);
+  const current = () => (W.BY_ID[state.equipped] ? W.effective(W.BY_ID[state.equipped], state.mods?.[state.equipped] || [], W.qOf(state, state.equipped), (() => { try { return root.NightshiftSkills?.level?.('shooting') ?? 1; } catch { return 1; } })()) : W.NONE);
   const durMul = () => { try { return root.NightshiftSkills?.mod('crafting.durability') ?? 1; } catch { return 1; } };
 
   /* eslint-disable no-undef */
