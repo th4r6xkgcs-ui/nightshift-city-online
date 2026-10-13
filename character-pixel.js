@@ -15,7 +15,7 @@
 (function (root) {
   'use strict';
   const C0 = () => root.NightshiftCharacters, W0 = () => root.NightshiftWardrobeData;
-  const G = 3, CW = 44, CH = 56, AXW = 22, AYW = 36, GW = CW * G, GH = CH * G, AX = AXW * G, AY = AYW * G;
+  const G = 2, CW = 44, CH = 56, AXW = 22, AYW = 36, GW = CW * G, GH = CH * G, AX = AXW * G, AY = AYW * G;
 
   // ---------------- colour ----------------
   const rgb = (h) => { const n = parseInt(String(h).slice(1, 7), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
@@ -455,7 +455,20 @@
   }
 
   // ---------------- canvas + cache ----------------
-  const frames = new Map(), MAX = 520, BUDGET = 6, budget = { t: 0, n: 0 }; let stats = { built: 0, ms: 0 };
+  // v0.62: EPX/Scale2x upscaling — the art is authored on the G grid (where faces, seams and logos are tuned), then
+  // doubled with edge-aware rules so silhouettes and diagonals come out smooth and fine instead of stair-stepped.
+  const UP = 2;
+  function epx(col, w, h) {
+    const W2 = w * 2, out = new Array(W2 * h * 2).fill(null);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const i = y * w + x, P = col[i], A = y > 0 ? col[i - w] : null, B = x < w - 1 ? col[i + 1] : null, C = x > 0 ? col[i - 1] : null, D = y < h - 1 ? col[i + w] : null;
+      let p1 = P, p2 = P, p3 = P, p4 = P;
+      if (C === A && C !== D && A !== B) p1 = A; if (A === B && A !== C && B !== D) p2 = B; if (D === C && D !== B && C !== A) p3 = C; if (B === D && B !== A && D !== C) p4 = D;
+      const o = (y * 2) * W2 + x * 2; out[o] = p1; out[o + 1] = p2; out[o + W2] = p3; out[o + W2 + 1] = p4;
+    }
+    return [out, W2, h * 2];
+  }
+  const frames = new Map(), MAX = 420, BUDGET = 6, budget = { t: 0, n: 0 }; let stats = { built: 0, ms: 0 };
   function render(o, dir, anim, f, hold) { const t0 = (typeof performance !== 'undefined' ? performance.now() : 0); const F = build(o, dir, anim, f, hold), col = finish(F); stats.built++; stats.ms += (typeof performance !== 'undefined' ? performance.now() : 0) - t0; return col; }
   function base(o, dir, anim, f, hold) {
     const C = C0(), W = W0(), n = C.ANIMS[anim] || 1, k = ((f % n) + n) % n, key = W.keyOf(o) + '|' + dir + anim + k + '|' + (hold || '');
@@ -463,14 +476,14 @@
     const now = (typeof performance !== 'undefined' ? performance.now() : 0); if (now - budget.t > 12) { budget.t = now; budget.n = 0; }
     if (++budget.n > BUDGET) { for (let d = 1; d < n; d++) { const alt = frames.get(W.keyOf(o) + '|' + dir + anim + ((k + n - d) % n) + '|' + (hold || '')); if (alt) { stats.deferred = (stats.deferred || 0) + 1; return alt; } }
       if (budget.n > BUDGET * 2) { const pre = W.keyOf(o) + '|' + dir; for (const [kk, v] of frames) if (kk.startsWith(pre)) { stats.deferred = (stats.deferred || 0) + 1; return v; } } }
-    const col = render(o, dir, anim, k, hold); cv = document.createElement('canvas'); cv.width = GW; cv.height = GH;
-    const x = cv.getContext('2d'), img = x.createImageData(GW, GH); for (let i = 0; i < col.length; i++) { const c = col[i]; if (!c) continue; const [r, gg, b] = rgb(c); img.data[i * 4] = r; img.data[i * 4 + 1] = gg; img.data[i * 4 + 2] = b; img.data[i * 4 + 3] = 255; }
+    const col0 = render(o, dir, anim, k, hold), [col, OW, OH] = UP > 1 ? epx(col0, GW, GH) : [col0, GW, GH]; cv = document.createElement('canvas'); cv.width = OW; cv.height = OH;
+    const x = cv.getContext('2d'), img = x.createImageData(OW, OH); for (let i = 0; i < col.length; i++) { const c = col[i]; if (!c) continue; const [r, gg, b] = rgb(c); img.data[i * 4] = r; img.data[i * 4 + 1] = gg; img.data[i * 4 + 2] = b; img.data[i * 4 + 3] = 255; }
     x.putImageData(img, 0, 0); frames.set(key, cv); if (frames.size > MAX) frames.delete(frames.keys().next().value); return cv;
   }
   const scaled = new Map();
   // Same contract as character-art frame(): a canvas of CELL*scale, anchor at CELL.ax/ay*scale.
   function frame(o, dir, anim, f, scale = 2, hold = '') {
-    const b = base(o, dir, anim, f, hold); if (scale === G) return b;
+    const b = base(o, dir, anim, f, hold); if (b.width === CW * scale) return b;
     const key = b.__k || (b.__k = Math.random().toString(36).slice(2)), sk = key + '@' + scale; let cv = scaled.get(sk); if (cv) return cv;
     cv = document.createElement('canvas'); cv.width = CW * scale; cv.height = CH * scale; const x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(b, 0, 0, cv.width, cv.height);
     scaled.set(sk, cv); if (scaled.size > 160) scaled.delete(scaled.keys().next().value); return cv;
