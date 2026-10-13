@@ -461,7 +461,8 @@
     const C = C0(), W = W0(), n = C.ANIMS[anim] || 1, k = ((f % n) + n) % n, key = W.keyOf(o) + '|' + dir + anim + k + '|' + (hold || '');
     let cv = frames.get(key); if (cv) { frames.delete(key); frames.set(key, cv); return cv; }
     const now = (typeof performance !== 'undefined' ? performance.now() : 0); if (now - budget.t > 12) { budget.t = now; budget.n = 0; }
-    if (++budget.n > BUDGET) { for (let d = 1; d < n; d++) { const alt = frames.get(W.keyOf(o) + '|' + dir + anim + ((k + n - d) % n) + '|' + (hold || '')); if (alt) { stats.deferred = (stats.deferred || 0) + 1; return alt; } } }
+    if (++budget.n > BUDGET) { for (let d = 1; d < n; d++) { const alt = frames.get(W.keyOf(o) + '|' + dir + anim + ((k + n - d) % n) + '|' + (hold || '')); if (alt) { stats.deferred = (stats.deferred || 0) + 1; return alt; } }
+      if (budget.n > BUDGET * 2) { const pre = W.keyOf(o) + '|' + dir; for (const [kk, v] of frames) if (kk.startsWith(pre)) { stats.deferred = (stats.deferred || 0) + 1; return v; } } }
     const col = render(o, dir, anim, k, hold); cv = document.createElement('canvas'); cv.width = GW; cv.height = GH;
     const x = cv.getContext('2d'), img = x.createImageData(GW, GH); for (let i = 0; i < col.length; i++) { const c = col[i]; if (!c) continue; const [r, gg, b] = rgb(c); img.data[i * 4] = r; img.data[i * 4 + 1] = gg; img.data[i * 4 + 2] = b; img.data[i * 4 + 3] = 255; }
     x.putImageData(img, 0, 0); frames.set(key, cv); if (frames.size > MAX) frames.delete(frames.keys().next().value); return cv;
