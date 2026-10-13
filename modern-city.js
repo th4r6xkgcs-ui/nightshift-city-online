@@ -43,7 +43,7 @@
   }
   const scheme = (b, kind) => { const L = SCHEMES[kind] || SCHEMES.store; return L[Math.floor(H(b.x, b.y, 2) * L.length)]; };
   const BRAND = { 'CORNER SHOP': ['MART 24', 'QUIK STOP', 'DAILY', '7NITE', 'CORNER CO.'], CLOTHING: ['THREADS', 'DRIP', 'HYPE LAB', 'NORTHSIDE', 'ARCADE SUPPLY'], DINER: ['DINER', 'BURGER BAR', 'NOODLE HOUSE', 'TACO SPOT', 'GRILL 88'], GARAGE: ['AUTO WORKS', 'TUNE LAB', 'EV SERVICE'], WAREHOUSE: ['LOGISTICS', 'DEPOT', 'STORAGE+'], BANK: ['FIRST NIGHTSHIFT', 'CITY TRUST', 'APEX BANK'], CLUB: ['NEON', 'VELVET', 'AFTERDARK', 'PULSE'], OFFICES: ['TECH HUB', 'STUDIO', 'CO-WORK'] };
-  const brand = (b) => { const L = BRAND[b.name] || [b.name]; return L[Math.floor(H(b.x, b.y, 3) * L.length)]; };
+  const brand = (b) => { const L = BRAND[b.name] || [b.name]; return L[(Math.floor(H(Math.floor(b.x / 440), Math.floor(b.y / 340), 3) * L.length) + (b.x % 440 > 200 ? 1 : 0)) % L.length]; }; // twins get different brands
 
   // ---------- shared pieces ----------
   function shadow(c, b) { c.fillStyle = 'rgba(8,14,24,0.32)'; c.beginPath(); c.moveTo(b.x + 10, b.y + 14); c.lineTo(b.x + b.w + 26, b.y + 26); c.lineTo(b.x + b.w + 26, b.y + b.h + 22); c.lineTo(b.x + 16, b.y + b.h + 22); c.closePath(); c.fill(); }
@@ -59,7 +59,7 @@
   function lightbox(c, x, y, w, h, text, bg, fg, glow) {
     c.save(); if (glow) { c.shadowColor = fg; c.shadowBlur = 10; }
     c.fillStyle = bg; rr(c, x, y, w, h, 2); c.fill(); c.shadowBlur = 0;
-    c.font = FONT(Math.min(11, h - 4)); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = fg; c.fillText(text, x + w / 2, y + h / 2 + 0.5);
+    c.font = FONT(Math.min(11, h - 4)); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = fg; c.fillText(text, x + w / 2, y + h / 2 + 0.5, w - 6);
     c.restore();
   }
   // animated digital billboard
