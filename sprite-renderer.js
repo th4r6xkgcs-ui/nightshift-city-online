@@ -229,7 +229,7 @@ function furniture(f){
  }else{
   rect('#2a2230',x-1,y-1,w+2,h+2);rect(f.color,x,y,w,h);rect('#ffffff22',x+2,y+2,w-4,3);rect('#00000022',x+2,y+h-7,w-4,6);
  }
- label(name,x+w/2,y-3);
+ /* v0.61: no debug-style furniture captions; the USE prompt names things when you're next to them */
  g.restore();
 }
 
