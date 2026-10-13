@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict'),boot=require('./harness.cjs');const run=boot();
-run('globalThis.o=NightshiftWardrobeData.cleanOutfit(NightshiftWardrobeData.DEFAULT);globalThis.a=NightshiftCharacters.frame(o,2,"walk",0);globalThis.b=NightshiftCharacters.frame(o,2,"walk",8)');
+run('globalThis.o=NightshiftWardrobeData.cleanOutfit(NightshiftWardrobeData.DEFAULT);globalThis.a=NightshiftCharacters.frame(o,2,"walk",0);globalThis.b=NightshiftCharacters.frame(o,2,"walk",12)');
 assert.equal(run('a===b'),true);assert.equal(run('a.width'),176);assert.equal(run('a.height'),224);
 run('NightshiftWardrobe.outfit();globalThis.testWardrobeSnapshot=JSON.stringify(NightshiftWardrobe.state);globalThis.testGameplaySnapshot=JSON.stringify({player,cars,peds});for(let d=0;d<8;d++)for(let f=0;f<8;f++)NightshiftCharacters.frame(o,d,"walk",f);NightshiftCharacters.frame(o,0,"idle",NaN);NightshiftCharacters.frame(o,0,"walk",-1);NightshiftCharacters.frame(o,0,"crouch",0);NightshiftSprites.person(player,true,{weapon:false})');
 assert.equal(run('JSON.stringify(NightshiftWardrobe.state)===testWardrobeSnapshot'),true);assert.equal(run('JSON.stringify({player,cars,peds})===testGameplaySnapshot'),true);
