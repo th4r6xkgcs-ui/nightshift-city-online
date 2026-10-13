@@ -245,7 +245,8 @@
     if (onPlayer && (u.meleeOnly || dP < 34)) {
       if (dP > 24) moveTo(u, p, u.boss ? 82 : 78, dt); else u.moving = false;
       u.angle = Math.atan2(p.y - u.y, p.x - u.x); u.inCover = false;
-      if (dP < 30 && now > (u.nextMelee || 0)) { u.nextMelee = now + (u.boss ? 900 : 1150); u.swingAt = now; if (Math.random() < 0.3) bark(u, 'melee'); const dmg = u.boss ? 16 : 9; try { if (root.NightshiftMelee?.incoming?.(u, dmg) !== false) root.NightshiftRecovery?.damage?.(dmg, now); } catch { /* n/a */ } }
+      if (dP >= 30) u.windUp = 0; else if (!u.windUp) u.windUp = now + 280;
+      if (dP < 30 && now > (u.nextMelee || 0) && now > u.windUp) { u.nextMelee = now + (u.boss ? 1000 : 1350) + Math.random() * 300; u.swingAt = now; if (Math.random() < 0.3) bark(u, 'melee'); const dmg = u.boss ? 13 : 6; try { if (root.NightshiftMelee?.incoming?.(u, dmg) !== false) root.NightshiftRecovery?.damage?.(dmg, now); } catch { /* n/a */ } }
       return;
     }
     let reloading = false; try { reloading = onPlayer && combatState.until > now && dP < 330; } catch { /* n/a */ } // eslint-disable-line no-undef
