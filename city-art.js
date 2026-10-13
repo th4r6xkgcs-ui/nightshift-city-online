@@ -47,7 +47,7 @@
     }
     // turn arrows on the approach to the next junction (right-hand lanes)
     if (H(seed, 12) < 0.45) {
-      const fwd = len - 120, [ax, ay, ang] = horiz ? [x0 + fwd, y0 + 31, 0] : [x0 - 31, y0 + fwd, Math.PI / 2], left = H(seed, 13) < 0.5;
+      const fwd = len - 120, [ax, ay, ang] = horiz ? [x0 + 120, y0 - 31, Math.PI] : [x0 - 31, y0 + fwd, Math.PI / 2], left = H(seed, 13) < 0.5;
       c.save(); c.translate(ax, ay); c.rotate(ang); c.fillStyle = 'rgba(220,224,206,0.55)'; c.fillRect(-14, -1.5, 16, 3);
       if (left) { c.fillRect(0, -9, 3, 9); c.beginPath(); c.moveTo(1.5, -15); c.lineTo(-4, -8); c.lineTo(7, -8); c.closePath(); c.fill(); }
       c.beginPath(); c.moveTo(10, 0); c.lineTo(2, -6); c.lineTo(2, 6); c.closePath(); c.fill(); c.restore();
