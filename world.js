@@ -252,6 +252,7 @@ function ground(ctx,width,height){
   ctx.save();ctx.translate(ax,ay);ctx.rotate(angle);rect(ctx,'#bfc6b599',-12,-2,19,4);
   ctx.fillStyle='#bfc6b599';ctx.beginPath();ctx.moveTo(13,0);ctx.lineTo(3,-7);ctx.lineTo(3,7);ctx.closePath();ctx.fill();ctx.restore();
  }
+ try{root.NightshiftCityArt?.roads?.(ctx,width,height,groundView)}catch{} // v0.60 (Claude): road wear, kerbs, drains, arrows
 }
 let groundCache=null,cacheWidth=0,cacheHeight=0;
 const litWindows=[];
