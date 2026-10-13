@@ -5,14 +5,14 @@ function phase(now){const t=((now%18000)+18000)%18000;return {horizontal:t<7000?
 function stop(actor,now){
  const horizontal=Math.abs(Math.cos(actor.angle))>.8,light=phase(now)[horizontal?'horizontal':'vertical'];if(light==='green')return false;
  const ux=Math.cos(actor.angle),uy=Math.sin(actor.angle);
- for(let x=440;x<2200;x+=440)for(let y=340;y<1700;y+=340){const dx=x-actor.x,dy=y-actor.y,forward=dx*ux+dy*uy,lateral=Math.abs(dx*uy-dy*ux);if(forward>42&&forward<85&&lateral<36)return true}
+ for(let x=440;x<world.w;x+=440)for(let y=340;y<world.h;y+=340){const dx=x-actor.x,dy=y-actor.y,forward=dx*ux+dy*uy,lateral=Math.abs(dx*uy-dy*ux);if(forward>42&&forward<85&&lateral<36)return true}
  return false;
 }
 root.NightshiftSignals={phase,stop};if(!root.document)return;
 root.NightshiftSignals.draw=now=>{
  const lights=phase(now),colors={red:'#f47e86',amber:'#f3c86d',green:'#89e2b4'};
  g.save();
- for(let x=440;x<2200;x+=440)for(let y=340;y<1700;y+=340){
+ for(let x=440;x<world.w;x+=440)for(let y=340;y<world.h;y+=340){
   if(typeof camera!=='undefined'&&(x+110<camera.x||y+110<camera.y||x-110>camera.x+W/camera.zoom||y-110>camera.y+H/camera.zoom))continue;
   // Paired three-lamp heads: positions communicate state as well as color.
   for(const [dx,dy,axis] of [[72,-91,'vertical'],[-91,72,'horizontal']]){

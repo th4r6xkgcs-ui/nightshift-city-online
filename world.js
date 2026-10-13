@@ -10,7 +10,15 @@ function wash(ctx,color,x,y,w,h,top='#ffffff12',bottom='#081c3055'){
 }
 function oval(ctx,color,x,y,rx,ry){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill()}
 const palettes=Object.freeze({west:Object.freeze({yard:'#596650',edge:'#8f8974',facade:'#967b63',roof:'#6c7062',accent:'#c1a479'}),midtown:Object.freeze({yard:'#566264',edge:'#9caaa5',facade:'#879698',roof:'#657580',accent:'#b3d2ce'}),south:Object.freeze({yard:'#61584c',edge:'#817565',facade:'#886655',roof:'#655c51',accent:'#b69c70'}),docks:Object.freeze({yard:'#53605d',edge:'#84938b',facade:'#6a7d78',roof:'#536967',accent:'#d0b76b'})});
-function districtStyle(x,y){return y>=1020?(x>=1320?'docks':'south'):(x>=880?'midtown':'west')}
+// v0.57 (Claude): the original 5x5-block core keeps its four districts; the city now spreads east and south into
+// eight more neighbourhoods (15x15 blocks). Each reuses one of the four palettes and has its own name.
+const REGIONS=[
+ {bx:[5,9],by:[0,4],style:'midtown',name:'DOWNTOWN'},{bx:[10,14],by:[0,4],style:'west',name:'THE HEIGHTS'},
+ {bx:[0,4],by:[5,9],style:'south',name:'OLD TOWN'},{bx:[5,9],by:[5,9],style:'midtown',name:'MARKET DISTRICT'},{bx:[10,14],by:[5,9],style:'docks',name:'IRONWORKS'},
+ {bx:[0,4],by:[10,14],style:'west',name:'FAIRVIEW'},{bx:[5,9],by:[10,14],style:'south',name:'THE FLATS'},{bx:[10,14],by:[10,14],style:'docks',name:'HARBOR'}];
+function regionAt(x,y){if(x<2200&&y<1700)return null;const bx=Math.floor(x/440),by=Math.floor(y/340);return REGIONS.find(r=>bx>=r.bx[0]&&bx<=r.bx[1]&&by>=r.by[0]&&by<=r.by[1])||REGIONS[REGIONS.length-1]}
+function districtStyle(x,y){const r=regionAt(x,y);if(r)return r.style;return y>=1020?(x>=1320?'docks':'south'):(x>=880?'midtown':'west')}
+function districtName(x,y){const r=regionAt(x,y);if(r)return r.name;return y>=1020?(x>=1320?'THE DOCKS':'SOUTHSIDE'):(x>=880?'MIDTOWN':'WEST END')}
 function palm(ctx,x,y){
  // Cutout fronds, a bent trunk and a consistent cast shadow; cached with paving.
  rect(ctx,'#101c2d44',x+3,y+5,32,8);rect(ctx,'#283d3766',x+20,y-10,16,23);
@@ -157,7 +165,7 @@ function storefrontLight(b,night){
 // oil stains and tyre marks on the road bands only (deterministic, so every device sees the same streets).
 function ground(ctx,width,height){
  rect(ctx,'#344d4b',0,0,width,height);const cafes=new Set(createBuildings(width,height).filter(b=>['DINER','CORNER SHOP'].includes(b.name)).map(b=>(b.x-80)+':'+(b.y-75)));
- for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
+ for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){if(groundView&&(x+500<groundView.x||x-60>groundView.x+groundView.w||y+400<groundView.y||y-60>groundView.y+groundView.h))continue;
   const palette=palettes[districtStyle(x+100,y+100)];rect(ctx,palette.edge,x+82,y+80,276,180);rect(ctx,palette.yard,x+93,y+91,254,156);
 
   if(x===0&&y===340){
@@ -177,7 +185,7 @@ function ground(ctx,width,height){
  // Smooth asphalt fields; sparse longitudinal patches describe material, not noise.
  for(let x=0;x<width;x+=440)wash(ctx,'#273443',x-57,0,114,height,'#ffffff03','#0c1c3018');
  for(let y=0;y<height;y+=340)wash(ctx,'#273443',0,y-56,width,112,'#ffffff03','#0c1c3022');
- for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){
+ for(let x=0;x<width;x+=440)for(let y=0;y<height;y+=340){if(groundView&&(x+500<groundView.x||x-60>groundView.x+groundView.w||y+400<groundView.y||y-60>groundView.y+groundView.h))continue;
   // Cut all four curb bars out of the junction. Keep pedestrian corners intact.
   rect(ctx,'#273443',x-63,y-83,126,166);
   rect(ctx,'#273443',x-85,y-62,170,124);
@@ -188,7 +196,7 @@ function ground(ctx,width,height){
   rect(ctx,'#c8b674',x-2,y+112,2,90);rect(ctx,'#c8b674',x+2,y+112,2,90);
   for(let k=114;k<335;k+=48){rect(ctx,'#c8b674',x+k,y-2,26,2);rect(ctx,'#c8b674',x+k,y+2,26,2)}
   if(x>0&&y>0&&(x/440+y/340)%3===0){
-   const name={west:'WEST END',midtown:'MIDTOWN',south:'SOUTHSIDE',docks:'HARBOR WAY'}[districtStyle(x+150,y+30)];
+   const name=regionAt(x+150,y+30)?districtName(x+150,y+30):{west:'WEST END',midtown:'MIDTOWN',south:'SOUTHSIDE',docks:'HARBOR WAY'}[districtStyle(x+150,y+30)];
    ctx.save();ctx.font='bold 10px monospace';ctx.textAlign='center';ctx.fillStyle='#a7b3ae66';ctx.fillText(name,x+224,y+31);ctx.fillRect(x+165,y+37,118,1);ctx.restore();
   }
   // Drain grilles and brick pedestrian corners.
@@ -212,9 +220,18 @@ function ground(ctx,width,height){
 }
 let groundCache=null,cacheWidth=0,cacheHeight=0;
 const litWindows=[];
+// v0.57 (Claude): the ground is cached in 1320x1020 tiles (3x3 blocks), built lazily for what's on screen
+// (a single world-sized canvas would exceed mobile canvas limits now that the city is 6600x5100).
+const TILE_W=1320,TILE_H=1020,tiles=new Map();let tileBuilds=0;
+function groundTile(tx,ty){const k=tx+','+ty;let t=tiles.get(k);if(t){tiles.delete(k);tiles.set(k,t);return t}
+ const canvas=root.document?.createElement?.('canvas'),ctx=canvas?.getContext?.('2d');if(!ctx)return null;canvas.width=TILE_W;canvas.height=TILE_H;ctx.imageSmoothingEnabled=false;
+ ctx.save();ctx.beginPath();ctx.rect(0,0,TILE_W,TILE_H);ctx.clip();ctx.translate(-tx*TILE_W,-ty*TILE_H);groundView={x:tx*TILE_W,y:ty*TILE_H,w:TILE_W,h:TILE_H};ground(ctx,world.w,world.h);groundView=null;ctx.restore();
+ tiles.set(k,canvas);tileBuilds++;while(tiles.size>16)tiles.delete(tiles.keys().next().value);return canvas}
+let groundView=null;
 function road(){litWindows.length=0;
- if(!groundCache||cacheWidth!==world.w||cacheHeight!==world.h){const canvas=root.document?.createElement?.('canvas');const ctx=canvas?.getContext?.('2d');if(ctx){canvas.width=world.w;canvas.height=world.h;ctx.imageSmoothingEnabled=false;ground(ctx,world.w,world.h);groundCache=canvas;cacheWidth=world.w;cacheHeight=world.h}}
- if(groundCache)g.drawImage(groundCache,0,0);else ground(g,world.w,world.h);
+ const m=g.getTransform?.(),z=m&&m.a?m.a:1,vx=m?-m.e/z:0,vy=m?-m.f/(m.d||z):0,vw=(g.canvas?.width||W)/z,vh=(g.canvas?.height||H)/(m?.d||z);
+ const tx0=Math.max(0,Math.floor(vx/TILE_W)),ty0=Math.max(0,Math.floor(vy/TILE_H)),tx1=Math.min(Math.ceil(world.w/TILE_W)-1,Math.floor((vx+vw)/TILE_W)),ty1=Math.min(Math.ceil(world.h/TILE_H)-1,Math.floor((vy+vh)/TILE_H));
+ for(let ty=ty0;ty<=ty1;ty++)for(let tx=tx0;tx<=tx1;tx++){const t=groundTile(tx,ty);if(t)g.drawImage(t,tx*TILE_W,ty*TILE_H)}
 }
 // Roof detail (art pass): deterministic per building; draws into the free strip at the roof's south edge (y+74..y+104,
 // x+146..x+232), which is clear of every type's utilities. Night: skylights feed the lightmap, antennas blink red.
@@ -350,5 +367,5 @@ function building(b){
  if(shop){const bx=x+w-43,by=y+h+10;rect(g,'#152d3966',bx+4,by+5,25,25);wash(g,'#42695d',bx,by,24,22,'#a9cbbf33','#173c3455');oval(g,'#446e55',bx+12,by-1,13,7);oval(g,'#76966a',bx+9,by-4,8,4);rect(g,'#c3b58c',x+28,y+h+10,20,23);rect(g,'#253e48',x+31,y+h+12,14,16);g.fillStyle='#d8d0ac';g.font='7px system-ui';g.textAlign='center';g.fillText(name==='DINER'?'MENU':'OPEN',x+38,y+h+23)}
  ambient(g,b,(typeof ticks==='number'?ticks:0)/60,night);storefrontLight(b,night);g.restore();
 }
-root.NightshiftWorld={ambient,litWindows:()=>litWindows,createBuildings,road,building,ground,cafeActors,cafeCanopy,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop,signActors,signTop};
+root.NightshiftWorld={districtName,regionAt,tileStats:()=>({tiles:tiles.size,built:tileBuilds}),ambient,litWindows:()=>litWindows,createBuildings,road,building,ground,cafeActors,cafeCanopy,hash,districtStyle,neonColor,palmActors,palmCrown:(p)=>palmCrown(g,p.x,p.y),treeActors,treeCrown:(p)=>treeCrown(g,p.x,p.y-12),awningActors,awningTop,signActors,signTop};
 })(globalThis);

@@ -3,7 +3,7 @@
 'use strict';
 const KEY='nightshift-city-world-v1';
 function clean(raw){return {minute:Number.isFinite(raw?.minute)?((raw.minute%1440)+1440)%1440:1140}}
-function district(pos){if(pos.y>=1020)return pos.x>=1320?'THE DOCKS':'SOUTHSIDE';return pos.x>=880?'MIDTOWN':'WEST END'}
+function district(pos){const n=root.NightshiftWorld?.districtName?.(pos.x,pos.y);if(n)return n;if(pos.y>=1020)return pos.x>=1320?'THE DOCKS':'SOUTHSIDE';return pos.x>=880?'MIDTOWN':'WEST END'}
 function darkness(minute){const hour=((minute%1440)+1440)%1440/60;if(hour>=7&&hour<=18)return 0;if(hour<6||hour>=20)return 1;return hour<7?7-hour:(hour-18)/2}
 function step(state,seconds){state.minute=(state.minute+Math.max(0,Math.min(.2,Number.isFinite(seconds)?seconds:0))*3)%1440;return state}
 function clock(minute){const n=Math.floor(((minute%1440)+1440)%1440);return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
@@ -15,7 +15,7 @@ function inView(x,y,margin=80){return typeof camera==='undefined'||(x>=camera.x-
 root.NightshiftEnvironment={clean,district,darkness,step,clock,weather,rainCount,lampColor,vehicleLights};if(!root.document)return;
 let state=clean();try{state=clean(JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}
-function lights(){const night=darkness(state.minute);g.save();for(let x=440;x<2200;x+=440)for(let y=340;y<1700;y+=340){
+function lights(){const night=darkness(state.minute);g.save();for(let x=440;x<world.w;x+=440)for(let y=340;y<world.h;y+=340){
  const lx=x-73,ly=y-87;if(!inView(lx,ly))continue;const color=lampColor({x,y});
  if(night){g.globalAlpha=night;const glow=g.createRadialGradient?.(lx,ly,2,lx,ly,57);if(glow?.addColorStop){glow.addColorStop(0,color+'55');glow.addColorStop(.4,color+'22');glow.addColorStop(1,color+'00');g.fillStyle=glow}else g.fillStyle=color+'22';g.beginPath();g.arc(lx,ly,57,0,Math.PI*2);g.fill();g.globalAlpha=1}
  g.fillStyle='#111f2b66';g.fillRect(lx+3,ly+3,4,27);g.fillStyle='#283a40';g.fillRect(lx-1,ly,3,25);g.fillRect(lx-4,ly+24,9,3);g.fillStyle='#61716c';g.fillRect(lx-1,ly,1,22);g.fillStyle=night?color:'#9eaa98';g.fillRect(lx-6,ly-4,12,5);if(night){g.fillStyle='#fff5d9';g.fillRect(lx-4,ly-3,8,2);g.fillStyle=color+'20';g.fillRect(lx-20,ly+26,40,12);}
@@ -32,7 +32,7 @@ function glow(ctx,x,y,r,color,a){if(r<=1)return;const gr=ctx.createRadialGradien
 function hexA(hex,a){const n=parseInt(String(hex).slice(1,7),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${Math.max(0,Math.min(1,a)).toFixed(3)})`}
 function lightSources(){
  const out={lamps:[],cars:[],fronts:[],dots:[]},z=camera.zoom;
- for(let x=440;x<2200;x+=440)for(let y=340;y<1700;y+=340){const lx=x-73,ly=y-87;if(seen(lx,ly,140))out.lamps.push({x:lx,y:ly+2,color:lampColor({x,y})})}
+ for(let x=440;x<world.w;x+=440)for(let y=340;y<world.h;y+=340){const lx=x-73,ly=y-87;if(seen(lx,ly,140))out.lamps.push({x:lx,y:ly+2,color:lampColor({x,y})})}
  const all=[...(typeof cars!=='undefined'?cars:[]),...(root.NightshiftTraffic?.actors||[])];
  for(const car of all){if(!car||!seen(car.x,car.y,160))continue;const active=(typeof player!=='undefined'&&player.car===car)||root.NightshiftTraffic?.actors?.includes(car)===true,l=vehicleLights(car,{active});if(l.on)out.cars.push({car,reach:l.reach,brake:l.braking})}
  if(typeof buildings!=='undefined')for(const b of buildings){if(!b||!seen(b.x+b.w/2,b.y+b.h,b.w))continue;const color=root.NightshiftWorld?.neonColor?.(b.name)||'#ffd9a0',big=['CLUB','DINER','CORNER SHOP','CLOTHING','GARAGE','CASINO'].some(n=>String(b.name||'').includes(n));out.fronts.push({x:b.x+b.w/2,y:b.y+b.h+4,w:b.w,color,big})}
