@@ -1,0 +1,47 @@
+/* Authored three-quarter animal geometry: 8 facings, 8 walk frames, idle/sit/sleep. Gameplay pet state stays Claude-owned. */
+(function(r){'use strict';const Original=r.NightshiftPetArt,D=r.NightshiftPetsData;if(!Original||!D)return;const CELL={w:48,h:44,ax:24,ay:36},cache=new Map(),LIMIT=256,K=Original.K;
+const shade=(h,n)=>{const v=parseInt(h.slice(1),16);return '#'+[v>>16&255,v>>8&255,v&255].map(x=>Math.max(0,Math.min(255,x+n)).toString(16).padStart(2,'0')).join('')};
+function sprite(id,dir=0,anim='idle',frame=0){const pet=D.PET[id];if(!pet)return null;dir=((Math.round(Number.isFinite(dir)?dir:0)%8)+8)%8;anim=['idle','walk','sit','sleep'].includes(anim)?anim:'idle';frame=Number.isFinite(frame)?frame:0;const n=anim==='walk'?8:anim==='sleep'?2:4,f=((Math.floor(frame)%n)+n)%n,key=[id,dir,anim,f].join('|');if(cache.has(key)){const cv=cache.get(key);cache.delete(key);cache.set(key,cv);return cv}
+const cv=document.createElement('canvas');cv.width=CELL.w*2;cv.height=CELL.h*2;const c=cv.getContext('2d',{willReadFrequently:true});c.scale(2,2);c.translate(CELL.ax,CELL.ay);c.lineCap='round';
+const angle=dir*Math.PI/4,sx=Math.cos(angle),sy=Math.sin(angle),side=Math.abs(sx),back=sy<-.3,walk=anim==='walk',sit=anim==='sit',sleep=anim==='sleep',phase=f*Math.PI/4,bob=walk?Math.sin(phase*2)*.4:Math.sin(f*Math.PI/2)*.2,base=['blackcat','rottweiler'].includes(id)?shade(pet.colors[0],12):pet.colors[0],second=pet.colors[1],dark=shade(base,-26),hi=shade(base,26),ink='#17212b';
+const project=(u,v,z=0)=>[u*sx-v*sy*.72,u*sy*.45+v*sx*.3+z],R=(h,x,y,w,hh)=>{c.fillStyle=h;c.fillRect(x,y,w,hh)},P=(h,p)=>{c.fillStyle=h;c.beginPath();p.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fill()},L=(h,x,y,xx,yy,w=.5)=>{c.strokeStyle=h;c.lineWidth=w;c.beginPath();c.moveTo(x,y);c.lineTo(xx,yy);c.stroke()},E=(h,x,y,rx,ry)=>{c.fillStyle=h;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fill()};
+const eye=(x,y,col='#b7a35f',closed=false)=>{if(closed)L(ink,x-.75,y,x+.75,y,.4);else{R(col,x-.6,y-.4,1.2,1.2);R(ink,x-.15+sx*.15,y-.3,.5,1);R('#f1e8cf',x-.4,y-.2,.3,.3)}};
+if(['dog','cat','raccoon'].includes(pet.kind)){
+ const cat=pet.kind==='cat',coon=pet.kind==='raccoon',tiger=id==='tiger',stocky=['rottweiler','lab'].includes(id),length=tiger?11:cat?8.5:stocky?10:9.2,height=stocky?8.1:cat?6:7.2,bodyY=sleep?-4:sit?-8:-10+bob;
+ const feet=[];for(const u of [-length*.65,length*.66])for(const v of [-3,3]){const root=project(u,v,bodyY+2),p=project(u,v,0),step=walk?Math.sin(phase+(u*v>0?Math.PI:0))*1.4:0,foot=project(u+step,v,-(walk&&step>0?step*.35:0)),knee=[(root[0]+foot[0])/2+(u>0?-.8:.6)*sx,(root[1]+foot[1])/2];feet.push({root,foot,knee,near:p[1],front:u>0})}
+ const leg=l=>{if(sleep)return;const foot=sit?project(l.front?length*.65:-length*.6,l.near<0?-2:2,1):l.foot;L(dark,l.root[0],l.root[1],l.knee[0],l.knee[1],stocky?3:2.4);L(base,l.knee[0],l.knee[1],foot[0],foot[1]-.4,stocky?2.6:1.85);R(['husky','rottweiler','shiba','tiger'].includes(id)?second:hi,foot[0]-1.25,foot[1]-.7,2.5,1);L(ink,foot[0]-.1,foot[1]-.7,foot[0]-.1,foot[1],.25)};
+ feet.sort((a,b)=>a.near-b.near);feet.slice(0,2).forEach(leg);
+ const tail=project(-length,0,bodyY-1),wag=(walk?Math.sin(phase):Math.sin(f*Math.PI/2))*.8;
+ if(id==='shiba'){const end=project(-length-3.5,0,bodyY-6);L(dark,...tail,end[0],end[1],2.4);E(base,end[0]+1,end[1],2.5,2.2);E(dark,end[0]+1.1,end[1]+.3,1,1)}
+ else if(coon){for(let i=0;i<5;i++){const p=project(-length-1-i*1.5,0,bodyY-1+i*.25);E(i%2?second:base,p[0],p[1]+wag*i*.25,1.7,1.2)}}
+ else{const end=project(-length-6,0,bodyY-(cat?5:2)+wag);L(dark,...tail,end[0],end[1],cat?1.5:2.1);L(hi,...tail,end[0]-.3,end[1]-.4,.55)}
+ const pts=[[-length,0,bodyY],[-length*.7,-4,bodyY-2],[length*.5,-4.2,bodyY-2.5],[length,0,bodyY-1],[length*.7,4,bodyY+height*.55],[-length*.6,4.3,bodyY+height*.65]].map(v=>project(...v));P(base,pts);P(dark,[[-length*.6,4.3,bodyY+height*.65],[length*.7,4,bodyY+height*.55],[length*.7,1.4,bodyY+height*.2],[-length*.8,1.8,bodyY+height*.3]].map(v=>project(...v)));L(hi,...pts[1],pts[2][0],pts[2][1],.8);
+ if(id==='husky'){P(second,[[-length*.7,0,bodyY+3],[length*.7,0,bodyY+2],[length*.55,4,bodyY+height*.6],[-length*.6,4,bodyY+height*.6]].map(v=>project(...v)))}
+ if(['tabby','tiger'].includes(id))for(let i=0;i<5;i++){const p=project(-length*.6+i*length*.3,0,bodyY-.6);L('#64412d',p[0],p[1],p[0]-sy*1.5,p[1]+2.3,.7)}
+ feet.slice(2).forEach(leg);
+ const h=project(sleep?length*.6:length*.82,0,sleep?-5:sit?-17:-17+bob),hx=h[0],hy=h[1],hw=tiger?4.7:stocky?4.4:3.7;
+ const neck=project(length*.65,0,bodyY+.8);L(dark,neck[0],neck[1],hx,hy+2.3,stocky?5.7:4.4);L(base,neck[0]-.3,neck[1]-.1,hx-.4,hy+2.1,stocky?4.7:3.5);
+ P(base,[[hx-hw,hy-3],[hx-2,hy-4.2],[hx+2.7,hy-3.7],[hx+hw,hy-1.2],[hx+hw-.5,hy+2.7],[hx,hy+3.8],[hx-hw+.3,hy+1.3]]);P(hi,[[hx-2.8,hy-2.7],[hx-.6,hy-3.3],[hx+1.2,hy-2.5],[hx-.4,hy-1.4],[hx-2.9,hy-.8]]);
+ if(cat||['shiba','husky'].includes(id)){for(const s of [-1,1]){P(dark,[[hx+s*3.6,hy-1.5],[hx+s*4.3,hy-6],[hx+s*1.7,hy-3.3]]);P(id==='husky'?second:shade(base,12),[[hx+s*3.4,hy-2.1],[hx+s*3.7,hy-4.8],[hx+s*2.3,hy-3.1]])}}
+ else for(const s of [-1,1])P(dark,[[hx+s*3,hy-3],[hx+s*4.6,hy-1.5],[hx+s*4.2,hy+2.6],[hx+s*2.8,hy+.4]]);
+ if(!back){const eyes=side>.9?[sx>0?1:-1]:[-1,1];if(coon)P(second,[[hx-3.6,hy-.9],[hx+3.6,hy-.9],[hx+3,hy+1],[hx-3.1,hy+.8]]);
+ const noseX=hx+sx*3.4,noseY=hy+1.4+sy*.3;if(!cat)E(id==='rottweiler'?second:shade(second,-5),noseX,hy+2,side> .9?2.6:3.4,1.8);for(const ex of eyes){const xx=hx+sx*1.4+(side>.9?1.25*Math.sign(sx):ex*1.8);eye(xx,hy-.1,id==='husky'?'#7db7c3':cat?'#9daf65':'#907453',sleep||(!walk&&f===3));if(id==='rottweiler')R(second,xx-.6,hy-1.6,1.2,.65)}R(cat?'#b8837d':ink,noseX-.65,noseY,.9,.65);L(ink,noseX,noseY+.6,noseX-.5,hy+2.9,.35);if(cat){for(const s of [-1,1]){L('#dbc4a2',noseX+s*.7,noseY+.7,noseX+s*3.7,noseY+.35,.25);L('#dbc4a2',noseX+s*.7,noseY+.9,noseX+s*3.7,noseY+1.6,.25)}}
+ if(tiger)for(const ex of [-1,1]){L('#56352a',hx+ex*2.1,hy-3,hx+ex*1.6,hy-1.5,.7);L('#56352a',hx+ex*3.5,hy+.4,hx+ex*2.5,hy+1,.6)}
+ }
+ if(!sleep){const p=project(length*.72,0,bodyY-.5);L('#9d564e',p[0]-3,p[1],p[0]+3,p[1],1);R('#d7b366',p[0]+1,p[1]+.1,.7,1.2)}
+}else{
+ const owl=pet.kind==='owl',monkey=pet.kind==='monkey',bird=!monkey; c.scale((monkey?0.8:0.7)+(monkey?0.2:0.3)*Math.abs(sy),1);const cy=sleep?-7:sit?-10:-12+bob,hx=sx*1.3,hy=cy-(monkey?8:8.5);
+ if(monkey){const tail=[[-4,cy+5],[-9,cy+2],[-11,cy-5],[-7,cy-10],[-4,cy-7]];for(let i=1;i<tail.length;i++)L(dark,...tail[i-1],...tail[i],2);for(const s of [-1,1]){const step=walk?Math.sin(phase+s)*2:0;L(dark,s*2.5,cy+3,s*3.5,cy+9,2.6);L(base,s*3.5,cy+9,s*3.3+sx*step,0,2);R(second,s*3.3+sx*step-1.2,-.5,2.7,1)}
+ P(base,[[-4.3,cy-5],[3.7,cy-5],[5,cy+2],[2.5,cy+7],[-3.5,cy+7],[-5,cy+1]]);P(back?dark:second,[[-2.4,cy-3],[2.6,cy-3],[2.1,cy+5],[-2.2,cy+5]]);for(const s of [-1,1]){const swing=walk?Math.sin(phase+s*Math.PI/2)*1.7:0;L(dark,s*4,cy-2,s*5,cy+3,2);L(base,s*5,cy+3,s*5.4+sx*swing,cy+7,1.6);E(second,s*5.4+sx*swing,cy+7,1.1,1)}}
+ else{P(base,[[-4.8,cy-5],[3.8,cy-5],[5.5,cy+2],[3.3,cy+8],[-3.5,cy+8],[-5.7,cy+1]]);P(back?(owl?dark:second):(owl?second:shade(base,18)),[[-3.4,cy-2],[3,cy-2],[2.6,cy+6],[-2.6,cy+6]]);for(const s of [-1,1]){const flap=walk?Math.sin(phase)*3.8:0;P(owl?dark:pet.colors[1],[[s*4,cy-4],[s*(7+Math.abs(flap)*.6),cy-1-flap],[s*6,cy+7],[s*3.8,cy+4]]);for(let i=0;i<3;i++)L(hi,s*4.5,cy+i*1.3,s*5.4,cy+3+i*1.3,.35);L('#b89256',s*2.1,cy+8,s*2.2,0,.8);L('#c6ab71',s*2.2-1.2,0,s*2.2+1.4,0,.5)}}
+ E(dark,hx,hy+.5,owl?6:monkey?5.7:4.2,owl?6:4.5);E(base,hx-.3,hy,owl?5.7:monkey?5.3:3.9,owl?5.7:4.1);
+ if(!back){if(owl){for(const s of side>.9?[Math.sign(sx)]:[-1,1]){E(second,hx+s*(side>.9?1.5:2.5),hy,2.6,3);eye(hx+s*(side>.9?1.5:2.4),hy,'#c7a156',sleep||f===3)}}else{E(second,hx+sx,hy+1,monkey?3.5:2.5,2.6);for(const ex of side>.9?[Math.sign(sx)]:[-1,1])eye(hx+sx+(side>.9?ex:ex*1.9),hy-.5,monkey?'#866448':'#d9c48b',sleep||f===3)}P(bird?'#bd984f':ink,[[hx+sx*1.5,hy+1],[hx+sx*1.5+1.2,hy+1.8],[hx+sx*1.5-.3,hy+3]])}
+ if(monkey)for(const s of [-1,1]){E(base,hx+s*5.3,hy+.4,1.6,2);E(second,hx+s*5.4,hy+.4,.7,1)}
+}
+// Turn vector geometry into crisp native pixel clusters and a single native contour.
+c.setTransform(1,0,0,1,0,0);const img=c.getImageData(0,0,96,88),p=img.data;for(let i=3;i<p.length;i+=4)p[i]=p[i]>=128?255:0;const mask=new Uint8ClampedArray(p);for(let y=1;y<87;y++)for(let x=1;x<95;x++){const i=(y*96+x)*4;if(!mask[i+3]&&(mask[i-1]||mask[i+7]||mask[i-384+3]||mask[i+384+3])){p[i]=18;p[i+1]=25;p[i+2]=34;p[i+3]=255}}c.putImageData(img,0,0);
+cache.set(key,cv);if(cache.size>LIMIT)cache.delete(cache.keys().next().value);return cv;
+}
+function draw(c,id,p,t=performance.now()/1000,opts={}){if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)||!D.PET[id])return false;const dir=((Math.round((p.angle||0)/(Math.PI/4))%8)+8)%8,anim=opts.sleeping?'sleep':p.moving?'walk':opts.sitting?'sit':'idle',f=p.moving?Math.floor((p.walk??t*9)*2):Math.floor(t*2.4),cv=sprite(id,dir,anim,f);c.save();c.imageSmoothingEnabled=false;c.fillStyle='#060c1644';c.beginPath();c.ellipse(p.x+1,p.y+1,10,3,0,0,Math.PI*2);c.fill();c.drawImage(cv,Math.round(p.x)-CELL.ax*K,Math.round(p.y)-CELL.ay*K,CELL.w*K,CELL.h*K);c.restore();return true}
+const api=Object.freeze({...Original,draw,directionalSprite:sprite,CELL,stats:()=>({count:cache.size,limit:LIMIT,bytes:cache.size*96*88*4})});r.NightshiftPetArt=api;r.NightshiftPremiumPets=api;
+})(globalThis);

@@ -4,7 +4,7 @@ run('globalThis.before=JSON.stringify({player,cars,peds,buildings});globalThis.c
 const drawings=[];
 for(const [x,y] of [[520,755],[960,755],[520,1095],[1840,1435]]){
  const render=`calls=[];NightshiftWorld.building({x:${x},y:${y},w:240,h:170,name:'APARTMENTS'});JSON.stringify(calls.map(c=>[c[0],c[1]-${x},c[2]-${y},c[3],c[4]]))`;
- const first=run(render);assert.equal(run(render),first);drawings.push(first);
+ run(`NightshiftPremiumDistrict.panel({x:${x},y:${y},w:240,h:170,name:"APARTMENTS"})`);const first=run(render);assert.equal(run(render),first);drawings.push(first);
 }
 assert.equal(new Set(drawings).size,4,'district architecture differs');
 run('NightshiftWorld.ground(g,2200,1700)');assert.equal(run('JSON.stringify({player,cars,peds,buildings})===before'),true);

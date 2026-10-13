@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "source": "wardrobe-data.js + character-art.js + premium-art-renderer.js",
+  "source": "wardrobe-data.js + character-art.js + character-pixel.js + premium-body-art.js + premium-head-art.js + premium-art-renderer.js",
   "density": 4,
   "worldCell": {
     "w": 44,
@@ -69,7 +69,7 @@
       "height": 224,
       "direction": "E",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
@@ -94,14 +94,14 @@
       "height": 224,
       "direction": "E",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         84.44,
-        138.8
+        139.5
       ],
       "visualBounds": [
         0,
@@ -119,14 +119,14 @@
       "height": 224,
       "direction": "E",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         84.44,
-        138
+        138.5
       ],
       "visualBounds": [
         0,
@@ -144,14 +144,64 @@
       "height": 224,
       "direction": "E",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         84.44,
-        138.8
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-E-4",
+      "atlas": "street-idle.png",
+      "x": 0,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        138.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-E-5",
+      "atlas": "street-idle.png",
+      "x": 0,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        139.5
       ],
       "visualBounds": [
         0,
@@ -169,7 +219,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
@@ -194,14 +244,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138.8
+        139.5
       ],
       "visualBounds": [
         0,
@@ -219,14 +269,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138
+        138.5
       ],
       "visualBounds": [
         0,
@@ -244,14 +294,64 @@
       "height": 224,
       "direction": "SE",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138.8
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SE-4",
+      "atlas": "street-idle.png",
+      "x": 176,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SE-5",
+      "atlas": "street-idle.png",
+      "x": 176,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        139.5
       ],
       "visualBounds": [
         0,
@@ -269,7 +369,7 @@
       "height": 224,
       "direction": "S",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
@@ -294,14 +394,14 @@
       "height": 224,
       "direction": "S",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        138.8
+        139.5
       ],
       "visualBounds": [
         0,
@@ -319,14 +419,14 @@
       "height": 224,
       "direction": "S",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        138
+        138.5
       ],
       "visualBounds": [
         0,
@@ -344,14 +444,64 @@
       "height": 224,
       "direction": "S",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        138.8
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-S-4",
+      "atlas": "street-idle.png",
+      "x": 352,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-S-5",
+      "atlas": "street-idle.png",
+      "x": 352,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        139.5
       ],
       "visualBounds": [
         0,
@@ -369,7 +519,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
@@ -394,14 +544,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138.8
+        139.5
       ],
       "visualBounds": [
         0,
@@ -419,14 +569,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138
+        138.5
       ],
       "visualBounds": [
         0,
@@ -444,14 +594,64 @@
       "height": 224,
       "direction": "SW",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138.8
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SW-4",
+      "atlas": "street-idle.png",
+      "x": 528,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-SW-5",
+      "atlas": "street-idle.png",
+      "x": 528,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        139.5
       ],
       "visualBounds": [
         0,
@@ -469,7 +669,7 @@
       "height": 224,
       "direction": "W",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
@@ -494,14 +694,14 @@
       "height": 224,
       "direction": "W",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         84.44,
-        138.8
+        139.5
       ],
       "visualBounds": [
         0,
@@ -519,14 +719,14 @@
       "height": 224,
       "direction": "W",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         84.44,
-        138
+        138.5
       ],
       "visualBounds": [
         0,
@@ -544,14 +744,64 @@
       "height": 224,
       "direction": "W",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         84.44,
-        138.8
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-W-4",
+      "atlas": "street-idle.png",
+      "x": 704,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        138.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-W-5",
+      "atlas": "street-idle.png",
+      "x": 704,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        84.44,
+        139.5
       ],
       "visualBounds": [
         0,
@@ -569,7 +819,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
@@ -594,14 +844,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138.8
+        139.5
       ],
       "visualBounds": [
         0,
@@ -619,14 +869,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138
+        138.5
       ],
       "visualBounds": [
         0,
@@ -644,14 +894,64 @@
       "height": 224,
       "direction": "NW",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285785,
-        138.8
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NW-4",
+      "atlas": "street-idle.png",
+      "x": 880,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        138.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NW-5",
+      "atlas": "street-idle.png",
+      "x": 880,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285785,
+        139.5
       ],
       "visualBounds": [
         0,
@@ -669,7 +969,7 @@
       "height": 224,
       "direction": "N",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
@@ -694,14 +994,14 @@
       "height": 224,
       "direction": "N",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        138.8
+        139.5
       ],
       "visualBounds": [
         0,
@@ -719,14 +1019,14 @@
       "height": 224,
       "direction": "N",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        138
+        138.5
       ],
       "visualBounds": [
         0,
@@ -744,14 +1044,64 @@
       "height": 224,
       "direction": "N",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        138.8
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-N-4",
+      "atlas": "street-idle.png",
+      "x": 1056,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-N-5",
+      "atlas": "street-idle.png",
+      "x": 1056,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        139.5
       ],
       "visualBounds": [
         0,
@@ -769,7 +1119,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
@@ -794,14 +1144,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285784,
-        138.8
+        139.5
       ],
       "visualBounds": [
         0,
@@ -819,14 +1169,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285784,
-        138
+        138.5
       ],
       "visualBounds": [
         0,
@@ -844,14 +1194,64 @@
       "height": 224,
       "direction": "NE",
       "animation": "idle",
-      "durationMs": 380,
+      "durationMs": 253.33333333333334,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         71.71992493285784,
-        138.8
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NE-4",
+      "atlas": "street-idle.png",
+      "x": 1232,
+      "y": 896,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285784,
+        138.5
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-idle-NE-5",
+      "atlas": "street-idle.png",
+      "x": 1232,
+      "y": 1120,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "idle",
+      "durationMs": 253.33333333333334,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        71.71992493285784,
+        139.5
       ],
       "visualBounds": [
         0,
@@ -869,7 +1269,7 @@
       "height": 224,
       "direction": "E",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
@@ -894,13 +1294,13 @@
       "height": 224,
       "direction": "E",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        88.92,
+        87.8,
         138
       ],
       "visualBounds": [
@@ -919,14 +1319,14 @@
       "height": 224,
       "direction": "E",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        91.16,
-        136
+        90.25969071343143,
+        136.53589838486224
       ],
       "visualBounds": [
         0,
@@ -944,14 +1344,14 @@
       "height": 224,
       "direction": "E",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        88.92,
-        138
+        91.16,
+        136
       ],
       "visualBounds": [
         0,
@@ -969,14 +1369,14 @@
       "height": 224,
       "direction": "E",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        84.44,
-        140
+        90.25969071343143,
+        136.53589838486224
       ],
       "visualBounds": [
         0,
@@ -994,13 +1394,13 @@
       "height": 224,
       "direction": "E",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        79.96000000000001,
+        87.8,
         138
       ],
       "visualBounds": [
@@ -1019,14 +1419,14 @@
       "height": 224,
       "direction": "E",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        77.72,
-        136
+        84.44,
+        140
       ],
       "visualBounds": [
         0,
@@ -1044,13 +1444,113 @@
       "height": 224,
       "direction": "E",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        79.96000000000001,
+        81.08,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-8",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        78.62030928656857,
+        136.53589838486226
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-9",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        77.72,
+        136
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-10",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 2240,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        78.62030928656857,
+        136.53589838486224
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-E-11",
+      "atlas": "street-walk.png",
+      "x": 0,
+      "y": 2464,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        81.08,
         138
       ],
       "visualBounds": [
@@ -1069,7 +1569,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
@@ -1094,14 +1594,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.88776331257358,
-        139.13137084989847
+        74.09580371764464,
+        138.84852813742387
       ],
       "visualBounds": [
         0,
@@ -1119,14 +1619,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        76.47168250243145,
-        137.6970562748477
+        75.83506770073359,
+        138.00559223053216
       ],
       "visualBounds": [
         0,
@@ -1144,14 +1644,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.88776331257358,
-        139.13137084989847
+        76.47168250243145,
+        137.6970562748477
       ],
       "visualBounds": [
         0,
@@ -1169,14 +1669,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        71.71992493285785,
-        140
+        75.83506770073359,
+        138.00559223053216
       ],
       "visualBounds": [
         0,
@@ -1194,14 +1694,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.55208655314212,
-        136.86862915010153
+        74.09580371764464,
+        138.84852813742387
       ],
       "visualBounds": [
         0,
@@ -1219,14 +1719,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        66.96816736328424,
-        134.3029437251523
+        71.71992493285785,
+        140
       ],
       "visualBounds": [
         0,
@@ -1244,14 +1744,114 @@
       "height": 224,
       "direction": "SE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.55208655314212,
-        136.86862915010153
+        69.34404614807104,
+        137.15147186257613
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-8",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.60478216498211,
+        135.06620453919234
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-9",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.96816736328424,
+        134.3029437251523
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-10",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 2240,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.60478216498211,
+        135.06620453919234
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SE-11",
+      "atlas": "street-walk.png",
+      "x": 176,
+      "y": 2464,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.34404614807104,
+        137.15147186257613
       ],
       "visualBounds": [
         0,
@@ -1269,7 +1869,7 @@
       "height": 224,
       "direction": "S",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
@@ -1294,14 +1894,14 @@
       "height": 224,
       "direction": "S",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        139.6
+        139.2
       ],
       "visualBounds": [
         0,
@@ -1319,14 +1919,14 @@
       "height": 224,
       "direction": "S",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        138.4
+        138.6143593539449
       ],
       "visualBounds": [
         0,
@@ -1344,14 +1944,14 @@
       "height": 224,
       "direction": "S",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        139.6
+        138.4
       ],
       "visualBounds": [
         0,
@@ -1369,14 +1969,14 @@
       "height": 224,
       "direction": "S",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        140
+        138.6143593539449
       ],
       "visualBounds": [
         0,
@@ -1394,14 +1994,14 @@
       "height": 224,
       "direction": "S",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        136.4
+        139.2
       ],
       "visualBounds": [
         0,
@@ -1419,14 +2019,14 @@
       "height": 224,
       "direction": "S",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        133.6
+        140
       ],
       "visualBounds": [
         0,
@@ -1444,14 +2044,114 @@
       "height": 224,
       "direction": "S",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        136.4
+        136.8
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-8",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        134.4574374157796
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-9",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        133.6
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-10",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 2240,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        134.4574374157796
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-S-11",
+      "atlas": "street-walk.png",
+      "x": 352,
+      "y": 2464,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        136.8
       ],
       "visualBounds": [
         0,
@@ -1469,7 +2169,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
@@ -1494,14 +2194,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.55208655314212,
-        139.13137084989847
+        69.34404614807104,
+        138.84852813742387
       ],
       "visualBounds": [
         0,
@@ -1519,14 +2219,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        66.96816736328424,
-        137.6970562748477
+        67.60478216498211,
+        138.00559223053216
       ],
       "visualBounds": [
         0,
@@ -1544,14 +2244,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.55208655314212,
-        139.13137084989847
+        66.96816736328424,
+        137.6970562748477
       ],
       "visualBounds": [
         0,
@@ -1569,14 +2269,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        71.71992493285785,
-        140
+        67.60478216498211,
+        138.00559223053216
       ],
       "visualBounds": [
         0,
@@ -1594,14 +2294,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.88776331257358,
-        136.86862915010153
+        69.34404614807104,
+        138.84852813742387
       ],
       "visualBounds": [
         0,
@@ -1619,14 +2319,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        76.47168250243143,
-        134.3029437251523
+        71.71992493285785,
+        140
       ],
       "visualBounds": [
         0,
@@ -1644,14 +2344,114 @@
       "height": 224,
       "direction": "SW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.88776331257358,
-        136.86862915010153
+        74.09580371764464,
+        137.15147186257613
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-8",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        75.83506770073357,
+        135.06620453919234
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-9",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.47168250243143,
+        134.3029437251523
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-10",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 2240,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        75.83506770073359,
+        135.06620453919234
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-SW-11",
+      "atlas": "street-walk.png",
+      "x": 528,
+      "y": 2464,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.09580371764464,
+        137.15147186257613
       ],
       "visualBounds": [
         0,
@@ -1669,7 +2469,7 @@
       "height": 224,
       "direction": "W",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
@@ -1694,13 +2494,13 @@
       "height": 224,
       "direction": "W",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        79.96,
+        81.08,
         138
       ],
       "visualBounds": [
@@ -1719,14 +2519,14 @@
       "height": 224,
       "direction": "W",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        77.72,
-        136
+        78.62030928656857,
+        136.53589838486224
       ],
       "visualBounds": [
         0,
@@ -1744,14 +2544,14 @@
       "height": 224,
       "direction": "W",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        79.96,
-        138
+        77.72,
+        136
       ],
       "visualBounds": [
         0,
@@ -1769,14 +2569,14 @@
       "height": 224,
       "direction": "W",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        84.44,
-        140
+        78.62030928656857,
+        136.53589838486224
       ],
       "visualBounds": [
         0,
@@ -1794,13 +2594,13 @@
       "height": 224,
       "direction": "W",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        88.92,
+        81.08,
         138
       ],
       "visualBounds": [
@@ -1819,14 +2619,14 @@
       "height": 224,
       "direction": "W",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        91.16,
-        136
+        84.44,
+        140
       ],
       "visualBounds": [
         0,
@@ -1844,13 +2644,113 @@
       "height": 224,
       "direction": "W",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        88.92,
+        87.8,
+        138
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-8",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        90.25969071343143,
+        136.53589838486226
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-9",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        91.16,
+        136
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-10",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 2240,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        90.25969071343143,
+        136.53589838486224
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-W-11",
+      "atlas": "street-walk.png",
+      "x": 704,
+      "y": 2464,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        87.8,
         138
       ],
       "visualBounds": [
@@ -1869,7 +2769,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
@@ -1894,14 +2794,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.55208655314212,
-        136.86862915010153
+        69.34404614807104,
+        137.15147186257613
       ],
       "visualBounds": [
         0,
@@ -1919,14 +2819,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        66.96816736328424,
-        134.3029437251523
+        67.60478216498211,
+        135.06620453919234
       ],
       "visualBounds": [
         0,
@@ -1944,14 +2844,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.55208655314212,
-        136.86862915010153
+        66.96816736328424,
+        134.3029437251523
       ],
       "visualBounds": [
         0,
@@ -1969,14 +2869,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        71.71992493285785,
-        140
+        67.60478216498211,
+        135.06620453919234
       ],
       "visualBounds": [
         0,
@@ -1994,14 +2894,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.88776331257358,
-        139.13137084989847
+        69.34404614807104,
+        137.15147186257613
       ],
       "visualBounds": [
         0,
@@ -2019,14 +2919,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        76.47168250243145,
-        137.6970562748477
+        71.71992493285785,
+        140
       ],
       "visualBounds": [
         0,
@@ -2044,14 +2944,114 @@
       "height": 224,
       "direction": "NW",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.88776331257358,
-        139.13137084989847
+        74.09580371764464,
+        138.84852813742387
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-8",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        75.83506770073359,
+        138.00559223053216
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-9",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        76.47168250243145,
+        137.6970562748477
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-10",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 2240,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        75.83506770073359,
+        138.00559223053216
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NW-11",
+      "atlas": "street-walk.png",
+      "x": 880,
+      "y": 2464,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.09580371764466,
+        138.84852813742387
       ],
       "visualBounds": [
         0,
@@ -2069,7 +3069,7 @@
       "height": 224,
       "direction": "N",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
@@ -2094,14 +3094,14 @@
       "height": 224,
       "direction": "N",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        136.4
+        136.8
       ],
       "visualBounds": [
         0,
@@ -2119,14 +3119,14 @@
       "height": 224,
       "direction": "N",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        133.6
+        134.4574374157796
       ],
       "visualBounds": [
         0,
@@ -2144,14 +3144,14 @@
       "height": 224,
       "direction": "N",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        136.4
+        133.6
       ],
       "visualBounds": [
         0,
@@ -2169,14 +3169,14 @@
       "height": 224,
       "direction": "N",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        140
+        134.4574374157796
       ],
       "visualBounds": [
         0,
@@ -2194,14 +3194,14 @@
       "height": 224,
       "direction": "N",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        139.6
+        136.8
       ],
       "visualBounds": [
         0,
@@ -2219,14 +3219,14 @@
       "height": 224,
       "direction": "N",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        138.4
+        140
       ],
       "visualBounds": [
         0,
@@ -2244,14 +3244,114 @@
       "height": 224,
       "direction": "N",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         62.2,
-        139.6
+        139.2
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-8",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.6143593539449
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-9",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.4
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-10",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 2240,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        138.6143593539449
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-N-11",
+      "atlas": "street-walk.png",
+      "x": 1056,
+      "y": 2464,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        62.2,
+        139.2
       ],
       "visualBounds": [
         0,
@@ -2269,7 +3369,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
@@ -2294,14 +3394,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.88776331257357,
-        136.86862915010153
+        74.09580371764464,
+        137.15147186257613
       ],
       "visualBounds": [
         0,
@@ -2319,14 +3419,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        76.47168250243143,
-        134.3029437251523
+        75.83506770073357,
+        135.06620453919234
       ],
       "visualBounds": [
         0,
@@ -2344,14 +3444,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.88776331257357,
-        136.86862915010153
+        76.47168250243143,
+        134.3029437251523
       ],
       "visualBounds": [
         0,
@@ -2369,14 +3469,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        71.71992493285784,
-        140
+        75.83506770073357,
+        135.06620453919234
       ],
       "visualBounds": [
         0,
@@ -2394,14 +3494,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.5520865531421,
-        139.13137084989847
+        74.09580371764464,
+        137.15147186257613
       ],
       "visualBounds": [
         0,
@@ -2419,14 +3519,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        66.96816736328424,
-        137.6970562748477
+        71.71992493285784,
+        140
       ],
       "visualBounds": [
         0,
@@ -2444,14 +3544,114 @@
       "height": 224,
       "direction": "NE",
       "animation": "walk",
-      "durationMs": 110,
+      "durationMs": 73.33333333333333,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.5520865531421,
-        139.13137084989847
+        69.34404614807104,
+        138.84852813742387
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-8",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.60478216498211,
+        138.00559223053216
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-9",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.96816736328424,
+        137.6970562748477
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-10",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 2240,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.6047821649821,
+        138.00559223053216
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-walk-NE-11",
+      "atlas": "street-walk.png",
+      "x": 1232,
+      "y": 2464,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "walk",
+      "durationMs": 73.33333333333333,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        69.34404614807104,
+        138.84852813742387
       ],
       "visualBounds": [
         0,
@@ -2469,7 +3669,7 @@
       "height": 224,
       "direction": "E",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
@@ -2494,14 +3694,14 @@
       "height": 224,
       "direction": "E",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        99.44,
-        120
+        99.25189288530409,
+        120.19577393481939
       ],
       "visualBounds": [
         0,
@@ -2519,14 +3719,14 @@
       "height": 224,
       "direction": "E",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        105.6,
-        122
+        104.84627035094536,
+        121.6488589908301
       ],
       "visualBounds": [
         0,
@@ -2544,14 +3744,14 @@
       "height": 224,
       "direction": "E",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        99.44,
-        128
+        104.84627035094536,
+        126.3511410091699
       ],
       "visualBounds": [
         0,
@@ -2569,14 +3769,14 @@
       "height": 224,
       "direction": "E",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        90.2,
-        124
+        99.25189288530409,
+        127.80422606518061
       ],
       "visualBounds": [
         0,
@@ -2594,14 +3794,14 @@
       "height": 224,
       "direction": "E",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        80.96000000000001,
-        120
+        90.2,
+        124
       ],
       "visualBounds": [
         0,
@@ -2619,14 +3819,14 @@
       "height": 224,
       "direction": "E",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.8,
-        122
+        81.14810711469592,
+        120.19577393481939
       ],
       "visualBounds": [
         0,
@@ -2644,14 +3844,64 @@
       "height": 224,
       "direction": "E",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        80.96000000000001,
-        128
+        75.55372964905465,
+        121.6488589908301
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-8",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        75.55372964905463,
+        126.3511410091699
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-E-9",
+      "atlas": "street-run.png",
+      "x": 0,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        81.1481071146959,
+        127.80422606518061
       ],
       "visualBounds": [
         0,
@@ -2669,7 +3919,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
@@ -2694,14 +3944,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        83.02947037580834,
-        122.3334523779156
+        82.89645855941743,
+        122.48172209259538
       ],
       "visualBounds": [
         0,
@@ -2719,14 +3969,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        87.38524814791748,
-        125.88908729652601
+        86.85228080188959,
+        125.34760080663187
       ],
       "visualBounds": [
         0,
@@ -2744,14 +3994,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        83.02947037580834,
-        130.3334523779156
+        86.85228080188959,
+        130.04988282497166
       ],
       "visualBounds": [
         0,
@@ -2769,14 +4019,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        76.49580371764465,
-        124
+        82.89645855941743,
+        130.09017422295662
       ],
       "visualBounds": [
         0,
@@ -2794,14 +4044,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        69.96213705948094,
-        117.6665476220844
+        76.49580371764465,
+        124
       ],
       "visualBounds": [
         0,
@@ -2819,14 +4069,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.60635928737182,
-        118.11091270347399
+        70.09514887587187,
+        117.9098257770434
       ],
       "visualBounds": [
         0,
@@ -2844,14 +4094,64 @@
       "height": 224,
       "direction": "SE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        69.96213705948094,
-        125.6665476220844
+        66.1393266333997,
+        117.95011717502834
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-8",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.1393266333997,
+        122.65239919336813
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SE-9",
+      "atlas": "street-run.png",
+      "x": 176,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        70.09514887587186,
+        125.51827790740462
       ],
       "visualBounds": [
         0,
@@ -2869,7 +4169,7 @@
       "height": 224,
       "direction": "S",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
@@ -2894,14 +4194,14 @@
       "height": 224,
       "direction": "S",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        123.3
+        123.42859282242799
       ],
       "visualBounds": [
         0,
@@ -2919,14 +4219,14 @@
       "height": 224,
       "direction": "S",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        127.5
+        126.87966983045345
       ],
       "visualBounds": [
         0,
@@ -2944,14 +4244,14 @@
       "height": 224,
       "direction": "S",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        131.3
+        131.58195184879324
       ],
       "visualBounds": [
         0,
@@ -2969,14 +4269,14 @@
       "height": 224,
       "direction": "S",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        124
+        131.03704495278922
       ],
       "visualBounds": [
         0,
@@ -2994,14 +4294,14 @@
       "height": 224,
       "direction": "S",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        116.7
+        124
       ],
       "visualBounds": [
         0,
@@ -3019,14 +4319,14 @@
       "height": 224,
       "direction": "S",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        116.5
+        116.96295504721078
       ],
       "visualBounds": [
         0,
@@ -3044,14 +4344,64 @@
       "height": 224,
       "direction": "S",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        124.7
+        116.41804815120676
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-8",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        121.12033016954655
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-S-9",
+      "atlas": "street-run.png",
+      "x": 352,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.6,
+        124.57140717757201
       ],
       "visualBounds": [
         0,
@@ -3069,7 +4419,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
@@ -3094,14 +4444,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.21037948990735,
-        122.3334523779156
+        65.34339130629826,
+        122.48172209259538
       ],
       "visualBounds": [
         0,
@@ -3119,14 +4469,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        60.85460171779821,
-        125.88908729652601
+        61.387569063826106,
+        125.34760080663187
       ],
       "visualBounds": [
         0,
@@ -3144,14 +4494,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.21037948990735,
-        130.33345237791562
+        61.3875690638261,
+        130.04988282497166
       ],
       "visualBounds": [
         0,
@@ -3169,14 +4519,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        71.74404614807105,
-        124
+        65.34339130629826,
+        130.09017422295662
       ],
       "visualBounds": [
         0,
@@ -3194,14 +4544,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        78.27771280623475,
-        117.6665476220844
+        71.74404614807105,
+        124
       ],
       "visualBounds": [
         0,
@@ -3219,14 +4569,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        82.63349057834387,
-        118.11091270347399
+        78.14470098984383,
+        117.9098257770434
       ],
       "visualBounds": [
         0,
@@ -3244,14 +4594,64 @@
       "height": 224,
       "direction": "SW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        78.27771280623475,
-        125.6665476220844
+        82.10052323231598,
+        117.95011717502834
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-8",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.100523232316,
+        122.65239919336813
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-SW-9",
+      "atlas": "street-run.png",
+      "x": 528,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        78.14470098984383,
+        125.51827790740462
       ],
       "visualBounds": [
         0,
@@ -3269,7 +4669,7 @@
       "height": 224,
       "direction": "W",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
@@ -3294,14 +4694,14 @@
       "height": 224,
       "direction": "W",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.24,
-        120
+        74.4281071146959,
+        120.19577393481939
       ],
       "visualBounds": [
         0,
@@ -3319,14 +4719,14 @@
       "height": 224,
       "direction": "W",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.08,
-        122
+        68.83372964905463,
+        121.6488589908301
       ],
       "visualBounds": [
         0,
@@ -3344,14 +4744,14 @@
       "height": 224,
       "direction": "W",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.24,
-        128
+        68.83372964905463,
+        126.3511410091699
       ],
       "visualBounds": [
         0,
@@ -3369,14 +4769,14 @@
       "height": 224,
       "direction": "W",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        83.48,
-        124
+        74.4281071146959,
+        127.80422606518061
       ],
       "visualBounds": [
         0,
@@ -3394,14 +4794,14 @@
       "height": 224,
       "direction": "W",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        92.72,
-        120
+        83.47999999999999,
+        124
       ],
       "visualBounds": [
         0,
@@ -3419,14 +4819,14 @@
       "height": 224,
       "direction": "W",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        98.88,
-        122
+        92.53189288530409,
+        120.19577393481939
       ],
       "visualBounds": [
         0,
@@ -3444,14 +4844,64 @@
       "height": 224,
       "direction": "W",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        92.72,
-        128
+        98.12627035094536,
+        121.6488589908301
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-8",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        98.12627035094536,
+        126.3511410091699
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-W-9",
+      "atlas": "street-run.png",
+      "x": 704,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        92.53189288530409,
+        127.80422606518061
       ],
       "visualBounds": [
         0,
@@ -3469,7 +4919,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
@@ -3494,14 +4944,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.21037948990735,
-        117.6665476220844
+        65.34339130629826,
+        117.9098257770434
       ],
       "visualBounds": [
         0,
@@ -3519,14 +4969,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        60.85460171779821,
-        118.11091270347399
+        61.387569063826106,
+        117.95011717502834
       ],
       "visualBounds": [
         0,
@@ -3544,14 +4994,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.21037948990735,
-        125.6665476220844
+        61.3875690638261,
+        122.65239919336813
       ],
       "visualBounds": [
         0,
@@ -3569,14 +5019,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        71.74404614807105,
-        124
+        65.34339130629826,
+        125.51827790740462
       ],
       "visualBounds": [
         0,
@@ -3594,14 +5044,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        78.27771280623475,
-        122.3334523779156
+        71.74404614807105,
+        124
       ],
       "visualBounds": [
         0,
@@ -3619,14 +5069,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        82.63349057834388,
-        125.88908729652601
+        78.14470098984383,
+        122.48172209259538
       ],
       "visualBounds": [
         0,
@@ -3644,14 +5094,64 @@
       "height": 224,
       "direction": "NW",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        78.27771280623475,
-        130.3334523779156
+        82.100523232316,
+        125.34760080663187
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-8",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.100523232316,
+        130.04988282497166
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NW-9",
+      "atlas": "street-run.png",
+      "x": 880,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        78.14470098984384,
+        130.09017422295662
       ],
       "visualBounds": [
         0,
@@ -3669,7 +5169,7 @@
       "height": 224,
       "direction": "N",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
@@ -3694,14 +5194,14 @@
       "height": 224,
       "direction": "N",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        116.7
+        116.96295504721078
       ],
       "visualBounds": [
         0,
@@ -3719,14 +5219,14 @@
       "height": 224,
       "direction": "N",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        116.5
+        116.41804815120676
       ],
       "visualBounds": [
         0,
@@ -3744,14 +5244,14 @@
       "height": 224,
       "direction": "N",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        124.7
+        121.12033016954655
       ],
       "visualBounds": [
         0,
@@ -3769,14 +5269,14 @@
       "height": 224,
       "direction": "N",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        124
+        124.57140717757201
       ],
       "visualBounds": [
         0,
@@ -3794,14 +5294,14 @@
       "height": 224,
       "direction": "N",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        123.3
+        124
       ],
       "visualBounds": [
         0,
@@ -3819,14 +5319,14 @@
       "height": 224,
       "direction": "N",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        64.60000000000001,
-        127.5
+        64.6,
+        123.42859282242799
       ],
       "visualBounds": [
         0,
@@ -3844,14 +5344,64 @@
       "height": 224,
       "direction": "N",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.60000000000001,
+        126.87966983045345
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-8",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        64.60000000000001,
+        131.58195184879324
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-N-9",
+      "atlas": "street-run.png",
+      "x": 1056,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "run",
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         64.6,
-        131.3
+        131.03704495278922
       ],
       "visualBounds": [
         0,
@@ -3869,7 +5419,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
@@ -3894,14 +5444,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        83.02947037580833,
-        117.6665476220844
+        82.89645855941743,
+        117.9098257770434
       ],
       "visualBounds": [
         0,
@@ -3919,14 +5469,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        87.38524814791747,
-        118.11091270347399
+        86.85228080188958,
+        117.95011717502834
       ],
       "visualBounds": [
         0,
@@ -3944,14 +5494,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        83.02947037580833,
-        125.6665476220844
+        86.85228080188958,
+        122.65239919336813
       ],
       "visualBounds": [
         0,
@@ -3969,14 +5519,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        76.49580371764463,
-        124
+        82.89645855941743,
+        125.51827790740462
       ],
       "visualBounds": [
         0,
@@ -3994,14 +5544,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        69.96213705948094,
-        122.3334523779156
+        76.49580371764463,
+        124
       ],
       "visualBounds": [
         0,
@@ -4019,14 +5569,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.60635928737182,
-        125.88908729652601
+        70.09514887587186,
+        122.48172209259538
       ],
       "visualBounds": [
         0,
@@ -4044,14 +5594,64 @@
       "height": 224,
       "direction": "NE",
       "animation": "run",
-      "durationMs": 80,
+      "durationMs": 64,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        69.96213705948094,
-        130.33345237791562
+        66.13932663339969,
+        125.34760080663187
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-8",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        66.13932663339969,
+        130.04988282497166
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-run-NE-9",
+      "atlas": "street-run.png",
+      "x": 1232,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "run",
+      "durationMs": 64,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        70.09514887587186,
+        130.09017422295662
       ],
       "visualBounds": [
         0,
@@ -4069,7 +5669,7 @@
       "height": 224,
       "direction": "E",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4094,7 +5694,7 @@
       "height": 224,
       "direction": "E",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4119,7 +5719,7 @@
       "height": 224,
       "direction": "E",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4144,7 +5744,7 @@
       "height": 224,
       "direction": "E",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4169,7 +5769,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4194,7 +5794,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4219,7 +5819,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4244,7 +5844,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4269,7 +5869,7 @@
       "height": 224,
       "direction": "S",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4294,7 +5894,7 @@
       "height": 224,
       "direction": "S",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4319,7 +5919,7 @@
       "height": 224,
       "direction": "S",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4344,7 +5944,7 @@
       "height": 224,
       "direction": "S",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4369,7 +5969,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4394,7 +5994,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4419,7 +6019,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4444,7 +6044,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4469,7 +6069,7 @@
       "height": 224,
       "direction": "W",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4494,7 +6094,7 @@
       "height": 224,
       "direction": "W",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4519,7 +6119,7 @@
       "height": 224,
       "direction": "W",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4544,7 +6144,7 @@
       "height": 224,
       "direction": "W",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4569,7 +6169,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4594,7 +6194,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4619,7 +6219,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4644,7 +6244,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4669,7 +6269,7 @@
       "height": 224,
       "direction": "N",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4694,7 +6294,7 @@
       "height": 224,
       "direction": "N",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4719,7 +6319,7 @@
       "height": 224,
       "direction": "N",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4744,7 +6344,7 @@
       "height": 224,
       "direction": "N",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4769,7 +6369,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4794,7 +6394,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4819,7 +6419,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4844,7 +6444,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "crouch",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4869,7 +6469,7 @@
       "height": 224,
       "direction": "E",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -4894,14 +6494,14 @@
       "height": 224,
       "direction": "E",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        97.9424,
-        146.8
+        97.84664228931892,
+        146.82442949541505
       ],
       "visualBounds": [
         0,
@@ -4919,14 +6519,14 @@
       "height": 224,
       "direction": "E",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        98.6592,
-        146
+        98.562722604921,
+        146.0978869674097
       ],
       "visualBounds": [
         0,
@@ -4944,14 +6544,14 @@
       "height": 224,
       "direction": "E",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        97.9424,
-        146.8
+        98.562722604921,
+        146.0978869674097
       ],
       "visualBounds": [
         0,
@@ -4969,14 +6569,14 @@
       "height": 224,
       "direction": "E",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        96.688,
-        148
+        97.84664228931892,
+        146.82442949541505
       ],
       "visualBounds": [
         0,
@@ -4994,14 +6594,14 @@
       "height": 224,
       "direction": "E",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        95.4336,
-        146.8
+        96.688,
+        148
       ],
       "visualBounds": [
         0,
@@ -5019,14 +6619,14 @@
       "height": 224,
       "direction": "E",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        94.7168,
-        146
+        95.52935771068108,
+        146.82442949541505
       ],
       "visualBounds": [
         0,
@@ -5044,14 +6644,64 @@
       "height": 224,
       "direction": "E",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        95.4336,
-        146.8
+        94.813277395079,
+        146.0978869674097
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-8",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        94.813277395079,
+        146.0978869674097
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-E-9",
+      "atlas": "street-sneak.png",
+      "x": 0,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "E",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        95.52935771068108,
+        146.82442949541505
       ],
       "visualBounds": [
         0,
@@ -5069,7 +6719,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -5094,14 +6744,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        84.0201185203747,
-        147.19597979746447
+        83.95240759380121,
+        147.19018120065923
       ],
       "visualBounds": [
         0,
@@ -5119,14 +6769,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        84.52697266112921,
-        146.62225396744415
+        84.45875284083765,
+        146.68968565793799
       ],
       "visualBounds": [
         0,
@@ -5144,14 +6794,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        84.0201185203747,
-        147.19597979746447
+        84.45875284083765,
+        146.68968565793799
       ],
       "visualBounds": [
         0,
@@ -5169,14 +6819,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        83.1331237740543,
-        148
+        83.95240759380121,
+        147.19018120065923
       ],
       "visualBounds": [
         0,
@@ -5194,14 +6844,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        82.24612902773389,
-        146.40402020253552
+        83.1331237740543,
+        148
       ],
       "visualBounds": [
         0,
@@ -5219,14 +6869,14 @@
       "height": 224,
       "direction": "SE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        81.73927488697936,
-        145.37774603255585
+        82.31383995430737,
+        146.4586777901709
       ],
       "visualBounds": [
         0,
@@ -5244,14 +6894,64 @@
       "height": 224,
       "direction": "SE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        82.24612902773389,
-        146.40402020253552
+        81.80749470727093,
+        145.5060882768814
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-8",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        81.80749470727093,
+        145.5060882768814
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SE-9",
+      "atlas": "street-sneak.png",
+      "x": 176,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "SE",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.31383995430737,
+        146.4586777901709
       ],
       "visualBounds": [
         0,
@@ -5269,7 +6969,7 @@
       "height": 224,
       "direction": "S",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -5294,14 +6994,14 @@
       "height": 224,
       "direction": "S",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        147.35999999999999
+        147.34168051743242
       ],
       "visualBounds": [
         0,
@@ -5319,14 +7019,14 @@
       "height": 224,
       "direction": "S",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        146.88
+        146.93481670174944
       ],
       "visualBounds": [
         0,
@@ -5344,14 +7044,14 @@
       "height": 224,
       "direction": "S",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        147.35999999999999
+        146.93481670174944
       ],
       "visualBounds": [
         0,
@@ -5369,14 +7069,14 @@
       "height": 224,
       "direction": "S",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        148
+        147.34168051743242
       ],
       "visualBounds": [
         0,
@@ -5394,14 +7094,14 @@
       "height": 224,
       "direction": "S",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        146.24
+        148
       ],
       "visualBounds": [
         0,
@@ -5419,14 +7119,14 @@
       "height": 224,
       "direction": "S",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        145.12
+        146.30717847339767
       ],
       "visualBounds": [
         0,
@@ -5444,14 +7144,64 @@
       "height": 224,
       "direction": "S",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        146.24
+        145.26095723306995
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-8",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        145.26095723306995
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-S-9",
+      "atlas": "street-sneak.png",
+      "x": 352,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "S",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        146.30717847339767
       ],
       "visualBounds": [
         0,
@@ -5469,7 +7219,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -5494,14 +7244,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.93176137219785,
-        147.19597979746447
+        65.99947229877134,
+        147.19018120065923
       ],
       "visualBounds": [
         0,
@@ -5519,14 +7269,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.42490723144334,
-        146.62225396744415
+        65.49312705173492,
+        146.68968565793799
       ],
       "visualBounds": [
         0,
@@ -5544,14 +7294,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.93176137219785,
-        147.19597979746447
+        65.49312705173492,
+        146.68968565793799
       ],
       "visualBounds": [
         0,
@@ -5569,14 +7319,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        66.81875611851827,
-        148
+        65.99947229877134,
+        147.19018120065923
       ],
       "visualBounds": [
         0,
@@ -5594,14 +7344,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        67.70575086483868,
-        146.40402020253552
+        66.81875611851827,
+        148
       ],
       "visualBounds": [
         0,
@@ -5619,14 +7369,14 @@
       "height": 224,
       "direction": "SW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.21260500559319,
-        145.37774603255585
+        67.63803993826518,
+        146.4586777901709
       ],
       "visualBounds": [
         0,
@@ -5644,14 +7394,64 @@
       "height": 224,
       "direction": "SW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        67.70575086483868,
-        146.40402020253552
+        68.14438518530162,
+        145.5060882768814
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-8",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.14438518530162,
+        145.5060882768814
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-SW-9",
+      "atlas": "street-sneak.png",
+      "x": 528,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "SW",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.63803993826518,
+        146.4586777901709
       ],
       "visualBounds": [
         0,
@@ -5669,7 +7469,7 @@
       "height": 224,
       "direction": "W",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -5694,14 +7494,14 @@
       "height": 224,
       "direction": "W",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        72.3616,
-        146.8
+        72.45735771068108,
+        146.82442949541505
       ],
       "visualBounds": [
         0,
@@ -5719,14 +7519,14 @@
       "height": 224,
       "direction": "W",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        71.6448,
-        146
+        71.741277395079,
+        146.0978869674097
       ],
       "visualBounds": [
         0,
@@ -5744,14 +7544,14 @@
       "height": 224,
       "direction": "W",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        72.3616,
-        146.8
+        71.741277395079,
+        146.0978869674097
       ],
       "visualBounds": [
         0,
@@ -5769,14 +7569,14 @@
       "height": 224,
       "direction": "W",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        73.616,
-        148
+        72.45735771068108,
+        146.82442949541505
       ],
       "visualBounds": [
         0,
@@ -5794,14 +7594,14 @@
       "height": 224,
       "direction": "W",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.8704,
-        146.8
+        73.616,
+        148
       ],
       "visualBounds": [
         0,
@@ -5819,14 +7619,14 @@
       "height": 224,
       "direction": "W",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        75.5872,
-        146
+        74.77464228931892,
+        146.82442949541505
       ],
       "visualBounds": [
         0,
@@ -5844,14 +7644,64 @@
       "height": 224,
       "direction": "W",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        74.8704,
-        146.8
+        75.490722604921,
+        146.0978869674097
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-8",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        75.490722604921,
+        146.0978869674097
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-W-9",
+      "atlas": "street-sneak.png",
+      "x": 704,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "W",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        74.77464228931892,
+        146.82442949541505
       ],
       "visualBounds": [
         0,
@@ -5869,7 +7719,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -5894,14 +7744,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.93176137219785,
-        146.40402020253552
+        65.99947229877134,
+        146.4586777901709
       ],
       "visualBounds": [
         0,
@@ -5919,14 +7769,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.42490723144334,
-        145.37774603255585
+        65.49312705173492,
+        145.5060882768814
       ],
       "visualBounds": [
         0,
@@ -5944,14 +7794,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        65.93176137219785,
-        146.40402020253552
+        65.49312705173492,
+        145.5060882768814
       ],
       "visualBounds": [
         0,
@@ -5969,14 +7819,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        66.81875611851827,
-        148
+        65.99947229877134,
+        146.4586777901709
       ],
       "visualBounds": [
         0,
@@ -5994,14 +7844,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        67.70575086483868,
-        147.19597979746447
+        66.81875611851827,
+        148
       ],
       "visualBounds": [
         0,
@@ -6019,14 +7869,14 @@
       "height": 224,
       "direction": "NW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        68.21260500559319,
-        146.62225396744415
+        67.63803993826518,
+        147.1901812006592
       ],
       "visualBounds": [
         0,
@@ -6044,14 +7894,64 @@
       "height": 224,
       "direction": "NW",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        67.70575086483868,
-        147.19597979746447
+        68.14438518530162,
+        146.68968565793799
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-8",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        68.14438518530162,
+        146.68968565793799
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NW-9",
+      "atlas": "street-sneak.png",
+      "x": 880,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "NW",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.63803993826518,
+        147.19018120065923
       ],
       "visualBounds": [
         0,
@@ -6069,7 +7969,7 @@
       "height": 224,
       "direction": "N",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6094,14 +7994,14 @@
       "height": 224,
       "direction": "N",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        146.24
+        146.30717847339767
       ],
       "visualBounds": [
         0,
@@ -6119,14 +8019,14 @@
       "height": 224,
       "direction": "N",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        145.12
+        145.26095723306995
       ],
       "visualBounds": [
         0,
@@ -6144,14 +8044,14 @@
       "height": 224,
       "direction": "N",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        146.24
+        145.26095723306995
       ],
       "visualBounds": [
         0,
@@ -6169,14 +8069,14 @@
       "height": 224,
       "direction": "N",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        148
+        146.30717847339767
       ],
       "visualBounds": [
         0,
@@ -6194,14 +8094,14 @@
       "height": 224,
       "direction": "N",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        147.35999999999999
+        148
       ],
       "visualBounds": [
         0,
@@ -6219,14 +8119,14 @@
       "height": 224,
       "direction": "N",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        146.88
+        147.34168051743242
       ],
       "visualBounds": [
         0,
@@ -6244,14 +8144,64 @@
       "height": 224,
       "direction": "N",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
         67.36,
-        147.35999999999999
+        146.93481670174944
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-8",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        146.93481670174944
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-N-9",
+      "atlas": "street-sneak.png",
+      "x": 1056,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "N",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        67.36,
+        147.34168051743242
       ],
       "visualBounds": [
         0,
@@ -6269,7 +8219,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6294,14 +8244,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        84.02011852037468,
-        146.40402020253552
+        83.9524075938012,
+        146.4586777901709
       ],
       "visualBounds": [
         0,
@@ -6319,14 +8269,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        84.52697266112921,
-        145.37774603255585
+        84.45875284083763,
+        145.5060882768814
       ],
       "visualBounds": [
         0,
@@ -6344,14 +8294,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        84.02011852037468,
-        146.40402020253552
+        84.45875284083763,
+        145.5060882768814
       ],
       "visualBounds": [
         0,
@@ -6369,14 +8319,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        83.13312377405428,
-        148
+        83.9524075938012,
+        146.4586777901709
       ],
       "visualBounds": [
         0,
@@ -6394,14 +8344,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        82.24612902773387,
-        147.19597979746447
+        83.13312377405428,
+        148
       ],
       "visualBounds": [
         0,
@@ -6419,14 +8369,14 @@
       "height": 224,
       "direction": "NE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        81.73927488697936,
-        146.62225396744415
+        82.31383995430737,
+        147.19018120065923
       ],
       "visualBounds": [
         0,
@@ -6444,14 +8394,64 @@
       "height": 224,
       "direction": "NE",
       "animation": "sneak",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
       ],
       "equipmentAnchor": [
-        82.24612902773387,
-        147.19597979746447
+        81.80749470727093,
+        146.68968565793799
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-8",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 1792,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        81.80749470727093,
+        146.68968565793799
+      ],
+      "visualBounds": [
+        0,
+        0,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "street-sneak-NE-9",
+      "atlas": "street-sneak.png",
+      "x": 1232,
+      "y": 2016,
+      "width": 176,
+      "height": 224,
+      "direction": "NE",
+      "animation": "sneak",
+      "durationMs": 420,
+      "anchor": [
+        88,
+        144
+      ],
+      "equipmentAnchor": [
+        82.31383995430737,
+        147.19018120065923
       ],
       "visualBounds": [
         0,
@@ -6469,7 +8469,7 @@
       "height": 224,
       "direction": "E",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6494,7 +8494,7 @@
       "height": 224,
       "direction": "E",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6519,7 +8519,7 @@
       "height": 224,
       "direction": "E",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6544,7 +8544,7 @@
       "height": 224,
       "direction": "E",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6569,7 +8569,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6594,7 +8594,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6619,7 +8619,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6644,7 +8644,7 @@
       "height": 224,
       "direction": "SE",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6669,7 +8669,7 @@
       "height": 224,
       "direction": "S",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6694,7 +8694,7 @@
       "height": 224,
       "direction": "S",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6719,7 +8719,7 @@
       "height": 224,
       "direction": "S",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6744,7 +8744,7 @@
       "height": 224,
       "direction": "S",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6769,7 +8769,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6794,7 +8794,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6819,7 +8819,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6844,7 +8844,7 @@
       "height": 224,
       "direction": "SW",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6869,7 +8869,7 @@
       "height": 224,
       "direction": "W",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6894,7 +8894,7 @@
       "height": 224,
       "direction": "W",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6919,7 +8919,7 @@
       "height": 224,
       "direction": "W",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6944,7 +8944,7 @@
       "height": 224,
       "direction": "W",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6969,7 +8969,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -6994,7 +8994,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7019,7 +9019,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7044,7 +9044,7 @@
       "height": 224,
       "direction": "NW",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7069,7 +9069,7 @@
       "height": 224,
       "direction": "N",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7094,7 +9094,7 @@
       "height": 224,
       "direction": "N",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7119,7 +9119,7 @@
       "height": 224,
       "direction": "N",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7144,7 +9144,7 @@
       "height": 224,
       "direction": "N",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7169,7 +9169,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7194,7 +9194,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7219,7 +9219,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144
@@ -7244,7 +9244,7 @@
       "height": 224,
       "direction": "NE",
       "animation": "sit",
-      "durationMs": 380,
+      "durationMs": 420,
       "anchor": [
         88,
         144

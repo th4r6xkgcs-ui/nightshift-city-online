@@ -107,9 +107,9 @@
     // backdrop: studio wall, floor, spotlight, turntable
     const gw = x.createLinearGradient(0, 0, 0, h); gw.addColorStop(0, '#1b2433'); gw.addColorStop(0.62, '#121a26'); gw.addColorStop(0.63, '#2a3140'); gw.addColorStop(1, '#151a22'); x.fillStyle = gw; x.fillRect(0, 0, w, h);
     const sp = x.createRadialGradient(w / 2, h * 0.45, 10, w / 2, h * 0.45, Math.max(w, h) * 0.6); sp.addColorStop(0, '#ffe9b022'); sp.addColorStop(1, '#00000000'); x.fillStyle = sp; x.fillRect(0, 0, w, h);
-    const o = compare ? state.outfit : preview, n = { idle: 4, walk: 8, run: 8 }[anim], ms = { idle: 380, walk: 110, run: 80 }[anim], f = Math.floor((now - t0) / ms) % n;
+    const o = compare ? state.outfit : preview, n = root.NightshiftCharacters.ANIMS[anim], ms = { idle: 380 * 4 / n, walk: 110 * 8 / n, run: 80 * 8 / n }[anim], f = Math.floor((now - t0) / ms) % n;
     // zoom 1 = whole body fits (head top ~26 world px above the anchor, feet 14 below); zooming slides the focus up to the face
-    const fit = (r.height * 0.84) / 42, sc = Math.max(1, Math.round(fit * zoom * dpr * 2) / 2), C = root.NightshiftCharacters, frame = C.frame(o, dir, anim, f, Math.max(2, Math.min(18, Math.round(sc))));
+    const fit = (r.height * 0.84) / 42, sc = Math.max(1, Math.round(fit * zoom * dpr * 2) / 2), C = root.NightshiftCharacters, frame = C.frame(o, dir, anim, f, Math.max(2, Math.min(18, 2 * Math.round(sc / 2))));
     const k = Math.min(1, (zoom - 1) / 1.6), focus = -6 - 11 * k, cx = w / 2, ancY = h * 0.5 - focus * sc, footY = ancY + 14 * sc;
     x.fillStyle = '#ffd9701a'; x.beginPath(); x.ellipse(cx, footY, 20 * sc, 5 * sc, 0, 0, Math.PI * 2); x.fill();
     x.fillStyle = '#00000066'; x.beginPath(); x.ellipse(cx + sc, footY + 0.5 * sc, 9 * sc, 3 * sc, 0, 0, Math.PI * 2); x.fill();

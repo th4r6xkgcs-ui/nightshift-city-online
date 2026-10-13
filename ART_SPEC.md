@@ -141,3 +141,27 @@ Gameplay, inventory and the inspection studios all draw from the same definition
 - Character "rotation" in the studio uses the 8 authored directions; there are no in-between angles.
 - Building facades, trees and signs are still Codex v0.55 art (good already). Interiors are Codex's too.
 - Before/after comparison: `docs/art/before-after-characters.png`. Codex's v0.55 people are clean, hand-tuned sprites; the layered system trades a little of that polish for 44 wearable items and per-NPC variety. `NightshiftCharacters.enabled = false` switches back instantly for comparison.
+
+## Characters v2: true pixel renderer (`character-pixel.js`, owner: "still too blocky, not detailed 2.5D")
+- **Replaces the vector compose and Codex's v0.56 vector finishing** (`premium-art-renderer.js`/`premium-head-art.js`). It installs as `NightshiftCharacters.frame/draw` and `S.person/personTo`, loads after those files, and the weapon pass still wraps outermost.
+- **Resolution:** 88×112 art px per 44×56 world cell (2× density, 1 art px = 0.5 world px). It uses the same skeleton (`character-art.js` `geom`: 8 directions, idle/walk/run/sneak/crouch/sit, gun holds) and the same wardrobe items.
+- **Proportions:** chunkier streetwear. Head ≈ 12 world px, shoulders ×1.16, thicker limbs, bigger hands and shoes, shorter hems so the legs read.
+- **Lighting:**
+  - Every part is a pixel mask (capsules, polygons, ellipses).
+  - A chamfer distance field inside each mask gives an outward normal. Light comes from the top-left, with a little vertical falloff.
+  - Each part picks one of 5 hue-shifted tones: cool violet shadows, warm lights. Dark garments get a lifted ramp; skin gets a warm red shadow.
+  - Leather, metal, satin, hair and skin may reach the top highlight; cloth stops one tone below.
+- **Detail painted on its own part only:**
+  - garments: seams, zips, pockets, puffer baffles (each baffle its own volume), rib knit, laces and soles, jersey numbers, prints
+  - accessories: chain links, watch glint
+  - face: lids and lashes, sclera, iris and catch-light, brows, nose planes, lips, cheeks
+- **Hair:** built from clumps. Every lock is its own lit volume, so clumps separate naturally. Hats flatten hair to temples and nape.
+- **Finish:**
+  - a contact-shadow pass where a front part meets a back part
+  - a coloured outline: the neighbour's colour pushed toward a near-black violet, instead of a flat ink line
+- **Performance:**
+  - about 2 ms per new frame, LRU of 420 base frames (88×112).
+  - City sample: 221 frames built in 467 ms total while the city filled.
+  - Studio scales are snapped to even sizes so pixels stay square.
+- **Tests:** `tests/character-pixel.cjs` covers all 44 items visible, 12 distinct haircuts, 8 distinct directions, every animation animates, both holds, and 30 random NPCs fit the cell.
+- **Sheets:** `docs/art/characters-pixel-8dir.png`, `characters-pixel-closeup.png`, `characters-pixel-hair-npcs.png`, `characters-before-after-pixel.png`.

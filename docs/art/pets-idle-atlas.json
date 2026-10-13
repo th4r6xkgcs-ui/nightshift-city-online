@@ -1,0 +1,7752 @@
+{
+  "version": 1,
+  "source": "authoritative Nightshift runtime builders",
+  "width": 1024,
+  "height": 3242,
+  "frames": [
+    {
+      "id": "shiba-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 92,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 182,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "shiba-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 272,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 362,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 452,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "lab-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 542,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 632,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 722,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "husky-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 812,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 902,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 992,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "rottweiler-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1082,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1172,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1262,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tabby-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1352,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1442,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1532,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1622,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "blackcat-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1712,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1802,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1892,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "parrot-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 1982,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2072,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2162,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "raccoon-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2252,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2342,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2432,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "owl-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2522,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2612,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2702,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "monkey-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2792,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-0-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-0-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-0-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-0-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "E",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-1-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-1-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-1-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-1-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-2-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-2-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2882,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-2-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-2-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "S",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-3-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-3-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-3-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-3-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "SW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-4-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-4-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-4-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-4-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "W",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 2972,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-5-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-5-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-5-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 198,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-5-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NW",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 296,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-6-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 394,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-6-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 492,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-6-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 590,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-6-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "N",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 688,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-7-0",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 0,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 786,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-7-1",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 1,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 884,
+      "y": 3062,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-7-2",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 2,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 2,
+      "y": 3152,
+      "width": 96,
+      "height": 88
+    },
+    {
+      "id": "tiger-idle-7-3",
+      "anchor": [
+        48,
+        72
+      ],
+      "worldScale": 0.37,
+      "animation": "idle",
+      "direction": "NE",
+      "frame": 3,
+      "durationMs": 380,
+      "timing": "nominal preview duration; gameplay uses movement progress and simulation time",
+      "renderLayers": [
+        "animal"
+      ],
+      "collision": "unchanged existing pet simulation",
+      "atlas": "pets-idle-atlas.png",
+      "x": 100,
+      "y": 3152,
+      "width": 96,
+      "height": 88
+    }
+  ]
+}

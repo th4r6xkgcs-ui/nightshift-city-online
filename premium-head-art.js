@@ -7,7 +7,7 @@ function draw(c,o,q){
  const P=(h,pts)=>{c.fillStyle=h;c.beginPath();pts.forEach(([xx,yy],i)=>i?c.lineTo(x+xx,y+yy):c.moveTo(x+xx,y+yy));c.closePath();c.fill()};
  const L=(h,xx,yy,tx,ty,w=.25)=>{c.strokeStyle=h;c.lineWidth=w;c.beginPath();c.moveTo(x+xx,y+yy);c.lineTo(x+tx,y+ty);c.stroke()};
  // Clear old head/hair without removing the shoulders or torso. Long hair drapes over clothing afterwards.
- c.clearRect(x-13,y-11,26,16);
+ c.clearRect(x-13,y-11,26,17.5);
  const face=side?[[-3.6,-3.4],[1.7,-4.3],[3.8,-2.1],[4.4,.2],[3.8,.65],[3.7,2.5],[1.4,4.7],[-1.8,4.3],[-3.8,1.3]].map(([xx,yy])=>[xx*s,yy]):[[-3.7,-3.5],[-1.5,-4.6],[1.9,-4.5],[3.8,-2.6],[4.1,.3],[3.3,2.7],[1.2,4.6],[-1.5,4.6],[-3.3,2.7],[-4.1,.2]];
  R(dark,-1.35,3.6,2.7,3);R(skin,-1.1,4.1,1.65,2.5);P(skin,face);
  if(side){P(dark,[[-3.6*s,-2.7],[-1.3*s,-1.1],[-1.1*s,2.7],[1.4*s,4.7],[-1.8*s,4.3],[-3.8*s,1.3]]);P(light,[[.8*s,-3.4],[2.8*s,-2.3],[2.8*s,-.7],[.5*s,-1.8]]);R(tone(skin,-14),-2.6*s-.4,.1,.8,1.7);L(light,-2.6*s,.2,-2.6*s,1.1)}

@@ -1,6 +1,6 @@
 {
   "name": "nightshift-city-online",
-  "version": "0.56.0",
+  "version": "0.57.0",
   "private": true,
   "engines": {
     "node": ">=24"
@@ -13,6 +13,8 @@
     "build": "node scripts/build-static.cjs",
     "export:city": "node scripts/export-city.cjs",
     "test:premium-browser": "node scripts/verify-premium-browser.cjs",
-    "test:heads-pistols": "node scripts/verify-heads-pistols.cjs"
+    "test:heads-pistols": "node scripts/verify-heads-pistols.cjs",
+    "test:four-pass": "node scripts/verify-four-pass.cjs",
+    "export:world-atlases": "node scripts/export-world-atlases.cjs"
   }
 }
