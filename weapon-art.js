@@ -150,12 +150,12 @@
     sawnoff: (b) => { const x = OX, y = OY; b.P('wood', [[x + 1, y], [x - 7, y + 3], [x - 8, y + 9], [x - 3, y + 9], [x + 3, y + 5]]); b.R('steel', x, y - 1, 6, 6); b.C('dark', x + 6, y - 1, 13, 3); b.C('dark', x + 6, y + 2, 13, 3); b.R('wood', x + 6, y + 4, 7, 2); b.R('tape', x + 14, y - 1, 2, 6, { matte: true }); guard(b, x + 2, y + 5, 4); b.L(b.T('chrome', 2), x + 1, y - 2, 1, 1); return { hand: [x, y + 6], muzzle: [x + 19, y + 1], rail: [x + 10, y - 2], under: [x + 13, y + 6], mag: null }; },
     pistol: (b) => handgun(b, { len: 15, mag: 6 }),
     compact: (b) => handgun(b, { len: 11, slideH: 4, serr: 2, mag: 1 }),
-    revolver: (b) => handgun(b, { len: 21, revolver: true, frameMat: 'wood', grips: true }),
+    revolver: (b) => handgun(b, { len: 21, revolver: true, frameMat: 'rubber', grips: true }), // v0.63: modern rubber grips
     hawk: (b) => handgun(b, { len: 19, slideH: 5, serr: 4, hammer: true, slideMat: 'chrome' }),
     machine: (b) => { const a = handgun(b, { len: 14, mag: 7, comp: true }); b.R('poly', OX - 4, OY + 1, 4, 2); b.R('rubber', OX - 6, OY, 2, 4); return a; },
-    pump: (b) => longgun(b, { rec: 11, bar: 19, hg: 8, hgType: 'pump', furn: 'wood', stock: 'wood', wrist: true, tubeMag: true, frontSight: true }),
+    pump: (b) => longgun(b, { rec: 11, bar: 19, hg: 8, hgType: 'pump', furn: 'poly', stock: 'wood', rail: true, wrist: true, tubeMag: true, frontSight: true }),
     smg: (b) => longgun(b, { rec: 13, bar: 6, hg: 6, mag: 'straight', magLen: 8, stock: 'tube', rail: true, hider: true }),
-    hunting: (b) => { const a = longgun(b, { rec: 14, bar: 22, hg: 10, hgType: 'wood', furn: 'wood', stock: 'wood', wrist: true, mag: 'box', bolt: true, frontSight: true }); return a; },
+    hunting: (b) => { const a = longgun(b, { rec: 14, bar: 22, hg: 10, hgType: 'wood', furn: 'tan', stock: 'wood', wrist: true, mag: 'box', bolt: true, rail: true, frontSight: true }); return a; }, // v0.63: synthetic FDE stock
     shotgun: (b) => longgun(b, { rec: 13, bar: 17, hg: 9, hgType: 'pump', stock: 'fixed', tubeMag: true, rail: true, mag: null, frontSight: true }),
     carbine: (b) => longgun(b, { rec: 14, bar: 11, hg: 8, mag: 'curved', magLen: 8, stock: 'skel', rail: true, hider: true, frontSight: true }),
     rifle: (b) => { const a = longgun(b, { rec: 15, bar: 20, hg: 11, mag: 'straight', magLen: 5, stock: 'fixed', rail: true, brake: true, bolt: true }); optic(b, a.rail[0], a.rail[1], 15); a.optic = true; return a; },

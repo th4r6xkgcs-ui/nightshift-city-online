@@ -55,6 +55,7 @@
 
   // ---------- buildings ----------
   function building(b) {
+    if (root.NightshiftModern?.on) return; // v0.63: modern-city.js draws its own facades
     let c = null; try { c = g; } catch { return; } // eslint-disable-line no-undef
     const { x, y, w, h, name } = b, front = y + h - 62, reg = region(x, y), sty = styleAt(x, y), s = H(Math.round(x), Math.round(y), 3);
     let night = 0; try { night = root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment.state?.minute ?? 720) || 0; } catch { /* n/a */ }
