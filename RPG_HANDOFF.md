@@ -606,3 +606,13 @@ Audit at iPhone landscape size (852×393, touch) from a fresh save, then fixes:
 - MORE menu trimmed to Style, Bag, Craft, Rob, Give up, Car, Sound, Map, Saves, Ctrl, Street (the rest live on the action button or the phone); NEAR chip removed; home stash panel styled with the close button on top.
 - Big map: fills the panel height and draws the real city art (minimap base) with gang turf instead of grey boxes (`city-map.js`, `minimap.js` exposes `base()`).
 - Checks: 113 suites PASS; headless fps 54–58; no page errors in the audit run.
+
+## v0.62 High-detail pass (owner: "go really high detail for the next run on everything")
+- **Resolution**: the game canvas was capped at 2x (and stepped down further when slow) on a 3x iPhone, so everything was upscaled. `render-quality.js` now allows up to 3x (7.5 M px budget); `fx.js` adaptive steps are 3 → 2.5 → 2 → 1.5 → 1, stepping down only if frames stay slow. Test `render-quality.cjs` updated.
+- **Ground**: `world.js` tiles are 660×510 baked at 2x (LRU 12), so road paint/kerbs/cracks are crisp. `hd-art.js` adds fine asphalt grain, paver joints and kerb stones (called from city-art roads, baked once).
+- **Buildings** (`hd-art.js`, live per visible building): facade material by district (brick / siding / board-marked concrete), roof membrane seams and gravel, parapet highlight + inner shadow, drip stains, drainpipes with brackets, window mullions, sills, glass sheen + glints, curtains or blinds at night, shop kick plates, roller-door slats.
+- **Cars** (`hd-art.js`): body specular streaks, panel seams, door handles, mirrors, windscreen/rear-glass reflections, tyre tread.
+- **Characters** (`character-pixel.js`): authored on the G=2 grid where faces/seams/logos are tuned, then EPX/Scale2x upscaled to 176×224 (smooth silhouettes and diagonals, clearer faces); sprite cache 420.
+- **Interiors**: `zones.js` bakes zone grounds at 2x; `interiors.js` floors/walls get wood grain, tile grout, carpet pile, wallpaper and light pooling. Zone entry title is now a small line at the top.
+- **Minimap**: renders the city straight into its small canvas (the old world-sized temp canvas was over the iPhone canvas limit).
+- Salvage crates moved clear of benches (tests follow). 113 suites PASS; headless fps ~54–58 (renderer stepped to 2.5x in the software headless browser).
