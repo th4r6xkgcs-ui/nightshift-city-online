@@ -385,7 +385,8 @@
     else if (back) { for (let r = 0; r < 3; r++) for (const [x, y] of arc(5, Math.PI * 0.95, Math.PI * 2.05, hx, hy + 1.6 - r * 2.2, rx - 0.2 - r * 0.6, ry - 0.6 - r * 0.8)) lobe(F, hc, x, y, 2.2, 1.7, r === 2 ? 1 : 0); }
     else {
       cap(6, rx - 0.3, 2.1); cap(4, rx - 1.6, 1.8, 1.4);
-      if (!prof && h !== 'bun') { // fringe swept toward the facing side
+      if (h === 'ponytail' && !prof) { lobe(F, hc, hx + (sx >= 0 ? -1 : 1) * (rx - 0.2), hy + 3.2, 1, 1.7, 1); { const tie = ellipse(Mask(), hx + (sx >= 0 ? -1 : 1) * (rx - 0.2), hy + 1.6, 0.9, 0.5); layer(F, tie, '#c84659', { soft: 1 }); } }
+      else if (!prof && h !== 'bun') { // fringe swept toward the facing side
         for (let k = 0; k < 3; k++) lobe(F, hc, hx - rx * 0.45 + k * rx * 0.42 + sx * 0.8, hy - 2.6 + (k === 1 ? 0.3 : 0), 1.7, 1.2, 1);
       } else if (prof) lobe(F, hc, hx + sx * (rx - 1.2), hy - 2.4, 1.6, 1.3, 1);
     }
