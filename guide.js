@@ -199,12 +199,15 @@
     state.toured = true; persist();
     const css = document.createElement('style');
     css.textContent = '.qkHint{position:fixed;z-index:30;pointer-events:none;transform:translate(-50%,-100%);background:#0c111ee6;border:1px solid #ffd970;border-radius:10px;color:#fff7dd;font:700 11px/1.25 ui-monospace,Menlo,monospace;padding:5px 9px;white-space:nowrap;transition:opacity .4s;animation:qkB 1.2s ease-in-out infinite}' +
-      '.qkHint::after{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);border:6px solid transparent;border-top-color:#ffd970;border-bottom:0}@keyframes qkB{50%{margin-top:-4px}}';
+      '.qkHint::after{content:"";position:absolute;left:var(--ax,50%);bottom:-6px;transform:translateX(-50%);border:6px solid transparent;border-top-color:#ffd970;border-bottom:0}@keyframes qkB{50%{margin-top:-4px}}';
     document.head.appendChild(css);
     const hints = [['#pad', 'Drag to walk · push far to run', 'move'], ['#aimPad', 'Drag to aim · hold to shoot', 'aim'], ['#use', 'Tap when it glows', 'use']].map(([sel, text, k]) => {
       const t = document.querySelector(sel); if (!t || !t.offsetParent) return null; const r = t.getBoundingClientRect();
-      const h = el('div', { className: 'qkHint' }, text); h.style.left = Math.round(r.left + r.width / 2) + 'px'; h.style.top = Math.round(r.top - 8) + 'px'; document.body.append(h);
-      const done = () => { h.style.opacity = '0'; setTimeout(() => h.remove(), 450); }; t.addEventListener('pointerdown', done, { once: true }); setTimeout(done, k === 'use' ? 9000 : 12000); return h;
+      const h = el('div', { className: 'qkHint' }, text); document.body.append(h);
+      // keep the bubble on screen: centre over the control, clamped to the edges; the arrow still points at it
+      const w = h.offsetWidth, cx = r.left + r.width / 2, left = Math.max(8, Math.min(innerWidth - w - 8, cx - w / 2));
+      h.style.transform = 'translateY(-100%)'; h.style.left = Math.round(left) + 'px'; h.style.top = Math.round(r.top - 10) + 'px'; h.style.setProperty('--ax', Math.round(cx - left) + 'px');
+      const done = () => { h.style.opacity = '0'; setTimeout(() => h.remove(), 450); }; t.addEventListener('pointerdown', done, { once: true }); setTimeout(done, k === 'use' ? 7000 : 9000); const watch = setInterval(() => { if (document.querySelector('#phPhone:not([hidden]),.spP:not([hidden]),#ggPanel:not([hidden]),[role=dialog]:not([hidden])')) { done(); clearInterval(watch); } }, 400); setTimeout(() => clearInterval(watch), 10000); return h;
     });
     void hints;
   }
