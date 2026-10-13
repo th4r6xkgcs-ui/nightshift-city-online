@@ -36,7 +36,7 @@
   const blocks = new Map();
   const st = { spawned: 0, fights: 0, kills: 0, hits: 0, skirmishes: 0, raids: 0, claims: 0 };
   const district = (x, y) => { try { return root.NightshiftWorld?.districtName?.(x, y) || ''; } catch { return ''; } };
-  const holdPoint = (b) => ({ x: b.bx * 440 + 118, y: b.by * 340 + 268 });
+  const holdPoint = (b) => (b.squadHold ? b.squadHold : { x: b.bx * 440 + 118, y: b.by * 340 + 268 });
 
   // ---------- barks: short call-outs over heads ----------
   const BARK = {
@@ -44,6 +44,7 @@
     cover: ['Cover!', 'Reloading!', 'Get down!'], flank: ['Flank him!', 'Go round!', 'Cut him off!'],
     hurt: ['Agh!', 'I\'m hit!', 'Ugh—'], down: ['Man down!', 'They got Lil T!', 'Nooo!'], flee: ['I\'m out!', 'Fall back!', 'Not worth it!'],
     guard: ['Not on our block!', 'On it, boss!', 'Hold the line!', 'We got this!'], clear: ['Clear!', 'Corner\'s ours.', 'That\'s what I thought.'],
+    push: ['He\'s reloading!', 'Push him!', 'Now! Now!', 'Rush him!'], melee: ['Come here!', 'Hands then!', 'Square up!'],
     warn: ['Keep walking.', 'You lost?', 'This ain\'t your block.'], idle: ['…and then he says—', 'Ha!', 'Nah, for real?', 'You hear about the bank?', 'Cops been around.', 'Slow night.'],
   };
   let lastBark = 0;
@@ -115,6 +116,10 @@
   function onDeath(u, byPlayer) {
     units.splice(units.indexOf(u), 1); st.kills++;
     const env = E();
+    // v0.64: squads (story bosses, robbers) report deaths on the shared event bus (multiplayer-ready)
+    try { root.dispatchEvent?.(new CustomEvent('ns:event', { detail: { type: 'kill', team: u.team, tag: u.tag || null, boss: !!u.boss, role: u.role, byPlayer: !!byPlayer, x: u.x, y: u.y, melee: !!u.lastMelee } })); } catch { /* n/a */ }
+    try { u.onDeath?.(u, byPlayer); } catch { /* n/a */ }
+    if (u.squad) { if (byPlayer) { try { env?.loot?.push({ x: u.x, y: u.y, value: Math.floor(rnd(30, 110)) * (u.boss ? 5 : 1) }); } catch { /* n/a */ } try { root.NightshiftMelee?.dropFrom?.(u); } catch { /* n/a */ } } persist(); return; }
     if (u.role === 'local') state.dead[u.id] = Date.now() + 5 * 60000;
     if (u.role === 'guard') { const o = state.owned[u.block.key]; if (o) o.guards = o.guards.filter((gd) => gd !== u.ref); say(`💀 One of your guards on ${district(u.x, u.y)} went down`); }
     const mate = units.find((v) => v.team === u.team && dist(v, u) < 220); if (mate) bark(mate, 'down');
@@ -124,6 +129,7 @@
       if (skirmishHelp) { D.change(state, u.team, -10); D.change(state, b.owner.id, 6); say(`🤝 ${b.owner.short} saw you drop one of the ${u.gang.short} · +rep with ${b.owner.name}`); }
       else { D.change(state, u.team, -15); if (u.gang.rival) D.change(state, u.gang.rival, 4); }
       try { env?.loot?.push({ x: u.x, y: u.y, value: Math.floor(rnd(20, 90)) }); } catch { /* n/a */ }
+      try { root.NightshiftMelee?.dropFrom?.(u); } catch { /* n/a */ }
       if (state.job && state.job.target === u.team) {
         state.job.done++;
         if (state.job.done >= state.job.need) { const j = state.job, from = D.BY_ID[j.from]; if (env) env.player.cash += j.pay; D.change(state, j.from, 15); state.job = null; say(`💰 Job done for ${from.name} · +$${j.pay} · they've got your back`); save(); }
@@ -133,19 +139,41 @@
     }
     persist();
   }
-  function damage(u, dmg, byPlayer, from) {
+  function damage(u, dmg, byPlayer, from, opts) {
     if (!u || u.hp <= 0 || !units.includes(u)) return false;
-    u.hp -= Math.max(1, dmg); st.hits++;
+    u.hp -= Math.max(1, dmg); st.hits++; u.lastMelee = !!opts?.melee;
+    // v0.64 hit reactions: a short flinch for bullets, a real stagger + knockback for melee
+    const now0 = performance.now(); u.flinchUntil = now0 + 160;
+    if (opts?.knock && from) { const d = Math.max(1, dist(u, from)); push(u, (u.x - from.x) / d * opts.knock, (u.y - from.y) / d * opts.knock, opts.stun || 350); }
+    if (u.squad && byPlayer && u.vs && !u.vs.includes('player')) u.vs.push('player');
     if (u.hp > 0) { bark(u, 'hurt'); if (from) { u.lastThreat = { x: from.x, y: from.y }; u.nextPlan = 0; } }
     if (byPlayer && u.team !== 'you') {
       const b = u.block;
-      if (u.role === 'local' && !(b.attackers && false)) provoke(b, 'you shot one of them');
+      if (u.role === 'local' && !(opts?.silent && !units.some((v) => v !== u && v.block === b && v.role === 'local' && sightTo(v, u, 170)))) provoke(b, opts?.melee ? 'you jumped one of them' : 'you shot one of them');
       if (u.role === 'raider' && !u.vs.includes('player') && !(b.owner !== P && b.attackers === u.team)) u.vs.push('player');
     }
     if (u.hp <= 0) onDeath(u, byPlayer);
     return true;
   }
-  const hit = (u, dmg) => { const env = E(); return u?.team !== 'you' && damage(u, dmg || 20, true, env?.player); };
+  const hit = (u, dmg, opts) => { const env = E(); return u?.team !== 'you' && damage(u, dmg || 20, true, env?.player, opts); };
+  // knockback that respects walls; stun = no moving or shooting
+  function push(u, dx, dy, stunMs) { const n = Math.max(1, Math.ceil(Math.hypot(dx, dy) / 4)); for (let i = 0; i < n; i++) { const nx = u.x + dx / n, ny = u.y + dy / n; if (canStep(nx, u.y)) u.x = nx; if (canStep(u.x, ny)) u.y = ny; } if (stunMs) u.stunUntil = Math.max(u.stunUntil || 0, performance.now() + stunMs); u.seated = false; u.seat = null; u.nextPlan = 0; }
+  // v0.64 squads: story bosses, store robbers, hit crews. Not tied to a turf block; they fight whoever is in `vs`.
+  let squadN = 0;
+  function squad(o) {
+    const env = E(); const g = (typeof o.gang === 'string' ? D.BY_ID[o.gang] : o.gang) || D.GANGS[0], out = [], n = Math.max(1, Math.min(8, o.n || 1));
+    const b = { key: 'squad-' + (o.tag || ++squadN), bx: Math.floor(o.x / 440), by: Math.floor(o.y / 340), home: g, owner: g, alertUntil: 0, fightUntil: 0, loiter: 0, warned: 0, hold: 0, raid: null, attackers: null, squad: true, squadHold: { x: o.x, y: o.y } };
+    if (env?.player) refreshNear(env.player);
+    for (let i = 0; i < n; i++) {
+      let x = o.x, y = o.y; for (let k = 0; k < 12; k++) { const a = (i * 2.4 + k * 0.9), r = i === 0 && o.boss ? 0 : 26 + k * 8; x = o.x + Math.cos(a) * r; y = o.y + Math.sin(a) * r * 0.6; if (canStep(x, y)) break; }
+      const boss = i === 0 && o.boss ? o.boss : null, gear0 = o.gear || D.GANG_GEAR, gear = boss ? { ...gear0, dmg: boss.dmg || gear0.dmg * 1.4, err: (gear0.err || 0.12) * 0.75, range: Math.max(gear0.range || 220, 240), cool: gear0.cool } : gear0, hp = boss ? (boss.hp || 260) : (o.hp || gear0.hp + 10);
+      const look = hash(g.id) % 1000 + ((i + squadN) % 5), outfit = outfitFor(g.id === 'you' ? P : (D.BY_ID[g.id] ? g : D.GANGS[0]), look, o.gearTier || 1);
+      if (boss) { outfit.outer = { id: 'leather', color: 0 }; outfit.jewelry = { id: 'chain', color: 0 }; outfit.face = { id: 'shades', color: 0 }; }
+      out.push(makeUnit({ id: `squad-${b.key}-${i}`, team: g.id, gang: g, block: b, role: 'raider', squad: true, tag: o.tag || null, vs: (o.vs || ['player', 'you']).slice(), home: { x: o.x, y: o.y }, face: { x: o.x, y: o.y + 40 }, x, y, hp, maxHp: hp, gear, outfit, boss: boss ? { name: boss.name } : null, meleeOnly: !!o.meleeOnly || !!boss?.meleeOnly, hunt: o.hunt || 0, onDeath: o.onDeath || null, giveUp: Infinity, angle: Math.PI / 2 }));
+    }
+    return out;
+  }
+  const clearSquad = (tag) => { for (let i = units.length - 1; i >= 0; i--) if (units[i].tag === tag) units.splice(i, 1); };
 
   // ---------- movement / sight ----------
   let near = [];
@@ -194,13 +222,15 @@
   function anyFoeNear(u, now, env) { if (wantsPlayer(u, now) && dist(u, env.player) < 500) return env.player; return units.find((v) => isFoe(u, v, now) && dist(u, v) < 500) || null; }
   function unitTick(env, u, now, dt) {
     const p = env.player;
+    if (now < (u.stunUntil || 0)) { u.moving = false; u.inCover = false; return; }
     // flee when badly hurt (guards hold their ground)
     if (u.fleeing) { const away = { x: u.x + (u.x - u.fleeing.x) * 2, y: u.y + (u.y - u.fleeing.y) * 2 }; moveTo(u, away, 92, dt); if (dist(u, p) > 900 || now > u.fleeUntil) { if (u.role === 'raider') { units.splice(units.indexOf(u), 1); return; } u.fleeing = null; } return; }
-    if (u.role !== 'guard' && u.hp < u.maxHp * 0.3 && !u.triedFlee) { u.triedFlee = true; if (Math.random() < 0.4) { u.fleeing = u.lastThreat || p; u.fleeUntil = now + 9000; bark(u, 'flee', true); return; } }
+    if (u.role !== 'guard' && !u.boss && u.hp < u.maxHp * 0.3 && !u.triedFlee) { u.triedFlee = true; if (Math.random() < 0.4) { u.fleeing = u.lastThreat || p; u.fleeUntil = now + 9000; bark(u, 'flee', true); return; } }
     const t = chooseTarget(env, u, now), threat = t ? (t.unit || p) : anyFoeNear(u, now, env);
     if (!threat) {
       // calm: go home, hang out, chat
       u.mode = u.role === 'raider' ? 'walk' : 'hang'; u.inCover = false; u.target = null;
+      if (u.squad) { const huntP = u.hunt && p.hp > 0 && dist(u, p) < u.hunt; moveTo(u, huntP ? p : u.home, huntP ? 72 : 55, dt); if (!huntP && dist(u, u.home) < 6) { u.moving = false; u.angle = Math.atan2(p.y - u.y, p.x - u.x); } return; }
       if (u.role === 'raider') { const hp0 = holdPoint(u.block); if (moveTo(u, hp0, 66, dt) || dist(u, hp0) < 30) { if (!u.vs.length || now > (u.giveUp || (u.giveUp = now + 20000))) units.splice(units.indexOf(u), 1); } return; }
       if (!u.seated && dist(u, u.home) > 4) { moveTo(u, u.home, 50, dt); return; }
       u.moving = false;
@@ -210,10 +240,22 @@
       return;
     }
     u.seated = false; u.seat = null; u.mode = 'fight';
+    // v0.64 close quarters: anyone this close throws hands instead of shooting; brawlers always close the gap
+    const onPlayer = !t?.unit && threat === p && !p.car && p.hp > 0, dP = dist(u, p);
+    if (onPlayer && (u.meleeOnly || dP < 34)) {
+      if (dP > 24) moveTo(u, p, u.boss ? 82 : 78, dt); else u.moving = false;
+      u.angle = Math.atan2(p.y - u.y, p.x - u.x); u.inCover = false;
+      if (dP < 30 && now > (u.nextMelee || 0)) { u.nextMelee = now + (u.boss ? 900 : 1150); u.swingAt = now; if (Math.random() < 0.3) bark(u, 'melee'); const dmg = u.boss ? 16 : 9; try { if (root.NightshiftMelee?.incoming?.(u, dmg) !== false) root.NightshiftRecovery?.damage?.(dmg, now); } catch { /* n/a */ } }
+      return;
+    }
+    let reloading = false; try { reloading = onPlayer && combatState.until > now && dP < 330; } catch { /* n/a */ } // eslint-disable-line no-undef
+    if (reloading && !u.pushed) { u.pushed = true; u.nextPlan = 0; if (Math.random() < 0.6) bark(u, 'push', true); }
+    if (!reloading) u.pushed = false;
     if (now > (u.nextPlan || 0)) {
       u.nextPlan = now + rnd(1300, 2600);
       const cv = coverSpot(env, u, threat), want = u.gear.range * rnd(0.5, 0.8);
-      if (cv && Math.random() < 0.65) u.goal = cv;
+      if (reloading && Math.random() < 0.75) { const a = Math.atan2(u.y - p.y, u.x - p.x); u.goal = { x: p.x + Math.cos(a) * 60, y: p.y + Math.sin(a) * 60 }; }
+      else if (cv && Math.random() < 0.65) u.goal = cv;
       else {
         // flank: swing around the target, away from team-mates, at a working distance
         const mates = units.filter((v) => v.team === u.team && v !== u && dist(v, u) < 200).length, swing = mates > 1 ? (u.slot = u.slot ?? (Math.random() < 0.5 ? -1 : 1)) * rnd(0.6, 1.2) : rnd(-0.6, 0.6);
@@ -400,6 +442,7 @@
     for (const u of units) {
       const d = dist(u, p); if (d > 700) continue;
       if (u.mode === 'fight' || d < 160 || u.role === 'guard') { ctx.fillStyle = u.gang.color === '#1d2024' ? '#c9d1d6' : u.gang.color; ctx.beginPath(); ctx.moveTo(u.x - 4, u.y - 40); ctx.lineTo(u.x + 4, u.y - 40); ctx.lineTo(u.x, u.y - 35); ctx.closePath(); ctx.fill(); if (u.role === 'guard') for (let k = 0; k <= u.ref.tier; k++) ctx.fillRect(u.x - 6 + k * 4, u.y - 46, 3, 3); }
+      if (u.boss) { const w = 46, f = Math.max(0, u.hp / u.maxHp); ctx.fillStyle = '#0c111ee0'; ctx.fillRect(u.x - w / 2 - 1, u.y - 66, w + 2, 15); ctx.fillStyle = '#ff5a6a'; ctx.fillRect(u.x - w / 2, u.y - 55, w * f, 3); ctx.fillStyle = '#ffe08a'; ctx.fillText('☠ ' + u.boss.name, u.x, u.y - 58); }
       if (u.bark && now < u.bark.until) { const w = ctx.measureText(u.bark.t).width + 8, y = u.y - 54; ctx.fillStyle = '#0c111ee0'; ctx.fillRect(u.x - w / 2, y - 9, w, 12); ctx.fillStyle = u.team === 'you' ? '#ffb0f0' : '#fff1c4'; ctx.fillText(u.bark.t, u.x, y); }
     }
     ctx.restore();
@@ -489,7 +532,7 @@
   }, 300);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) close(); });
   root.NightshiftGangs = Object.freeze({ members: () => units.filter((u) => u.team !== 'you'), units: () => units, hit, open, manage, raid, close, paused: () => !panel.hidden, get state() { return state; }, turf: (x, y) => D.turfAt(x, y),
-    guardOutfit, hideoutKill, hideoutDone, blocks: () => blocks, skirmish: () => { nextSkirmish = 0; },
+    guardOutfit, hideoutKill, hideoutDone, blocks: () => blocks, squad, clearSquad, push, alive: (tag) => units.filter((u) => u.tag === tag).length, strike: (u, dmg, opts) => hit(u, dmg, opts), skirmish: () => { nextSkirmish = 0; },
     engaged: () => { const now = performance.now(), p = E()?.player; return [...blocks.values()].some((b) => b.fightUntil > now || ((b.raid || b.attackers || b.hold > 0) && p && dist(holdPoint(b), p) < 700)); },
     stats: () => ({ ...st, units: units.length, blocks: blocks.size, shots: shots.length, owned: Object.keys(state.owned).length }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);

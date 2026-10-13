@@ -74,6 +74,7 @@
   function finish(secs) {
     const race = run.race, before = state.best[race.id], m = R.medal(race, secs), pay = R.payout(race, m, before);
     state.runs++;
+    try { root.dispatchEvent(new CustomEvent('ns:event', { detail: { type: 'race', id: race.id, medal: m ? m.id : null, secs } })); } catch { /* n/a */ } // v0.64 event bus
     if (!before || secs < before) state.best[race.id] = Math.round(secs * 1000) / 1000;
     const bm = R.medal(race, state.best[race.id]); if (bm) state.medals[race.id] = bm.id;
     persist();
