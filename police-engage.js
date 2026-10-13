@@ -44,7 +44,7 @@
       if (downed && d < 220) { if (!o.cuffBark) { o.cuffBark = true; bark(o, 'cuff', true); } } else o.cuffBark = false;
       // tasers: ★1 when you run, ★2 unless you're showing a gun (then crime.js uses guns)
       const taserLevel = S === 1 ? p.moving : S === 2 && !armedRecently();
-      if (taserLevel && !downed && !p.car && vis && d < 135 && d > 18 && now > (o.nextTaser || o.nextAttack || 0) && now > (o.suppressedUntil || 0)) {
+      if (taserLevel && !downed && !p.car && vis && d < 135 && d > 18 && now > (o.nextTaser ?? (o.nextTaser = now + 700)) && now > (o.suppressedUntil || 0)) {
         o.nextTaser = now + 2600 + Math.random() * 900; o.nextAttack = Math.max(o.nextAttack || 0, now + 1200);
         const lead = p.moving && Number.isFinite(p.moveAngle) ? 10 : 0, tx = p.x + Math.cos(p.moveAngle || 0) * lead, ty = p.y + Math.sin(p.moveAngle || 0) * lead;
         const a = Math.atan2(ty - o.y, tx - o.x) + (Math.random() * 2 - 1) * 0.12;
