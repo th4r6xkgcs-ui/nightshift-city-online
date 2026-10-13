@@ -113,13 +113,14 @@
     sprint: [['rico', 'Pop-up street sprint starting. Bring a car 🏁']],
   };
   function cleanState(raw) {
-    const s = { version: 1, station: 'nfm', radio: true, log: [], unread: 0, lastNightAt: 0, lastMorningAt: 0, lastMarketWindow: -1, seen: {}, welcomed: false };
+    const s = { version: 1, station: 'nfm', radio: true, log: [], unread: 0, lastNightAt: 0, lastMorningAt: 0, lastMarketWindow: -1, seen: {}, welcomed: false, where: 'home' };
     if (STATION[raw?.station]) s.station = raw.station;
     s.radio = raw?.radio !== false;
     if (Array.isArray(raw?.log)) s.log = raw.log.filter((x) => x && CONTACTS[x.from] && typeof x.text === 'string' && Number.isFinite(x.at)).slice(-40).map((x) => ({ from: x.from, text: x.text.slice(0, 200), at: x.at }));
     for (const k of ['lastNightAt', 'lastMorningAt']) if (Number.isFinite(raw?.[k]) && raw[k] > 0) s[k] = raw[k];
     s.unread = Number.isSafeInteger(raw?.unread) && raw.unread > 0 ? Math.min(99, raw.unread) : 0;
     s.welcomed = raw?.welcomed === true;
+    s.where = raw?.where === 'city' ? 'city' : 'home'; // where you were when the game last saved
     if (Number.isSafeInteger(raw?.lastMarketWindow)) s.lastMarketWindow = raw.lastMarketWindow;
     for (const [k, v] of Object.entries(raw?.seen || {})) if (/^[a-zA-Z]{1,20}$/.test(k) && Number.isFinite(v) && v >= 0) s.seen[k] = v;
     return s;
