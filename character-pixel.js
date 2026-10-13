@@ -328,41 +328,72 @@
     if (o.head && !hoodUp && !(masked && o.head.id === 'durag')) hat(F, o, g, hx, hy, rx, ry);
   }
   function face(L, o, g, skin, hc, hx, hy, rx, ry) {
-    const T = L.T, fx = hx + g.sx * 1.6, eyeY = Y(hy + 0.6), brow = mix(hc, '#000000', 0.15), eye = '#1c1418', white = '#f4efe6', blink = g.blink;
-    const eyes = g.profile ? [fx + g.sx * 1.2] : [fx - 2.1, fx + 2.1].map((x, i) => x + (i === (g.sx > 0 ? 0 : 1) ? g.sx * 0.35 : 0));
-    for (const ex of eyes) { const x = X(ex); if (blink) { L.put(x - 1, eyeY + 1, T[0]); L.put(x, eyeY + 1, T[0]); L.put(x + 1, eyeY + 1, T[0]); } else { L.put(x - 1, eyeY, white); L.put(x, eyeY, eye); L.put(x, eyeY + 1, eye); L.put(x + 1, eyeY + 1, eye); L.put(x + 1, eyeY, eye); L.put(x - 1, eyeY + 1, T[1]); L.put(x + 1, eyeY - 1, T[1]); } for (let k = -1; k <= 1; k++) L.put(x + k, eyeY - 2 - (k === -1 ? 0 : 0), brow); }
-    // nose: lit bridge + shadow under/right
-    const nx = X(fx + g.sx * (g.profile ? 2.6 : 0.4)), ny = Y(hy + 2.2); L.put(nx, ny - 1, T[3]); L.put(nx + 1, ny, T[1]); L.put(nx, ny + 1, T[0]); L.put(nx - 1, ny + 1, T[1]);
-    if (g.profile) { L.put(X(hx + g.sx * (rx + 0.2)), ny, T[2]); L.put(X(hx + g.sx * (rx + 0.2)), ny - 1, T[3]); }
-    // mouth + chin shading
-    const my = Y(hy + 3.8), mx = X(fx + (g.profile ? g.sx * 1.6 : 0)); for (let k = g.profile ? 0 : -1; k <= 1; k++) L.put(mx + k, my, mix(T[0], '#7a3030', 0.3)); L.put(mx, my + 1, T[3]);
-    // cheek warmth + far-side shadow plane
-    if (!g.profile) { L.put(X(fx - 3.2), Y(hy + 2.4), mix(T[2], '#d06a5a', 0.25)); L.put(X(fx + 3.2), Y(hy + 2.4), mix(T[2], '#d06a5a', 0.25)); }
+    const T = L.T, fx = hx + g.sx * 1.6, eyeY = Y(hy + 0.5), brow = mix(hc, '#000000', 0.25), iris = '#24161a', sclera = '#f2ebe0', lid = mix(T[0], '#000000', 0.2), look = g.sx > 0.2 ? 1 : g.sx < -0.2 ? -1 : 0;
+    const eyes = g.profile ? [fx + g.sx * 1.3] : [fx - 2.2 + (g.sx > 0 ? g.sx * 0.5 : 0), fx + 2.2 + (g.sx < 0 ? g.sx * 0.5 : 0)];
+    for (const [k, ex] of eyes.entries()) {
+      const x = X(ex) - 1; // 4px-wide eye: sclera on the side away from the gaze
+      if (g.blink) { for (let d = 0; d < 4; d++) L.put(x + d, eyeY + 1, lid); continue; }
+      for (let d = 0; d < 4; d++) L.put(x + d, eyeY - 1, lid); // upper lid + lashes
+      const ix = look >= 0 ? x + 1 : x + 1 - 1, sc = look >= 0 ? x : x + 3; L.put(sc, eyeY, sclera); L.put(look >= 0 ? x + 3 : x, eyeY, mix(sclera, T[1], 0.5));
+      L.put(ix + (look > 0 ? 1 : 0), eyeY, iris); L.put(ix + 1 + (look > 0 ? 1 : 0) - (look < 0 ? 0 : 0), eyeY, iris); L.put(ix + (look > 0 ? 1 : 0), eyeY + 1, iris); L.put(ix + 1 + (look > 0 ? 1 : 0), eyeY + 1, mix(iris, T[1], 0.4));
+      L.put(ix + (look > 0 ? 1 : 0), eyeY, '#e8e2f0'); // catch-light
+      L.put(x + 1, eyeY + 2, T[1]); L.put(x + 2, eyeY + 2, T[1]); // under-eye
+      const outer = (k === 0) !== (look < 0) ? -1 : 1, by = eyeY - 3; for (let d = 0; d < 4; d++) L.put(x + d, by + (d === (outer < 0 ? 0 : 3) ? 1 : 0), brow); // brow, outer end lower
+      if (g.profile) break;
+    }
+    // nose: lit ridge, shadow on the far side, nostrils
+    const nx = X(fx + g.sx * (g.profile ? 2.8 : 0.5)), ny = Y(hy + 2.4);
+    L.put(nx, ny - 2, T[3]); L.put(nx, ny - 1, T[3]); L.put(nx + 1, ny - 1, T[1]); L.put(nx + 1, ny, T[1]); L.put(nx - 1, ny + 1, T[0]); L.put(nx + 1, ny + 1, T[0]); L.put(nx, ny + 1, T[1]); L.put(nx, ny, T[4]);
+    if (g.profile) { const tip = X(hx + g.sx * (rx + 0.25)); L.put(tip, ny - 1, T[3]); L.put(tip, ny, T[2]); }
+    // mouth: upper lip line, lit lower lip, corners
+    const my = Y(hy + 4.1), mx = X(fx + (g.profile ? g.sx * 1.9 : 0.1)), lip = mix(T[1], '#9a3a40', 0.35);
+    for (let d = g.profile ? 0 : -2; d <= (g.profile ? 1 : 1); d++) L.put(mx + d, my, mix(T[0], '#5a1a20', 0.3));
+    L.put(mx - (g.profile ? 0 : 1), my + 1, lip); L.put(mx, my + 1, mix(lip, '#ffffff', 0.15)); L.put(mx, my + 2, T[1]);
+    // cheeks + jaw plane
+    if (!g.profile) { L.put(X(fx - 3.4), Y(hy + 2.6), mix(T[2], '#d8705e', 0.28)); L.put(X(fx + 3.4), Y(hy + 2.6), mix(T[2], '#d8705e', 0.22)); }
   }
   function facial(F, o, g, hc, hx, hy, rx, ry) {
     const f = o.facial, fx = hx + g.sx * 1.6, m = Mask();
     if (f === 'beard') poly(m, [[hx - rx + 0.6 + g.sx * 0.4, hy + 1.6], [hx + rx - 0.6 + g.sx * 0.4, hy + 1.6], [hx + rx * 0.6 + g.sx * 1.1, hy + ry - 1], [hx + g.sx * 1.3, hy + ry + 0.6], [hx - rx * 0.6 + g.sx * 1.1, hy + ry - 1]]);
     else if (f === 'goatee') ellipse(m, fx, hy + 4.4, 1.4, 1.2);
     else if (f === 'mustache') rect(m, fx - 1.8, hy + 3.1, 3.6, 0.6);
-    else if (f === 'stubble') { /* dithered: drawn as deco on a jaw mask */ poly(m, [[hx - rx + 0.8 + g.sx * 0.4, hy + 2], [hx + rx - 0.8 + g.sx * 0.4, hy + 2], [hx + g.sx * 1.3, hy + ry]]); }
+    else if (f === 'stubble') { /* dithered shadow along the jaw and chin */ poly(m, [[hx - rx + 0.9 + g.sx * 0.4, hy + 3.2], [hx + rx - 0.9 + g.sx * 0.4, hy + 3.2], [hx + rx * 0.55 + g.sx * 1.1, hy + ry - 1.2], [hx + g.sx * 1.3, hy + ry + 0.1], [hx - rx * 0.55 + g.sx * 1.1, hy + ry - 1.2]]); }
     if (f === 'beard') cut(m, rect(Mask(), fx - 1.2, hy + 3.4, 2.4, 0.9)); // mouth gap
-    if (f === 'stubble') { const L = { put: () => {} }; void L; for (let y = m.y0; y <= m.y1; y++) for (let x = m.x0; x <= m.x1; x++) if (m.a[y * GW + x] && (x + y) % 2 === 0 && F.col[y * GW + x]) F.col[y * GW + x] = mix(F.col[y * GW + x], hc, 0.45); return; }
+    if (f === 'stubble') { const L = { put: () => {} }; void L; for (let y = m.y0; y <= m.y1; y++) for (let x = m.x0; x <= m.x1; x++) if (m.a[y * GW + x] && (x + y) % 2 === 0 && F.col[y * GW + x]) F.col[y * GW + x] = mix(F.col[y * GW + x], mix(hc, '#2a1a14', lum(hc) > 0.5 ? 0.6 : 0), 0.3); return; }
     layer(F, m, hc, { kind: 'hair', soft: 1.8, deco: (L) => hairStrands(L, g, hx, hy, 'beard') });
   }
+  // Hair is built from clumps: every lobe is its own lit volume, so clumps separate with contact shadows (no noise).
+  function lobe(F, hc, x, y, rx, ry, hi = 0) { return layer(F, ellipse(Mask(), x, y, rx, ry), hc, { kind: 'hair', soft: Math.min(rx, ry) * 1.5, grad: 0.15, deco: (L) => { if (hi) { const cx = X(x - rx * 0.35), cy = Y(y - ry * 0.45); L.put(cx, cy, L.T[4]); L.put(cx + 1, cy, L.T[3]); } } }); }
+  function arc(n, a0, a1, cxw, cyw, R, Ry) { const out = []; for (let k = 0; k < n; k++) { const a = a0 + (a1 - a0) * (n === 1 ? 0.5 : k / (n - 1)); out.push([cxw + Math.cos(a) * R, cyw + Math.sin(a) * Ry]); } return out; }
   function hairFront(F, o, g, hc, hx, hy, rx, ry) {
-    const h = o.hair, side = g.side, sx = g.sx, m = Mask(), top = hy - ry + 0.2;
-    const capTo = (yb, inset = 0) => { const c = ellipse(Mask(), hx, hy - 0.8, rx + 0.5 - inset, ry - 0.1); return above(c, Y(yb)); };
+    const h = o.hair, sx = g.sx, back = g.back, prof = g.profile, hat = o.head && o.head.id !== 'durag';
     if (h === 'bald') return;
-    if (h === 'buzz' || h === 'fade') { const c = capTo(hy - (g.back ? -2.6 : 1.4)); for (let i = 0; i < c.a.length; i++) if (c.a[i]) { const x = i % GW, y = (i / GW) | 0; if (F.col[i] && ((h === 'fade' && y > Y(hy - 3)) ? (x + y) % 2 === 0 : (x * 3 + y) % 3 !== 0)) F.col[i] = mix(F.col[i], hc, h === 'buzz' ? 0.8 : 0.65); } if (h === 'fade') { const t = capTo(hy - 3.2, 0.6); layer(F, t, hc, { kind: 'hair', soft: 2 }); } return; }
-    if (h === 'short' || h === 'ponytail' || h === 'long' || h === 'bun' || h === 'locs' || h === 'braids') { const c = capTo(hy - (g.back ? -3.5 : 1.3)); for (let i = 0; i < c.a.length; i++) if (c.a[i]) m.a[i] = 1; Object.assign(m, { x0: c.x0, y0: c.y0, x1: c.x1, y1: c.y1 }); if (!g.back) { poly(m, [[hx - rx + 0.2 + sx * 0.6, hy - 2.2], [hx + sx * 2.4 + 1, hy - 3.2], [hx + rx - 0.4 + sx * 0.6, hy - 1.9], [hx + rx + 0.4, hy - 3.6], [hx - rx - 0.4, hy - 3.6]]); } }
-    if (h === 'long' && !g.back) { rect(m, hx - rx - 0.7 + (sx > 0.3 ? 1.2 : 0), hy - 2, 1.6, 7.5); rect(m, hx + rx - 0.9 - (sx < -0.3 ? 1.2 : 0), hy - 2, 1.6, 7.5); }
-    if ((h === 'curly' || h === 'afro') && !(o.head && o.head.id !== 'durag')) { const bumps = h === 'afro' ? 9 : 7, R = h === 'afro' ? rx + 1.8 : rx + 0.4; for (let k = 0; k < bumps; k++) { const a = Math.PI + (k / (bumps - 1)) * Math.PI; ellipse(m, hx + Math.cos(a) * R * 0.86, hy - 1.2 + Math.sin(a) * (ry + (h === 'afro' ? 1.2 : 0)) * 0.82, h === 'afro' ? 2.4 : 1.7, h === 'afro' ? 2.2 : 1.6); } ellipse(m, hx, hy - (h === 'afro' ? 3 : 2.4), R * 0.85, ry * 0.62); if (g.back) ellipse(m, hx, hy, R * 0.9, ry * 0.9); }
-    if (h === 'mohawk') { capsule(m, [[hx + sx * 0.6, hy - ry - 1.6, 1.1], [hx - sx * 2.2, hy - 1, 1.1]]); const c = capTo(hy - 1.2); for (let i = 0; i < c.a.length; i++) if (c.a[i] && F.col[i] && ((i % GW) + ((i / GW) | 0)) % 2 === 0) F.col[i] = mix(F.col[i], hc, 0.5); }
-    if (h === 'bun') ellipse(m, hx - sx * 1.4, top - 1.2, 2.2, 1.9);
-    if (h === 'ponytail' && !g.back && !g.profile) { /* tail hidden from the front */ }
-    if (empty(m)) return;
-    layer(F, m, hc, { kind: 'hair', soft: 2.6, deco: (L) => { hairStrands(L, g, hx, hy, h); // a few bright strands where the light hits
-      for (let k = 0; k < 4; k++) { const x = X(hx - rx * 0.4 + k * 1.1 - sx), y = Y(top) + 2 + (k % 2); L.put(x, y, L.T[4]); L.put(x + 1, y + 1, L.T[3]); } } });
+    // shaved textures: tint the scalp itself (stubble dots) — buzz everywhere, fade on the sides only
+    const scalp = (yb, amt, every) => { const c = above(ellipse(Mask(), hx, hy - 0.8, rx + 0.4, ry - 0.1), Y(yb)); for (let i = 0; i < c.a.length; i++) if (c.a[i] && F.col[i]) { const x = i % GW, y = (i / GW) | 0; if ((x * 3 + y * 5) % every !== 0) F.col[i] = mix(F.col[i], hc, amt); } };
+    if (h === 'buzz') { scalp(hy - (back ? -3 : 1.6), 0.72, 4); return; }
+    if (h === 'fade') { scalp(hy - (back ? -3 : 1.4), 0.42, 3); for (const [x, y] of arc(5, Math.PI * 1.15, Math.PI * 1.85, hx + sx * 0.4, hy - 1.2, rx - 1.4, ry - 1.3)) lobe(F, hc, x, y, 1.9, 1.5, 1); return; }
+    if (h === 'mohawk') { scalp(hy - (back ? -3 : 1.2), 0.42, 3); const pts = prof ? arc(5, sx > 0 ? Math.PI * 1.25 : Math.PI * 1.75, sx > 0 ? Math.PI * 1.85 : Math.PI * 1.15, hx, hy - 0.8, rx - 0.2, ry - 0.2) : [[hx + sx * 0.4, hy - ry - 0.6], [hx + sx * 0.4, hy - ry + 0.8], [hx + sx * 0.4, hy - ry + 2.2]]; for (const [x, y] of pts) lobe(F, hc, x, y - 0.6, 1.2, 1.6, 1); return; }
+    const cap = (n, R, rr, row = 0) => arc(n, Math.PI * 1.05, Math.PI * 1.95, hx + sx * 0.3, hy - 1.1 - row, R, (ry - 0.9) * (1 - row * 0.12)).forEach(([x, y], k) => lobe(F, hc, x, y, rr * (0.9 + (k % 2) * 0.2), rr * 0.82, 1));
+    if ((h === 'curly' || h === 'afro') && !hat) {
+      const big = h === 'afro'; if (back) { for (let r = 0; r < 3; r++) for (const [x, y] of arc(big ? 7 : 6, Math.PI * 0.9, Math.PI * 2.1, hx, hy + 0.5 - r * 2, rx + (big ? 1.4 : 0) - r, ry - r)) lobe(F, hc, x, y, big ? 2.1 : 1.6, big ? 1.9 : 1.4, 1); return; }
+      cap(big ? 8 : 7, rx + (big ? 1.6 : 0.2), big ? 2.3 : 1.7); cap(big ? 6 : 5, rx - (big ? 0 : 1.2), big ? 2 : 1.5, 1.2); return;
+    }
+    // under a hat only the temples / nape show
+    if (hat && h !== 'curly' && h !== 'afro') { if (back) for (const [x, y] of arc(4, Math.PI * 0.95, Math.PI * 2.05, hx, hy + 1.6, rx - 0.6, ry - 1.6)) lobe(F, hc, x, y, 1.9, 1.4, 0); else for (const s2 of [-1, 1]) { if (prof && s2 * sx > 0) continue; lobe(F, hc, hx + s2 * (rx - 0.5) + sx * 0.6, hy - 0.6, 1.1, 1.5, 0); } }
+    else if (hat) { /* big hair squashed under the hat brim */ for (const s2 of [-1, 1]) lobe(F, hc, hx + s2 * (rx + 0.2), hy - 0.4, 1.8, 2, 1); }
+    // everything else starts with a clumped cap; back views cover the nape
+    else if (back) { for (let r = 0; r < 3; r++) for (const [x, y] of arc(5, Math.PI * 0.95, Math.PI * 2.05, hx, hy + 1.6 - r * 2.2, rx - 0.2 - r * 0.6, ry - 0.6 - r * 0.8)) lobe(F, hc, x, y, 2.2, 1.7, r === 2 ? 1 : 0); }
+    else {
+      cap(6, rx - 0.3, 2.1); cap(4, rx - 1.6, 1.8, 1.4);
+      if (h === 'ponytail' && !prof) { lobe(F, hc, hx + (sx >= 0 ? -1 : 1) * (rx - 0.2), hy + 3.2, 1, 1.7, 1); { const tie = ellipse(Mask(), hx + (sx >= 0 ? -1 : 1) * (rx - 0.2), hy + 1.6, 0.9, 0.5); layer(F, tie, '#c84659', { soft: 1 }); } }
+      else if (!prof && h !== 'bun') { // fringe swept toward the facing side
+        for (let k = 0; k < 3; k++) lobe(F, hc, hx - rx * 0.45 + k * rx * 0.42 + sx * 0.8, hy - 2.6 + (k === 1 ? 0.3 : 0), 1.7, 1.2, 1);
+      } else if (prof) lobe(F, hc, hx + sx * (rx - 1.2), hy - 2.4, 1.6, 1.3, 1);
+    }
+    if (h === 'bun' && !hat) lobe(F, hc, hx - sx * 1.2, hy - ry - 1.4, 2.3, 2, 1);
+    if (h === 'long' && !back) for (const s2 of [-1, 1]) { if (prof && s2 * sx > 0) continue; const x = hx + s2 * (rx - 0.2) + sx * 0.5; layer(F, capsule(Mask(), [[x, hy - 2, 1.5], [x + s2 * 0.4, hy + 3, 1.6], [x + s2 * 0.2, hy + 7.4, 1.3]]), hc, { kind: 'hair', soft: 2, deco: (L) => { for (let y = L.m.y0 + 2; y <= L.m.y1; y += 3) L.put(X(x) + s2, y, L.T[1]); } }); }
+    if ((h === 'locs' || h === 'braids') && !back) for (const s2 of [-1, 1]) { if (prof && s2 * sx > 0) continue; for (let k = 0; k < 2; k++) { const x = hx + s2 * (rx - 0.6 + k * 1.1) + sx * 0.5; layer(F, capsule(Mask(), [[x, hy - 1.5, h === 'locs' ? 0.95 : 0.75], [x + s2 * 0.3, hy + 7 - k, h === 'locs' ? 0.85 : 0.7]]), hc, { kind: 'hair', soft: 1.4, deco: (L) => { for (let y = L.m.y0; y <= L.m.y1; y += (h === 'braids' ? 2 : 3)) { L.put(X(x) - 1, y, L.T[0]); L.put(X(x), y, L.T[1]); } } }); } }
+    if (h === 'ponytail' && !back && prof) lobe(F, hc, hx - sx * (rx + 0.6), hy - 1.6, 1.6, 1.6, 1);
   }
   function skimaskDeco(L, o, g, hx, hy, rx, ry) {
     const T = L.T; for (let x = L.m.x0; x <= L.m.x1; x += 2) for (let y = L.m.y0; y <= L.m.y1; y++) if ((y + x) % 4 === 0) L.put(x, y, T[1]);
