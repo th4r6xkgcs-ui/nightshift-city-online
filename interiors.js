@@ -185,7 +185,7 @@
       lights: [{ x: 140, y: 170, r: 120, a: 0.5 }, { x: 420, y: 170, r: 120, a: 0.5 }, { x: 455, y: 300, r: 100, a: 0.5 }],
       glow(c, t) { K.glow(c, 280, 16, 110, '#ff4a4a', 0.28 + 0.04 * Math.sin(t * 5)); K.glow(c, 140, 150, 90, '#9fe6ff', 0.1); K.glow(c, 420, 150, 90, '#9fe6ff', 0.1); },
       solids: [solid(40, 140, 200, 46), solid(320, 140, 200, 46), solid(380, 280, 150, 52), solid(30, 300, 110, 56)], staff: [{ x: 455, y: 266 }, { x: 280, y: 120, guard: true }], browsers: [{ x: 140, y: 214 }],
-      targets: () => [{ x: 455, y: 346, r: 60, action: 'BUY', label: 'Gun counter · weapons, mods, repairs', use: () => openSafe(() => root.NightshiftWeapons?.open?.()) }, { x: 140, y: 214, r: 50, action: 'LOOK', label: 'Display case · inspect a gun', use: () => openSafe(() => root.NightshiftWeaponArt?.inspect?.()) }] },
+      targets: () => [{ x: 455, y: 346, r: 60, action: 'BUY', label: 'Gun counter · gun parts, mods & repairs', use: () => openSafe(() => root.NightshiftWeapons?.open?.()) }, { x: 140, y: 214, r: 50, action: 'LOOK', label: 'Display case · inspect a gun', use: () => openSafe(() => root.NightshiftWeaponArt?.inspect?.()) }] },
 
     TATTOO: {
       title: 'TATTOO', robAt: { x: 176, y: 232 },  floor: 'check', wall: ['stripe', '#2a1a2a', '#ff4ad8'], dark: 0.22, seed: 101,
@@ -284,7 +284,8 @@
   function tattoo() { const p = P(); if (!p) return; const r = ACT.tattoo(p, lastInk, now0()); say(r.msg); if (r.ok) { lastInk = now0(); try { root.NightshiftSkills?.gain?.('charisma', 40, 'tattoo'); } catch { /* optional */ } gameSave(); } }
   function train() { const p = P(); if (!p) return; const r = ACT.train(p, lastTrain, now0()); say(r.msg); if (r.ok) { lastTrain = now0(); try { root.NightshiftSkills?.gain?.('athletics', 30, 'gym'); root.NightshiftSkills?.gain?.('toughness', 20, 'gym'); } catch { /* optional */ } gameSave(); } }
   // ---- hold-ups (v0.72) ----
-  let hold = null, alarm = null, curDoor = null;
+  let hold = null, alarm = null, curDoor = null, unseen = false, lowT = 0;
+  const LAY_LOW = 0.022; // stars per second shed while hiding inside unseen (~45 s a star)
   function raiseAlarm(type) { if (curDoor) alarm = { x: curDoor.x, y: curDoor.y, n: type === 'GUN SHOP' ? 3 : 2, at: Date.now() }; }
   setInterval(() => { if (!alarm || root.NightshiftZones?.active?.()) return; const a = alarm; alarm = null; if (Date.now() - a.at > 5 * 60000) return; setTimeout(() => { try { const n = root.NightshiftPolice?.respond?.(a.x, a.y + 10, a.n); if (n) say('🚓 Cops outside the store!'); } catch { /* n/a */ } }, 900); }, 500);
   function weaponNow() { try { const W = root.NightshiftWeapons; return W?.state?.equipped ? W.current() : null; } catch { return null; } }
@@ -331,6 +332,7 @@
         solids: [solid(0, 0, W, WALL + 4), solid(0, 0, 10, H), solid(W - 10, 0, 10, H), solid(0, H - 8, W / 2 - 34, 8), solid(W / 2 + 34, H - 8, W / 2 - 34, 8), ...t.solids],
         onEnter(api, data) {
           if (type === 'GARAGE' || type === 'AUTO PARTS') { const n = root.NightshiftPoliceCars?.repairAll?.() || 0; if (n) setTimeout(() => say('🔧 New tyres fitted on the house · drive safe'), 400); }
+          unseen = !root.NightshiftCrime?.wanted?.seen; lowT = 0; if ((P()?.heat || 0) > 0.2) setTimeout(() => say(unseen ? '🤫 Nobody saw you come in · lay low here and the heat cools off' : '👀 The cops saw you duck in here'), 600);
           hold = null; curB = data?.b || null; curDoor = curB ? { x: curB.x + curB.w / 2, y: curB.y + curB.h + 14 } : null; const r = rng((data?.seed || 7) >>> 0); people = [];
           for (const s of t.staff || []) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-staff-' + s.x, role: s.guard ? 'security' : null });
           for (const s of t.patrons || []) if (r() < 0.8) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-pat-' + Math.floor(r() * 24), seated: true, seat: { x: s.x, y: s.y } });
@@ -339,6 +341,7 @@
           api.key = data?.key || 'x';
         },
         update(dt, now0, api) { holdTick(api);
+          { const p = P(); if (p && unseen && !hold && !alarm && (p.heat || 0) > 0) { const before = Math.ceil(p.heat); p.heat = Math.max(0, p.heat - LAY_LOW * (Math.min(2, dt || 1) / 60)); lowT += dt || 1; if (Math.ceil(p.heat) < before || (p.heat === 0 && before > 0)) api.float(api.pos.x, api.pos.y - 50, p.heat > 0 ? '★ −1 · laying low' : '✓ Heat\'s off', '#7cffb5'); } }
           for (let i = people.length - 1; i >= 0; i--) { const q = people[i]; if (!q.flee) continue; const dx = DOOR.x - q.x, dy = DOOR.y - q.y, d = Math.hypot(dx, dy); if (d < 14) { people.splice(i, 1); continue; } const v = Math.min(d, 1.9 * Math.min(2, dt || 1)); /* dt is in 60 Hz frames */ q.x += dx / d * v; q.y += dy / d * v; q.angle = Math.atan2(dy, dx); q.moveAngle = q.angle; q.moving = true; q.walkTicks = (q.walkTicks || 0) + 1; } const now = performance.now() / 1000; for (const p of people) { if (p.dance !== undefined) { p.angle = p.dance + now * 2.2; p.moving = Math.sin(now * 5 + p.dance) > 0; p.walkTicks = (p.walkTicks || 0) + dt; } } },
         actors: () => people,
         targets: (api) => [{ x: DOOR.x, y: DOOR.y - 6, r: 46, action: 'EXIT', label: 'Back to the street', use: () => root.NightshiftZones.leave() }, ...t.targets(curB || {}, api), ...(t.robAt ? [{ x: t.robAt.x, y: t.robAt.y, r: 40, action: hold ? '…' : 'ROB', label: hold ? 'Hold it…' : 'Hold up the register (needs a gun out)', use: () => startRob(type, 'rob-' + api.key, t.robAt, api, people) }] : [])],
@@ -348,7 +351,7 @@
   }
   // ---------------- doors in the city ----------------
   const BLURB = { 'CORNER SHOP': 'food, meds, ammo', DINER: 'meals with buffs', CLOTHING: 'clothes & mirror', GARAGE: 'tune your car · scrap', BANK: 'invest · case the vault', CLUB: 'drinks, dancing, cools heat', WAREHOUSE: 'scavenge crafting parts', APARTMENTS: 'lobby · mailboxes',
-    'GUN SHOP': 'weapons, mods, repairs', TATTOO: 'ink · +charisma', 'AUTO PARTS': 'car parts & kits', GYM: 'train · athletics', HOSPITAL: 'heal up', POLICE: 'pay off your wanted level' };
+    'GUN SHOP': 'gun parts, mods, repairs', TATTOO: 'ink · +charisma', 'AUTO PARTS': 'car parts & kits', GYM: 'train · athletics', HOSPITAL: 'heal up', POLICE: 'pay off your wanted level' };
   const homeDoor = { x: 950, y: 735 };
   let doorList = null;
   function doors() { if (doorList) return doorList; doorList = B().map((b, i) => ({ b, i, type: variant(b), x: b.x + b.w / 2, y: b.y + b.h + 14 })).filter((d) => T[d.type] && !(d.b.name === 'APARTMENTS' && Math.hypot(d.x - homeDoor.x, d.y - homeDoor.y) < 120)); return doorList; }
