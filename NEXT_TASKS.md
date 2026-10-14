@@ -1,4 +1,7 @@
 # Next tasks
+- P0 (owner): Option 3 review gate — approve/redirect the vertical slice (character, studio, carbine presets, Vanta GT, husky, props) before bulk catalog expansion; approve gh-pages deploy of v0.70.
+- P0 (owner): approve deploying v0.69 multiplayer server (PvP combat-core + world bounds) to the live Worker.
+- P1 (Claude, after review): expand Option 3 catalog — remaining wardrobe items/hairstyles, NPC outfits on O3, shiba/rottweiler atlases, more props, more kit guns; quality pass on faces/hands.
 - P0: Real desktop and iPhone Safari QA: simultaneous movement/aim/fire, portrait/landscape HUD, brake, map, shop, audio and backup export/import.
 - P0: Modular scene/state architecture before a scoped Phaser/TypeScript migration; retain existing behavioral regressions.
 - P1: Expand furnished interiors, authored city content and interaction feedback; add explicit safe-zone rules.

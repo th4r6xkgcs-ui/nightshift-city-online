@@ -2,6 +2,9 @@
 Saved crafting levels, upgraded apartment bench, six abstract recipes, finite-ammo transaction guards and crafting modal isolation. 34 automated suites pass. Browser/device QA pending; local single-player only.
 
 # Project state
+## Current: v0.70 Option 3 vertical slice (Claude, unreleased)
+Branches claude/option3 (core) and claude/option3-play (play build). Deployed site remains v0.69. Option 3 modules: o3-engine, o3-character, o3-runtime, o3-pet, o3-props, weapon-kit-data, weapon-kit, car-views; atlases in art/o3. 119 client suites + 113 server tests pass. See HANDOFF.md v0.70.
+
 Current source version: **v0.16** (v0.15 remains deployed). Canonical GitHub branch `codex/mobile-controls-v03`, PR #1. Existing owner-private Sites preview is recorded in DEPLOYMENT.md.
 
 The game is a dependency-free Canvas/localStorage single-player prototype. It does not yet use Phaser, TypeScript, Colyseus, a database or online accounts. Those remain target architecture, not installed functionality.
