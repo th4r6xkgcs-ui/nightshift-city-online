@@ -26,7 +26,7 @@
     rb.C = (mat, x, y, w, h) => { ops.push({ k: 'C', T: [0, 1, 2, 3].map((i) => pb.T(mat, i)), fam: famOf(mat), x, y, w, h }); pb.C(mat, x, y, w, h); };
     rb.L = (c, x, y, w = 1, h = 1) => { ops.push({ k: 'L', c, x, y, w, h }); pb.L(c, x, y, w, h); };
     rb.T = (mat, k) => pb.T(mat, k); rb.get = (x, y) => pb.get(x, y); rb.put = (x, y, c) => { ops.push({ k: 'L', c, x, y, w: 1, h: 1 }); pb.put(x, y, c); };
-    const a = GUNS[id](rb); attach(rb, id, [...new Set(mods)], a);
+    const a = GUNS[id](rb, K.parts || null); attach(rb, id, [...new Set(mods)], a);
     // pixel box (before outline) → HD box with room for the outline
     let x0 = GW, y0 = GH, x1 = -1, y1 = -1; for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) if (pb.px[y * GW + x]) { if (x < x0) x0 = x; if (y < y0) y0 = y; if (x > x1) x1 = x; if (y > y1) y1 = y; }
     if (x1 < 0) return null;
