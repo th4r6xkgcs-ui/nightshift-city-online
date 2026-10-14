@@ -91,7 +91,7 @@
       title: 'GARAGE', floor: 'concrete', wall: ['block', '#3a3f48', '#e2c24a'], dark: 0.12, seed: 41,
       art(c) {
         K.neon(c, 'TUNE LAB', 290, 18, '#a34dff', 15); K.pegboard(c, 24, 26, 150, 50); K.shelf(c, 390, 26, 150, 3, K.parts, '#5a606b');
-        K.carLift(c, 190, 120, 170, 210, (cc, x, y) => { try { const C = root.NightshiftCars; const s = C?.sprite?.('vanta', '#8a3fd6'); if (s) { cc.save(); cc.translate(x, y); cc.rotate(-Math.PI / 2); cc.drawImage(s.cv, -s.w / 2, -s.h / 2, s.w, s.h); cc.restore(); } } catch { /* art optional */ } });
+        K.carLift(c, 190, 120, 170, 210, (cc, x, y) => { try { const C = root.NightshiftCars; const s = C?.sprite?.('vanta', '#8a3fd6'); if (s) { cc.save(); cc.translate(x, y); cc.rotate(-Math.PI / 2); cc.fillStyle = 'rgba(0,0,0,0.35)'; cc.fillRect(-s.w * 0.85 + 6, -s.h * 0.85 + 8, s.w * 1.7, s.h * 1.7); cc.drawImage(s.cv, -s.w * 0.85, -s.h * 0.85, s.w * 1.7, s.h * 1.7); cc.restore(); } } catch { /* art optional */ } });
         K.toolChest(c, 30, 110, '#c8432f'); K.toolChest(c, 30, 200, '#3d7fd0'); K.block(c, 400, 240, 130, 22, 26, '#5a606b', { panels: 3, handles: true }); R(c, '#9aa3ab', 420, 236, 30, 6); R(c, '#e05a4a', 470, 234, 12, 8);
       },
       props: [prop(470, 150, (c, x, y) => K.tires(c, x, y, 4)), prop(510, 170, (c, x, y) => K.tires(c, x, y, 3)), prop(520, 380, (c, x, y) => K.tires(c, x, y, 2))],
