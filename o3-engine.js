@@ -38,12 +38,12 @@
 
   // ---------- view ----------
   /** Projection for a facing. F = forward on screen (fx, fz toward camera), R = character's right. */
-  function view(dir) {
+  function view(dir, scale = 1) {
     const th = (dir * Math.PI) / 4, fx = Math.cos(th), fz = Math.sin(th);
-    const v = { dir, fx, fz, rx: -fz, rz: fx };
-    v.px = (p) => OX + p[0] * v.rx + p[2] * v.fx; // screen x
-    v.py = (p) => OY - p[1];                     // screen y (orthographic front, the 3/4 feel lives in the art)
-    v.depth = (p) => p[0] * v.rz + p[2] * v.fz;   // toward camera = positive
+    const v = { dir, fx, fz, rx: -fz, rz: fx, s: scale };
+    v.px = (p) => OX + (p[0] * v.rx + p[2] * v.fx) * scale; // screen x
+    v.py = (p) => OY - p[1] * scale;                     // screen y (orthographic front, the 3/4 feel lives in the art)
+    v.depth = (p) => (p[0] * v.rz + p[2] * v.fz) * scale;   // toward camera = positive
     v.toScreenN = (n) => [n[0] * v.rx + n[2] * v.fx, -n[1], n[0] * v.rz + n[2] * v.fz]; // local normal -> screen normal
     return v;
   }
@@ -80,6 +80,7 @@
   // ---------- primitives (each returns a mask + a surface mapper for details) ----------
   /** Tapered capsule from a to b (local coords) with radii ra, rb. */
   function capsule(v, a, b, ra, rb = ra, o = {}) {
+    ra *= v.s || 1; rb *= v.s || 1;
     const ax = v.px(a), ay = v.py(a), bx = v.px(b), by = v.py(b), mask = new Uint8Array(FW * FH);
     const dx = bx - ax, dy = by - ay, len2 = dx * dx + dy * dy || 1e-6, len = Math.sqrt(len2), ux = dx / len, uy = dy / len;
     const x0 = Math.floor(Math.min(ax, bx) - Math.max(ra, rb) - 1), x1 = Math.ceil(Math.max(ax, bx) + Math.max(ra, rb) + 1), y0 = Math.floor(Math.min(ay, by) - Math.max(ra, rb) - 1), y1 = Math.ceil(Math.max(ay, by) + Math.max(ra, rb) + 1);
@@ -96,6 +97,7 @@
   }
   /** Ellipsoid at c with local radii [rx, ry, rz]. */
   function ellipsoid(v, c, r, o = {}) {
+    if ((v.s || 1) !== 1) r = r.map((q) => q * v.s);
     const cx = v.px(c), cy = v.py(c), sx = Math.hypot(r[0] * v.rx, r[2] * v.fx) || 0.5, sy = r[1], mask = new Uint8Array(FW * FH);
     for (let y = Math.floor(cy - sy - 1); y <= Math.ceil(cy + sy + 1); y++) for (let x = Math.floor(cx - sx - 1); x <= Math.ceil(cx + sx + 1); x++) {
       if (!inside(x, y)) continue; const nx = (x + 0.5 - cx) / sx, ny = (y + 0.5 - cy) / sy, d = nx * nx + ny * ny; if (d > 1) continue;
