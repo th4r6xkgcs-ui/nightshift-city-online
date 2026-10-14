@@ -72,7 +72,7 @@
   // ---------- traffic ----------
   function seedTraffic() {
     A.traffic.length = 0; A.oncoming.length = 0;
-    for (let k = 0; k < 16; k++) { const lane = Math.floor(Math.random() * H.LANES); A.traffic.push(H.trafficCar(Math.random, H.wrap(A.d - 1200 + k * 360 + Math.random() * 200), lane)); }
+    for (let k = 0; k < 16; k++) { const lane = Math.floor(Math.random() * H.LANES); A.traffic.push(H.trafficCar(Math.random, H.wrap(A.d - 1200 + k * 420 + Math.random() * 200), lane)); }
     for (let k = 0; k < 10; k++) A.oncoming.push({ d: H.wrap(A.d + k * 500), lane: k % 4, v: H.pxs(90 + Math.random() * 40), model: ['SEDAN', 'COMPACT', 'VAN'][k % 3], color: ['#c84659', '#e8e6e0', '#3d7fc6', '#1d2024'][k % 4] });
   }
   function trafficTick(dt) {
@@ -81,19 +81,19 @@
       // keep distance from the car in front, or change lanes
       let front = null, fd = 1e9; for (const o of A.traffic) { if (o === t || o.lane !== t.lane) continue; const r = rel(o.d, t.d); if (r > 0 && r < fd) { fd = r; front = o; } }
       const want = t.base || (t.base = t.v);
-      if (front && fd < 170) { t.v = Math.max(front.v - 20, t.v - 260 * dt); if (!t.change && Math.random() < dt * 0.8) { const to = t.lane + (Math.random() < 0.5 ? -1 : 1); if (to >= 0 && to < H.LANES && !A.traffic.some((o) => o !== t && o.lane === to && Math.abs(rel(o.d, t.d)) < 140)) { t.change = { to, at: performance.now() + 800 }; } } }
+      if (front && fd < H.CAR_LEN + 130) { t.v = Math.max(front.v - 20, t.v - 260 * dt); if (!t.change && Math.random() < dt * 0.8) { const to = t.lane + (Math.random() < 0.5 ? -1 : 1); if (to >= 0 && to < H.LANES && !A.traffic.some((o) => o !== t && o.lane === to && Math.abs(rel(o.d, t.d)) < H.CAR_LEN + 90)) { t.change = { to, at: performance.now() + 800 }; } } }
       else t.v = Math.min(want, t.v + 120 * dt);
       if (t.change && performance.now() > t.change.at) { t.lane = t.change.to; t.change = null; }
       const ty = H.laneY(t.lane); t.y += Math.max(-60 * dt, Math.min(60 * dt, ty - t.y));
       t.d = H.wrap(t.d + t.v * dt);
       // recycle cars that fall far behind / run far ahead
       const r = rel(t.d, me);
-      if (r < -1500 || r > 4200) { const lane = Math.floor(Math.random() * H.LANES); const n = H.trafficCar(Math.random, H.wrap(me + (A.vehicle.v > t.v ? 2600 + Math.random() * 1400 : -1300 - Math.random() * 200)), lane); if (!A.traffic.some((o) => o.lane === lane && Math.abs(rel(o.d, n.d)) < 200)) Object.assign(t, n, { base: 0, near: false }); }
+      if (r < -1500 || r > 4200) { const lane = Math.floor(Math.random() * H.LANES); const n = H.trafficCar(Math.random, H.wrap(me + (A.vehicle.v > t.v ? 2600 + Math.random() * 1400 : -1300 - Math.random() * 200)), lane); if (!A.traffic.some((o) => o.lane === lane && Math.abs(rel(o.d, n.d)) < H.CAR_LEN + 200)) Object.assign(t, n, { base: 0, near: false }); }
     }
     for (const o of A.oncoming) { o.d = H.wrap(o.d - o.v * dt); if (rel(o.d, me) < -1400) { o.d = H.wrap(me + 3000 + Math.random() * 1000); o.lane = Math.floor(Math.random() * 4); } }
   }
   // ---------- collisions + near misses ----------
-  function hitTest(o, len, wid) { const dx = rel(o.d, A.d), dy = o.y - A.y; return Math.abs(dx) < (len + 52) / 2 - 3 && Math.abs(dy) < (wid + 24) / 2 - 2 ? { dx, dy } : null; }
+  function hitTest(o, len, wid) { const dx = rel(o.d, A.d), dy = o.y - A.y; return Math.abs(dx) < (len + H.CAR_LEN) / 2 - 6 && Math.abs(dy) < (wid + 24) / 2 - 2 ? { dx, dy } : null; }
   function crash(o, h, kind) {
     const V = A.vehicle, rv = Math.abs(V.v - (o.v || 0)), impact = Math.min(1, rv / 600);
     if (h.dx > 0) { V.v = Math.min(V.v, (o.v || 0) * 0.92); if (o.v !== undefined) o.v += rv * 0.3; } else if (o.v !== undefined) { o.v = Math.min(o.v, V.v * 0.9); }
@@ -110,8 +110,8 @@
       if (r < 0 && r > -80 && !t.near && t.wasAhead && H.nearMiss({ y: A.y, v: A.vehicle.v }, t)) { t.near = true; A.streak++; A.bestStreak = Math.max(A.bestStreak, A.streak); const pay = H.nearMissPay(A.streak); A.cash += pay; st.nearMiss++; save0.nearMiss++; pop(`NEAR MISS +$${pay}${A.streak >= 3 ? ` · x${H.streakMult(A.streak)}` : ''}`, '#7cffb5'); }
       t.wasAhead = r > 0; if (r > 60) t.near = false;
     }
-    for (const c of A.cops) { const h = hitTest(c, 54, 26); if (h && !c.hitCool) { crash(c, h, 'cop'); c.hitCool = 1.5; } }
-    for (const b of A.blocks) for (const c of b.cars) { const h = hitTest({ d: c.d, y: c.y, v: 0 }, 54, 28); if (h) { crash({ v: 0 }, h, 'block'); A.vehicle.v *= 0.4; } }
+    for (const c of A.cops) { const h = hitTest(c, H.CAR_LEN, 26); if (h && !c.hitCool) { crash(c, h, 'cop'); c.hitCool = 1.5; } }
+    for (const b of A.blocks) for (const c of b.cars) { const h = hitTest({ d: c.d, y: c.y, v: 0 }, H.CAR_LEN, 28); if (h) { crash({ v: 0 }, h, 'block'); A.vehicle.v *= 0.4; } }
     for (const s of A.spikes) { if (s.hit) continue; const r = rel(s.d, A.d); if (Math.abs(r) < 20 && A.y > s.y0 && A.y < s.y1) { s.hit = true; A.vehicle.spikes = true; A.vehicle.condition = Math.max(0, A.vehicle.condition - 12); say('💥 Spike strip! Tyres shredded · top speed way down · get off at the next exit'); A.shake = 10; } }
   }
   const pops = []; function pop(t, col) { pops.push({ t, col, at: performance.now() }); if (pops.length > 4) pops.shift(); }
@@ -133,9 +133,9 @@
       c.y += Math.max(-120 * dt, Math.min(120 * dt, ty - c.y)); c.y = Math.max(14, Math.min(H.SHOULDER[1] - 12, c.y));
       c.d = H.wrap(c.d + c.v * dt); c.hitCool = Math.max(0, (c.hitCool || 0) - dt);
       // never sit inside your car: stay a bumper's length away
-      const r2 = rel(c.d, A.d); if (Math.abs(r2) < 58 && Math.abs(c.y - A.y) < 28) { c.d = H.wrap(A.d + (r2 < 0 ? -58 : 58)); c.v = r2 < 0 ? Math.min(c.v, A.vehicle.v) : Math.max(c.v, A.vehicle.v); }
+      const r2 = rel(c.d, A.d); if (Math.abs(r2) < H.CAR_LEN + 4 && Math.abs(c.y - A.y) < 28) { c.d = H.wrap(A.d + (r2 < 0 ? -(H.CAR_LEN + 4) : H.CAR_LEN + 4)); c.v = r2 < 0 ? Math.min(c.v, A.vehicle.v) : Math.max(c.v, A.vehicle.v); }
       // PIT: only alongside, at speed, once every few seconds per cruiser
-      if (S >= 2 && Math.abs(r2) < 40 && Math.abs(c.y - A.y) < 44 && Math.abs(c.y - A.y) > 20 && A.vehicle.v > H.pxs(60) && now > (c.pitAt || 0)) { c.pitAt = now + 4500; A.y += Math.sign(A.y - c.y || 1) * 16; A.vehicle.v *= 0.86; A.shake = 8; pop('PIT MANEUVER', '#ff8a7a'); }
+      if (S >= 2 && Math.abs(r2) < H.CAR_LEN * 0.7 && Math.abs(c.y - A.y) < 44 && Math.abs(c.y - A.y) > 20 && A.vehicle.v > H.pxs(60) && now > (c.pitAt || 0)) { c.pitAt = now + 4500; A.y += Math.sign(A.y - c.y || 1) * 16; A.vehicle.v *= 0.86; A.shake = 8; pop('PIT MANEUVER', '#ff8a7a'); }
     }
     // spikes at 3+, roadblock at 4+, helicopter at 4+
     if (S >= 3 && now > A.spikesNext) { A.spikesNext = now + 16000; const l0 = Math.floor(Math.random() * 3); A.spikes.push({ d: H.wrap(A.d + 2600), y0: H.laneY(l0) - 22, y1: H.laneY(l0 + 1) + 22 }); }
@@ -162,7 +162,7 @@
     if (r.ty !== undefined) { r.y += Math.max(-140 * dt, Math.min(140 * dt, r.ty - r.y)); if (Math.abs(r.ty - r.y) < 1) r.ty = undefined; }
     r.y = Math.max(16, Math.min(H.BOTTOM - 16, r.y));
     r.v += Math.max(-600 * dt, Math.min(r.perf.accel * 0.9 * dt, target - r.v)); r.d = H.wrap(r.d + r.v * dt);
-    const h = hitTest(r, 54, 26); if (h) { crash(r, h, 'racer'); }
+    const h = hitTest(r, H.CAR_LEN, 26); if (h) { crash(r, h, 'racer'); }
     if (racing) {
       const R = A.race, mine = H.ahead(R.start, A.d), theirs = H.ahead(R.start, r.d);
       R.mine = mine; R.theirs = theirs;
@@ -227,6 +227,13 @@
   function frame(now) {
     if (!A) return; update(now); if (!A) return; st.frames++;
     const c = G(), Wd = SW(), Hd = SHt(), V = A.vehicle, n = night(), rn = rainAmt();
+    const SIDE = root.NightshiftHighwaySide;
+    if (SIDE?.ready?.()) { // v0.67: Nightshift Garage side view with the Garage art
+      let others = []; try { others = (root.NightshiftNet?.players?.() || []).filter((q) => q.zone === 'highway'); } catch { /* n/a */ }
+      SIDE.draw(c, Wd, Hd, { A, H, rel, now, night: n, rain: rn, others });
+      c.save(); if (A.flash > 0) { c.fillStyle = `rgba(255,255,255,${A.flash * 0.7})`; c.fillRect(0, 0, Wd, Hd); } hud(c, Wd, Hd, now); if (A.fade > 0) { c.fillStyle = `rgba(0,0,0,${A.fade})`; c.fillRect(0, 0, Wd, Hd); } c.restore();
+      return;
+    }
     const z = Math.min(1.15, Hd / 470) * (1 - 0.22 * Math.min(1, V.v / H.pxs(260)));
     const px0 = Wd * 0.26, cy = 22 + (A.y - 88) * 0.25, sh = A.shake;
     const X = (d) => px0 + rel(d, A.d) * z + (Math.random() - 0.5) * sh, Y = (y) => Hd / 2 + (y - cy) * z + (Math.random() - 0.5) * sh * 0.5;
