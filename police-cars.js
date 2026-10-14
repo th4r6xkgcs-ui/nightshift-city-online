@@ -25,6 +25,8 @@
   const stars = (env) => { try { return root.NightshiftWantedData?.stars?.(env.player.heat) ?? 0; } catch { return 0; } };
   const want = (s) => (s >= 5 ? 3 : s >= 4 ? 2 : s >= 1 ? 1 : 0); // v0.71: a patrol car from ★1
   const wrecks = []; let heli = null;
+  const LKEY = 'nightshift-pursuit-v1'; let life = { wrecks: 0, spikes: 0, pits: 0 }; try { const r = JSON.parse(localStorage.getItem(LKEY) || '{}'); for (const k of Object.keys(life)) if (Number.isFinite(r[k])) life[k] = r[k]; } catch { /* fresh */ }
+  const bump = (k) => { life[k]++; try { localStorage.setItem(LKEY, JSON.stringify(life)); } catch { /* full */ } };
   const inZone = () => { try { return !!(root.NightshiftZones?.active?.() || root.NightshiftHome?.kind?.()); } catch { return false; } };
   const node = (x, y) => ({ i: Math.round(x / BW), j: Math.round(y / BH) });
   const nodePos = (n) => ({ x: n.i * BW, y: n.j * BH });
@@ -70,7 +72,7 @@
     if (pc && d < 38 && Math.abs(pc.speed || 0) > 3.5 && now > (c.hitAt || 0) + 700 && PU.playerRams(pc, c)) {
       c.hitAt = now; c.hits = (c.hits || 0) + 1; c.stunUntil = now + 2200; c.spin = (Math.random() < 0.5 ? -1 : 1) * 7; c.slideA = pc.angle || 0; c.slideV = Math.abs(pc.speed) * 45; pc.speed = (pc.speed || 0) * 0.75;
       try { root.NightshiftVehicles?.hit?.(pc); root.NightshiftFeedback?.burst?.(c.x, c.y); } catch { /* n/a */ }
-      if (c.hits >= 3) { c.wreck = true; c.wreckAt = now; wrecks.push(c); chase.splice(chase.indexOf(c), 1); tick.nextSpawn = now + 12000; st.wrecks = (st.wrecks || 0) + 1; try { root.say?.('💥 Cruiser wrecked!'); p.heat = (p.heat || 0) + 0.3; } catch { /* n/a */ } }
+      if (c.hits >= 3) { c.wreck = true; c.wreckAt = now; wrecks.push(c); chase.splice(chase.indexOf(c), 1); tick.nextSpawn = now + 12000; st.wrecks = (st.wrecks || 0) + 1; bump('wrecks'); try { root.say?.('💥 Cruiser wrecked!'); p.heat = (p.heat || 0) + 0.3; } catch { /* n/a */ } }
       else try { root.say?.('💥 You rammed the cruiser!'); } catch { /* n/a */ }
       return;
     }
@@ -83,7 +85,7 @@
         if (!env.blocked?.(nx, ny)) { c.x = nx; c.y = ny; c.speed = v / dt / 60; c.offGrid = true; }
         if (d < 36) {
           c.bumpUntil = now + 4500; const pit = PU.isPit(c, pc);
-          if (pit) { pc.angle = (pc.angle || 0) + pit * 1.1; pc.speed = (pc.speed || 0) * 0.35; st.pits = (st.pits || 0) + 1; try { root.say?.('🚓 PIT maneuver! You spin out'); } catch { /* n/a */ } }
+          if (pit) { pc.angle = (pc.angle || 0) + pit * 1.1; pc.speed = (pc.speed || 0) * 0.35; st.pits = (st.pits || 0) + 1; bump('pits'); try { root.say?.('🚓 PIT maneuver! You spin out'); } catch { /* n/a */ } }
           else { pc.speed = (pc.speed || 0) * 0.65; try { root.say?.('🚓 Rammed by police!'); } catch { /* n/a */ } }
           try { root.NightshiftVehicles?.hit?.(pc); root.NightshiftCombatVision?.engage?.(4000); } catch { /* n/a */ }
           c.x -= Math.cos(c.angle) * 24; c.y -= Math.sin(c.angle) * 24; st.rams++;
@@ -131,7 +133,7 @@
   const flats = new Set();
   function spikeTick(env, now) {
     const pc = env.player.car;
-    if (pc && !pc.flat) for (const b of blocks) { if (b.strip && PU.onStrip(pc, b.strip)) { pc.flat = true; pc.flatAt = now; flats.add(pc); st.spikes = (st.spikes || 0) + 1; try { root.say?.('💥 Spike strip! Tyres blown · get them fixed at a garage or auto parts store'); root.NightshiftFx?.shake?.(0.5); root.NightshiftVehicles?.hit?.(pc); } catch { /* n/a */ } } }
+    if (pc && !pc.flat) for (const b of blocks) { if (b.strip && PU.onStrip(pc, b.strip)) { pc.flat = true; pc.flatAt = now; flats.add(pc); st.spikes = (st.spikes || 0) + 1; bump('spikes'); try { root.say?.('💥 Spike strip! Tyres blown · get them fixed at a garage or auto parts store'); root.NightshiftFx?.shake?.(0.5); root.NightshiftVehicles?.hit?.(pc); } catch { /* n/a */ } } }
     if (pc && pc.flat) { const cap = PU.FLAT_CAP; if (Math.abs(pc.speed || 0) > cap) pc.speed = Math.sign(pc.speed) * cap; if (Math.abs(pc.speed || 0) > 1) pc.angle = (pc.angle || 0) + Math.sin(now / 90) * 0.004; }
   }
   function repairAll() { let n = 0; for (const c of flats) { if (c.flat) n++; c.flat = false; } flats.clear(); return n; }
@@ -205,5 +207,5 @@
     }
   }
   const hook = setInterval(() => { const C = root.NightshiftCrime; if (C && typeof C.draw === 'function' && !C.__pcars) { const d0 = C.draw; C.draw = function () { try { draw(); } catch { /* cosmetic */ } return d0.apply(this, arguments); }; C.__pcars = true; clearInterval(hook); } }, 300);
-  root.NightshiftPoliceCars = Object.freeze({ cars: () => chase, roadblocks: () => blocks, wrecks: () => wrecks, heli: () => heli, repairAll, flats: () => [...flats].filter((c) => c.flat).length, stats: () => ({ ...st, cars: chase.length, blocks: blocks.length, wrecks: wrecks.length, heli: !!heli }) });
+  root.NightshiftPoliceCars = Object.freeze({ cars: () => chase, roadblocks: () => blocks, wrecks: () => wrecks, heli: () => heli, repairAll, lifetime: () => ({ ...life }), flats: () => [...flats].filter((c) => c.flat).length, stats: () => ({ ...st, cars: chase.length, blocks: blocks.length, wrecks: wrecks.length, heli: !!heli }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
