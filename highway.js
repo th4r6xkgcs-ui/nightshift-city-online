@@ -111,7 +111,7 @@
       if (r < 0 && r > -80 && !t.near && t.wasAhead && H.nearMiss({ y: A.y, v: A.vehicle.v }, t)) { t.near = true; A.streak++; A.bestStreak = Math.max(A.bestStreak, A.streak); const pay = H.nearMissPay(A.streak); A.cash += pay; st.nearMiss++; save0.nearMiss++; pop(`NEAR MISS +$${pay}${A.streak >= 3 ? ` · x${H.streakMult(A.streak)}` : ''}`, '#7cffb5'); }
       t.wasAhead = r > 0; if (r > 60) t.near = false;
     }
-    for (const c of A.cops) { const h = hitTest(c, 54, 26); if (h && !c.hitCool) { crash(c, h, 'cop'); c.hitCool = 0.8; } }
+    for (const c of A.cops) { const h = hitTest(c, 54, 26); if (h && !c.hitCool) { crash(c, h, 'cop'); c.hitCool = 1.5; } }
     for (const b of A.blocks) for (const c of b.cars) { const h = hitTest({ d: c.d, y: c.y, v: 0 }, 54, 28); if (h) { crash({ v: 0 }, h, 'block'); A.vehicle.v *= 0.4; } }
     for (const s of A.spikes) { if (s.hit) continue; const r = rel(s.d, A.d); if (Math.abs(r) < 20 && A.y > s.y0 && A.y < s.y1) { s.hit = true; A.vehicle.spikes = true; A.vehicle.condition = Math.max(0, A.vehicle.condition - 12); say('💥 Spike strip! Tyres shredded · top speed way down · get off at the next exit'); A.shake = 10; } }
   }
@@ -121,7 +121,7 @@
   const stars = () => { try { return root.NightshiftWantedData?.stars?.(P()?.heat || 0) || 0; } catch { return 0; } };
   function policeTick(dt, now) {
     const S = stars(), want = H.units(S), p = P();
-    while (A.cops.length < want) A.cops.push({ d: H.wrap(A.d - 900 - A.cops.length * 260), y: H.laneY(A.cops.length % H.LANES), v: A.vehicle.v + H.pxs(20), id: 'hwcop' + Math.random(), hitCool: 0 });
+    if (now - A.t0 > 6000) while (A.cops.length < want) { const k = A.cops.length; A.cops.push({ d: H.wrap(A.d - 1400 - k * 300), y: H.laneY((k + (A.y < H.BOTTOM / 2 ? 2 : 0)) % H.LANES), v: Math.max(A.vehicle.v, H.pxs(90)) + H.pxs(20), id: 'hwcop' + Math.random(), hitCool: 0, pitAt: 0 }); }
     while (A.cops.length > want) A.cops.pop();
     let nearest = 1e9;
     for (const c of A.cops) {
@@ -133,8 +133,10 @@
       let ty = A.y; for (const t of A.traffic) { const tr = rel(t.d, c.d); if (tr > 0 && tr < 160 && Math.abs(t.y - c.y) < 30) { ty = c.y + (c.y < H.BOTTOM / 2 ? 46 : -46); break; } }
       c.y += Math.max(-120 * dt, Math.min(120 * dt, ty - c.y)); c.y = Math.max(14, Math.min(H.SHOULDER[1] - 12, c.y));
       c.d = H.wrap(c.d + c.v * dt); c.hitCool = Math.max(0, (c.hitCool || 0) - dt);
-      if (Math.abs(r) < 46 && Math.abs(c.y - A.y) < 40 && !c.pit && S >= 2) { c.pit = 1.6; A.y += Math.sign(A.y - c.y || 1) * 18; A.vehicle.v *= 0.85; A.shake = 8; pop('PIT MANEUVER', '#ff8a7a'); }
-      c.pit = Math.max(0, (c.pit || 0) - dt);
+      // never sit inside your car: stay a bumper's length away
+      const r2 = rel(c.d, A.d); if (Math.abs(r2) < 58 && Math.abs(c.y - A.y) < 28) { c.d = H.wrap(A.d + (r2 < 0 ? -58 : 58)); c.v = r2 < 0 ? Math.min(c.v, A.vehicle.v) : Math.max(c.v, A.vehicle.v); }
+      // PIT: only alongside, at speed, once every few seconds per cruiser
+      if (S >= 2 && Math.abs(r2) < 40 && Math.abs(c.y - A.y) < 44 && Math.abs(c.y - A.y) > 20 && A.vehicle.v > H.pxs(60) && now > (c.pitAt || 0)) { c.pitAt = now + 4500; A.y += Math.sign(A.y - c.y || 1) * 16; A.vehicle.v *= 0.86; A.shake = 8; pop('PIT MANEUVER', '#ff8a7a'); }
     }
     // spikes at 3+, roadblock at 4+, helicopter at 4+
     if (S >= 3 && now > A.spikesNext) { A.spikesNext = now + 16000; const l0 = Math.floor(Math.random() * 3); A.spikes.push({ d: H.wrap(A.d + 2600), y0: H.laneY(l0) - 22, y1: H.laneY(l0 + 1) + 22 }); }
@@ -337,7 +339,7 @@
   #hwPanel .row{display:flex;gap:8px;align-items:center;background:#16233d;border:1px solid #2f4669;border-radius:9px;padding:7px 9px;margin-bottom:6px} #hwPanel .row div{flex:1} #hwPanel .row small{display:block;color:#b9c8da;font-size:11px}
   #hwPanel button{all:unset;box-sizing:border-box;cursor:pointer;font:700 12px ui-monospace,Menlo,monospace;background:#2c4c7c;color:#fff;border:1px solid #6f8db3;border-radius:8px;padding:6px 10px;white-space:nowrap} #hwPanel button[disabled]{opacity:.4;cursor:default} #hwPanel .go{background:#2f8f6a;border-color:#7cffb5;padding:9px 14px;font-size:14px}
   #hwRace{all:unset;position:fixed;z-index:30;left:50%;top:128px;transform:translateX(-50%);cursor:pointer;padding:9px 16px;border-radius:12px;background:linear-gradient(160deg,#5a3a08f0,#2a1a04f0);border:1px solid #ffd970;color:#fff1c4;font:800 14px ui-monospace,Menlo,monospace;box-shadow:0 0 16px #ffd97066} #hwRace[hidden]{display:none}
-  body[data-highway="on"] #actions:not(.expanded)>button:is(#use,#reload,#melee,#roll,#rob,#surrender),body[data-highway="on"] #aimPad,body[data-highway="on"] #wpPill,body[data-highway="on"] #lfRadio{display:none!important}
+  body[data-highway="on"] #actions:not(.expanded)>button:is(#use,#reload,#melee,#roll,#rob,#surrender),body[data-highway="on"] #aimPad,body[data-highway="on"] #crimeStatus,body[data-highway="on"] #wpPill,body[data-highway="on"] #lfRadio{display:none!important}
   body[data-highway="on"] #glCard,body[data-highway="on"] #stCard,body[data-highway="on"] #minimap,body[data-highway="on"] #mmWrap{display:none!important}`;
   document.head.appendChild(css);
   const panel = Object.assign(document.createElement('section'), { id: 'hwPanel', hidden: true }); document.body.appendChild(panel);
