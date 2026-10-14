@@ -432,6 +432,54 @@
     1536,
     640
    ]
+  },
+  {
+   "file": "pet_husky_idle",
+   "frames": 32,
+   "size": [
+    768,
+    384
+   ]
+  },
+  {
+   "file": "pet_husky_walk",
+   "frames": 48,
+   "size": [
+    768,
+    576
+   ]
+  },
+  {
+   "file": "pet_husky_sit",
+   "frames": 16,
+   "size": [
+    768,
+    192
+   ]
+  },
+  {
+   "file": "prop_hydrant_daynight",
+   "frames": 2,
+   "size": [
+    192,
+    128
+   ]
+  },
+  {
+   "file": "prop_vending_daynight",
+   "frames": 2,
+   "size": [
+    192,
+    128
+   ]
+  },
+  {
+   "file": "prop_atm_daynight",
+   "frames": 2,
+   "size": [
+    192,
+    128
+   ]
   }
  ]
 }

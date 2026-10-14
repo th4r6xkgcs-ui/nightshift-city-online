@@ -60,6 +60,25 @@ function run() {
   // composite golden sample (what the game shows)
   const comp = frameList().map((x) => { const r = renderOf(GOLDEN, x); return { ...x, buf: r.composite, layer: 'composite', z: 0, anchors: r.anchors, tags: ['golden_sample'] }; });
   for (const an of ANIMS) report.push(writeAtlas('char_golden_sample_' + an, 'character_golden_sample', comp.filter((c) => c.a === an), { outfit: GOLDEN, animation: an }));
+  // pets: husky (golden), 96x96 frames, origin (48, 88); idle 4 / walk 6 / sit 2
+  const PET = require('../o3-pet.js'), PDUR = { idle: 200, walk: 110, sit: 500 };
+  for (const breed of ['husky']) for (const an of Object.keys(PET.ANIMS)) {
+    const cells = []; for (const dn of DIR_NAMES) for (let f = 0; f < PET.ANIMS[an]; f++) { const r = PET.render(breed, DIR_INDEX[dn], an, f); cells.push({ a: an, dn, f, buf: r.composite }); }
+    const cols = 8, w = cols * PET.PW, h = Math.ceil(cells.length / cols) * PET.PH, img = new Uint8ClampedArray(w * h * 4), frames = [];
+    cells.forEach((cl, i) => { const x = (i % cols) * PET.PW, y = Math.floor(i / cols) * PET.PH; PNG.blit(img, w, E.toRGBA(cl.buf, PET.PW, PET.PH), PET.PW, PET.PH, x, y, 1); frames.push({ asset_id: 'pet_' + breed, atlas: `pet_${breed}_${an}.png`, rect: { x, y, w: PET.PW, h: PET.PH }, direction: cl.dn, animation: an, frame_index: cl.f, duration_ms: PDUR[an], origin: { x: PET.POX, y: PET.POY }, hand_anchor: null, equipment_anchors: {}, collision_bounds: { x: 30, y: 80, w: 36, h: 12 }, layer: 'composite', z_bias: 0, tags: ['pet', breed] }); });
+    fs.writeFileSync(path.join(OUT, `pet_${breed}_${an}.png`), PNG.encode(img, w, h));
+    fs.writeFileSync(path.join(OUT, `pet_${breed}_${an}.json`), JSON.stringify({ schema_version: '1.0.0', asset_id: 'pet_' + breed, atlas: `pet_${breed}_${an}.png`, native_frame_size: { w: PET.PW, h: PET.PH }, world_px_per_art_px: 0.5, frame_order: DIR_NAMES, frame_counts: { [an]: PET.ANIMS[an] }, animation: an, generator: 'o3-pet.js', production_ready: true, frames }));
+    report.push({ file: `pet_${breed}_${an}`, frames: frames.length, size: [w, h] });
+  }
+  // props: day + night variants, single facing (S), origin bottom-centre (48, 118)
+  const PR = require('../o3-props.js');
+  for (const kind of PR.KINDS) {
+    const w = E.FW * 2, h = E.FH, img = new Uint8ClampedArray(w * h * 4), frames = [];
+    ['day', 'night'].forEach((st, i) => { const r = PR.render(kind, st === 'night'); PNG.blit(img, w, E.toRGBA(r.composite), E.FW, E.FH, i * E.FW, 0, 1); frames.push({ asset_id: 'prop_' + kind, atlas: `prop_${kind}_daynight.png`, rect: { x: i * E.FW, y: 0, w: E.FW, h: E.FH }, direction: 'S', animation: st, frame_index: 0, duration_ms: 0, origin: { x: E.OX, y: E.OY }, hand_anchor: null, equipment_anchors: {}, collision_bounds: { x: 30, y: 106, w: 36, h: 14 }, layer: 'base', z_bias: 0, tags: ['prop', st], light: r.emissive }); });
+    fs.writeFileSync(path.join(OUT, `prop_${kind}_daynight.png`), PNG.encode(img, w, h));
+    fs.writeFileSync(path.join(OUT, `prop_${kind}_daynight.json`), JSON.stringify({ schema_version: '1.0.0', asset_id: 'prop_' + kind, atlas: `prop_${kind}_daynight.png`, native_frame_size: { w: E.FW, h: E.FH }, world_px_per_art_px: 0.5, frame_order: DIR_NAMES, frame_counts: {}, states: ['day', 'night'], generator: 'o3-props.js', production_ready: true, frames }));
+    report.push({ file: `prop_${kind}_daynight`, frames: 2, size: [w, h] });
+  }
   fs.writeFileSync(path.join(OUT, 'index.json'), JSON.stringify({ generated_by: 'tools/o3-export.cjs', atlases: report }, null, 1));
   return report;
 }

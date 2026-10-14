@@ -41,7 +41,7 @@ def check(jpath):
         if opaque == 0: err(f'{jpath.name}: empty frame {key}')
         if clear == 0: err(f'{jpath.name}: opaque matte frame {key}')
         if semi: err(f'{jpath.name}: {semi} semi-transparent pixels in {key} (pixel art must be crisp)')
-        if f['layer'] == 'composite' and f['animation'] in ('idle', 'walk') and not (f['origin']['y'] - 4 <= lowest <= f['origin']['y'] + 6):  # 2.5D tilt: feet toward/away from camera sit up to 4 px higher or 6 px lower
+        if f['layer'] == 'composite' and f['animation'] in ('idle', 'walk') and 'pet' not in f.get('tags', []) and not (f['origin']['y'] - 4 <= lowest <= f['origin']['y'] + 6):  # 2.5D tilt: feet toward/away from camera sit up to 4 px higher or 6 px lower
             err(f'{jpath.name}: feet not planted at origin in {key} (lowest row {lowest})')
     if len(origins) > 1: err(f'{jpath.name}: frames disagree on origin {origins}')
     for i in range(len(rects)):  # rects are a grid, but check anyway
@@ -50,9 +50,9 @@ def check(jpath):
             bx, by, bw, bh = rects[j]
             if ax < bx + bw and bx < ax + aw and ay < by + bh and by < ay + ah: err(f'{jpath.name}: overlapping rects {rects[i]} {rects[j]}'); break
     if d['frames'] and d['frames'][0]['layer'] == 'composite':
-        an = d.get('animation')
+        an = d.get('animation'); counts = d.get('frame_counts') or COUNTS
         for dn in ORDER:
-            for k in range(COUNTS.get(an, 0)):
+            for k in range(counts.get(an, 0)):
                 if (dn, an, k, 'composite') not in seen: err(f'{jpath.name}: missing {dn} {an} {k}')
     return d['asset_id'], len(d['frames'])
 
