@@ -86,7 +86,7 @@
     const skyH = Math.round(Hd * 0.44), roadTop = skyH, roadBot = Hd - 4, roadH = roadBot - roadTop;
     const yOf = (wy) => roadTop + 10 + (wy / (H.SHOULDER[1] + 4)) * (roadH - 22); // world lateral -> screen y (car ground line)
     const sOf = (wy) => 0.84 + 0.2 * (wy / H.SHOULDER[1]);                       // depth scale
-    const px0 = Math.round(Wd * 0.24), shake = A.shake || 0;
+    const px0 = Math.round(Wd * 0.3), shake = A.shake || 0;
     const X = (d) => px0 + rel(d, A.d) * kx + (Math.random() - 0.5) * shake;
     const camOff = A.d * kx;
     c.save();
