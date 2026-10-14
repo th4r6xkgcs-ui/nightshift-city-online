@@ -230,6 +230,12 @@ function draw() {
   P.rect(71, 106, 3, 4, C.gd[1]).set(71, 106, C.gd[0]).set(73, 109, C.gd[3]);
 
   P.off(0, 0);
+  P.paint(C, { gain: 8, vgrad: 2.5, parts: {
+    legL: { r: 8 }, legR: { r: 8 }, shoeL: { r: 4, gloss: true }, shoeR: { r: 4, gloss: true }, tee: { r: 6 },
+    jacketL: { r: 9, gloss: true }, jacketR: { r: 9, gloss: true }, collarL: { r: 3 }, collarR: { r: 3 },
+    armL: { r: 7, gloss: true }, armR: { r: 7, gloss: true }, handL: { r: 4 }, handR: { r: 4 }, watch: { flat: true },
+    neck: { r: 5 }, teeNeck: { flat: true }, earL: { r: 3 }, earR: { r: 3 }, head: { r: 11 }, hair: { r: 3 },
+    cap: { r: 13, gloss: true }, capTab: { flat: true }, brim: { r: 4, gloss: true }, chain: { flat: true } } });
   P.contour(C.ink, 0.6, ['chain', 'teeNeck', 'capTab', 'watch']);
   return P;
 }

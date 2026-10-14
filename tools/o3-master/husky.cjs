@@ -105,6 +105,9 @@ function draw() {
   P.part('earNear').poly([[91, 22], [99.5, 6], [103, 24]], C.gy[2]);
   P.clip('earNear').poly([[93.5, 21.5], [99.5, 10], [101.5, 22.5]], C.er[0]).line(94, 21, 98.5, 13, C.er[1]).line(100, 8, 102, 20, C.gy[1]).line(95, 22, 101, 22.5, C.wt[1]).clip(null);
 
+  P.paint(C, { gain: 8, vgrad: 1.5, warm: '#fffaf0', cool: '#1e2440', rim: '#b9c8ff', parts: {
+    legFH: { r: 4 }, legFF: { r: 4 }, legNH: { r: 6 }, legNF: { r: 4 }, tail: { r: 7 }, body: { r: 12 }, neck: { r: 10 },
+    collar: { r: 2, gloss: true }, tag: { flat: true }, head: { r: 10 }, earFar: { r: 3 }, earNear: { r: 3 } } });
   P.contour(C.ink, 0.55, ['tag'], [['body', 'neck', 'head']]);
   return P;
 }

@@ -76,7 +76,7 @@ function draw() {
   P.path([[60, CY - 22], [92, CY - 22]], C.pu[1]); P.path([[64, CY - 23], [80, CY - 23]], C.pu[0]);
   P.line(58, CY - 8, 94, CY - 8, C.pu[2]); P.line(58, CY + 8, 94, CY + 8, C.pu[4]);                  // roof channels
   P.clip(null);
-  P.clip('glass');
+  P.part('glass').clip('glass');
   // windshield: lighter near the top, a crisp diagonal reflection band; rear glass darker with its own streak
   for (let y = 0; y < H; y++) for (let x = 96; x < 122; x++) P.tint(x, y, x > 117 ? C.cf[3] : y < CY - 14 ? C.gl[2] : y > CY + 16 ? C.gl[4] : C.gl[3]);
   P.line(117, CY - 33, 117, CY + 33, C.cf[1]);
@@ -111,6 +111,10 @@ function draw() {
   P.clip('wing'); P.line(15, 6, 15, 84, C.cf[0]); P.line(14, 6, 14, 84, C.cf[1]); P.line(8, 6, 8, 84, C.cf[3]); for (let y = 8; y < 84; y += 4) P.set(11, y, C.cf[1]); P.clip(null);
   for (const y of [3, 84]) P.part('wing').rect(5, y, 13, 3, C.cf[3]).line(6, y, 16, y, C.cf[1]);
 
+  P.paint(C, { gain: 8, light: [-0.5, -0.6, 0.62], parts: {
+    tyres: { flat: true }, body: { r: 20, gloss: true }, hood: { r: 12, gloss: true }, stripe: { r: 10, gloss: true }, glass: { r: 5, gain: 3 },
+    roof: { r: 14, gloss: true }, lamps: { flat: true, ao: false }, trim: { flat: true }, exhaust: { flat: true }, mirrors: { r: 3, gloss: true },
+    wingShadow: { flat: true }, wing: { r: 3, gloss: true } } });
   P.contour(C.ink, 0.55, ['wingShadow', 'stripe', 'roof', 'exhaust']);
   return P;
 }
