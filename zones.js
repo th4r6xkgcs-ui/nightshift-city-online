@@ -235,7 +235,8 @@
   }
   function frameDraw(now) {
     const c = cur, d = c.def, ctx = G(), Wd = SW(), Hd = SH(), pos = c.pos, t = now / 1000;
-    const z = Math.max(1, Math.min(2.4, (d.zoom || 1) * Math.max(1.15, CAMZ())));
+    let z = Math.max(1, Math.min(2.4, (d.zoom || 1) * Math.max(1.15, CAMZ())));
+    if (d.fit) z = Math.max(0.85, Math.min(z, SH() / (d.h * d.fit))); // v0.71: rooms show most of their height on a landscape phone
     const vw = Wd / z, vh = Hd / z;
     let cx = d.w <= vw ? (d.w - vw) / 2 : Math.max(0, Math.min(d.w - vw, pos.x - vw / 2));
     let cy = d.h <= vh ? (d.h - vh) / 2 : Math.max(0, Math.min(d.h - vh, pos.y - vh / 2));
