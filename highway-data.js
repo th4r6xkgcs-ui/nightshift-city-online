@@ -54,7 +54,7 @@
     let a = 0;
     if (!empty && input.throttle > 0) a += P.accel * input.throttle * (1 - Math.pow(Math.max(0, car.v) / top, 2.2)) * (input.nitro ? 1.6 : 1);
     if (input.brake > 0) a -= 900 * input.brake;
-    a -= 18 + 0.00022 * car.v * car.v * (empty ? 3 : 1); // rolling + air drag
+    a -= 10 + P.accel * 0.2 * Math.pow(car.v / P.top, 2) * (empty ? 4 : 1) + (input.throttle > 0 ? 0 : 30); // rolling + air drag (+ engine braking off-throttle)
     car.v = Math.max(0, Math.min(top * 1.02, car.v + a * dt));
     car.fuel = Math.max(0, (car.fuel ?? 100) - car.v * dt * M / 1000 * 0.9); // ~0.9% per km
     // gearbox: even spread of the speed range over the gears, rpm 1,000-7,500
