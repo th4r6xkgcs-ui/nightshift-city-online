@@ -26,6 +26,8 @@ Current art pass: high-density Canvas rendering (2× DPR, four-million-pixel bud
 ## Historical backlog (superseded by priorities above)
 
 # Next tasks
+- P0 (owner): approve or correct the three Option 3 master sprites (player, Vanta GT top-down, husky) — HANDOFF art correction. No atlas mass-production until approved.
+- P1 (Claude, after approval): 8-direction key poses from the masters, then walk/run with planted feet; separate clothing layers; modular gun visuals; icons; interiors (correction prompt steps 4-9).
 - P0 (owner): Option 3 review gate — approve/redirect the vertical slice (character, studio, carbine presets, Vanta GT, husky, props) before bulk catalog expansion; approve gh-pages deploy of v0.70.
 - P0 (owner): approve deploying v0.69 multiplayer server (PvP combat-core + world bounds) to the live Worker.
 - P1 (Claude, after review): expand Option 3 catalog — remaining wardrobe items/hairstyles, NPC outfits on O3, shiba/rottweiler atlases, more props, more kit guns; quality pass on faces/hands.
