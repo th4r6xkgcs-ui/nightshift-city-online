@@ -52,3 +52,16 @@ console.log('PASS: screen-relative driving (stick direction = travel direction, 
   assert.deepEqual(M.clean(JSON.parse(JSON.stringify(s))).ops[civ.id].o, -60);
   console.log('PASS: NPC minds (fixed residents, memory/opinion, gossip, personality reactions, secrets)');
 }
+// ---------- car style: kits + stance ----------
+{
+  const SD = require('../carstyle-data.js');
+  assert.ok(SD.KEYS.includes('kit') && SD.KEYS.includes('stance'));
+  const s = SD.clean({ cars: { 'car-1': { kit: 'wide', stance: 'slammed', rims: 'bronze' } } });
+  assert.equal(s.cars['car-1'].kit, 'wide'); assert.equal(s.cars['car-1'].stance, 'slammed'); assert.equal(s.cars['car-1'].rims, 'bronze');
+  assert.equal(SD.clean({ cars: { 'car-1': { kit: 'rocket' } } }).cars['car-1'].kit, 'stock', 'unknown kit -> stock');
+  const w = { cash: 10000 }, r = SD.apply(s, w, 'car-2', { ...SD.DEFAULT, kit: 'wide', stance: 'lowered' }); assert.ok(r.ok && r.price === 4800 + 800 && w.cash === 10000 - 5600);
+  assert.ok(SD.flair(SD.cleanStyle({ kit: 'wide' })) > SD.flair(SD.DEFAULT));
+  // old saves (no kit/stance) still load with defaults
+  assert.equal(SD.clean({ cars: { 'car-3': { rims: 'gold' } } }).cars['car-3'].stance, 'stock');
+  console.log('PASS: car style body kits + stance (prices, save cleaning, old saves)');
+}
