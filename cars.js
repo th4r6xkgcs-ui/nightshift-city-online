@@ -95,6 +95,13 @@
     gallardo: ({ c, hl, hw, xr, rw, R }) => { for (let k = 0; k < 5; k++) R(c, '#0c0e11', xr - 6 - k * 2.2, -rw + 2, 1, rw * 2 - 4); for (const s of [-1, 1]) R(c, '#0c0e11', hl - 6, s * (hw - 3) - 0.8, 4, 1.6); },
   };
   function bake(id, color, st = null) {
+    // v0.67 image pipeline: a top-down PNG (art/top/cars/<id>.png, nose right) replaces the code-drawn car
+    const IMG = root.NightshiftArt?.image?.('top/cars/' + id + '.png');
+    if (IMG) {
+      const spec0 = D.BY[id] || BASE[id], L0 = spec0.len, W0 = spec0.wid, pad0 = 6, S0 = 4, cv0 = document.createElement('canvas'); cv0.width = (L0 + pad0 * 2) * S0; cv0.height = (W0 + pad0 * 2) * S0;
+      const c0 = cv0.getContext('2d'); c0.imageSmoothingEnabled = true; c0.drawImage(root.NightshiftArt.tinted(IMG, color, 'car:' + id), pad0 * S0, pad0 * S0, L0 * S0, W0 * S0);
+      return { cv: cv0, w: L0 + pad0 * 2, h: W0 + pad0 * 2, L: L0, W: W0, image: true };
+    }
     bakeStyle = st;
     const spec = D.BY[id] || BASE[id], B0 = BODY[spec.body], L = spec.len, W = spec.wid, S = BASE[id] ? 3 : 4, pad = 6;
     const cv = document.createElement('canvas'); cv.width = (L + pad * 2) * S; cv.height = (W + pad * 2) * S;
@@ -231,7 +238,7 @@
   }
   const cache = new Map();
   const SK = () => root.NightshiftCarStyleData;
-  function sprite(id, color, st = null) { const k = id + color + (st && SK() ? '|' + SK().keyOf(st) : ''); let s = cache.get(k); if (!s) { if (cache.size > 120) cache.delete(cache.keys().next().value); s = bake(id, color, st); cache.set(k, s); } return s; }
+  function sprite(id, color, st = null) { const k = id + color + (st && SK() ? '|' + SK().keyOf(st) : '') + '|a' + (root.NightshiftArt?.has?.('top/cars/' + id + '.png') ? root.NightshiftArt.version : 0); let s = cache.get(k); if (!s) { if (cache.size > 120) cache.delete(cache.keys().next().value); s = bake(id, color, st); cache.set(k, s); } return s; }
 
   // Live draw on the game context (car faces +x like the base game).
   const prevSpeed = new WeakMap();

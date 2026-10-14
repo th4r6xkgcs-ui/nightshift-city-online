@@ -193,12 +193,14 @@
   }
   function sprite(id, skinId = null, mods = []) {
     if (!GUNS[id]) id = 'pistol';
-    const mk = [...new Set(mods)].sort().join(','), key = id + '|' + (skinId || '') + '|' + mk; let s = cache.get(key); if (s) return s;
+    const art = root.NightshiftArt?.has?.('side/weapons/' + id + '.png') ? root.NightshiftArt.image('side/weapons/' + id + '.png') : null;
+    const mk = [...new Set(mods)].sort().join(','), key = id + '|' + (skinId || '') + '|' + mk + (art ? '|img' : ''); let s = cache.get(key); if (s) return s;
     const { px, box, a } = build(id, skinId, mods), b = { px }, [x0, y0, x1, y1] = [box.x, box.y, box.x + box.w - 1, box.y + box.h - 1];
     const cv = typeof document !== 'undefined' ? document.createElement('canvas') : null; if (!cv) return null;
     cv.width = GW; cv.height = GH; const c = cv.getContext('2d'), img = c.createImageData(GW, GH);
     for (let i = 0; i < b.px.length; i++) { let v = b.px[i]; if (!v) continue; if (v === 'glow') v = '#ff6b6b'; const [r, g, bl] = hexToRgb(v); img.data.set([r, g, bl, 255], i * 4); }
     c.putImageData(img, 0, 0);
+    if (art) { c.clearRect(0, 0, GW, GH); const bw = x1 - x0 + 1, bh = y1 - y0 + 1, f = Math.min(bw / art.naturalWidth, bh / art.naturalHeight) * 1.0, dw = art.naturalWidth * f, dh = art.naturalHeight * f; c.imageSmoothingEnabled = true; c.drawImage(art, x0 + (bw - dw) / 2, y0 + (bh - dh) / 2, dw, dh); } // v0.67: image art in the same box (hand/muzzle anchors unchanged)
     s = { cv, box: { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 }, a };
     cache.set(key, s); if (cache.size > 240) cache.delete(cache.keys().next().value);
     return s;

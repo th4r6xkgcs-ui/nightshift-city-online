@@ -194,6 +194,8 @@
     let c = null; try { c = g; } catch { return; } // eslint-disable-line no-undef
     try { if (typeof camera !== 'undefined' && (b.x + b.w + 48 < camera.x || b.y + b.h + 48 < camera.y || b.x > camera.x + (typeof W !== 'undefined' ? W : 1200) / camera.zoom || b.y > camera.y + (typeof H !== 'undefined' ? 800 : 800) / camera.zoom)) return; } catch { /* n/a */ } // eslint-disable-line no-undef
     const n = night(), a = archetype(b);
+    // v0.67 image pipeline: art/top/buildings/<archetype>-<n>.png (whole footprint: roof + front facade)
+    const AR = root.NightshiftArt; if (AR) { const vs = AR.variants('top/buildings/' + a + '-'); if (vs.length) { const im = AR.image(vs[Math.floor(H(b.x, b.y, 77) * vs.length)]); if (im) { c.save(); shadow(c, b); c.drawImage(im, b.x, b.y, b.w, b.h); c.restore(); st.buildings++; return; } } }
     c.save(); shadow(c, b);
     if (a === 'tower') tower(c, b, n); else if (a === 'mid') midrise(c, b, n); else if (a === 'ind') industrial(c, b, n); else if (a === 'club') club(c, b, n); else store(c, b, n);
     c.restore(); st.buildings++;
