@@ -701,3 +701,8 @@ Everything below is built for a shared world. The world never pauses (no cutscen
   - Verified with test PNGs in a built site: the car swapped in, and models without an image kept the code art.
 - **Asking the owner:** the 25-car / 25-rim Garage pack as separate PNGs (it would go straight onto Route 9), and who generates the top-down sets (ChatGPT image gen per the spec).
 - **Checks:** `node tests/run.cjs` passes all 116 suites. Playwright: side-view race vs Mika, rest stop + run, ★2 pursuit; 60 fps on the highway.
+
+## v0.68 — HD top-down cars (Claude)
+- New `car-hd.js` (NightshiftCarHD.bake), hooked from `cars.js` bake after the image hook, so a real PNG in `art/top/cars/<id>.png` still wins.
+- Procedural HD sprites: curved per-body profiles, contact shadow, tyres peeking out of fender bulges, cylinder shading with a key-light streak, clear-coat bands, multiply contrast pass, rim light + outline, shut lines, glass greenhouse, pillars, mirrors, per-family head/tail lights, diffuser/exhaust, liveries and signature details.
+- Falls back to the legacy baker on any error. Tests: `node tests/run.cjs` → 116 suites PASS.
