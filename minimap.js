@@ -106,7 +106,7 @@
       let v = to(m.x, m.y); const dx = v.x - cx, dy = v.y - cy, d = Math.hypot(dx, dy), rim = px / 2 - 7 * dpr, out = d > rim;
       if (m.kind === 'rumor' && !out) { c.strokeStyle = '#ffd97099'; c.lineWidth = 1.5 * dpr; c.setLineDash?.([4 * dpr, 3 * dpr]); c.beginPath(); c.arc(v.x, v.y, m.r * k, 0, Math.PI * 2); c.stroke(); c.setLineDash?.([]); continue; }
       if (m.kind === 'cop') { if (out) continue; c.fillStyle = Math.floor(now / 250) % 2 ? '#ff4a5a' : '#4a7aff'; c.beginPath(); c.arc(v.x, v.y, 2.6 * dpr, 0, Math.PI * 2); c.fill(); continue; }
-      if (m.kind === 'poi') { if (out) continue; c.fillStyle = '#05080f'; c.beginPath(); c.arc(v.x, v.y, 5.2 * dpr, 0, Math.PI * 2); c.fill(); c.fillStyle = m.color; c.beginPath(); c.arc(v.x, v.y, 4.2 * dpr, 0, Math.PI * 2); c.fill(); c.fillStyle = '#05080f'; c.font = `800 ${Math.round(6.5 * dpr)}px system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(m.glyph, v.x, v.y + 0.5 * dpr); continue; }
+      if (m.kind === 'poi') { if (out) continue; c.fillStyle = '#05080f'; c.beginPath(); c.arc(v.x, v.y, 7 * dpr, 0, Math.PI * 2); c.fill(); c.fillStyle = m.color; c.beginPath(); c.arc(v.x, v.y, 5.8 * dpr, 0, Math.PI * 2); c.fill(); c.fillStyle = '#05080f'; c.font = `800 ${Math.round(8.5 * dpr)}px system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(m.glyph, v.x, v.y + 0.5 * dpr); continue; }
       if (out) v = { x: cx + dx / d * rim, y: cy + dy / d * rim };
       c.fillStyle = '#05080f'; c.beginPath(); c.arc(v.x, v.y, 4.6 * dpr, 0, Math.PI * 2); c.fill();
       c.fillStyle = m.color; c.beginPath();
