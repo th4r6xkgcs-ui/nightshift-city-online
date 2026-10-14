@@ -46,20 +46,25 @@
   function lum(h) { const n = parseInt(h.slice(1), 16); return (0.299 * (n >> 16 & 255) + 0.587 * (n >> 8 & 255) + 0.114 * (n & 255)) / 255; }
   // ---------- one car ----------
   function drawCar(c, id, color, x, ground, width, spin, speed, opts = {}) {
-    const src = opts.police ? IM.police[opts.police] : tinted(id, color); if (!ok(src) && !(src instanceof HTMLCanvasElement)) return;
+    const raw = opts.police ? IM.police[opts.police] : tinted(id, color); if (!ok(raw) && !(raw instanceof HTMLCanvasElement)) return;
+    const HS = root.NightshiftHighwayStyle, st = !opts.police && HS ? opts.style || null : null, src = st ? HS.body(id, raw, color, st) : raw, dy = st ? HS.drop(st) : 0;
     const W0 = src.naturalWidth || src.width, H0 = src.naturalHeight || src.height, s = width / W0, h = H0 * s, y = ground - h;
+    if (st) HS.under(c, st, x, ground, width);
     // soft contact shadow
     c.save(); c.globalAlpha = 0.55; c.fillStyle = '#000'; c.beginPath(); c.ellipse(x + width / 2, ground - 2, width * 0.5, Math.max(3, h * 0.07), 0, 0, Math.PI * 2); c.fill(); c.restore();
     c.save(); c.translate(x, y + (opts.bob || 0)); c.scale(s, s);
     const wheels = !opts.police && WHEELS[id];
     if (wheels) {
-      c.save(); c.beginPath(); c.rect(0, -10, W0, H0 + 20); for (const [cx, cy, r] of wheels) { c.moveTo(cx + r + 1, cy); c.arc(cx, cy, r + 1, 0, Math.PI * 2); } c.clip('evenodd'); c.drawImage(src, 0, 0); c.restore();
       const blur = Math.min(4, Math.floor(speed / 260)), a0 = spin / 39;
       for (const [cx, cy, r] of wheels) {
+        if (st && HS.wheel(c, raw, cx, cy, r, st, spin, speed)) continue; // custom rim
         c.save(); c.translate(cx, cy); c.beginPath(); c.arc(0, 0, r + 1, 0, Math.PI * 2); c.clip();
-        for (let k = 0; k <= blur; k++) { c.save(); c.globalAlpha = k ? 0.35 : 1; c.rotate(a0 - k * 0.18); c.drawImage(src, cx - r - 1, cy - r - 1, r * 2 + 2, r * 2 + 2, -r - 1, -r - 1, r * 2 + 2, r * 2 + 2); c.restore(); }
+        for (let k = 0; k <= blur; k++) { c.save(); c.globalAlpha = k ? 0.35 : 1; c.rotate(a0 - k * 0.18); c.drawImage(raw, cx - r - 1, cy - r - 1, r * 2 + 2, r * 2 + 2, -r - 1, -r - 1, r * 2 + 2, r * 2 + 2); c.restore(); }
         c.restore();
       }
+      // body over the wheels (lowered by the stance: it sits further down over the tyres)
+      c.save(); c.beginPath(); c.rect(0, -10, W0, H0 + 20); for (const [cx, cy, r] of wheels) { c.moveTo(cx + r + 1, cy + dy); c.arc(cx, cy + dy, r + 1, 0, Math.PI * 2); } c.clip('evenodd'); c.drawImage(src, 0, dy); c.restore();
+      if (st) { try { HS.extras(c, id, raw, st, color, wheels, dy); } catch (e) { console.error(e); } }
     } else c.drawImage(src, 0, 0);
     if (opts.police) { const on = Math.floor(performance.now() / 130) % 2, lx = W0 * 0.44, ly = H0 * 0.04; c.save(); c.globalCompositeOperation = 'lighter'; for (const [dx, col] of [[-28, on ? '#ff2a3a' : '#2a6aff'], [28, on ? '#2a6aff' : '#ff2a3a']]) { const gr = c.createRadialGradient(lx + dx, ly, 0, lx + dx, ly, 120); gr.addColorStop(0, col + 'cc'); gr.addColorStop(1, col + '00'); c.fillStyle = gr; c.fillRect(lx + dx - 120, ly - 120, 240, 240); } c.restore(); }
     c.restore();
@@ -120,14 +125,14 @@
     for (const p of A.cops) list.push({ y: p.y, d: p.d, police: 'charger', v: p.v });
     for (const b of A.blocks) for (const q of b.cars) list.push({ y: q.y, d: q.d, police: 'crown', v: 0 });
     for (const o of k.others || []) list.push({ y: o.y, d: o.x, id: carImage(o.car), color: o.color, v: 400, name: o.name });
-    list.push({ me: true, y: A.y, d: A.d, id: carImage(A.car.model), color: A.car.color, v: V.v });
+    list.push({ me: true, y: A.y, d: A.d, id: carImage(A.car.model), color: A.car.color, v: V.v, style: (() => { try { return root.NightshiftCarStyle?.of?.(A.car.id) || null; } catch { return null; } })() });
     list.sort((a, b) => a.y - b.y);
     const W = (y, truck) => 170 * sOf(y) * (truck ? 1.3 : 1);
     for (const o of list) {
       const w = W(o.y, o.truck), x = (o.me ? px0 + (Math.random() - 0.5) * shake : X(o.d)) - w / 2, g = yOf(o.y);
       if (x > Wd + 40 || x + w < -40) continue;
       const bob = o.me && V.v > 50 ? Math.sin(now / 45) * 0.4 : 0;
-      drawCar(c, o.id, o.color, x, g, w, (o.me ? A.d : o.d) * 7.27, o.v * 7.27 / 39 * 0.016 * 39, { police: o.police, bob });
+      drawCar(c, o.id, o.color, x, g, w, (o.me ? A.d : o.d) * 7.27, o.v * 7.27 / 39 * 0.016 * 39, { police: o.police, bob, style: o.style });
       // lights
       if (n > 0.15 || k.rain > 0) { c.save(); c.globalCompositeOperation = 'lighter'; const hy = g - w * 0.13; const gr = c.createLinearGradient(x + w, hy, x + w + 200, hy); gr.addColorStop(0, `rgba(255,240,205,${0.24 * Math.max(n, 0.4)})`); gr.addColorStop(1, 'rgba(255,240,205,0)'); c.fillStyle = gr; c.beginPath(); c.moveTo(x + w - 4, hy - 2); c.lineTo(x + w + 170, hy - 6); c.lineTo(x + w + 170, hy + 18); c.lineTo(x + w - 4, hy + 5); c.closePath(); c.fill(); const tg = c.createRadialGradient(x + 4, hy, 0, x + 4, hy, 22); tg.addColorStop(0, `rgba(255,30,50,${0.55 * Math.max(n, 0.4)})`); tg.addColorStop(1, 'rgba(255,30,50,0)'); c.fillStyle = tg; c.fillRect(x - 18, hy - 22, 44, 44); c.restore(); }
       if (o.sig && Math.sin(now / 120) > 0) { c.fillStyle = '#ffb33a'; c.fillRect(x + w - 8, g - w * 0.12, 5, 3); c.fillRect(x + 2, g - w * 0.12, 5, 3); }

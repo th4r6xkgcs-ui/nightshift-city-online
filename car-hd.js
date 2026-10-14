@@ -53,9 +53,11 @@
     for (let k = 3; k >= 0; k--) { c.save(); c.translate(1.2 + k * 0.5, 1.8 + k * 0.6); c.scale(1 + k * 0.025, 1 + k * 0.05); path(pts); c.fillStyle = `rgba(0,0,0,${0.12 + (3 - k) * 0.05})`; c.fill(); c.restore(); }
     // ---- tyres (peek out under the arches) ----
     for (const s of [-1, 1]) for (const [x0, rear] of [[fx, 0], [rx, 1]]) {
-      const tw2 = tw + (wide && rear ? 1.5 : 0), th2 = th + (wide && rear ? 1.2 : 0), y0 = s * (hw - th2 * 0.38 + (sport ? 0.9 : 0.35));
+      const kw = st?.kit === 'wide', drop = st?.stance === 'slammed' ? 1.3 : st?.stance === 'lowered' ? 0.6 : 0;
+      const tw2 = tw + (wide && rear ? 1.5 : 0) + (kw ? 1 : 0), th2 = th + (wide && rear ? 1.2 : 0) + (kw ? 1.1 : 0), y0 = s * (hw - th2 * 0.38 + (sport ? 0.9 : 0.35) + (kw ? 1.4 : 0) - drop);
       RR(c, '#040506', x0 - tw2 / 2 - 0.3, y0 - th2 / 2 - 0.3, tw2 + 0.6, th2 + 0.6, 2); RR(c, '#0b0d10', x0 - tw2 / 2, y0 - th2 / 2, tw2, th2, 1.8);
       for (let k = -tw2 / 2 + 1.2; k < tw2 / 2 - 1; k += 1.6) R(c, '#1c2026', x0 + k, y0 - th2 / 2 + 0.3, 0.7, th2 - 0.6);
+      if (st?.stance === 'slammed') R(c, '#000000', x0 - tw2 / 2, y0 - s * (th2 / 2 - 0.9) - 0.45, tw2, 0.9); // camber: inner edge tucked away
       R(c, rim, x0 - tw2 / 2 + 2, y0 + s * (th2 / 2 - 1.1) - 0.5, tw2 - 4, 1); R(c, '#ffffff70', x0 - tw2 / 2 + 2.5, y0 + s * (th2 / 2 - 1.1) - 0.5, tw2 * 0.3, 0.4);
     }
     // ---- body ----
@@ -176,6 +178,28 @@
       if (st.spoiler === 'lip') RR(c, shade(color, -0.45), -hl + 0.3, -rwS - 1, 1.4, rwS * 2 + 2, 0.5);
       if (st.spoiler === 'ducktail') { RR(c, shade(color, -0.35), -hl - 1.2, -rwS - 1.5, 3, rwS * 2 + 3, 1.2); RR(c, color, -hl - 0.8, -rwS - 1, 2.2, rwS * 2 + 2, 1); }
       if (st.spoiler === 'wing' || st.spoiler === 'gt') { const big = st.spoiler === 'gt', ww = big ? W + 3 : W - 2, x0 = -hl - (big ? 3.4 : 2.2); for (const sgn of [-1, 1]) R(c, '#0c0e11', -hl + 0.5, sgn * (rwS - 2.5) - 0.5, big ? 3 : 2.2, 1); RR(c, '#06080a', x0 - 0.4, -ww / 2 - 0.4, (big ? 4.4 : 3.2) + 0.8, ww + 0.8, 0.8); RR(c, big ? '#1b1f24' : shade(color, -0.25), x0, -ww / 2, big ? 4.4 : 3.2, ww, 0.6); R(c, '#ffffff38', x0 + 0.4, -ww / 2 + 0.6, 0.6, ww - 1.2); }
+    }
+    // ---- body kits (v0.69) ----
+    if (st && st.kit && st.kit !== 'stock') {
+      const carbon = '#16191d', cHi = '#2c3138';
+      if (st.kit === 'lip' || st.kit === 'drift') {
+        const big = st.kit === 'drift', ext = big ? 2 : 1.2;
+        c.beginPath(); c.moveTo(hl - 1.5, -rw * 0.95); c.quadraticCurveTo(hl + ext + 0.6, 0, hl - 1.5, rw * 0.95); c.lineTo(hl - 2.6, rw * 0.88); c.quadraticCurveTo(hl + ext - 0.8, 0, hl - 2.6, -rw * 0.88); c.closePath(); c.fillStyle = carbon; c.fill(); c.strokeStyle = cHi; c.lineWidth = 0.35; c.stroke();
+        for (const sgn of [-1, 1]) { RR(c, carbon, rx + tw * 0.6, sgn * (hw + 0.15) - 0.55, fx - rx - tw * 1.2, 1.1, 0.5); R(c, cHi, rx + tw * 0.6 + 1, sgn * (hw + 0.15) - (sgn < 0 ? 0.45 : -0.1), fx - rx - tw * 1.2 - 2, 0.3); }
+        if (big) {
+          for (const sgn of [-1, 1]) { poly(c, [[hl - 3.5, sgn * (hw - 0.6)], [hl - 1, sgn * (hw - 0.4)], [hl - 4.5, sgn * (hw + 1.4)]], carbon); poly(c, [[hl - 6.5, sgn * (hw - 0.5)], [hl - 4.6, sgn * (hw - 0.4)], [hl - 7.2, sgn * (hw + 1)]], carbon); }
+          for (let k = -2; k <= 2; k++) R(c, carbon, -hl - 1.4, k * (rw * 0.3) - 0.3, 1.8, 0.6);
+        }
+      }
+      if (st.kit === 'wide') {
+        for (const sgn of [-1, 1]) for (const x0 of [fx, rx]) {
+          const fw = tw * 1.55, y1 = sgn * (hw + 1.5);
+          c.beginPath(); c.moveTo(x0 - fw / 2, sgn * (hw - 1.4)); c.quadraticCurveTo(x0 - fw / 2 + 0.6, y1, x0, y1); c.quadraticCurveTo(x0 + fw / 2 - 0.6, y1, x0 + fw / 2, sgn * (hw - 1.4)); c.closePath();
+          const fg2 = c.createLinearGradient(0, sgn * (hw - 1.4), 0, y1); fg2.addColorStop(0, color); fg2.addColorStop(1, shade(color, -0.4)); c.fillStyle = fg2; c.fill(); c.strokeStyle = 'rgba(0,0,0,0.45)'; c.lineWidth = 0.4; c.stroke();
+          for (let k = -2; k <= 2; k++) CIR(c, '#cfd6dc', x0 + k * fw * 0.19, sgn * (hw + 0.2 - Math.abs(k) * 0.12), 0.28);
+        }
+        for (const sgn of [-1, 1]) RR(c, carbon, rx + tw * 0.8, sgn * (hw + 0.7) - 0.6, fx - rx - tw * 1.6, 1.2, 0.5);
+      }
     }
     return { cv, w: L + pad * 2, h: W + pad * 2, L, W, hd: true };
   }

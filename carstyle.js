@@ -87,7 +87,7 @@
     raf = requestAnimationFrame(loop);
   }
 
-  const CATS = [['paint', '🎨 Paint'], ['finish', '✨ Finish'], ['rims', '🛞 Wheels'], ['spoiler', '🪽 Spoiler'], ['hood', '🔩 Hood'], ['livery', '🏁 Livery'], ['lights', '💡 Lights'], ['glow', '🌈 Underglow'], ['tint', '🕶️ Tint'], ['exhaust', '💨 Exhaust']];
+  const CATS = [['paint', '🎨 Paint'], ['finish', '✨ Finish'], ['rims', '🛞 Wheels'], ['kit', '🧱 Body kit'], ['stance', '⬇️ Stance'], ['spoiler', '🪽 Spoiler'], ['hood', '🔩 Hood'], ['livery', '🏁 Livery'], ['lights', '💡 Lights'], ['glow', '🌈 Underglow'], ['tint', '🕶️ Tint'], ['exhaust', '💨 Exhaust']];
   function specOf(v) { const D = root.NightshiftCarsData; return D?.fromModel?.(v.model) || null; }
   function render() {
     top.textContent = ''; const spec = specOf(car), cond = Math.round(car.condition ?? 100), cur = SD.styleOf(state, car.id);
