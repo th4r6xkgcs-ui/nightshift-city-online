@@ -199,7 +199,7 @@
     for (const cd of H.CAMERAS) { const before = rel(cd, A.d - V.v * dt), after = rel(cd, A.d); if (before > 0 && after <= 0) { const t = H.camera(V.v); if (t) { const p = P(); A.flash = 1; A.fines += t.fine; p.cash = Math.max(0, p.cash - t.fine); st.tickets++; save0.tickets++; pop(`📸 SPEED CAMERA · ${t.kmh} km/h · ticket ${money(t.fine)}`, '#ffffff'); if (t.heat) { p.heat = Math.max(p.heat || 0, 1); try { root.NightshiftCrime?.report?.(p, now, 'camera'); } catch { /* n/a */ } } } } }
     // exits + rest stop (shoulder at the ramp)
     if (A.y > H.BOTTOM + 6) {
-      for (let i = 0; i < H.EXITS.length; i++) { const r = rel(H.exitAt(i), A.d); if (r < 40 && r > -500 && H.ahead(H.entryAt(i) - 600, A.d) > 1200) { leave(i); return; } }
+      for (let i = 0; i < H.EXITS.length; i++) { const r = rel(H.exitAt(i), A.d); if (r < 40 && r > -500) { leave(i); return; } }
       const rr = rel(H.REST.at, A.d); if (rr < 40 && rr > -400 && !A.restDone) { openRest(); return; }
     }
     if (rel(H.REST.at, A.d) < -600) A.restDone = false;
@@ -387,8 +387,9 @@
   // ---------- hooks ----------
   function install() {
     const HM = root.NightshiftHome; if (!HM || HM.__highway) return !!HM?.__highway;
-    const paused = HM.paused, render = HM.render;
+    const paused = HM.paused, render = HM.render, kind = HM.kind;
     HM.paused = function () { return !!A || paused.apply(this, arguments); };
+    if (typeof kind === 'function') HM.kind = function () { if (A) return 'highway'; return kind.apply(this, arguments); }; // city modules that idle indoors idle here too
     HM.render = function (now) { if (A) { try { frame(now); } catch (e) { console.error(e); } return; } return render.apply(this, arguments); };
     HM.__highway = true; return true;
   }
