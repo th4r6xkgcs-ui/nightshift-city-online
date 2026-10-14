@@ -141,7 +141,7 @@
         // dodge: in front of a fast car → dive sideways
         const sp = Math.abs(P.car.speed); if (sp > 3 && dd < 40 + sp * 16 && !busy.has(p) && p.hp > 0) {
           const ax = Math.cos(P.car.angle) * Math.sign(P.car.speed), ay = Math.sin(P.car.angle) * Math.sign(P.car.speed), rx = p.x - P.car.x, ry = p.y - P.car.y, ahead = rx * ax + ry * ay, side = -rx * ay + ry * ax;
-          if (ahead > 10 && Math.abs(side) < 26) { const s = side >= 0 ? 1 : -1, who = of(p), quick = who ? 0.45 + who.bravery * 0.2 + (who.age < 40 ? 0.25 : 0) : 0.6; if (Math.random() < quick) { busy.set(p, { kind: 'dodge', until: now + 260, nx: -ay * s, ny: ax * s }); if (Math.random() < 0.5) bubble(p, ['WHOA!', 'Watch it!!', 'Are you crazy?!'][Math.floor(Math.random() * 3)], 1200, '#ffd2d2'); st.dodges++; } }
+          if (ahead > 10 && Math.abs(side) < 26) { const s = side >= 0 ? 1 : -1, who = of(p), quick = who ? 0.45 + who.bravery * 0.2 + (who.age < 40 ? 0.25 : 0) : 0.6; if (!(p.__dodgeRoll > now)) { p.__dodgeRoll = now + 1500; if (Math.random() < quick) { busy.set(p, { kind: 'dodge', until: now + 260, nx: -ay * s, ny: ax * s }); if (Math.random() < 0.5) bubble(p, ['WHOA!', 'Watch it!!', 'Are you crazy?!'][Math.floor(Math.random() * 3)], 1200, '#ffd2d2'); st.dodges++; } } }
         }
       }
     }
