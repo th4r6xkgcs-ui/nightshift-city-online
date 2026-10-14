@@ -1,0 +1,13 @@
+# Nightshift City Online room server (new Worker; does not touch any existing Worker).
+# Deploy only with the owner's go-ahead:  npx wrangler deploy   (from this folder)
+name = "nightshift-city-online-rooms"
+main = "worker.js"
+compatibility_date = "2026-06-01"
+
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "NightshiftRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["NightshiftRoom"]
