@@ -13,6 +13,9 @@ const RULES = require('../shared/rules.js');
 const { C, S, validate } = require('../shared/protocol.js');
 const { createCity } = require('../shared/city.js');
 const movement = require('../shared/movement.js');
+// v0.69: shared combat rules (pure modules at the repo root). Optional so a bare server still runs with flat damage.
+let K = null, WEAPONS = null;
+try { K = require('../combat-core.js'); const WD = require('../weapons-data.js'); WEAPONS = new Map((WD.WEAPONS || []).map((w) => [w.id, w])); } catch { K = null; WEAPONS = null; }
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -91,8 +94,8 @@ class World {
     p.job = this._restoreJob(s.job);
     if (p.job && p.job.stage === 'deliver' && !(p.pocket.parcel > 0)) p.job = null; // parcel lost: job void
     if (Number.isFinite(s.x) && Number.isFinite(s.y)) {
-      const x = clamp(s.x, R.player.radius, R.world.w - R.player.radius);
-      const y = clamp(s.y, R.player.radius, R.world.h - R.player.radius);
+      const x = clamp(s.x, R.player.radius, (this.city.width || R.world.w) - R.player.radius);
+      const y = clamp(s.y, R.player.radius, (this.city.height || R.world.h) - R.player.radius);
       if (!this.city.blocked(x, y)) { p.x = x; p.y = y; }
     }
   }
@@ -125,7 +128,7 @@ class World {
     if (p.presence) {
       // Shared-world mode: the real game keeps its own economy/combat for now.
       if (msg.t === C.POS) return this._pos(p, msg, now);
-      if (msg.t === C.FIRE) return this._presenceFire(p, msg.aim, now);
+      if (msg.t === C.FIRE) return this._presenceFire(p, msg.aim, now, msg);
       if (msg.t === C.PVP) return this._setPvp(p, msg.on);
       if (msg.t !== C.CHAT && msg.t !== C.MUTE) return { ok: false, reason: 'not available in shared-world mode', quiet: msg.t === C.INPUT };
     } else if (msg.t === C.POS) {
@@ -547,42 +550,65 @@ class World {
   // ---------- shared-world combat ----------
   // The game owns ammo and its own hit effects; the server decides hits
   // between online players: cadence, range, walls, safe zone, both opted in.
-  _presenceFire(p, aim, now) {
+  // Where q was at time t (server clock), from its accepted position reports.
+  _rewound(q, t) {
+    const h = q.hist; if (!h || !h.length || t >= h[h.length - 1].t) return { x: q.x, y: q.y, car: !!q.car };
+    if (t <= h[0].t) return { x: h[0].x, y: h[0].y, car: h[0].car };
+    for (let i = h.length - 1; i > 0; i--) { const a = h[i - 1], b = h[i]; if (a.t <= t && t <= b.t) { const k = (t - a.t) / Math.max(1, b.t - a.t); return { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k, car: k < 0.5 ? a.car : b.car }; } }
+    return { x: q.x, y: q.y, car: !!q.car };
+  }
+
+  _presenceFire(p, aim, now, msg = {}) {
     const PR = RULES.presence, CB = RULES.combat;
-    const refill = (now - p.shotAt) / CB.fireIntervalMs;
+    // weapon: only ids from the game's catalog; anything else fires like the default pistol
+    const w = WEAPONS && msg.w ? WEAPONS.get(msg.w) || null : null, W = w && K ? K.normalize(w) : null;
+    const interval = W ? Math.max(CB.minFireIntervalMs, w.rate) : CB.fireIntervalMs;
+    const refill = (now - p.shotAt) / interval;
     p.shotBucket = Math.min(PR.shotBurst, p.shotBucket + refill);
     p.shotAt = now;
     if (p.shotBucket < 1) return { ok: false, reason: 'too fast', quiet: true };
     p.shotBucket -= 1;
     if (p.car) return { ok: false, reason: 'in a car', quiet: true };
-    p.aim = aim;
-    const dx = Math.cos(aim), dy = Math.sin(aim);
-    let best = null, bestT = Infinity;
-    for (const q of this.players.values()) {
-      if (q === p || !q.presence) continue;
-      const ox = q.x - p.x, oy = q.y - p.y, t = ox * dx + oy * dy;
-      if (t <= 0 || t > CB.rangePx) continue;
-      const r = q.car ? PR.carRadius : RULES.player.radius;
-      if (Math.abs(ox * dy - oy * dx) <= r && t < bestT) { best = q; bestT = t; }
+    p.aim = aim; p.shots = (p.shots || 0) + 1;
+    const range = W ? Math.min(CB.maxRangePx, W.range) : CB.rangePx;
+    const lag = clamp(Number.isFinite(msg.lag) ? msg.lag : 0, 0, CB.lagCompMaxMs), then = now - lag;
+    // targets where the shooter saw them
+    const targets = [];
+    for (const q of this.players.values()) { if (q === p || !q.presence) continue; targets.push({ q, at: this._rewound(q, then) }); }
+    const angles = W && K && W.pellets > 1 ? K.spread(K.seedOf(p.id, p.shots), aim, W) : [aim]; // pellets fan out; single bullets go where you aimed
+    const dmgBy = new Map(); let longest = 0, blocked = null;
+    for (const a of angles) {
+      const dx = Math.cos(a), dy = Math.sin(a);
+      let best = null, bestT = Infinity;
+      for (const { q, at } of targets) {
+        const ox = at.x - p.x, oy = at.y - p.y, t = ox * dx + oy * dy;
+        if (t <= 0 || t > range) continue;
+        const r = at.car ? PR.carRadius : RULES.player.radius;
+        if (Math.abs(ox * dy - oy * dx) <= r && t < bestT) { best = { q, at }; bestT = t; }
+      }
+      const wallT = this.city.rayHit(p.x, p.y, dx, dy, Math.min(bestT, range));
+      let hit = null;
+      if (best && wallT < bestT) blocked = 'wall';
+      else if (best && !(p.pvp && best.q.pvp)) blocked = 'pvp off';
+      else if (best && (this.city.inClinic(best.q) || this.city.inClinic(p))) blocked = 'safe zone';
+      else if (best) hit = best;
+      longest = Math.max(longest, Math.min(hit ? bestT : range, wallT));
+      if (!hit) continue;
+      const dmg = W ? K.resolve({ weapon: W, dist: bestT, target: { armor: 0, stance: hit.at.car ? 'car' : 'stand', aware: true } }).hp : hit.at.car ? PR.carDamage : CB.damage;
+      dmgBy.set(hit.q, (dmgBy.get(hit.q) || 0) + dmg);
     }
-    const wallT = this.city.rayHit(p.x, p.y, dx, dy, Math.min(bestT, CB.rangePx));
-    let hit = null, blocked = null;
-    if (best && wallT < bestT) blocked = 'wall';
-    else if (best && !(p.pvp && best.pvp)) blocked = 'pvp off';
-    else if (best && (this.city.inClinic(best) || this.city.inClinic(p))) blocked = 'safe zone';
-    else if (best) hit = best;
-    const len = Math.min(hit ? bestT : CB.rangePx, wallT);
     // Tracer for everyone nearby (they see you shooting, even at NPCs).
     for (const q of this.players.values()) {
       if (q === p || Math.hypot(q.x - p.x, q.y - p.y) > PR.tracerRangePx) continue;
-      this._send(q.id, { t: S.EVENT, kind: 'shot', from: p.id, x: Math.round(p.x), y: Math.round(p.y), aim, len: Math.round(len) });
+      this._send(q.id, { t: S.EVENT, kind: 'shot', from: p.id, x: Math.round(p.x), y: Math.round(p.y), aim, len: Math.round(longest), ...(w ? { w: w.id } : {}) });
     }
-    if (hit) {
-      const damage = hit.car ? PR.carDamage : CB.damage;
-      this._send(hit.id, { t: S.EVENT, kind: 'shot-hit', by: p.id, byName: p.name, damage });
-      this._send(p.id, { t: S.EVENT, kind: 'hit-confirm', target: hit.id, targetName: hit.name, damage });
+    let first = null;
+    for (const [q, d] of dmgBy) {
+      const damage = Math.max(1, Math.round(d)); first = first || q.id;
+      this._send(q.id, { t: S.EVENT, kind: 'shot-hit', by: p.id, byName: p.name, damage, ...(w ? { w: w.id } : {}) });
+      this._send(p.id, { t: S.EVENT, kind: 'hit-confirm', target: q.id, targetName: q.name, damage });
     }
-    return { ok: true, quiet: true, hit: hit ? hit.id : null, blocked };
+    return { ok: true, quiet: true, hit: first, blocked: first ? null : blocked };
   }
 
   // ---------- shared-world position reports ----------
@@ -599,7 +625,7 @@ class World {
     if (m.seq <= p.posSeq) return { ok: false, reason: 'stale', quiet: true };
     const x = m.x, y = m.y;
     const inBuilding = this.city.buildings.some((b) => x > b.x && x < b.x + b.w && y > b.y && y < b.y + b.h);
-    const outside = x < 0 || y < 0 || x > R.world.w || y > R.world.h;
+    const outside = x < 0 || y < 0 || x > (this.city.width || R.world.w) || y > (this.city.height || R.world.h);
     let ok = !inBuilding && !outside;
     if (ok && p.posSeq >= 0) {
       const allowed = (P.maxSpeedPxPerSec * Math.max(0, now - p.posAt)) / 1000 + P.slackPx;
@@ -616,6 +642,9 @@ class World {
     p.posSeq = m.seq; p.posAt = now;
     p.x = x; p.y = y; p.aim = m.aim;
     p.car = m.car ? { angle: m.car.angle, ...(m.car.color ? { color: m.car.color } : {}) } : null;
+    // position history for lag-compensated hits
+    const hist = p.hist || (p.hist = []); hist.push({ t: now, x, y, car: !!p.car });
+    while (hist.length > 2 && now - hist[0].t > RULES.combat.historyMs) hist.shift(); if (hist.length > 64) hist.shift();
     return { ok: true, quiet: true };
   }
 

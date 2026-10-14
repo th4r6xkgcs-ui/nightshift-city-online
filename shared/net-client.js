@@ -44,7 +44,7 @@
     const presence = o.mode === 'presence';
     let report = null, posSeq = 0, lastPosKey = '', lastPosAt = -1e9;
     let history = []; // [{seq, dx, dy}] predicted movement not yet confirmed by the server
-    let nextFireAt = 0, txN = 0;
+    let nextFireAt = 0, txN = 0, rtt = null, lastPingAt = -1e9;
     const others = new Map(); // id -> {name, pvp, hp, dead, aim, snaps:[{t,x,y}]}
     let bags = [];
 
@@ -101,6 +101,7 @@
         bags = m.bags;
         emit(o.onState, m);
       } else if (m.t === S.RESULT) emit(o.onResult, m);
+      else if (m.t === S.PONG) { const r = o.now() - m.at; if (r >= 0 && r < 10000) rtt = rtt === null ? r : rtt * 0.8 + r * 0.2; }
       else if (m.t === S.EVENT) emit(o.onEvent, m);
       else if (m.t === S.CHAT) emit(o.onChat, m);
       else if (m.t === S.ERROR) emit(o.onError, m);
@@ -208,15 +209,23 @@
       },
 
       // Actions. Money actions return their transaction id (or null if offline).
-      fire(aim = input.aim) {
+      // opts: { w: weapon id, intervalMs: that weapon's fire interval }. The shot carries how far behind the
+      // shooter saw the world (interpolation delay + half the round trip) so the server can rewind targets.
+      fire(aim = input.aim, opts = {}) {
         const t = o.now();
         if (t < nextFireAt) return false;
-        if (!send({ t: C.FIRE, aim })) return false;
+        const msg = { t: C.FIRE, aim };
+        if (typeof opts.w === 'string' && /^[a-z0-9]{1,16}$/.test(opts.w)) msg.w = opts.w;
+        msg.lag = Math.round(Math.min(1000, o.interpDelayMs + (rtt === null ? 60 : rtt / 2)));
+        if (!send(msg)) return false;
         // 80% of the interval: frame timing jitter must not swallow a real shot;
         // the server's burst-tolerant cadence is the real limit.
-        nextFireAt = t + RULES.combat.fireIntervalMs * 0.8;
+        const iv = Number.isFinite(opts.intervalMs) && opts.intervalMs > 0 ? Math.max(RULES.combat.minFireIntervalMs || 70, opts.intervalMs) : RULES.combat.fireIntervalMs;
+        nextFireAt = t + iv * 0.8;
         return true;
       },
+      rtt: () => rtt,
+      ping() { const t = o.now(); if (t - lastPingAt < 1500) return false; lastPingAt = t; return send({ t: C.PING, at: t }); },
       reload: () => send({ t: C.RELOAD }),
       use: (item) => send({ t: C.USE, item }),
       pickup: (bag) => send({ t: C.PICKUP, bag }),

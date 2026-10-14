@@ -9,11 +9,16 @@ const R = require('../../shared/rules.js');
 const clientCatalog = path.join(__dirname, '../../city-data.js');
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
-test('built-in layout equals client city-data.js layout() v1 (drift guard)', (t) => {
+// v0.69: since v0.62 city-data.js generates a 9x city with lots and varied footprints, so the built-in fallback can
+// no longer be an exact copy. The guard is now: the server loads the client's catalog itself, and every size agrees.
+test('server uses the client city-data.js catalog; fallback matches its size (drift guard)', (t) => {
   if (!fs.existsSync(clientCatalog)) return t.skip('client city-data.js not on this branch yet');
   const theirs = require(clientCatalog).layout();
-  assert.deepEqual(plain(builtInLayout()), plain(theirs));
   assert.equal(loadLayout().source, 'city-data.js', 'server uses the client catalog when present');
+  assert.deepEqual(plain(loadLayout().layout), plain(theirs));
+  const fb = builtInLayout();
+  assert.equal(fb.width, theirs.width); assert.equal(fb.height, theirs.height);
+  assert.deepEqual(fb.spawn, theirs.spawn); assert.deepEqual(fb.clinic, theirs.clinic); assert.deepEqual(fb.apartment, theirs.apartment);
 });
 
 test('server rules agree with the layout', () => {
@@ -25,7 +30,7 @@ test('server rules agree with the layout', () => {
 
 test('layout sanity: spawn, hospital and entrances are walkable, a shop exists', () => {
   const city = createCity(builtInLayout());
-  assert.equal(city.buildings.length, 16);
+  assert.equal(city.buildings.length, 14 * 14); // v0.69: fallback grid at the 6600x5100 game size
   assert.ok(city.shops.length >= 1);
   assert.equal(city.blocked(R.spawn.x, R.spawn.y), false);
   assert.equal(city.blocked(R.hospital.x, R.hospital.y), false);

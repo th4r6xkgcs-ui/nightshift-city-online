@@ -11,7 +11,7 @@
   const C = Object.freeze({
     HELLO: 'hello',       // {name, v, token?, mode?: 'full' | 'presence'}
     INPUT: 'input',       // {seq, mx, my, aim, sprint}
-    FIRE: 'fire',         // {aim}
+    FIRE: 'fire',         // {aim, w?, lag?} (w = weapon id, lag = ms the shooter saw the world behind)
     RELOAD: 'reload',     // {}
     BUY: 'buy',           // {item, tx}
     SELL: 'sell',         // {item, tx}
@@ -60,7 +60,10 @@
         if (typeof msg.sprint !== 'boolean') return 'bad sprint';
         return null;
       case C.FIRE:
-        return isNum(msg.aim) ? null : 'bad aim';
+        if (!isNum(msg.aim)) return 'bad aim';
+        if (msg.w !== undefined && !(typeof msg.w === 'string' && /^[a-z0-9]{1,16}$/.test(msg.w))) return 'bad weapon';
+        if (msg.lag !== undefined && !(isNum(msg.lag) && msg.lag >= 0 && msg.lag <= 5000)) return 'bad lag';
+        return null;
       case C.RELOAD:
         return null;
       case C.BUY:

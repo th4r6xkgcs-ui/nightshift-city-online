@@ -9,9 +9,10 @@
   const NAMES = ['APARTMENTS', 'CORNER SHOP', 'GARAGE', 'DINER', 'WAREHOUSE', 'CLOTHING', 'BANK', 'CLUB'];
   const SHOP_RANGE = 120; // server rule: how close to a corner shop door to trade
 
-  // Built-in fallback: identical to city-data.js layout() v1.
+  // Built-in fallback for hosts without city-data.js: the same 440x340 street grid at the game's size
+  // (the real catalog adds lots, varied footprints and districts; servers ship city-data.js).
   function builtInLayout() {
-    const WIDTH = 2200, HEIGHT = 1700, buildings = [];
+    const WIDTH = 6600, HEIGHT = 5100, buildings = [];
     for (let x = 0; x < WIDTH; x += 440) {
       for (let y = 0; y < HEIGHT; y += 340) {
         if (x < 100 || y < 100) continue;

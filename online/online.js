@@ -161,10 +161,12 @@
         const shots = Math.min(3, lastAmmo - ammo);
         for (let i = 0; i < shots; i++) {
           stats.shotsSeen++;
-          if (net.fire(p.angle || 0)) stats.shotsSent++;
+          const W0 = globalThis.NightshiftWeapons, wid = W0?.state?.equipped || null, wdef = wid && globalThis.NightshiftWeaponsData?.WEAPONS?.find?.((w) => w.id === wid);
+          if (net.fire(p.angle || 0, { w: wid || undefined, intervalMs: wdef?.rate })) stats.shotsSent++;
         }
       }
       lastAmmo = ammo;
+      if (typeof net.ping === 'function') net.ping();
       const view = net.update(dt);
       me = view.me; others = view.others;
       if (now - lastBadge > 500) {

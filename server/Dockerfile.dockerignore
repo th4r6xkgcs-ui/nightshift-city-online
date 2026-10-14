@@ -3,6 +3,8 @@
 !shared/
 !server/
 !city-data.js
+!combat-core.js
+!weapons-data.js
 server/tests/
 server/data/
 server/node_modules/

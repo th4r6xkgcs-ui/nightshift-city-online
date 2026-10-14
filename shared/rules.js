@@ -5,7 +5,7 @@
 (function (root) {
   'use strict';
   const RULES = Object.freeze({
-    world: Object.freeze({ w: 2200, h: 1700 }),
+    world: Object.freeze({ w: 6600, h: 5100 }), // v0.69: the 9x city from v0.62 (city-data.js WIDTH/HEIGHT)
     spawn: Object.freeze({ x: 460, y: 450 }),
     hospital: Object.freeze({ x: 440, y: 340, maxFee: 100, respawnMs: 3000 }),
 
@@ -28,6 +28,9 @@
       rangePx: 520,
       startMagazine: 30,
       startReserve: 90,
+      // v0.69 shared-world PvP: shots are judged against where targets were on the shooter's screen
+      // (rewound by the reported lag, capped), with per-weapon cadence/damage/falloff from combat-core.
+      lagCompMaxMs: 250, historyMs: 1000, minFireIntervalMs: 70, maxRangePx: 900,
     }),
 
     shop: Object.freeze({
