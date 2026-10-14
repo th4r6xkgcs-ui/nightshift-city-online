@@ -68,7 +68,7 @@
     C.step = function (state, input, seconds) {
       const base = state && Number.isFinite(state.x) ? { ...state, x: state.x - (C.__kx || 0), y: state.y - (C.__ky || 0) } : state;
       const out = step.call(this, base, input, seconds), now = performance.now(), dt = Math.min(0.1, (now - lastT) / 1000); lastT = now;
-      const k = Math.exp(-dt * 16); kick.x *= k; kick.y *= k; C.__kx = kick.x; C.__ky = kick.y;
+      const k = Math.exp(-dt * 11); kick.x *= k; kick.y *= k; C.__kx = kick.x; C.__ky = kick.y;
       return out && Number.isFinite(out.x) ? { ...out, x: out.x + kick.x, y: out.y + kick.y } : out;
     };
     C.__feel = true; return true;
