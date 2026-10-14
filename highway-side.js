@@ -125,7 +125,7 @@
     for (const p of A.cops) list.push({ y: p.y, d: p.d, police: 'charger', v: p.v });
     for (const b of A.blocks) for (const q of b.cars) list.push({ y: q.y, d: q.d, police: 'crown', v: 0 });
     for (const o of k.others || []) list.push({ y: o.y, d: o.x, id: carImage(o.car), color: o.color, v: 400, name: o.name });
-    list.push({ me: true, y: A.y, d: A.d, id: carImage(A.car.model), color: A.car.color, v: V.v, style: (() => { try { return root.NightshiftCarStyle?.of?.(A.car.id) || null; } catch { return null; } })() });
+    list.push({ me: true, y: A.y, d: A.d, id: carImage(A.car.model), color: A.car.color, v: V.v, style: (() => { try { const sp = root.NightshiftCarsData?.fromModel?.(A.car.model); return root.NightshiftCarStyle?.of?.(A.car.id) || (sp?.o3 ? root.NightshiftCarStyleData.cleanStyle(sp.o3) : null); } catch { return null; } })() });
     list.sort((a, b) => a.y - b.y);
     const W = (y, truck) => 170 * sOf(y) * (truck ? 1.3 : 1);
     for (const o of list) {
