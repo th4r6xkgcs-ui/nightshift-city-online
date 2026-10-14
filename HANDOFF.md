@@ -1,11 +1,12 @@
 # HANDOFF — Nightshift City Online
 
-## CURRENT — v0.73–v0.77 (Claude, 2026-10-14, core claude/v73-world → play claude/v73-play, each DEPLOYED to gh-pages, owner asked to ship continuously)
+## CURRENT — v0.73–v0.78 (Claude, 2026-10-14, core claude/v73-world → play claude/v73-play, each DEPLOYED to gh-pages, owner asked to ship continuously)
 - v0.73 hold-ups: customers bolt for the door; leaving a robbed store → 2 cops (3 at a gun shop) waiting outside (NightshiftPolice.respond).
 - v0.74 dailies 'Hold up {n} store(s)' and 'Wreck {n} police cruiser(s)' (interiors state.count.robberies, police-cars lifetime counters in nightshift-pursuit-v1); minimap lettered pins for gun shop (G), hospital (+), police (P), gym (F), tattoo (T), auto parts (A).
 - v0.75 questline.js (new, Claude): Rico's "Heat Check" — rob a store $300 → get hot then lose the cops $400 → wreck a cruiser $800. Starts ~40 s in; phone texts with GPS. Save nightshift-heatcheck-v1. tests/quest75.cjs.
 - v0.76 lay low: enter any building unseen with heat → heat sheds ~0.022/s (≈45 s a star) with float feedback; not during/after a hold-up alarm. Gun shop label now says parts (no guns over the counter by design).
 - v0.77 shoot back: cruisers wreck after 14 player bullets; the ★5 helicopter retreats smoking after 12 (60 s before another).
+- v0.78 Heat Check chapter 2: 3 min after the cruiser wreck, Rico texts two more jobs: rob a GUN SHOP ($1,200, GPS to nearest) then shoot down the ★5 helicopter ($1,500). interiors counts per-store robberies (`rob:<TYPE>`). Checks: 124 suites PASS, server 113 pass/0 fail; gh-pages deploy 78a7ae0 status success.
 - Deploy script now syntax-checks every built .js before pushing (a stray // comment once broke interiors.js locally; never shipped).
 - Checks each release: node tests/run.cjs 124 suites PASS; server 113/113 PASS; browser runs per feature.
 
