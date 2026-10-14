@@ -339,6 +339,7 @@
     cargo: { slot: 'bottom', draw: (c, it, col) => trousers(c, it, col, { cargo: true, baggy: 2, stack: true, belt: true, piping: '#f1efe8' }) },
     jeans: { slot: 'bottom', draw: (c, it, col) => trousers(c, it, col, { baggy: 0.4, stack: true, stitch: '#d89a4a', seam: E.mix(col, '#ffffff', 0.25) }) },
     courts: { slot: 'shoes', draw: (c, it, col, acc) => shoe(c, it, col, { upper: '#f4f2ec', accent: acc || '#d0283a', stripe: '#16181d', sole: '#f4f2ec', soleLine: acc || '#d0283a', len: 17, wide: 5.5 }) },
+    runners: { slot: 'shoes', draw: (c, it, col) => shoe(c, it, col, { upper: col, accent: '#1d2024', stripe: '#c9ccd2', sole: '#f4f2ec', soleLine: '#9aa0a8', len: 16, wide: 5.2 }) }, // starter: mesh upper, foam sole
     boots: { slot: 'shoes', draw: (c, it, col) => shoe(c, it, col, { upper: col, sole: '#1a1b1f', high: true, lug: true, laces: '#c9a86a', len: 15, wide: 4.8 }) },
     cap: { slot: 'head', draw: (c, it, col) => cap(c, it, col) },
     shades: { slot: 'face', draw: (c, it, col) => shades(c, it, col) },
