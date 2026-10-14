@@ -722,3 +722,6 @@ See HANDOFF.md CURRENT v0.70. Build order (play repo online/build-online.cjs): o
 
 ## v0.71 (Claude)
 New files (Claude-owned): interior-kit.js, pursuit-ai.js, combat-feel.js. Build order (play online/build-online.cjs): 'interior-kit.js' before 'interiors.js'; 'pursuit-ai.js' before 'police-cars.js'; 'combat-feel.js' after 'combat-fx.js'. Edited (Claude-owned): interiors.js, police-cars.js, zones.js (fit, camBias), modern-city.js (variant brands). See HANDOFF.md CURRENT v0.71.
+
+## v0.75 (Claude)
+New file questline.js (Claude-owned) loads after 'combat-feel.js'. See HANDOFF.md v0.73–v0.77.

@@ -1,6 +1,15 @@
 # HANDOFF — Nightshift City Online
 
-## CURRENT — v0.72 (Claude, 2026-10-14, core claude/v72-world → play claude/v72-play, DEPLOYED to gh-pages with owner approval)
+## CURRENT — v0.73–v0.77 (Claude, 2026-10-14, core claude/v73-world → play claude/v73-play, each DEPLOYED to gh-pages, owner asked to ship continuously)
+- v0.73 hold-ups: customers bolt for the door; leaving a robbed store → 2 cops (3 at a gun shop) waiting outside (NightshiftPolice.respond).
+- v0.74 dailies 'Hold up {n} store(s)' and 'Wreck {n} police cruiser(s)' (interiors state.count.robberies, police-cars lifetime counters in nightshift-pursuit-v1); minimap lettered pins for gun shop (G), hospital (+), police (P), gym (F), tattoo (T), auto parts (A).
+- v0.75 questline.js (new, Claude): Rico's "Heat Check" — rob a store $300 → get hot then lose the cops $400 → wreck a cruiser $800. Starts ~40 s in; phone texts with GPS. Save nightshift-heatcheck-v1. tests/quest75.cjs.
+- v0.76 lay low: enter any building unseen with heat → heat sheds ~0.022/s (≈45 s a star) with float feedback; not during/after a hold-up alarm. Gun shop label now says parts (no guns over the counter by design).
+- v0.77 shoot back: cruisers wreck after 14 player bullets; the ★5 helicopter retreats smoking after 12 (60 s before another).
+- Deploy script now syntax-checks every built .js before pushing (a stray // comment once broke interiors.js locally; never shipped).
+- Checks each release: node tests/run.cjs 124 suites PASS; server 113/113 PASS; browser runs per feature.
+
+## v0.72 (Claude, 2026-10-14, core claude/v72-world → play claude/v72-play, DEPLOYED to gh-pages with owner approval)
 Includes v0.71 (interiors, pursuit AI, combat feel — see below) plus:
 - Hold-ups (interiors.js): ROB spot at the counter of corner shops, diners, boutiques, gun shops, tattoo parlours and auto parts stores. Needs an equipped gun; stand at the counter 3 s (countdown, clerk 😨🙌); walking away trips the silent alarm (+0.8 heat). Payout/heat per store (ROB table, e.g. corner shop $150–350 / +1.2 heat, gun shop $400–750 / +2); gun shop clerk resists 45% (30 damage, no cash). 30 min cooldown per store, saved in nightshift-interiors-v1 `robbed` (additive). Emits ns:event store-robbed. +stealth xp.
 - Spike strips (police-cars.js + pursuit-ai.js onStrip/FLAT_CAP): every ★4 roadblock lays a strip 80 px in front; driving over it blows the tyres (speed capped at 3.2, wobble, sparks) until you walk into any GARAGE or AUTO PARTS (free fix; NightshiftPoliceCars.repairAll).
