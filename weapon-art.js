@@ -18,6 +18,7 @@
     rust: ['#43301f', '#644531', '#8a6347', '#b28c6a'], tape: ['#4d4a40', '#7a7565', '#a39d86', '#cfc8ae'],
     red: ['#5e1a1d', '#8e2b2c', '#c2443c', '#ff8a6a'], tan: ['#5b4a32', '#857050', '#ab9470', '#d8c39a'],
     olive: ['#262b1b', '#3c4429', '#56603a', '#87925e'], rubber: ['#0f1113', '#1a1d20', '#282c31', '#3d434a'],
+    clear: ['#1e2a33', '#33505e', '#5f8a9a', '#c8e6f0'],
   };
   const SKINNABLE = { steel: 1, poly: 1, rust: 1, dark: 0 };
   const hexToRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
@@ -108,6 +109,8 @@
     if (o.stock === 'wood') b.P(fm, [[x + 1, y], [x - 15, y + 2], [x - 16, y + 7], [x - 13, y + 8], [x + 1, y + 5]]);
     else if (o.stock === 'skel') { b.P(fm, [[x, y], [x - 12, y], [x - 13, y + 6], [x - 10, y + 6], [x - 9, y + 2], [x, y + 3]]); b.L(INK, x - 9, y + 3, 7, 1); b.R('rubber', x - 14, y, 2, 7); }
     else if (o.stock === 'tube') { b.R('dark', x - 9, y + 1, 9, 2); b.P(fm, [[x - 9, y - 1], [x - 15, y], [x - 15, y + 7], [x - 10, y + 6]]); b.R('rubber', x - 16, y, 1, 7); }
+    else if (o.stock === 'folded') { b.R('dark', x - 3, y + 1, 3, 4); b.P(fm, [[x + 1, y + 2], [x + 11, y + 2], [x + 11, y + 4], [x + 1, y + 5]]); b.R('rubber', x + 10, y + 1, 2, 4); } // v0.70 kit: folded alongside the receiver
+    else if (o.stock === 'brace') { b.L(b.T('dark', 2), x - 12, y + 1, 12, 1); b.L(b.T('dark', 1), x - 10, y + 5, 10, 1); b.L(b.T('dark', 2), x - 12, y + 1, 1, 6); b.R('rubber', x - 13, y, 2, 7); b.L(INK, x - 6, y + 2, 1, 3); } // wire brace
     else if (o.stock === 'fixed') { b.P(fm, [[x, y], [x - 14, y + 1], [x - 15, y + 7], [x - 9, y + 7], [x - 7, y + 4], [x, y + 4]]); b.R('rubber', x - 16, y + 1, 2, 6); for (let i = 0; i < 3; i++) b.L(b.T(fm, 0), x - 12 + i * 3, y + 3, 1, 2); }
     // pistol grip or wooden wrist
     if (!o.wrist) { b.P(fm, [[x + 2, y + 4], [x + 7, y + 4], [x + 5, y + 11], [x, y + 11]], { matte: true }); for (let i = 0; i < 3; i++) b.L(b.T(fm, 0), x + 2, y + 6 + i * 2, 3, 1); }
@@ -115,6 +118,8 @@
     let magEnd = null;
     if (o.mag === 'curved') { const ml = (o.magLen || 7); b.P('poly', [[x + 9, y + 5], [x + 13, y + 5], [x + 14 + ml * 0.35, y + 5 + ml], [x + 10 + ml * 0.35, y + 5 + ml]], { matte: true }); b.L(b.T('poly', 2), x + 10, y + 5 + ml - 1, 3, 1); magEnd = [x + 11 + ml * 0.35, y + 5 + ml]; }
     else if (o.mag === 'straight') { const ml = o.magLen || 6; b.R('poly', x + 9, y + 5, 4, ml, { matte: true }); magEnd = [x + 10, y + 5 + ml]; }
+    else if (o.mag === 'drum') { const cx = x + 11, cy = y + 11; b.R('poly', x + 9, y + 5, 4, 3, { matte: true }); b.P('poly', [[cx - 5, cy - 2], [cx - 2, cy - 5], [cx + 2, cy - 5], [cx + 5, cy - 2], [cx + 5, cy + 2], [cx + 2, cy + 5], [cx - 2, cy + 5], [cx - 5, cy + 2]], { matte: true }); b.L(b.T('poly', 3), cx - 1, cy - 1, 2, 2); b.L(INK, cx - 3, cy, 6, 1); magEnd = [cx, cy + 5]; }
+    else if (o.mag === 'clear') { const ml = (o.magLen || 7); b.P('clear', [[x + 9, y + 5], [x + 13, y + 5], [x + 14 + ml * 0.35, y + 5 + ml], [x + 10 + ml * 0.35, y + 5 + ml]], { matte: true }); for (let k = 1; k < ml - 1; k += 2) b.L('#d8a33a', x + 11 + k * 0.35, y + 5 + k, 2, 1); magEnd = [x + 11 + ml * 0.35, y + 5 + ml]; }
     else if (o.mag === 'box') { b.R('dark', x + 8, y + 5, 6, 3); magEnd = [x + 10, y + 8]; }
     // receiver
     b.R(rm, x, y, rec, 5); b.L(INK, x + 6, y + 1, 4, 1); // ejection port
@@ -144,6 +149,27 @@
     b.R(mat, x + Math.round(len / 2) - 1, ry - 6, 2, 2); // turret
     b.L(lens, x + len, ry - 4, 1, 3); b.L('#e8f6ff', x + len, ry - 4, 1, 1);
   }
+  // v0.70 Option 3 modular kit (weapon-kit-data.js): one rifle receiver, every slot drawn from the config
+  function kitGun(b, id, P) {
+    const ar = id === 'ar', bar0 = ar ? 14 : 11, bar = bar0 + (P.barrel === 'short' ? -4 : P.barrel === 'long' ? 6 : 0);
+    const stock = { skel: 'skel', full: 'fixed', folded: 'folded', brace: 'brace' }[P.stock] || 'skel';
+    const mag = { std: 'curved', clear: 'clear', ext: 'curved', drum: 'drum' }[P.magazine] || 'curved', magLen = P.magazine === 'ext' ? (ar ? 13 : 12) : ar ? 9 : 8;
+    const a = longgun(b, { rec: ar ? 15 : 14, bar, hg: Math.min(bar, ar ? 11 : 8) + (P.barrel === 'long' ? 3 : 0), mag, magLen, stock, rail: true, hider: P.muzzle === 'hider', brake: false, frontSight: P.optic === 'irons' });
+    const [mx, my] = a.muzzle;
+    if (P.muzzle === 'comp') { b.R('dark', mx, my - 2, 5, 4); for (let k = 1; k < 5; k += 2) b.L(INK, mx + k, my - 2, 1, 1); b.L(b.T('dark', 3), mx + 4, my - 1, 1, 2); a.muzzle = [mx + 5, my]; }
+    if (P.muzzle === 'can') { b.C('dark', mx, my - 2, 12, 5); for (let k = 2; k < 11; k += 3) b.L(INK, mx + k, my - 2, 1, 1); b.L(b.T('dark', 3), mx + 11, my - 1, 1, 2); a.muzzle = [mx + 12, my]; a.integral = true; }
+    const [rx, ry] = a.rail;
+    if (P.optic === 'irons') { b.R('dark', rx - 5, ry - 2, 2, 2); b.L(b.T('dark', 3), rx - 5, ry - 3, 1, 1); }
+    if (P.optic === 'dot') { b.R('dark', rx - 2, ry - 4, 6, 4); b.L('#ff4a4a', rx + 3, ry - 3, 1, 1); b.L('#9fd4ff', rx - 1, ry - 4, 3, 1); b.R('dark', rx - 1, ry - 1, 4, 1); }
+    if (P.optic === 'holo') { b.R('dark', rx - 3, ry - 5, 8, 5); b.L(INK, rx - 2, ry - 4, 6, 3); b.L('#ff4a4a', rx + 1, ry - 3, 1, 1); b.L('#9fd4ff', rx - 2, ry - 4, 1, 1); b.R('dark', rx - 3, ry - 1, 8, 1); }
+    if (P.optic === 'scope') { optic(b, rx + 1, ry, 15); a.optic = true; }
+    const [ux, uy] = a.under;
+    if (P.underbarrel === 'post') { b.R('poly', ux - 1, uy, 3, 6, { matte: true }); b.L(b.T('poly', 3), ux - 1, uy + 1, 1, 4); }
+    if (P.underbarrel === 'ramp') { b.P('poly', [[ux - 4, uy], [ux + 3, uy], [ux + 3, uy + 2], [ux - 3, uy + 4]], { matte: true }); }
+    if (P.underbarrel === 'bipod') { b.R('dark', ux + 3, uy, 3, 2); b.L(b.T('dark', 2), ux + 3, uy + 2, 1, 7); b.L(b.T('dark', 2), ux + 6, uy + 2, 1, 6); b.L(b.T('rubber', 2), ux + 2, uy + 9, 2, 1); b.L(b.T('rubber', 2), ux + 6, uy + 8, 2, 1); }
+    if (P.laser === 'red' || P.laser === 'green') { const lx = mx - 8, ly = my + 2; b.R('dark', lx, ly, 4, 2); b.L(P.laser === 'red' ? '#ff3b3b' : '#3bff8a', lx + 4, ly, 1, 1); b.L('glow', lx + 5, ly, 1, 1); a.laserAt = [lx + 4, ly]; }
+    a.kit = P; return a;
+  }
   const GUNS = {
     pipe: (b) => { const x = OX, y = OY; b.P('wood', [[x - 1, y + 2], [x + 5, y + 2], [x + 4, y + 10], [x - 2, y + 10]]); b.C('rust', x, y, 18, 3); b.R('tape', x + 2, y - 1, 3, 5, { matte: true }); b.R('tape', x + 11, y - 1, 2, 5, { matte: true }); b.L(b.T('rust', 3), x + 7, y, 1, 1); b.L(INK, x + 17, y + 1); b.L('#9b9b8e', x + 6, y + 3, 1, 2); return { hand: [x + 1, y + 6], muzzle: [x + 18, y + 1], rail: [x + 8, y - 1], under: [x + 12, y + 3], mag: null }; },
     zip: (b) => { const x = OX, y = OY; b.P('wood', [[x, y + 3], [x + 6, y + 3], [x + 5, y + 10], [x - 1, y + 10]]); b.R('rust', x, y, 9, 4); b.C('steel', x + 9, y + 1, 7, 2); b.R('tape', x + 4, y - 1, 2, 6, { matte: true }); b.R('tape', x + 12, y, 2, 4, { matte: true }); b.R('poly', x + 6, y + 4, 3, 4); b.L(INK, x + 7, y + 4, 1, 2); return { hand: [x + 2, y + 6], muzzle: [x + 16, y + 2], rail: [x + 5, y - 1], under: [x + 11, y + 3], mag: [x + 7, y + 8] }; },
@@ -157,9 +183,9 @@
     smg: (b) => longgun(b, { rec: 13, bar: 6, hg: 6, mag: 'straight', magLen: 8, stock: 'tube', rail: true, hider: true }),
     hunting: (b) => { const a = longgun(b, { rec: 14, bar: 22, hg: 10, hgType: 'wood', furn: 'tan', stock: 'wood', wrist: true, mag: 'box', bolt: true, rail: true, frontSight: true }); return a; }, // v0.63: synthetic FDE stock
     shotgun: (b) => longgun(b, { rec: 13, bar: 17, hg: 9, hgType: 'pump', stock: 'fixed', tubeMag: true, rail: true, mag: null, frontSight: true }),
-    carbine: (b) => longgun(b, { rec: 14, bar: 11, hg: 8, mag: 'curved', magLen: 8, stock: 'skel', rail: true, hider: true, frontSight: true }),
+    carbine: (b, P) => P ? kitGun(b, 'carbine', P) : longgun(b, { rec: 14, bar: 11, hg: 8, mag: 'curved', magLen: 8, stock: 'skel', rail: true, hider: true, frontSight: true }),
     rifle: (b) => { const a = longgun(b, { rec: 15, bar: 20, hg: 11, mag: 'straight', magLen: 5, stock: 'fixed', rail: true, brake: true, bolt: true }); optic(b, a.rail[0], a.rail[1], 15); a.optic = true; return a; },
-    ar: (b) => longgun(b, { rec: 15, bar: 14, hg: 11, mag: 'curved', magLen: 9, stock: 'skel', rail: true, carry: false, hider: true, frontSight: true }),
+    ar: (b, P) => P ? kitGun(b, 'ar', P) : longgun(b, { rec: 15, bar: 14, hg: 11, mag: 'curved', magLen: 9, stock: 'skel', rail: true, carry: false, hider: true, frontSight: true }),
     goldhawk: (b) => { const a = handgun(b, { len: 19, slideH: 5, serr: 4, hammer: true, slideMat: 'gold', frameMat: 'poly' }); for (let i = 0; i < 5; i++) b.L(b.T('gold', 0), OX + 8 + i * 2, OY + 3 - (i % 2), 1, 1); b.L('#7cc7ff', OX + 3, OY + 7, 1, 1); return a; },
     whisper: (b) => { const a = longgun(b, { rec: 13, bar: 3, hg: 0, mag: 'straight', magLen: 8, stock: 'tube', rail: true }); const m = a.muzzle; b.C('dark', m[0], m[1] - 2, 14, 5); for (let i = 3; i < 14; i += 3) b.L(INK, m[0] + i, m[1] - 2, 1, 5); a.muzzle = [m[0] + 14, m[1]]; a.integral = true; return a; },
     dragon: (b) => { const a = longgun(b, { rec: 13, bar: 17, hg: 9, hgType: 'pump', furn: 'red', stock: 'fixed', mag: 'straight', magLen: 5, rail: true, brake: true }); for (let i = 0; i < 6; i++) b.L(b.T('gold', 2 + (i % 2)), OX + 2 + i * 2, OY + 2 + (i % 2), 1, 1); b.L(b.T('gold', 3), OX - 10, OY + 3, 4, 1); return a; },
@@ -168,6 +194,7 @@
   };
   // Attachments: drawn at the gun's anchors (same asset in every view)
   function attach(b, id, mods, a) {
+    if (a.kit) mods = mods.filter((m) => m === 'reinforce'); // the kit draws optics/muzzles/mags/lasers itself
     const has = (m) => mods.includes(m), hand = /pistol|compact|hawk|goldhawk|revolver|machine/.test(id);
     if (has('extmag') && !a.mag && a.cyl) { const [cx, cy] = a.cyl; for (let i = 0; i < 3; i++) { b.L(b.T('gold', 2), cx + i * 2, cy + 3, 1, 1); b.L(b.T('gold', 3), cx + i * 2, cy + 3); } b.R(MAT.gold, cx - 1, cy - 2, 7, 1); } // speed-loader brass
     if (has('extmag') && !a.mag && a.tube) { const [tx, ty] = a.tube; b.C('steel', tx, ty, 5, 2); b.L(b.T('chrome', 2), tx + 5, ty, 1, 2); }
@@ -185,20 +212,22 @@
   const cache = new Map();
   const W = () => root.NightshiftWeaponsData || (typeof require === 'function' ? (() => { try { return require('./weapons-data.js'); } catch { return null; } })() : null);
   // Pure pixel build (Node-testable): grid pixels, trimmed box and anchors.
-  function build(id, skinId = null, mods = []) {
+  function build(id, skinId = null, mods = [], parts = null) {
     if (!GUNS[id]) id = 'pistol';
-    const skin = skinId && skinId !== 'stock' ? (W()?.SKIN?.[skinId] || null) : null, b = Buf(skin), a = GUNS[id](b); attach(b, id, [...new Set(mods)], a); outline(b);
+    const skin = skinId && skinId !== 'stock' ? (W()?.SKIN?.[skinId] || null) : null, b = Buf(skin), a = GUNS[id](b, parts); attach(b, id, [...new Set(mods)], a); outline(b);
     let x0 = GW, y0 = GH, x1 = 0, y1 = 0; for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) if (b.px[y * GW + x]) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
     return { px: b.px, box: { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 }, a, GW, GH };
   }
   const hdOn = () => { try { return root.localStorage?.getItem('ns-weapon-hd') !== '0'; } catch { return true; } };
-  function sprite(id, skinId = null, mods = []) {
+  // parts: an explicit kit config (bench preview) or, by default, the config saved for this gun (weapon-kit.js)
+  function sprite(id, skinId = null, mods = [], parts) {
     if (!GUNS[id]) id = 'pistol';
+    if (parts === undefined) { try { parts = root.NightshiftWeaponKit?.config?.(id, mods) || null; } catch { parts = null; } }
     const art = root.NightshiftArt?.has?.('side/weapons/' + id + '.png') ? root.NightshiftArt.image('side/weapons/' + id + '.png') : null;
-    const mk = [...new Set(mods)].sort().join(','), key = id + '|' + (skinId || '') + '|' + mk + (art ? '|img' : '') + (root.NightshiftWeaponHD && hdOn() ? '|hd' : ''); let s = cache.get(key); if (s) return s;
+    const mk = [...new Set(mods)].sort().join(','), key = id + '|' + (skinId || '') + '|' + mk + '|' + (parts ? root.NightshiftWeaponKitData?.keyOf?.(parts) || JSON.stringify(parts) : '') + (art ? '|img' : '') + (root.NightshiftWeaponHD && hdOn() ? '|hd' : ''); let s = cache.get(key); if (s) return s;
     // v0.69: HD vector re-render of the same builders (anchors unchanged); real PNG art still wins
-    if (!art && root.NightshiftWeaponHD && hdOn()) { try { const skin = skinId && skinId !== 'stock' ? (W()?.SKIN?.[skinId] || null) : null; const h = root.NightshiftWeaponHD.sprite({ id, skin, mods, GUNS, attach, Buf, MAT, INK, GW, GH }); if (h) { cache.set(key, h); if (cache.size > 240) cache.delete(cache.keys().next().value); return h; } } catch (e) { console.error(e); } }
-    const { px, box, a } = build(id, skinId, mods), b = { px }, [x0, y0, x1, y1] = [box.x, box.y, box.x + box.w - 1, box.y + box.h - 1];
+    if (!art && root.NightshiftWeaponHD && hdOn()) { try { const skin = skinId && skinId !== 'stock' ? (W()?.SKIN?.[skinId] || null) : null; const h = root.NightshiftWeaponHD.sprite({ id, skin, mods, parts, GUNS, attach, Buf, MAT, INK, GW, GH }); if (h) { cache.set(key, h); if (cache.size > 240) cache.delete(cache.keys().next().value); return h; } } catch (e) { console.error(e); } }
+    const { px, box, a } = build(id, skinId, mods, parts), b = { px }, [x0, y0, x1, y1] = [box.x, box.y, box.x + box.w - 1, box.y + box.h - 1];
     const cv = typeof document !== 'undefined' ? document.createElement('canvas') : null; if (!cv) return null;
     cv.width = GW; cv.height = GH; const c = cv.getContext('2d'), img = c.createImageData(GW, GH);
     for (let i = 0; i < b.px.length; i++) { let v = b.px[i]; if (!v) continue; if (v === 'glow') v = '#ff6b6b'; const [r, g, bl] = hexToRgb(v); img.data.set([r, g, bl, 255], i * 4); }
@@ -298,7 +327,7 @@
       c.fillStyle = st.night ? '#0b1018' : '#18222b'; c.fillRect(0, 0, w, h); c.strokeStyle = st.night ? '#1d2a3c' : '#24333e'; c.lineWidth = 1;
       const gs = Math.round(16 * dpr); for (let x = 0; x < w; x += gs) { c.beginPath(); c.moveTo(x + 0.5, 0); c.lineTo(x + 0.5, h); c.stroke(); } for (let y = 0; y < h; y += gs) { c.beginPath(); c.moveTo(0, y + 0.5); c.lineTo(w, y + 0.5); c.stroke(); }
       c.fillStyle = '#ffd97033'; for (let x = 0; x < w; x += gs / 2) c.fillRect(x, h - (x % gs === 0 ? 10 : 6) * dpr, 1, (x % gs === 0 ? 10 : 6) * dpr);
-      const s = sprite(st.id, st.skin, st.mods); if (s) {
+      const s = sprite(st.id, st.skin, st.mods, st.parts); if (s) {
         const fit = Math.min((w * 0.86) / s.box.w, (h * 0.66) / s.box.h), k = s.hd ? fit * st.zoom : Math.max(1, Math.floor(fit * st.zoom)), kp = s.hd ? k * s.nativeScale : k, dw = s.box.w * k, dh = s.box.h * k;
         const sp = c.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, Math.max(w, h) * 0.55); sp.addColorStop(0, st.night ? '#4a6cff1c' : '#fff1c826'); sp.addColorStop(1, '#0000'); c.fillStyle = sp; c.fillRect(0, 0, w, h);
         c.fillStyle = '#00000055'; c.beginPath(); c.ellipse(w / 2 + kp * 2, h / 2 + dh / 2 + kp * 2, dw * 0.46, kp * 2.2, 0, 0, Math.PI * 2); c.fill();
@@ -329,6 +358,7 @@
         mods.append(d);
       }
       side.append(mods);
+      try { root.NightshiftWeaponKit?.panel?.(side, st, render, el); } catch (e) { console.error(e); } // v0.70 Option 3 modular kit
       side.append(el('h4', {}, 'PAINT JOBS · tap to preview'));
       const sw = el('div', { className: 'sw' }); for (const s of Dd.SKINS) { const ownS = (ws?.skins?.[st.id] || 'stock') === s.id, b = el('button', { className: ((st.skin || 'stock') === s.id ? 'on' : '') + (ownS ? ' own' : ''), type: 'button', title: s.name }); b.style.background = s.pal ? `linear-gradient(135deg,${s.pal.hi},${s.pal.sl} 45%,${s.pal.st})` : 'linear-gradient(135deg,#8b9aa7,#303a44)'; if (s.camo) b.style.background = `repeating-linear-gradient(45deg,${s.pal.sl} 0 4px,${s.camo[0]} 4px 7px,${s.pal.st} 7px 10px)`; b.onclick = () => { st.skin = s.id === 'stock' ? null : s.id; render(); }; sw.append(b); }
       side.append(sw, el('div', { className: 'ds' }, `${(Dd.SKIN[st.skin || 'stock'] || Dd.SKINS[0]).name}${(ws?.skins?.[st.id] || 'stock') === (st.skin || 'stock') ? ' · on this gun' : ' · preview (apply at a workbench → ATTACHMENTS)'}`));
