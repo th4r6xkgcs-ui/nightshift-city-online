@@ -17,11 +17,11 @@
     const mag = Math.min(1, Math.hypot(mx, my));
     if (mag < DEAD) return { thrust: 0, steer: 0 };
     const target = Math.atan2(my, mx), diff = wrap(target - angle), ad = Math.abs(diff);
-    // Pulling against the car: brake while rolling forward, then reverse with the rear swinging toward the stick.
-    if (ad > REVERSE || (speed < -0.3 && ad > 1.95)) {
+    // Pulling against the car: brake while rolling forward, then a three-point turn — back up while the nose
+    // swings round toward the stick (reversing flips steering, hence -sign), and drive off once it's facing.
+    if (ad > REVERSE || (speed < -0.3 && ad > 1.1)) {
       if (speed > 0.6) return { thrust: -mag, steer: 0 };
-      const back = wrap(target - (angle + PI));
-      return { thrust: -mag, steer: clamp(-back * GAIN, -1, 1) };
+      return { thrust: -mag * 0.8, steer: diff >= 0 ? -1 : 1 };
     }
     // Forward: steer toward the stick; ease off the gas in tight turns so it doesn't plough.
     const steer = clamp(diff * GAIN, -1, 1);
