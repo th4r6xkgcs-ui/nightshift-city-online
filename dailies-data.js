@@ -23,6 +23,8 @@
     { id: 'trades', text: 'Make {n} market trades', stat: 'marketTrades', n: [2, 4, 6], cash: 60, xp: 'luck' },
     { id: 'fish', text: 'Land {n} catches', stat: 'fishCaught', n: [4, 6, 10], cash: 50, xp: 'fishing' },
     { id: 'earn', text: 'Earn ${n}', stat: 'earned', n: [1500, 2500, 4000], cash: 0.2, xp: 'charisma' },
+    { id: 'robs', text: 'Hold up {n} store(s)', stat: 'robberies', n: [1, 1, 2], cash: 250, xp: 'stealth' }, // v0.74
+    { id: 'wrecks', text: 'Wreck {n} police cruiser(s)', stat: 'cruisersWrecked', n: [1, 1, 2], cash: 350, xp: 'driving' }, // v0.74
   ];
   const BY_ID = Object.fromEntries(POOL.map((c) => [c.id, c]));
   const DAILY_COUNT = 3, WEEK_MULT = 6, WEEK_BONUS = 2.5, STREAK_STEP = 0.1, STREAK_MAX = 5;

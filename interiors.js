@@ -39,8 +39,8 @@
   if (!root.document) { if (typeof module !== 'undefined') module.exports = { variant, BRANDS, ACT, ROB, ROB_COOLDOWN }; return; }
 
   const KEY = 'nightshift-interiors-v1';
-  let state = { crates: {}, mail: {}, robbed: {} };
-  try { const r = JSON.parse(localStorage.getItem(KEY) || '{}'); if (r && typeof r === 'object') state = { crates: r.crates || {}, mail: r.mail || {}, robbed: r.robbed && typeof r.robbed === 'object' ? r.robbed : {} }; } catch { /* fresh */ }
+  let state = { crates: {}, mail: {}, robbed: {}, count: {} };
+  try { const r = JSON.parse(localStorage.getItem(KEY) || '{}'); if (r && typeof r === 'object') state = { crates: r.crates || {}, mail: r.mail || {}, robbed: r.robbed && typeof r.robbed === 'object' ? r.robbed : {}, count: r.count && typeof r.count === 'object' ? r.count : {} }; } catch { /* fresh */ }
   const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode */ } };
   /* eslint-disable no-undef */
   const P = () => { try { return player; } catch { return null; } };
@@ -306,7 +306,7 @@
     if (el < HOLD_MS) return;
     const r = ACT.rob(hold.type, Math.random(), Math.random()); state.robbed[hold.key] = Date.now(); persist();
     if (r.resist) { try { root.NightshiftAuthority?.damagePlayer?.(r.dmg, 'clerk'); } catch { p.hp = Math.max(1, p.hp - r.dmg); } api.shake?.(5); api.fx?.('muzzle', hold.spot.x, hold.spot.y - 30, 200); }
-    else { p.cash += r.cash; api.float(hold.spot.x, hold.spot.y - 50, '+$' + r.cash, '#7cffb5'); try { root.NightshiftSkills?.gain?.('stealth', 20, 'robbery'); } catch { /* optional */ } }
+    else { state.count.robberies = (state.count.robberies || 0) + 1; persist(); p.cash += r.cash; api.float(hold.spot.x, hold.spot.y - 50, '+$' + r.cash, '#7cffb5'); try { root.NightshiftSkills?.gain?.('stealth', 20, 'robbery'); } catch { /* optional */ } }
     const store = hold.type; raiseAlarm(store); p.heat = (p.heat || 0) + r.heat; say(r.msg); hold = null; gameSave();
     try { root.dispatchEvent?.(new CustomEvent('ns:event', { detail: { type: 'store-robbed', store, ok: r.ok } })); } catch { /* n/a */ }
   }
@@ -363,5 +363,5 @@
   }
   const t1 = setInterval(() => { if (register()) clearInterval(t1); }, 300);
   const t2 = setInterval(() => { if (hookDoors()) clearInterval(t2); }, 300);
-  root.NightshiftInteriors2 = Object.freeze({ enter, doors, variant, TYPES: Object.keys(T), BLURB, ACT, holdup: () => (hold ? { type: hold.type, ms: Math.round(performance.now() - hold.t0) } : null), robbed: () => ({ ...state.robbed }), title: (ty) => T[ty]?.title || ty });
+  root.NightshiftInteriors2 = Object.freeze({ enter, doors, variant, TYPES: Object.keys(T), BLURB, ACT, holdup: () => (hold ? { type: hold.type, ms: Math.round(performance.now() - hold.t0) } : null), robbed: () => ({ ...state.robbed }), counts: () => ({ robberies: 0, ...state.count }), title: (ty) => T[ty]?.title || ty });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
