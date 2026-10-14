@@ -239,7 +239,7 @@
     if (d.fit) z = Math.max(0.85, Math.min(z, SH() / (d.h * d.fit))); // v0.71: rooms show most of their height on a landscape phone
     const vw = Wd / z, vh = Hd / z;
     let cx = d.w <= vw ? (d.w - vw) / 2 : Math.max(0, Math.min(d.w - vw, pos.x - vw / 2));
-    let cy = d.h <= vh ? (d.h - vh) / 2 : Math.max(0, Math.min(d.h - vh, pos.y - vh / 2));
+    let cy = d.h <= vh ? (d.h - vh) / 2 : Math.max(0, Math.min(d.h - vh, pos.y - vh * (d.camBias || 0.5))); // camBias > 0.5 keeps more of a room's back wall in view
     const sh = c.shake; c.shake *= 0.85; cx += (Math.random() - 0.5) * sh; cy += (Math.random() - 0.5) * sh;
     c.z = z; c.cam = { x: cx, y: cy, ox: 0, oy: 0 };
     ctx.save();
