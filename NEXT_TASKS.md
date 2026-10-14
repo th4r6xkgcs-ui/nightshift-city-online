@@ -1,5 +1,5 @@
 # Next tasks
-- P0 (owner): approve gh-pages deploy of v0.71 (interiors, pursuit, combat feel); connect Cloudflare Workers Builds for the multiplayer server.
+- P0 (owner): connect Cloudflare Workers Builds for the multiplayer server (v0.72 is live on gh-pages).
 - P1 (Claude): interiors — per-building staff variety, robbable registers in shops, interiors for owned properties; pursuit — spike strips at ★4, police boats at the docks; combat — weapon-specific reload sounds.
 - P0 (owner): approve or correct the three Option 3 master sprites (player, Vanta GT top-down, husky) — HANDOFF art correction. No atlas mass-production until approved.
 - P1 (Claude, after approval): 8-direction key poses from the masters, then walk/run with planted feet; separate clothing layers; modular gun visuals; icons; interiors (correction prompt steps 4-9).
