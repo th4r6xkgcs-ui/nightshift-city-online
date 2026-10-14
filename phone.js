@@ -178,7 +178,8 @@
         app('⭐', 'Skills', launch(() => root.NightshiftSkills?.open?.())),
         app('📅', 'Dailies', launch(() => root.NightshiftDailies?.open?.())),
         app('👤', 'Respect', launch(() => root.NightshiftRespect?.open?.())),
-        app('📻', 'Radio', launch(() => document.querySelector('#lfRadio')?.click()))));
+        app('📻', 'Radio', launch(() => document.querySelector('#lfRadio')?.click())),
+        app('🎮', root.NightshiftDriveInput?.mode === 'classic' ? 'Steer: Tank' : 'Steer: Screen', () => { root.NightshiftDriveInput?.toggle?.(); render(); })));
     } else if (view.app === 'messages') {
       const ids = Object.keys(state.threads).filter((k) => state.threads[k].length).sort((a, b) => state.threads[b].at(-1).at - state.threads[a].at(-1).at);
       shell(el('div', { className: 'top' }, el('button', { className: 'back', textContent: '‹ Home', onclick: () => open('home') }), el('h2', { textContent: 'Messages', style: 'margin:0' })),
