@@ -335,7 +335,7 @@
           for (const s of t.dancers || []) people.push({ x: s.x, y: s.y, angle: r() * 6, id: type + '-d-' + Math.floor(r() * 24), dance: r() * 6 });
           api.key = data?.key || 'x';
         },
-        update(api, dt) { holdTick(api); const now = performance.now() / 1000; for (const p of people) { if (p.dance !== undefined) { p.angle = p.dance + now * 2.2; p.moving = Math.sin(now * 5 + p.dance) > 0; p.walkTicks = (p.walkTicks || 0) + dt; } } },
+        update(dt, now0, api) { holdTick(api); const now = performance.now() / 1000; for (const p of people) { if (p.dance !== undefined) { p.angle = p.dance + now * 2.2; p.moving = Math.sin(now * 5 + p.dance) > 0; p.walkTicks = (p.walkTicks || 0) + dt; } } },
         actors: () => people,
         targets: (api) => [{ x: DOOR.x, y: DOOR.y - 6, r: 46, action: 'EXIT', label: 'Back to the street', use: () => root.NightshiftZones.leave() }, ...t.targets(curB || {}, api), ...(t.robAt ? [{ x: t.robAt.x, y: t.robAt.y, r: 40, action: hold ? '…' : 'ROB', label: hold ? 'Hold it…' : 'Hold up the register (needs a gun out)', use: () => startRob(type, 'rob-' + api.key, t.robAt, api, people) }] : [])],
       });
