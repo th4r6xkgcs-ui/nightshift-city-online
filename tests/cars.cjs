@@ -18,7 +18,7 @@ const sorted = [...D.CARS].sort((a, b) => a.price - b.price);
 const fastest = [...D.CARS].sort((a, b) => b.max - a.max).slice(0, 3).map((c) => c.id).sort();
 assert.deepEqual(fastest, sorted.slice(-3).map((c) => c.id).sort(), 'the three priciest cars are the three fastest');
 assert.equal(D.fromModel('SEDAN'), null);
-console.log('PASS: car catalog (10 models, prices, handling, sizes, paints)');
+console.log('PASS: car catalog (16 models, prices, handling, sizes, paints)');
 
 const s = D.clean({}), w = { cash: 10000 };
 assert.ok(!D.buy(s, w, 'vortex').ok, 'cannot afford');

@@ -660,3 +660,25 @@ Everything below is built for a shared world. The world never pauses (no cutscen
   - `tests/combat65.cjs` added; `node tests/run.cjs` passes all 115 suites.
   - Playwright: bullet hit logged via the authority; downed → medkit revive (hp 45); ★2 taser → stun → BUSTED; ★4 downed → cuffed; store break-in zone with panel and cameras.
   - FPS: city 56–59 headless. Gang fight 40–51 headless; the rAF profile shows the new modules cost under 2 ms per second, so the gap is canvas rendering.
+
+## v0.66 Nightshift Garage cars + Route 9 highway (owner: "bring the cars over… when u hop on the highway it becomes a garage-type game")
+- **Garage cars** (owner-authorised to bring over from the Nightshift Garage repo; only names/specs were copied, no code):
+  - Added to `cars-data.js`, with `garage`, `drive`, `kmh` and `hp` fields: BMW M4 F82, Honda Civic EF, Dodge Charger 440, Nissan Silvia S15, Ford Mustang GT, Lamborghini Gallardo.
+  - `cars.js`: new `coupe` body, plus `stripes:false`, `wing:false` and `SIG[id]` signature details (M4 kidney grille + quad tips, Charger hidden-headlight grille + bumblebee stripe, S15 drift wing, Mustang tri-bar tails, Gallardo engine louvres).
+  - `driving-data` drift now depends on drivetrain (RWD > AWD > FWD).
+  - The `tests/cars.cjs` message now says 16 models.
+- **Route 9** (`highway-data.js` pure, `highway.js` runtime): a ring road around the city with 6 on-ramps on the edge roads, each with a green ROUTE 9 sign and chevrons; driving through one at speed enters the highway.
+  - **Display:** rendered through NightshiftHome render hooks like `zones.js`, with `HM.kind` returning 'highway' so city modules idle.
+  - **Driving:** stick right = gas, left/BRAKE = brake, up/down = lanes, NOS = nitro. Acceleration is hp-based for real cars; gears and rpm are shown in the bottom HUD.
+  - **Traffic:** keeps lanes and signals lane changes. Near misses build the Garage streak table, paid out when you exit.
+  - **Speed cameras:** 120 km/h limit; tickets over 150, heat over 200.
+  - **Police by stars:** pursuit cruisers (spawn after 6 s, no stacking, PIT with a cooldown), spikes at ★3, roadblock with a gap and helicopter at ★4+, evade by distance, busted when stopped.
+  - **Races:** Mika (S15), Jules (M4) and Rook (Mustang); pull alongside → 🏁 RACE to the exit after next.
+  - **Route 9 services** (fuel, repair, nitro via driving-data quotes; Rook's Tuning → `NightshiftTuning.open`; meet challenges; highway runs against the clock).
+  - **Exits:** move onto the shoulder at an EXIT; you drop back at that district's ramp. Totaled → towed.
+  - Save: `nightshift-highway-v1`.
+- **Multiplayer note:** I started a second MP stack this session and removed it again. The repo already has one: `shared/` + `server/` + `online/online.js` (presence, chat, opt-in PvP) on the live worker (`worker/LIVE_URL`). The live worker was not touched. A next MP step would be to move `combat-core.js` hit validation into that server (`server/room.js`), but that changes the live worker, so it needs the owner's OK.
+- **Checks:**
+  - `tests/highway66.cjs` added; `node tests/run.cjs` passes all 116 suites.
+  - Playwright: enter via the West End ramp, accelerate, ★3 cruisers, race start vs Mika, rest-stop panel (9 rows) + run accepted, exit → Downtown drop-off on the road.
+  - FPS: city 60, highway 60 headless.
