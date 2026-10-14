@@ -290,7 +290,7 @@
     for (const [type, t] of Object.entries(T)) {
       let curB = null, people = [];
       Z.register({
-        id: zid(type), name: t.title, tagline: 'USE things to interact · 🚪 exit at the bottom', w: W, h: H, indoor: true, dark: t.dark ?? 0.08, zoom: 1.2, fit: 0.86, camBias: 0.66, bg: '#07090d',
+        id: zid(type), name: t.title, tagline: 'USE things to interact · 🚪 exit at the bottom', w: W, h: H, indoor: true, dark: t.dark ?? 0.08, zoom: 1.2, fit: 1.0, camBias: 0.66, bg: '#07090d',
         spawn: { x: DOOR.x, y: DOOR.y - 34, angle: -Math.PI / 2 },
         ground(c) { K.floor(c, t.floor, t.seed); K.wall(c, t.wall[0], t.wall[1], t.wall[2], t.seed); t.art(c); },
         drawGround: t.glow ? (c, tt) => t.glow(c, tt) : undefined,
