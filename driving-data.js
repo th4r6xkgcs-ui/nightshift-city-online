@@ -18,10 +18,12 @@
     const dt = Math.max(0, Math.min(2, Number.isFinite(input.dt) ? input.dt : 1)), steer = Math.max(-1, Math.min(1, input.steer || 0));
     const fast = Math.abs(car.speed || 0) >= DRIFT.minSpeed && (car.speed || 0) > 0;
     const drifting = !!input.brake && fast && Math.abs(steer) >= DRIFT.minSteer;
-    const target = drifting ? steer * DRIFT.slipMax : 0;
+    // v0.66 drivetrain: rear-drive slides easiest, AWD a bit less, front-drive mostly scrubs (push / lift-off slide)
+    const DT = { RWD: [1.15, 1.1], AWD: [0.85, 0.9], FWD: [0.55, 0.75] }[input.drive] || [1, 1];
+    const target = drifting ? steer * DRIFT.slipMax * DT[0] : 0;
     car.drift = (car.drift || 0) + (target - (car.drift || 0)) * Math.min(1, (drifting ? DRIFT.slipIn : DRIFT.slipOut) * dt * 2);
     if (Math.abs(car.drift) < 0.004) car.drift = 0;
-    if (drifting) { car.angle += steer * DRIFT.yaw * dt; car.speed *= Math.pow(DRIFT.bleed, dt); }
+    if (drifting) { car.angle += steer * DRIFT.yaw * DT[1] * dt; car.speed *= Math.pow(DRIFT.bleed, dt); }
     return { drifting, brake: drifting ? false : !!input.brake };
   }
   // scoring: call every frame with seconds; returns a finished chain { points, cash, xp } or null

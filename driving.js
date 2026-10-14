@@ -24,7 +24,7 @@
     V.handling = function (car, thrust, steer, brake, dt) {
       const p = P();
       if (!p || !car || p.car !== car) return h0.apply(this, arguments);
-      const r = D.step(car, { thrust, steer, brake, dt });
+      const r = D.step(car, { thrust, steer, brake, dt, drive: root.NightshiftCarsData?.fromModel?.(car.model)?.drive });
       driftingNow = r.drifting;
       const args = Array.from(arguments); args[3] = r.brake; if (r.drifting) args[1] = Math.max(thrust || 0, 0.35); // keep the throttle pinned through a slide
       const out = h0.apply(this, args);
