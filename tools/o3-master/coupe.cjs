@@ -54,40 +54,50 @@ function draw() {
   }
   P.clip(null);
 
-  // ---- carbon hood with a raised centre bulge and twin vents ----
-  P.part('hood').poly([[121, CY - 33], [150, CY - 31], [158, CY - 27], [162, CY - 17], [163, CY], [162, CY + 17], [158, CY + 27], [150, CY + 31], [121, CY + 33]], C.cf[2]);
+  // curve helpers (plan view): a panel whose half-width eases between two stations, with a bowed end edge
+  const ease = (t) => t * t * (3 - 2 * t);
+  const taper = (x0, h0, x1, h1, bow0 = 0, bow1 = 0, n = 14) => {
+    const top = [], bot = []; for (let k = 0; k <= n; k++) { const t = k / n, x = x0 + (x1 - x0) * t, hh = h0 + (h1 - h0) * ease(t); top.push([x, CY - hh]); bot.unshift([x, CY + hh]); }
+    const cap = (x, hh, bow, rev) => { const pts = []; for (let k = 1; k < n; k++) { const u = -1 + (2 * k) / n; pts.push([x + bow * (1 - u * u), CY + u * hh]); } return rev ? pts.reverse() : pts; };
+    return [...top, ...cap(x1, h1, bow1, false), ...bot, ...cap(x0, h0, bow0, true)];
+  };
+
+  // ---- carbon hood panel: wide at the windshield, tapering to a point toward the nose, centre crease + vents ----
+  P.part('hood').poly(taper(121, 27, 160, 9, 0, 3), C.cf[2]);
   P.clip('hood');
   for (let y = 0; y < H; y++) for (let x = 121; x < 164; x++) if ((x + 2 * y) % 5 === 0) P.tint(x, y, C.cf[1]);   // fine diagonal twill
-  P.shade((x, y) => y > CY + 16, { [C.cf[1]]: C.cf[2], [C.cf[2]]: C.cf[3] });
-  P.poly([[124, CY - 9], [156, CY - 7], [156, CY + 7], [124, CY + 9]], C.cf[1]);                          // power bulge
-  P.line(124, CY - 9, 156, CY - 7, C.cf[0]); P.line(124, CY + 9, 156, CY + 7, C.cf[3]);
-  for (const s of [-1, 1]) for (let k = 0; k < 4; k++) { const x = 132 + k * 4; P.line(x, CY + s * 14, x + 2, CY + s * 22, C.cf[4]); P.line(x + 1, CY + s * 14, x + 3, CY + s * 22, s < 0 ? C.cf[0] : C.cf[2]); }
+  P.shade((x, y) => y > CY + 1, { [C.cf[1]]: C.cf[2], [C.cf[2]]: C.cf[3] });
+  P.line(122, CY, 159, CY, C.cf[0]); P.line(122, CY + 1, 159, CY + 1, C.cf[4]);
+  for (const s2 of [-1, 1]) for (let k = 0; k < 4; k++) { const x = 130 + k * 4; P.line(x, CY + s2 * 10, x + 2, CY + s2 * 17, C.cf[4]); P.line(x + 1, CY + s2 * 10, x + 3, CY + s2 * 17, s2 < 0 ? C.cf[0] : C.cf[2]); }
   P.clip(null);
 
-  // ---- centre racing stripe over the trunk ----
-  P.part('stripe').poly([[3, CY - 8], [36, CY - 8], [36, CY + 8], [3, CY + 8]], C.cf[2]);
-  P.clip('stripe').line(3, CY - 8, 36, CY - 8, C.cf[0]).line(3, CY - 6, 36, CY - 6, C.pu[2]).line(3, CY + 6, 36, CY + 6, C.pu[4]).clip(null);
+  // ---- carbon trunk panel: tapering from the rear glass to the tail ----
+  P.part('stripe').poly(taper(4, 11, 38, 20, 0, -3), C.cf[2]);
+  P.clip('stripe'); for (let y = 0; y < H; y++) for (let x = 3; x < 40; x++) if ((x + 2 * y) % 5 === 0) P.tint(x, y, C.cf[1]);
+  P.line(5, CY, 37, CY, C.cf[0]); P.clip(null);
 
-  // ---- glass house: rear window, roof, windshield ----
-  P.part('glass').poly(outline(CAB.map(([x, h]) => [x, h])), C.gl[3]);
-  P.part('roof').poly(outline([[56, 27.5], [96, 28.5]]).map(([x, y], i) => [x + (i === 0 || i === 3 ? 2 : -1), y]), C.pu[3]);
+  // ---- glass house: curved windshield + rear glass around a narrow rounded roof ----
+  P.part('glass').poly(taper(38, 19, 120, 30, -5, 9, 20), C.gl[3]);
+  P.part('roof').poly(taper(60, 23, 98, 25.5, -3, 4, 16), C.pu[3]);
   P.clip('roof');
-  for (let y = 0; y < H; y++) for (let x = 54; x < 98; x++) { const d = (y + 0.5 - CY) / 28; P.tint(x, y, d < -0.55 ? C.pu[2] : d > 0.6 ? C.pu[4] : C.pu[3]); }
-  P.path([[60, CY - 22], [92, CY - 22]], C.pu[1]); P.path([[64, CY - 23], [80, CY - 23]], C.pu[0]);
-  P.line(58, CY - 8, 94, CY - 8, C.pu[2]); P.line(58, CY + 8, 94, CY + 8, C.pu[4]);                  // roof channels
+  for (let y = 0; y < H; y++) for (let x = 54; x < 104; x++) { const d = (y + 0.5 - CY) / 25; P.tint(x, y, d < -0.55 ? C.pu[2] : d > 0.6 ? C.pu[4] : C.pu[3]); }
+  P.path([[64, CY - 19], [92, CY - 20]], C.pu[1]); P.path([[68, CY - 20], [84, CY - 21]], C.pu[0]);
+  P.ell(82, CY - 1, 1.6, 1.6, C.cf[2]); P.set(81, Math.round(CY - 2), C.cf[0]);                                // shark-fin antenna
   P.clip(null);
   P.part('glass').clip('glass');
-  // windshield: lighter near the top, a crisp diagonal reflection band; rear glass darker with its own streak
-  for (let y = 0; y < H; y++) for (let x = 96; x < 122; x++) P.tint(x, y, x > 117 ? C.cf[3] : y < CY - 14 ? C.gl[2] : y > CY + 16 ? C.gl[4] : C.gl[3]);
-  P.line(117, CY - 33, 117, CY + 33, C.cf[1]);
-  P.poly([[102, CY - 30], [108, CY - 31], [116, CY + 6], [110, CY + 6]], C.gl[1]); P.line(106, CY - 31, 113, CY + 1, C.gl[0]);
-  P.poly([[112, CY + 10], [116, CY + 10], [120, CY + 30], [117, CY + 31]], C.gl[2]);
-  for (let y = 0; y < H; y++) for (let x = 34; x < 56; x++) P.tint(x, y, y > CY + 10 ? C.gl[4] : C.gl[3]);
-  P.poly([[40, CY - 22], [44, CY - 24], [50, CY - 4], [46, CY - 4]], C.gl[2]); P.line(43, CY - 23, 48, CY - 7, C.gl[1]);
-  for (let x = 38; x < 54; x += 3) P.set(x, Math.round(CY + 2), C.gl[2]);                           // rear demister lines
+  // windshield: sky reflection on the upper half, interior visible below (dash, two bucket seats), crisp curved streak
+  for (let y = 0; y < H; y++) for (let x = 96; x < 130; x++) P.tint(x, y, x > 118 ? C.cf[3] : y < CY - 12 ? C.gl[2] : y > CY + 14 ? C.gl[4] : C.gl[3]);
+  for (const s2 of [-1, 1]) { P.ell(103, CY + s2 * 9, 3.6, 5.2, C.cf[3]); P.ell(102.5, CY + s2 * 9, 2.4, 3.8, C.cf[2]); P.line(101, CY + s2 * 9 - 2, 101, CY + s2 * 9 + 2, C.cf[1]); }   // seats seen through the glass
+  P.ell(109, CY - 9, 2.4, 2.8, C.cf[4]); P.set(109, Math.round(CY - 10), C.cf[1]);                           // steering wheel (left-hand drive)
+  const streak = []; for (let k = 0; k <= 10; k++) { const u = -1 + k / 5; streak.push([113 + 7 * (1 - u * u), CY - 27 + k * 5.4]); }
+  P.path(streak.slice(0, 5), C.gl[1]); P.path(streak.slice(0, 4).map(([x, y]) => [x - 1, y]), C.gl[0]); P.path(streak.slice(7, 10), C.gl[2]);
+  // rear glass: darker, demister lines, its own short streak
+  for (let y = 0; y < H; y++) for (let x = 30; x < 60; x++) P.tint(x, y, y > CY + 8 ? C.gl[4] : C.gl[3]);
+  for (let x = 43; x < 56; x += 3) P.line(x, CY - 9, x, CY + 9, '#2f3b5e');
+  P.path([[44, CY - 17], [48, CY - 10], [50, CY - 2]], C.gl[1]);
   P.clip(null);
-  // A/C pillars + roof rails
-  for (const s of [-1, 1]) { P.part('glass').path([[96, CY + s * 30.5], [121, CY + s * 35]], C.pu[s < 0 ? 2 : 5]); P.path([[56, CY + s * 29.5], [34, CY + s * 22]], C.pu[s < 0 ? 2 : 5]); }
+  // pillars
+  for (const s2 of [-1, 1]) { P.part('glass').path([[98, CY + s2 * 25.5], [104, CY + s2 * 27.5], [121, CY + s2 * 30]], C.pu[s2 < 0 ? 2 : 5]); P.path([[60, CY + s2 * 23], [50, CY + s2 * 22], [38, CY + s2 * 19]], C.pu[s2 < 0 ? 2 : 5]); }
 
   // ---- lamps ----
   for (const s of [-1, 1]) {
@@ -103,7 +113,7 @@ function draw() {
   for (const y of [CY - 13, CY - 9, CY + 8, CY + 12]) P.part('exhaust').rect(0, Math.round(y) - 1, 2, 3, C.ch[1]).set(0, Math.round(y), C.cf[4]);
 
   // ---- side mirrors ----
-  for (const s of [-1, 1]) P.part('mirrors').poly([[110, CY + s * 38], [114, CY + s * 38], [116, CY + s * 43.5], [111, CY + s * 44]], s < 0 ? C.pu[2] : C.pu[5]);
+  for (const s of [-1, 1]) P.part('mirrors').poly([[112, CY + s * 36], [117, CY + s * 36], [118, CY + s * 43], [113, CY + s * 43.5]], s < 0 ? C.pu[2] : C.pu[5]);
 
   // ---- GT wing on stalks (over the trunk), carbon with lit leading edge + endplates ----
   P.part('wingShadow').clip('body').rect(16, 5, 4, 80, C.pu[5]).clip(null);
