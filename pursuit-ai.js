@@ -40,7 +40,10 @@
   }
   function nearShot(civ, bullets) { for (const b of bullets || []) if (Math.abs(b.x - civ.x) < 180 && Math.abs(b.y - civ.y) < 180) return true; return false; }
   function follow(obj, t, max, dt) { const dx = t.x - obj.x, dy = t.y - obj.y, d = Math.hypot(dx, dy); if (!d) return { x: obj.x, y: obj.y }; const step = Math.min(d, Math.min(max, 40 + d * 1.2) * dt); return { x: obj.x + dx / d * step, y: obj.y + dy / d * step }; }
-  const api = Object.freeze({ intercept, isPit, playerRams, swerve, yieldsTo, nearShot, follow });
+  const FLAT_CAP = 3.2; // px / (1/60 s): top speed on blown tyres
+  /** is the car (centre + a little of its length) over the strip (centre, angle, len)? */
+  function onStrip(car, t) { const rx = car.x - t.x, ry = car.y - t.y, ca = Math.cos(-t.angle), sa = Math.sin(-t.angle), lx = rx * ca - ry * sa, ly = rx * sa + ry * ca; return Math.abs(lx) <= t.len / 2 + 6 && Math.abs(ly) <= 14; }
+  const api = Object.freeze({ FLAT_CAP, onStrip, intercept, isPit, playerRams, swerve, yieldsTo, nearShot, follow });
   root.NightshiftPursuit = api;
   if (typeof module !== 'undefined') module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

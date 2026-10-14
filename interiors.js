@@ -327,6 +327,7 @@
         lights: () => t.lights || [],
         solids: [solid(0, 0, W, WALL + 4), solid(0, 0, 10, H), solid(W - 10, 0, 10, H), solid(0, H - 8, W / 2 - 34, 8), solid(W / 2 + 34, H - 8, W / 2 - 34, 8), ...t.solids],
         onEnter(api, data) {
+          if (type === 'GARAGE' || type === 'AUTO PARTS') { const n = root.NightshiftPoliceCars?.repairAll?.() || 0; if (n) setTimeout(() => say('🔧 New tyres fitted on the house · drive safe'), 400); }
           hold = null; curB = data?.b || null; const r = rng((data?.seed || 7) >>> 0); people = [];
           for (const s of t.staff || []) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-staff-' + s.x, role: s.guard ? 'security' : null });
           for (const s of t.patrons || []) if (r() < 0.8) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-pat-' + Math.floor(r() * 24), seated: true, seat: { x: s.x, y: s.y } });
