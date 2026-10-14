@@ -16,7 +16,7 @@
   const ramp = (c) => [mix(mix(c, '#1d1238', 0.45), '#000', 0.35), mix(mix(c, '#2a1e50', 0.28), '#000', 0.12), c, mix(c, '#ffe9f0', 0.3), mix(c, '#ffffff', 0.62)];
   const RIM = { stock: ['#9aa3ab', '#5a636b', 5], chrome: ['#eef3f7', '#9aa6b1', 5], black: ['#2a2f36', '#0d1013', 10], gold: ['#f0c85a', '#8a6420', 14], deep: ['#f7f9fb', '#b9c3cc', 5], neon: ['#1c2128', '#0a0c0f', 6], bronze: ['#b8864a', '#6b4a22', 12], turbine: ['#d7dde3', '#7d8792', 16], white: ['#f4f6f8', '#b8c0c8', 6] };
   const LIGHT = { stock: '#fff4c8', xenon: '#eaf6ff', amber: '#ffc46b', ice: '#9fdcff' };
-  const supports = (spec) => !!spec && (spec.body === 'coupe' || spec.body === 'gt' || spec.id === 'vandal');
+  const supports = (spec) => !!spec && (spec.body === 'coupe' || spec.body === 'gt' || spec.id === 'vanta');
 
   function poly(c, pts, fill) { c.beginPath(); pts.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y))); c.closePath(); if (fill) { c.fillStyle = fill; c.fill(); } }
   function rect(c, x, y, w, h, f) { c.fillStyle = f; c.fillRect(x, y, w, h); }
