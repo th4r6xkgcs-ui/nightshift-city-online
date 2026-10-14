@@ -106,7 +106,18 @@
     const lens = []; let tot = 0; for (let i = 0; i + 1 < chain.length; i++) { const l = Math.hypot(chain[i + 1][0] - chain[i][0], chain[i + 1][1] - chain[i][1]); lens.push(l); tot += l; }
     let want = tot * t; const res = [chain[0]]; for (let i = 0; i < lens.length; i++) { if (want >= lens[i]) { res.push(chain[i + 1]); want -= lens[i]; continue; } const k = want / lens[i], a = chain[i], b = chain[i + 1]; res.push([a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k]); break; } return res;
   };
+  // v0.70: Option 3 items drawn by this (legacy) renderer as their nearest classic piece (NPCs / Option 3 off)
+  function legacy(o) {
+    const W = W0(); if (!o || !(o.outer?.id === 'puffer2' || o.shoes?.id === 'courts' || o.wrist)) return o;
+    const pick = (id, hex) => { const cs = W.ITEM[id]?.colors || []; let best = 0, bd = 1e9; const [r, g, b] = rgb(hex); cs.forEach((c, i) => { const [r2, g2, b2] = rgb(c), d = (r - r2) ** 2 + (g - g2) ** 2 + (b - b2) ** 2; if (d < bd) { bd = d; best = i; } }); return best; };
+    const n = { ...o };
+    if (o.outer?.id === 'puffer2') { const acc = W.ITEM.puffer2.opts.accent[o.outer.color] || '#f27934'; n.outer = { id: 'puffer', color: pick('puffer', acc), open: !!o.outer.open }; }
+    if (o.shoes?.id === 'courts') { const acc = W.ITEM.courts.opts.accent[o.shoes.color] || '#d0283a'; n.shoes = { id: 'hitops', color: pick('hitops', acc) }; }
+    if (o.wrist && !o.jewelry) n.jewelry = { id: 'watch', color: o.wrist.color === 1 ? 0 : 1 };
+    return n;
+  }
   function build(o, dir, anim, f, hold) {
+    o = legacy(o);
     const C = C0(), W = W0(), g = C.geom(o, dir, anim, f, hold), F = Frame(), skin = W.SKINS[o.skin], hairC = W.HAIR_COLORS[o.hairColor];
     const { sx, sy, side, back, profile, bw, cx } = g, front = !back, facing = sx >= 0 ? 1 : -1;
     const out = o.outer && o.outer.id !== 'vest' ? o.outer : null, vest = o.outer?.id === 'vest' ? o.outer : null, top = o.top, bot = o.bottom;
