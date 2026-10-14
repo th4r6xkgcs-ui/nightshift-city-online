@@ -28,4 +28,8 @@ assert.ok(!P.yieldsTo(civ, { x: 0, y: 200, speed: 5 }), 'other street');
 // gunfire panic + heli follow
 assert.ok(P.nearShot(civ, [{ x: 100, y: -60 }])); assert.ok(!P.nearShot(civ, [{ x: 400, y: 0 }]));
 let h = { x: 0, y: 0 }; for (let i = 0; i < 120; i++) h = P.follow(h, { x: 1000, y: 0 }, 230, 1 / 60); assert.ok(h.x > 400 && h.x <= 461, 'heli is capped at 230 px/s over 2 s (' + h.x.toFixed(0) + ')');
+// v0.72 spike strips: a strip across a horizontal road (angle PI/2) catches a car crossing it, not one beside it
+const strip = { x: 100, y: 50, angle: Math.PI / 2, len: 70 };
+assert.ok(P.onStrip({ x: 100, y: 60 }, strip)); assert.ok(P.onStrip({ x: 108, y: 20 }, strip)); assert.ok(!P.onStrip({ x: 140, y: 50 }, strip)); assert.ok(!P.onStrip({ x: 100, y: 120 }, strip));
+assert.ok(P.FLAT_CAP > 1 && P.FLAT_CAP < 5, 'flat tyres cap speed');
 console.log('PASS: v0.71 pursuit (intercept, PIT, ramming, swerve, yielding, panic, helicopter)');

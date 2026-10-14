@@ -1,6 +1,6 @@
 // v0.71 (Claude): building variants (gun shop, tattoo, auto parts, gym, hospital, police), room actions, kit loads.
 const assert = require('node:assert/strict');
-const { variant, BRANDS, ACT } = require('../interiors.js');
+const { variant, BRANDS, ACT, ROB, ROB_COOLDOWN } = require('../interiors.js');
 const bs = require('../city-data.js').createBuildings();
 const count = {}; for (const b of bs) { const v = variant(b); count[v] = (count[v] || 0) + 1; }
 for (const t of ['GUN SHOP', 'TATTOO', 'AUTO PARTS', 'GYM', 'HOSPITAL', 'POLICE']) { assert.ok(count[t] >= 1, t + ' exists in the city'); assert.ok(BRANDS[t]?.length, t + ' has street-sign brands'); }
@@ -18,6 +18,12 @@ assert.equal(ACT.fine({ heat: 0, cash: 9 }).ok, false);
 // tattoo / gym: price + cooldown
 p = { cash: 200 }; assert.ok(ACT.tattoo(p, 0, 1e9).ok); assert.equal(p.cash, 50); assert.equal(ACT.tattoo(p, 1e9, 1e9 + 1000).ok, false);
 p = { cash: 25 }; assert.ok(ACT.train(p, 0, 1e9).ok); assert.equal(p.cash, 5); assert.equal(ACT.train({ cash: 100 }, 1e9, 1e9 + 1000).ok, false);
+// v0.72 hold-ups: payout within the store's range, heat added, gun shop clerk can resist, banks/hospitals can't be held up
+for (const [type, [lo, hi, heat]] of Object.entries(ROB)) { for (const roll of [0, 0.5, 0.999]) { const r = ACT.rob(type, roll, 0.99); assert.ok(r.ok && r.cash >= lo && r.cash <= hi, type + ' payout'); assert.equal(r.heat, heat); } }
+assert.ok(ACT.rob('GUN SHOP', 0.5, 0.1).resist, 'gun shop clerk fights back sometimes'); assert.ok(ACT.rob('CORNER SHOP', 0.5, 0.1).ok, 'corner shop clerk never does');
+for (const t of ['BANK', 'HOSPITAL', 'POLICE', 'GYM']) assert.equal(ACT.rob(t, 0.5, 0.5), null, t + ' cannot be held up');
+assert.ok(!ACT.armed(null) && !ACT.armed({ cls: 'none' }) && ACT.armed({ cls: 'pistol' }), 'needs a real gun');
+assert.equal(ROB_COOLDOWN, 30 * 60000);
 // kit is loadable and exposes the painters the rooms use
 require('../interior-kit.js'); const K = globalThis.NightshiftInteriorKit;
 for (const f of ['floor', 'wall', 'neon', 'shelf', 'block', 'counter', 'fridges', 'aisle', 'carLift', 'vault', 'hospitalBed', 'cellBars', 'benchPress', 'tattooChair', 'djBooth', 'poolTable', 'glow']) assert.equal(typeof K[f], 'function', f);
