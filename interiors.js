@@ -307,7 +307,7 @@
     if (el < HOLD_MS) return;
     const r = ACT.rob(hold.type, Math.random(), Math.random()); state.robbed[hold.key] = Date.now(); persist();
     if (r.resist) { try { root.NightshiftAuthority?.damagePlayer?.(r.dmg, 'clerk'); } catch { p.hp = Math.max(1, p.hp - r.dmg); } api.shake?.(5); api.fx?.('muzzle', hold.spot.x, hold.spot.y - 30, 200); }
-    else { state.count.robberies = (state.count.robberies || 0) + 1; persist(); p.cash += r.cash; api.float(hold.spot.x, hold.spot.y - 50, '+$' + r.cash, '#7cffb5'); try { root.NightshiftSkills?.gain?.('stealth', 20, 'robbery'); } catch { /* optional */ } }
+    else { state.count.robberies = (state.count.robberies || 0) + 1; state.count['rob:' + hold.type] = (state.count['rob:' + hold.type] || 0) + 1; persist(); p.cash += r.cash; api.float(hold.spot.x, hold.spot.y - 50, '+$' + r.cash, '#7cffb5'); try { root.NightshiftSkills?.gain?.('stealth', 20, 'robbery'); } catch { /* optional */ } }
     const store = hold.type; raiseAlarm(store); p.heat = (p.heat || 0) + r.heat; say(r.msg); hold = null; gameSave();
     try { root.dispatchEvent?.(new CustomEvent('ns:event', { detail: { type: 'store-robbed', store, ok: r.ok } })); } catch { /* n/a */ }
   }
