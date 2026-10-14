@@ -1,0 +1,41 @@
+/* Loaded last so legacy module styles cannot restore the crowded control grid. */
+#hud{max-width:calc(100vw - 155px);padding:7px 10px;font-size:12px;line-height:1.55;border-color:#739baf55;background:#101728bb;box-shadow:0 2px 12px #0003}
+#map{font-size:10px;max-width:115px;background:#10172899}
+#crimeStatus{display:none}body[data-wanted="true"] #crimeStatus{display:block;top:82px!important;font-size:10px!important;max-width:160px!important;padding:5px!important}
+#jobPanel{top:118px!important;font-size:10px!important;padding:5px!important;max-width:180px!important}
+#help{display:none}body[data-control-hints="true"] #help{display:block;left:12px;bottom:165px;transform:none;max-width:155px;font-size:10px;pointer-events:none}
+#pad,#aimPad{z-index:2;width:112px;height:112px;bottom:calc(var(--control-bottom) + 4px);background:#182a3d55;border:1px solid #adc8df66}
+#pad{left:var(--control-edge-left)}#aimPad{right:var(--control-edge-right);left:auto;background:#42334844}
+#nub{width:44px;height:44px}#aimNub{left:calc(50% - 19px);top:calc(50% - 19px)}
+#pad::after{content:"MOVE / RUN"}#aimPad::after{content:"AIM / FIRE"}body[data-auto-fire="false"] #aimPad::after{content:"AIM"}body[data-driving="true"] #pad::after{content:"DRIVE"}
+#actions{z-index:4;right:var(--control-edge-right);bottom:calc(var(--control-bottom) + 134px);display:flex;flex-direction:row;align-items:center;gap:7px;max-width:calc(100vw - 28px)}
+#actions>button{display:none!important;width:48px;height:48px;font-size:10px;background:#20374ccc;border-color:#97bbcd88}
+#actions>button#more,#actions>button#use:not([hidden]),#actions>button#reload:not([hidden]),#actions>button#shoot:not([hidden]){display:block!important}
+#actions>button[hidden],#pad[hidden],#aimPad[hidden]{display:none!important}
+#actions.expanded{position:fixed;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));inset:auto 12px calc(var(--control-bottom) + 125px);width:auto;max-width:360px;max-height:calc(100dvh - 220px);overflow:auto;margin-left:auto;padding:12px;background:#101e30f5;border:1px solid #7897aa;border-radius:14px;gap:8px;box-shadow:0 10px 40px #0008}
+#actions.expanded>button{display:block!important;width:100%;height:44px;border-radius:8px}
+#actions.expanded>button:is(#use,#shoot,#reload,#run){display:none!important}
+body[data-control-hand="left"] #pad{left:auto;right:var(--control-edge-right)}body[data-control-hand="left"] #aimPad{left:var(--control-edge-left);right:auto}body[data-control-hand="left"] #actions{left:var(--control-edge-left);right:auto}body[data-control-hand="left"] #actions.expanded{inset:auto 12px calc(var(--control-bottom) + 125px);margin-left:0;margin-right:auto}
+body[data-control-size="compact"] #pad,body[data-control-size="compact"] #aimPad{width:100px;height:100px}
+body[data-control-size="compact"] #nub{width:44px;height:44px}
+@media(max-width:360px){#pad,#aimPad{width:100px;height:100px}#actions>button{width:44px;height:44px}#actions{gap:5px}#hud{font-size:11px}}
+@media(max-height:500px){#map{display:none}#hud{max-width:220px;font-size:10px}#actions{bottom:calc(var(--control-bottom) + 117px)}#pad,#aimPad{width:100px;height:100px}#actions.expanded{inset:12px 130px 12px;max-height:none;max-width:360px}body[data-control-hand="left"] #actions.expanded{inset:12px 130px 12px}#jobPanel{top:90px!important}body[data-wanted="true"] #crimeStatus{top:63px!important}body[data-control-hints="true"] #help{display:none}}
+
+#aimPad[data-firing="true"]{border-color:#f0c18b99;background:#66513b55}#aimPad[data-firing="true"] #aimNub{background:#efc591aa}
+
+/* Restrained glass panels and rounded controls for the illustrated city pass. */
+#hud,#map{background:linear-gradient(135deg,#102330e8,#172b36c9);border:1px solid #a2c4bb44;border-radius:12px;box-shadow:0 6px 24px #07101b44;color:#eef2df;letter-spacing:.15px}
+#actions>button{border-radius:13px!important;background:linear-gradient(160deg,#354e58ee,#19323de8);box-shadow:0 3px 10px #07101b44;color:#e8efdc}
+#actions.expanded{background:linear-gradient(140deg,#1c3544f7,#101e2ef5);border-color:#9bb7ac66;border-radius:18px}
+#toast{max-width:calc(100vw - 32px);border:1px solid #b9cbbc44;background:#152b39ed;box-shadow:0 10px 36px #06132166;font-size:13px;line-height:1.45}
+#nub,#aimNub{box-shadow:inset 0 2px 5px #dbe7de44,0 3px 12px #04122244}
+
+/* Living Streets: reserve safe-area space, stabilize numeric HUD width. */
+#hud,#map{top:calc(env(safe-area-inset-top,0px) + 10px);font-variant-numeric:tabular-nums}
+#hud{left:max(12px,env(safe-area-inset-left,0px));line-height:1.5}
+#map{right:max(12px,env(safe-area-inset-right,0px));white-space:pre-line;line-height:1.4}
+#actions>button:active{filter:brightness(1.2);transform:translateY(1px)}
+#actions>button:focus-visible{outline:2px solid #f4d597;outline-offset:3px}
+#toast{pointer-events:none;width:max-content;max-width:min(420px,calc(100vw - 32px))}
+@media(max-width:430px){#hud{font-size:11px;max-width:calc(100vw - 140px)}#map{max-width:116px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){#toast{transition:none}#actions>button:active{transform:none}}
