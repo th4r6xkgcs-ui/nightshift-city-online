@@ -54,6 +54,50 @@ function Pix(w, h) {
       }
       for (let i = 0; i < col.length; i++) col[i] = out[i]; return P;
     },
+    /** Painterly form pass (run BEFORE contour). Every authored ramp colour keeps its role, but is re-toned on an
+     *  11-step hue-shifted ramp by a per-part rounded height field (lit from the upper left), with ambient occlusion
+     *  where a later part overlaps, gloss on chosen parts and a cool rim light on the shadow-side silhouette.
+     *  ramps: { name: [c0..c4] } (light → dark); opts.parts: { partName: { r, gloss, flat, ao } }. Pixels stay 1 colour. */
+    paint(ramps, opts = {}) {
+      const L = (() => { const v = opts.light || [-0.55, -0.72, 0.62], n = Math.hypot(...v); return v.map((a) => a / n); })();
+      const warm = opts.warm || '#fff1c4', cool = opts.cool || '#2a1546', rimC = opts.rim || '#a9b8ff';
+      // fine ramps: hot, r0, ·, r1, ·, r2, ·, r3, ·, r4, deep  (index 0 = brightest)
+      const fine = {}, lut = new Map();
+      for (const [nm, r] of Object.entries(ramps)) {
+        if (!Array.isArray(r) || r.length < 3) continue; const f = [mix(r[0], warm, 0.45)];
+        for (let i = 0; i < r.length; i++) { f.push(r[i]); if (i + 1 < r.length) f.push(mix(r[i], r[i + 1], 0.5)); }
+        f.push(mix(r[r.length - 1], cool, 0.45)); fine[nm] = f;
+        r.forEach((c, i) => { if (!lut.has(c)) lut.set(c, [nm, 1 + 2 * i]); });
+      }
+      const cfg = (id) => (opts.parts || {})[parts[id]] || {}, R0 = opts.r || 7;
+      // distance (chamfer, px) from each pixel to its part's own silhouette (edges against air or an EARLIER part)
+      const INF = 1e9, d = new Float32Array(w * h).fill(INF), occ = new Float32Array(w * h).fill(INF), q = [];
+      const same = (i, j) => part[i] === part[j] && col[j];
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const i = y * w + x; if (!col[i]) continue; let edge = false, under = false;
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const xx = x + dx, yy = y + dy, j = yy * w + xx; if (xx < 0 || yy < 0 || xx >= w || yy >= h || !col[j]) { edge = true; continue; } if (part[j] !== part[i]) { if (part[j] < part[i]) edge = true; else under = true; } }
+        if (edge) d[i] = 0.5; if (under) occ[i] = 0.5;
+      }
+      const relax = (D, ok) => { for (let pass = 0; pass < 2; pass++) for (let k = 0; k < 2; k++) { const fw = k === 0; for (let yy = 0; yy < h; yy++) for (let xx = 0; xx < w; xx++) { const x = fw ? xx : w - 1 - xx, y = fw ? yy : h - 1 - yy, i = y * w + x; if (!col[i]) continue; for (const [dx, dy, c] of fw ? [[-1, 0, 1], [0, -1, 1], [-1, -1, 1.414], [1, -1, 1.414]] : [[1, 0, 1], [0, 1, 1], [1, 1, 1.414], [-1, 1, 1.414]]) { const X = x + dx, Y = y + dy; if (X < 0 || Y < 0 || X >= w || Y >= h) continue; const j = Y * w + X; if (ok(i, j) && D[j] + c < D[i]) D[i] = D[j] + c; } } } };
+      relax(d, same); relax(occ, same);
+      const ht = new Float32Array(w * h);
+      for (let i = 0; i < w * h; i++) if (col[i]) { const c = cfg(part[i]), R = c.r || R0, t = Math.min(d[i], R) / R; ht[i] = c.flat ? 1 : Math.sqrt(1 - (1 - t) * (1 - t)) * R * 0.5; }
+      const out = col.slice();
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const i = y * w + x, c0 = col[i]; if (!c0) continue; const m = lut.get(c0); if (!m) continue; const c = cfg(part[i]); if (c.flat && !c.ao) continue;
+        const hv = (X, Y) => { const j = Y * w + X; return X >= 0 && Y >= 0 && X < w && Y < h && same(i, j) ? ht[j] : ht[i]; };
+        const gx = (hv(x + 1, y) - hv(x - 1, y)) / 2, gy = (hv(x, y + 1) - hv(x, y - 1)) / 2, nn = Math.hypot(gx, gy, 1), n = [-gx / nn, -gy / nn, 1 / nn];
+        const lam = n[0] * L[0] + n[1] * L[1] + n[2] * L[2];
+        let off = c.flat ? 0 : Math.round((lam - L[2]) * (c.gain ?? opts.gain ?? 5) - (y / h - 0.45) * (opts.vgrad ?? 0));
+        if (c.gloss && lam > 0.9) off += 1 + (lam > 0.97 ? 1 : 0);
+        if (occ[i] < 3.5 && c.ao !== false) off -= occ[i] < 1.5 ? 2 : 1;                // contact shadow under an overlapping part
+        const [nm, base] = m, f = fine[nm], k = Math.max(0, Math.min(f.length - 1, base - off));
+        let o = f[k];
+        if (!c.flat && opts.rimLight !== false && n[0] > 0.3 && n[1] > -0.3 && (() => { for (let k = 1; k <= 2; k++) { const X = x + k; if (X >= w || !col[y * w + X]) return true; } return false; })()) o = mix(o, rimC, opts.rimMix ?? 0.3);  // cool rim on the shadow side
+        out[i] = o;
+      }
+      for (let i = 0; i < col.length; i++) col[i] = out[i]; return P;
+    },
     rgba() { const o = new Uint8ClampedArray(w * h * 4); for (let i = 0; i < col.length; i++) if (col[i]) { const [r, g, b] = hex(col[i]); o.set([r, g, b, 255], i * 4); } return o; },
     png() { return PNG.encode(P.rgba(), w, h); },
     bbox() { let x0 = w, y0 = h, x1 = -1, y1 = -1; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (col[y * w + x]) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); } return { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 }; },
