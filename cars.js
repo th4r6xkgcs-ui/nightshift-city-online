@@ -42,6 +42,8 @@
     classic: { shape: [[-32, -10], [-31, -13], [-27, -14.5], [-10, -15], [14, -15], [26, -14.2], [30.5, -12], [32, -8], [32, 0]], xr: -12, xf: 4, wsh: 7, rgl: 6, ins: 3.2, tire: [11, 5], wb: 0.3 },
     lowrider: { shape: [[-33, -11], [-32.5, -13.8], [-26, -14.5], [24, -14.5], [30, -13.5], [33, -10], [33, 0]], xr: -14, xf: 2, wsh: 6, rgl: 6, ins: 3, tire: [10, 4], wb: 0.31 },
     gt: { shape: [[-30, -11], [-29, -13.5], [-22, -14.5], [6, -14.5], [20, -13.8], [27, -11.5], [30, -7], [30.5, 0]], xr: -16, xf: -2, wsh: 8, rgl: 9, ins: 3.5, tire: [11, 5.5], wb: 0.3 },
+    // v0.66: compact sports coupe (BMW M4, Silvia S15): shorter hood than a GT, fastback roof
+    coupe: { shape: [[-28, -11.5], [-27, -13.8], [-20, -14.5], [8, -14.5], [19, -13.6], [25.5, -11], [28, -6.5], [28.5, 0]], xr: -14, xf: 1, wsh: 7, rgl: 7, ins: 3.2, tire: [10.5, 5.5], wb: 0.3 },
     super: { shape: [[-30, -13], [-29, -15.5], [-12, -15.5], [6, -14.5], [20, -12.5], [28, -9], [30, -5], [30.5, 0]], xr: -8, xf: 3, wsh: 9, rgl: 3, ins: 4, tire: [11, 6.5], wb: 0.29 },
     // the city's everyday cars (Codex models COMPACT / SEDAN / VAN), restyled with the same renderer
     sedan: { shape: [[-28, -11], [-27, -14], [-20, -15], [16, -15], [24, -13], [27.5, -9], [28, 0]], xr: -13, xf: 5, wsh: 7, rgl: 6, ins: 3, tire: [10, 5], wb: 0.3, doors: 2 },
@@ -71,6 +73,27 @@
   let styleBase = true;
   let bakeStyle = null; // style being baked (carstyle-data.js); read by glass() for tint
   const RIMS = { chrome: '#eef3f7', black: '#2a2f36', gold: '#f0c85a', deep: '#f7f9fb', neon: '#7af0ff' };
+  // v0.66 signature details for the cars brought over from Nightshift Garage
+  const SIG = {
+    m4: ({ c, hl, hw, xf, wsh, rw, R, RR, CIR, black, shade, color }) => {
+      for (const s of [-1, 1]) { RR(c, '#0c0e11', hl - 2.2, s * 2.4 - (s < 0 ? 2.2 : 0), 1.8, 2.2, 0.8); R(c, '#9aa3ab', hl - 1.9, s * 2.4 - (s < 0 ? 1.9 : 0.3), 1.2, 0.3); } // kidney grille
+      RR(c, shade(color, 0.1), xf + wsh + 4, -3, 10, 6, 2); R(c, '#ffffff26', xf + wsh + 4.5, -2.6, 8, 0.5); // power dome
+      for (const s of [-1, 1]) { RR(c, black, hl - 4, s * (hw - 3.4) - 1.2, 2.6, 2.4, 0.6); for (const d of [0, 2.4]) { CIR(c, '#5a6168', -hl - 0.4, s * (3 + d), 1.05); CIR(c, '#0c0e11', -hl - 0.6, s * (3 + d), 0.5); } } // intakes + quad exhaust
+    },
+    civic: ({ c, hl, hw, xr, rw, R, RR, black }) => { R(c, '#0c0e11', -hl + 1, -0.3, 4, 0.6); RR(c, black, hl - 0.8, -hw + 2, 1.2, hw * 2 - 4, 0.6); R(c, '#e0402a', -hl + 2, -rw + 1, 0.6, 2); },
+    charger: ({ c, hl, hw, xr, rgl, R, RR, chrome }) => {
+      RR(c, '#0c0e11', hl - 2.2, -hw + 2.6, 2.4, hw * 2 - 5.2, 0.8); for (let k = -hw + 3.4; k < hw - 3; k += 1.4) R(c, '#2a2f36', hl - 2, k, 2, 0.5); // full-width hidden-headlight grille
+      R(c, chrome, hl - 0.6, -hw + 2.6, 0.5, hw * 2 - 5.2);
+      R(c, '#0c0e11', -hl + 3, -2.2, 2.6, 4.4); for (const s of [-1, 1]) R(c, '#f4f1ea', -hl + 6.5, s * (hw - 4) - 1, 4, 2); // bumblebee tail stripe
+      void xr; void rgl;
+    },
+    s15: ({ c, hl, hw, rw, R, RR, black, shade, color }) => {
+      RR(c, black, hl - 1, -hw + 2.4, 1.6, hw * 2 - 4.8, 0.8); // front lip
+      RR(c, '#06080a', -hl - 2.4, -rw - 1.4, 3.4, rw * 2 + 2.8, 0.8); RR(c, shade(color, -0.25), -hl - 2, -rw - 1, 2.6, rw * 2 + 2, 0.6); R(c, '#ffffff38', -hl - 1.6, -rw - 0.6, 0.5, rw * 2 + 1.2); // drift wing
+    },
+    mustang: ({ c, hl, hw, R }) => { for (const s of [-1, 1]) for (let k = 0; k < 3; k++) R(c, '#ff2a3a', -hl + 0.2, s * (hw - 3.6 - k * 1.5) - 0.5, 1.4, 1); R(c, '#0c0e11', hl - 1.8, -3.2, 1.6, 6.4); },
+    gallardo: ({ c, hl, hw, xr, rw, R }) => { for (let k = 0; k < 5; k++) R(c, '#0c0e11', xr - 6 - k * 2.2, -rw + 2, 1, rw * 2 - 4); for (const s of [-1, 1]) R(c, '#0c0e11', hl - 6, s * (hw - 3) - 0.8, 4, 1.6); },
+  };
   function bake(id, color, st = null) {
     bakeStyle = st;
     const spec = D.BY[id] || BASE[id], B0 = BODY[spec.body], L = spec.len, W = spec.wid, S = BASE[id] ? 3 : 4, pad = 6;
@@ -102,7 +125,7 @@
     const xr = B0.xr * sx, xf = B0.xf * sx, wsh = B0.wsh * sx, rgl = B0.rgl * sx, ins = B0.ins;
     const rw = hw - ins; // roof half-width
     // ---- per-body paint work (under the glass) ----
-    if (spec.body === 'muscle') { // twin stripes nose to tail
+    if (spec.body === 'muscle' && spec.stripes !== false) { // twin stripes nose to tail
       for (const y0 of [-4.2, 1.2]) R(c, lum(color) > 0.7 ? '#1d2433' : '#f4f1ea', -hl + 1, y0, L - 2, 3);
     }
     if (spec.body === 'rally') { // livery: two diagonal bands + roof roundel
@@ -112,7 +135,7 @@
     if (spec.body === 'lowrider') { // gold pinstripe flames on the hood
       c.strokeStyle = '#f2c84a'; c.lineWidth = 0.55; for (const s of [-1, 1]) { c.beginPath(); c.moveTo(xf + wsh + 2, s * 2); c.bezierCurveTo(xf + wsh + 8, s * 9, hl - 10, s * 2, hl - 4, s * 7); c.moveTo(xf + wsh + 3, s * 5); c.bezierCurveTo(xf + wsh + 10, s * 11, hl - 12, s * 6, hl - 7, s * 10); c.stroke(); }
     }
-    if (spec.body === 'gt') { R(c, '#00000022', xf + wsh + 3, -5, hl - xf - wsh - 8, 1); R(c, '#00000022', xf + wsh + 3, 4, hl - xf - wsh - 8, 1); R(c, '#ffffff22', xf + wsh + 3, -4, hl - xf - wsh - 8, 0.6); }
+    if (spec.body === 'gt' || spec.body === 'coupe') { R(c, '#00000022', xf + wsh + 3, -5, hl - xf - wsh - 8, 1); R(c, '#00000022', xf + wsh + 3, 4, hl - xf - wsh - 8, 1); R(c, '#ffffff22', xf + wsh + 3, -4, hl - xf - wsh - 8, 0.6); }
     if (st) { // livery + hood (clipped to the body, under the glass)
       const lc = st.liveryColor || '#f4f1ea', hood0 = xf + wsh + 1.5, rwL = hw - ins;
       c.save(); poly(c, pts); c.clip();
@@ -149,7 +172,7 @@
       RR(c, shade(roofCol, -0.3), xr - 0.2, -rw - 0.2, xf - xr + 0.4, rw * 2 + 0.4, 1.6); RR(c, roofCol, xr, -rw, xf - xr, rw * 2, 1.4);
       const rg = c.createLinearGradient(0, -rw, 0, rw); rg.addColorStop(0, '#ffffff38'); rg.addColorStop(0.5, '#ffffff00'); rg.addColorStop(1, '#00000040'); c.fillStyle = rg; c.fillRect(xr, -rw, xf - xr, rw * 2);
       if (spec.body === 'lowrider') { R(c, '#d8ccb4', xr, -rw, (xf - xr) * 0.55, rw * 2); for (let k = 0; k < 4; k++) R(c, '#c4b698', xr + 1 + k * 2.2, -rw, 0.4, rw * 2); }
-      if (spec.body === 'muscle') for (const y0 of [-4.2, 1.2]) R(c, lum(color) > 0.7 ? '#1d2433' : '#f4f1ea', xr, y0, xf - xr, 3);
+      if (spec.body === 'muscle' && spec.stripes !== false) for (const y0 of [-4.2, 1.2]) R(c, lum(color) > 0.7 ? '#1d2433' : '#f4f1ea', xr, y0, xf - xr, 3);
       if (st?.livery === 'stripes') for (const y0 of [-4.4, 1.4]) R(c, st.liveryColor, xr, y0, xf - xr, 3);
       if (st?.livery === 'racing') { R(c, st.liveryColor, xr, -2.6, xf - xr, 5.2); CIR(c, '#f4f1ea', (xr + xf) / 2, 0, 3.4); c.fillStyle = '#14171c'; c.font = 'bold 4.4px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(String(((id.length * 7) % 89) + 10), (xr + xf) / 2, 0.3); }
       if (st?.livery === 'split') { c.globalAlpha = 0.9; R(c, st.liveryColor, xr, -rw, Math.max(0, (xr + xf) / 2 - xr), rw * 2); c.globalAlpha = 1; }
@@ -161,7 +184,7 @@
     // headlights
     const hx = hl - 3.2;
     if (spec.body === 'classic' || spec.body === 'lowrider') for (const s of [-1, 1]) { CIR(c, '#2a2e33', hx, s * (hw - 4.2), 2.3); CIR(c, '#fff4d0', hx, s * (hw - 4.2), 1.7); CIR(c, '#ffffff', hx + 0.5, s * (hw - 4.6), 0.6); }
-    else if (spec.body === 'gt' || spec.body === 'super' || spec.body === 'hyper') for (const s of [-1, 1]) { c.save(); c.translate(hx - 1, s * (hw - 4.5)); c.rotate(s * 0.35); RR(c, '#1a1f26', -2.6, -1.1, 5.2, 2.2, 1); R(c, '#e8f4ff', -2, -0.5, 4.2, 1); c.restore(); }
+    else if (spec.body === 'gt' || spec.body === 'coupe' || spec.body === 'super' || spec.body === 'hyper') for (const s of [-1, 1]) { c.save(); c.translate(hx - 1, s * (hw - 4.5)); c.rotate(s * 0.35); RR(c, '#1a1f26', -2.6, -1.1, 5.2, 2.2, 1); R(c, '#e8f4ff', -2, -0.5, 4.2, 1); c.restore(); }
     else for (const s of [-1, 1]) { RR(c, '#2a2e33', hx - 1, s * (hw - 4.5) - 2.2, 3.4, 4.4, 1); RR(c, '#fff4d0', hx - 0.4, s * (hw - 4.5) - 1.6, 2.2, 3.2, 0.8); R(c, '#ffffff', hx, s * (hw - 4.5) - 1.2, 0.8, 0.8); }
     // taillights
     for (const s of [-1, 1]) { if (spec.body === 'hyper') R(c, '#7a0f18', -hl + 0.6, s * (hw - 3) - (s < 0 ? 0 : 0), 1, s * -(hw - 6)); else RR(c, '#7a0f18', -hl + 0.3, s * (hw - 4.6) - 2, 1.8, 4, 0.6); }
@@ -182,7 +205,7 @@
     if (spec.body === 'super') {
       for (const s of [-1, 1]) poly(c, [[-12, s * (hw - 0.6)], [-3, s * (hw - 0.6)], [-11, s * (hw - 5.2)]], '#0c0e11');
       for (let k = 0; k < 6; k++) R(c, '#0c0e11', -hl + 6 + k * 2.4, -rw + 1.5, 1.1, rw * 2 - 3);
-      RR(c, '#0c0e11', -hl - 1.5, -hw - 1.6, 3.6, W + 3.2, 0.8); R(c, '#3a3f45', -hl - 1.2, -hw - 1.2, 0.8, W + 2.4); for (const s of [-1, 1]) R(c, '#0c0e11', -hl - 2, s * (hw + 0.6) - 1, 5, 2); // wing
+      if (spec.wing !== false) { RR(c, '#0c0e11', -hl - 1.5, -hw - 1.6, 3.6, W + 3.2, 0.8); R(c, '#3a3f45', -hl - 1.2, -hw - 1.2, 0.8, W + 2.4); for (const s of [-1, 1]) R(c, '#0c0e11', -hl - 2, s * (hw + 0.6) - 1, 5, 2); } // wing
       R(c, '#0c0e11', hl - 0.8, -hw + 4, 1.4, W - 8); // splitter
     }
     if (spec.body === 'hyper') { RR(c, '#0c0e11', -hl - 0.8, -hw - 0.8, 3, W + 1.6, 0.8); R(c, '#3a3f45', -hl - 0.5, -hw - 0.4, 0.6, W + 0.8); for (let k = -2; k <= 2; k++) R(c, '#0c0e11', -hl + 3, k * 3 - 0.4, 6, 0.8); }
@@ -190,6 +213,7 @@
     if (spec.body === 'compact') { RR(c, black, hl - 1, -hw + 3, 1.4, W - 6, 0.7); RR(c, black, -hl - 0.4, -hw + 3, 1.4, W - 6, 0.7); for (const s of [-1, 1]) R(c, '#d9dee3', (xr + xf) / 2 - 2, s * (hw - 1.4) - 0.3, 2, 0.6); }
     if (spec.body === 'van') { for (let k = 0; k < 3; k++) RR(c, shade(color, -0.12), xr + 6 + k * 9, -3, 5, 6, 1); c.strokeStyle = shade(color, -0.45); c.lineWidth = 0.5; for (const s of [-1, 1]) { c.beginPath(); c.moveTo(-4, s * (hw - 0.3)); c.lineTo(-4, s * (rw + 0.3)); c.moveTo(-14, s * (hw - 0.3)); c.lineTo(-14, s * (rw + 0.3)); c.stroke(); R(c, '#2a2e33', -12, s * (hw - 0.6) - 0.3, 6, 0.6); } c.beginPath(); c.moveTo(-hl + 0.5, 0); c.lineTo(-hl + 3, 0); c.stroke(); RR(c, black, hl - 1.4, -hw + 2.5, 2.2, W - 5, 1); RR(c, black, -hl - 0.8, -hw + 2.5, 2.2, W - 5, 1); }
     if (spec.body === 'hatch') { R(c, '#0c0e11', xr - 0.6, -rw + 0.5, 1.2, rw * 2 - 1); RR(c, black, hl - 1.2, -hw + 2.5, 1.8, W - 5, 0.8); RR(c, black, -hl - 0.6, -hw + 2.5, 1.8, W - 5, 0.8); }
+    try { SIG[id]?.({ c, L, W, hl, hw, xr, xf, wsh, rgl, rw, fx, rx, tw, th, color, dark, deep, chrome, black, shade, R, RR, CIR, poly }); } catch (e) { console.error(e); }
     if (st) {
       if (st.exhaust === 'twin') for (const sgn of [-1, 1]) { CIR(c, '#5a6168', -hl - 0.4, sgn * (hw - 6.5), 1.3); CIR(c, '#d9e0e6', -hl - 0.4, sgn * (hw - 6.5), 0.9); CIR(c, '#0c0e11', -hl - 0.6, sgn * (hw - 6.5), 0.5); }
       if (st.exhaust === 'quad') for (const sgn of [-1, 1]) for (const d of [0, 2.6]) { CIR(c, '#5a6168', -hl - 0.4, sgn * (hw - 5.5 - d), 1.1); CIR(c, '#d9e0e6', -hl - 0.4, sgn * (hw - 5.5 - d), 0.75); CIR(c, '#0c0e11', -hl - 0.6, sgn * (hw - 5.5 - d), 0.4); }
