@@ -43,7 +43,7 @@
   // performance from a city catalog entry (or a base car)
   function perf(spec) {
     const top = pxs(spec?.kmh || (spec?.max ? 150 + (spec.max - 6.5) * 40 : 175));
-    const zeroHundred = Math.max(2.8, 12.5 - (spec?.accel || 0.24) * 22); // seconds 0-100
+    const zeroHundred = spec?.hp ? Math.max(2.8, 2.6 + 900 / spec.hp) : Math.max(3.2, 12.5 - (spec?.accel || 0.24) * 22); // seconds 0-100 (real cars: from horsepower)
     return { top, accel: pxs(100) / zeroHundred, steer: 150 + (spec?.steer || 0.04) * 2200, gears: spec?.kmh > 280 ? 7 : 6, drive: spec?.drive || 'RWD', hp: spec?.hp || 150 };
   }
   // speed/gear step. input: { throttle 0..1, brake 0..1, nitro bool, dt s }; car: { v, fuel, condition, spikes }

@@ -337,6 +337,7 @@
   #hwPanel .row{display:flex;gap:8px;align-items:center;background:#16233d;border:1px solid #2f4669;border-radius:9px;padding:7px 9px;margin-bottom:6px} #hwPanel .row div{flex:1} #hwPanel .row small{display:block;color:#b9c8da;font-size:11px}
   #hwPanel button{all:unset;box-sizing:border-box;cursor:pointer;font:700 12px ui-monospace,Menlo,monospace;background:#2c4c7c;color:#fff;border:1px solid #6f8db3;border-radius:8px;padding:6px 10px;white-space:nowrap} #hwPanel button[disabled]{opacity:.4;cursor:default} #hwPanel .go{background:#2f8f6a;border-color:#7cffb5;padding:9px 14px;font-size:14px}
   #hwRace{all:unset;position:fixed;z-index:30;left:50%;top:128px;transform:translateX(-50%);cursor:pointer;padding:9px 16px;border-radius:12px;background:linear-gradient(160deg,#5a3a08f0,#2a1a04f0);border:1px solid #ffd970;color:#fff1c4;font:800 14px ui-monospace,Menlo,monospace;box-shadow:0 0 16px #ffd97066} #hwRace[hidden]{display:none}
+  body[data-highway="on"] #actions:not(.expanded)>button:is(#use,#reload,#melee,#roll,#rob,#surrender),body[data-highway="on"] #aimPad,body[data-highway="on"] #wpPill,body[data-highway="on"] #lfRadio{display:none!important}
   body[data-highway="on"] #glCard,body[data-highway="on"] #stCard,body[data-highway="on"] #minimap,body[data-highway="on"] #mmWrap{display:none!important}`;
   document.head.appendChild(css);
   const panel = Object.assign(document.createElement('section'), { id: 'hwPanel', hidden: true }); document.body.appendChild(panel);
