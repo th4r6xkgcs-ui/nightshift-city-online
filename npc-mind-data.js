@@ -20,6 +20,10 @@
     Ironworks: ['welder', 'forklift driver', 'machinist', 'scrapyard hand', 'night-shift foreman'],
     Heights: ['architect', 'dentist', 'yoga teacher', 'startup founder', 'art dealer', 'retired judge'],
     Fairview: ['mechanic', 'school bus driver', 'hairdresser', 'mail carrier', 'youth coach', 'line cook'],
+    Southside: ['corner-store clerk', 'barber', 'mechanic', 'youth coach', 'line cook', 'bus driver'],
+    'The Docks': ['dockworker', 'trucker', 'net mender', 'forklift driver'],
+    Midtown: ['office temp', 'gallery assistant', 'hotel valet', 'paralegal', 'sushi chef'],
+    'West End': ['skate-shop clerk', 'tattoo artist', 'thrift-store owner', 'busker'],
     'The Flats': ['DJ', 'club promoter', 'bouncer', 'model', 'sneaker reseller', 'producer'],
   };
   // bravery: how likely to stand their ground; gossip: how fast they spread news; temper: how quick to confront.
@@ -32,7 +36,7 @@
   const TRAIT_IDS = Object.keys(TRAITS);
   const LIKES = ['late-night tacos', 'old-school hip hop', 'street racing', 'boxing on TV', 'the Harbor sunsets', 'cheap lottery tickets', 'vintage sneakers', 'karaoke', 'their dog', 'telenovelas', 'fixing up old cars', 'pickup basketball', 'conspiracy podcasts', 'the night market', 'jazz bars', 'fishing off the pier', 'anime', 'gym selfies'];
   const GANGS = ['market', 'diablos', 'kings', 'tape', 'saints', 'rats'];
-  const DISTRICTS = ['Downtown', 'Old Town', 'Market', 'Harbor', 'Ironworks', 'Heights', 'Fairview', 'The Flats'];
+  const DISTRICTS = ['Downtown', 'Old Town', 'Market', 'Harbor', 'Ironworks', 'Heights', 'Fairview', 'The Flats', 'Southside', 'The Docks', 'Midtown', 'West End'];
   const PER_DISTRICT = 40;
   // Secrets; {d} = a district, {n} = a number. kind drives what the card can do with it.
   const SECRETS = [
