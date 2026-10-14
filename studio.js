@@ -35,7 +35,7 @@
   #csStudio[hidden]{display:none} #csStudio button{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;border-radius:10px;font:700 12px var(--disp,system-ui);letter-spacing:.04em}
   #csStudio .stage{position:relative;display:flex;flex-direction:column;min-height:0;border-right:1px solid #ffffff14}
   #csStudio .stage canvas{flex:1;min-height:0;width:100%;touch-action:none;cursor:grab}
-  #csStudio .bar{display:flex;gap:6px;align-items:center;padding:6px 8px;flex-wrap:wrap} #csStudio .chip{padding:7px 10px;background:#ffffff10;border:1px solid #ffffff22;color:#cfe0f2} #csStudio .chip.on{background:linear-gradient(180deg,#ffd970,#c99a2a);color:#1b1408;border-color:transparent}
+  #csStudio .bar[hidden]{display:none} #csStudio .bar{display:flex;gap:6px;align-items:center;padding:6px 8px;flex-wrap:wrap} #csStudio .chip{padding:7px 10px;background:#ffffff10;border:1px solid #ffffff22;color:#cfe0f2} #csStudio .chip.on{background:linear-gradient(180deg,#ffd970,#c99a2a);color:#1b1408;border-color:transparent}
   #csStudio .rot{width:40px;height:40px;font-size:18px;background:#ffffff14;border:1px solid #ffffff26} #csStudio input[type=range]{flex:1;accent-color:#ffd970;min-width:60px}
   #csStudio .dirlbl{font:800 11px var(--disp,system-ui);letter-spacing:.2em;color:#9fb3c8;min-width:34px;text-align:center}
   #csStudio .side{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden} #csStudio .side>*:not(.scroll){flex:none}
