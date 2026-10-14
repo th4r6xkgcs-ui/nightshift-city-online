@@ -616,3 +616,8 @@ Audit at iPhone landscape size (852×393, touch) from a fresh save, then fixes:
 - **Interiors**: `zones.js` bakes zone grounds at 2x; `interiors.js` floors/walls get wood grain, tile grout, carpet pile, wallpaper and light pooling. Zone entry title is now a small line at the top.
 - **Minimap**: renders the city straight into its small canvas (the old world-sized temp canvas was over the iPhone canvas limit).
 - Salvage crates moved clear of benches (tests follow). 113 suites PASS; headless fps ~54–58 (renderer stepped to 2.5x in the software headless browser).
+
+## v0.68 — HD top-down cars (Claude)
+- New `car-hd.js` (NightshiftCarHD.bake), hooked from `cars.js` bake after the image hook, so a real PNG in `art/top/cars/<id>.png` still wins.
+- Procedural HD sprites: curved per-body profiles, contact shadow, tyres peeking out of fender bulges, cylinder shading with a key-light streak, clear-coat bands, multiply contrast pass, rim light + outline, shut lines, glass greenhouse, pillars, mirrors, per-family head/tail lights, diffuser/exhaust, liveries and signature details.
+- Falls back to the legacy baker on any error. Tests: `node tests/run.cjs` → 116 suites PASS.
