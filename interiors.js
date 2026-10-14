@@ -23,8 +23,15 @@
     return n;
   }
   const BRANDS = { 'GUN SHOP': ['AMMO & ARMS', 'IRON SIGHT', 'LOCK & LOAD'], TATTOO: ['INK HOUSE', 'BLACKLINE', 'NEEDLE & CO'], 'AUTO PARTS': ['PARTS+', 'TORQUE SUPPLY', 'BOOST SHOP'], GYM: ['IRON GYM', 'PUMP HOUSE', '24 FIT'], POLICE: ['POLICE', 'PRECINCT 9'], HOSPITAL: ['CITY HOSPITAL', 'MERCY MED'] };
+  // v0.71 actions (pure logic in ACT so it can be tested in Node)
+  const ACT = {
+    heal(p) { if (p.hp >= 100) return { ok: false, msg: '🩺 "You look fine. Next!"' }; const cost = p.cash >= 60 ? 60 : 0; p.cash -= cost; p.hp = 100; return { ok: true, msg: cost ? '🩺 Patched up · full health ($60)' : '🩺 No money? They patch you up anyway. Full health.' }; },
+    fine(p) { const heat = p.heat || 0; if (heat < 0.1) return { ok: false, msg: '🚔 "Nothing on file. Keep it that way."' }; const cost = Math.ceil(heat * 150); if (p.cash < cost) return { ok: false, msg: `🚔 Fine is $${cost}. Come back with the cash.` }; p.cash -= cost; p.heat = 0; return { ok: true, msg: `🚔 Fine paid ($${cost}) · wanted level cleared` }; },
+    tattoo(p, last, now) { if (now - last < 10 * 60000) return { ok: false, msg: '🖋️ Still healing. Give it a few minutes.' }; if (p.cash < 150) return { ok: false, msg: '🖋️ A piece is $150' }; p.cash -= 150; return { ok: true, msg: '🖋️ Fresh ink · +charisma, the block respects it' }; },
+    train(p, last, now) { if (now - last < 3 * 60000) return { ok: false, msg: '🏋️ Muscles need rest · come back in a few minutes' }; if (p.cash < 20) return { ok: false, msg: '🏋️ Day pass is $20' }; p.cash -= 20; return { ok: true, msg: '🏋️ Good session · +athletics +strength ($20)' }; },
+  };
   root.NightshiftVariants = Object.freeze({ variant, BRANDS });
-  if (!root.document) { if (typeof module !== 'undefined') module.exports = { variant, BRANDS }; return; }
+  if (!root.document) { if (typeof module !== 'undefined') module.exports = { variant, BRANDS, ACT }; return; }
 
   const KEY = 'nightshift-interiors-v1';
   let state = { crates: {}, mail: {} };
@@ -266,13 +273,6 @@
   function drink() { const p = P(); if (!p) return; if (p.cash < 40) { say('Needs $40'); return; } p.cash -= 40; p.hp = Math.min(100, p.hp + 10); try { root.NightshiftSkills?.gain?.('charisma', 15, 'bar'); } catch { /* optional */ } say('🥃 You buy a round · +10 health, people like you more'); gameSave(); }
   let lastDance = 0;
   function dance() { const now = Date.now(); if (now - lastDance < 60000) { say('💃 Catch your breath first'); return; } lastDance = now; const p = P(); if (p) p.heat = Math.max(0, (p.heat || 0) - 0.5); try { root.NightshiftSkills?.gain?.('athletics', 12, 'dance'); } catch { /* optional */ } say('🕺 You hit the floor · heat cools off, +athletics'); }
-  // v0.71 actions (pure logic in ACT so it can be tested in Node)
-  const ACT = {
-    heal(p) { if (p.hp >= 100) return { ok: false, msg: '🩺 "You look fine. Next!"' }; const cost = p.cash >= 60 ? 60 : 0; p.cash -= cost; p.hp = 100; return { ok: true, msg: cost ? '🩺 Patched up · full health ($60)' : '🩺 No money? They patch you up anyway. Full health.' }; },
-    fine(p) { const heat = p.heat || 0; if (heat < 0.1) return { ok: false, msg: '🚔 "Nothing on file. Keep it that way."' }; const cost = Math.ceil(heat * 150); if (p.cash < cost) return { ok: false, msg: `🚔 Fine is $${cost}. Come back with the cash.` }; p.cash -= cost; p.heat = 0; return { ok: true, msg: `🚔 Fine paid ($${cost}) · wanted level cleared` }; },
-    tattoo(p, last, now) { if (now - last < 10 * 60000) return { ok: false, msg: '🖋️ Still healing. Give it a few minutes.' }; if (p.cash < 150) return { ok: false, msg: '🖋️ A piece is $150' }; p.cash -= 150; return { ok: true, msg: '🖋️ Fresh ink · +charisma, the block respects it' }; },
-    train(p, last, now) { if (now - last < 3 * 60000) return { ok: false, msg: '🏋️ Muscles need rest · come back in a few minutes' }; if (p.cash < 20) return { ok: false, msg: '🏋️ Day pass is $20' }; p.cash -= 20; return { ok: true, msg: '🏋️ Good session · +athletics +strength ($20)' }; },
-  };
   const now0 = () => Date.now(); let lastInk = 0, lastTrain = 0;
   function heal() { const p = P(); if (!p) return; const r = ACT.heal(p); say(r.msg); if (r.ok) gameSave(); }
   function payFine() { const p = P(); if (!p) return; const r = ACT.fine(p); say(r.msg); if (r.ok) gameSave(); }
