@@ -4,6 +4,7 @@
  *  - Recoil: the camera kicks back along your aim on every shot (by class), easing back in a fraction of a second.
  *  - Hit markers on the crosshair (white tick), KILL markers (red X + chime) when a target goes down.
  *  - Low health: a pulsing red vignette and a heartbeat under 35 HP.
+ *  - v0.72: reload foley per class (mag out / in / charge; shotgun shells + pump) and a dry-fire click on an empty gun.
  * Respects the game's SOUND toggle and reduced motion. Hooks: NightshiftFeedback.shot/hit/crosshair,
  * NightshiftCombatVision.shot (enemy fire), NightshiftCamera.step, NightshiftEnvironment.overlay.
  * Pure tuning in NightshiftCombatFeel.TUNE (Node-testable). API: NightshiftCombatFeel.{TUNE, stats} */
@@ -26,7 +27,7 @@
   /* eslint-enable no-undef */
   const reduced = root.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   const soundOn = () => document.querySelector('#sound')?.getAttribute('aria-pressed') === 'true';
-  const st = { shots: 0, enemyShots: 0, hits: 0, kills: 0 };
+  const st = { shots: 0, enemyShots: 0, hits: 0, kills: 0, reloads: 0, dry: 0 };
 
   // ---------------- audio ----------------
   let ac = null, noise = null, bus = null, echo = null;
@@ -54,6 +55,13 @@
     if (!suppressed && T.thump) { const o = a.createOscillator(), og = a.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(38, t + 0.14); og.gain.setValueAtTime(0.7 * T.thump * gain, t); og.gain.exponentialRampToValueAtTime(0.001, t + 0.16); o.connect(og); og.connect(bus); o.start(t); o.stop(t + 0.18); }
   }
   function tone(f0, f1, dur, vol) { const a = audio(); if (!a) return; const t = a.currentTime, o = a.createOscillator(), g = a.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur); o.connect(g); g.connect(bus); o.start(t); o.stop(t + dur + 0.02); }
+  function clack(at, freq = 2600, vol = 0.25, len = 0.035) { const a = audio(); if (!a) return; const t = a.currentTime + at, src = a.createBufferSource(); src.buffer = noise; const bp = a.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = 3; const g = a.createGain(); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + len); src.connect(bp); bp.connect(g); g.connect(bus); src.start(t, Math.random() * 0.3, len + 0.02); }
+  /** reload foley by class: mag out → mag in → charge (shotgun: shells + pump) */
+  function reloadSound(cls) {
+    if (cls === 'shotgun') { for (let i = 0; i < 3; i++) clack(0.15 + i * 0.28, 1800, 0.22); clack(1.05, 900, 0.35, 0.08); clack(1.18, 1300, 0.35, 0.07); return; }
+    clack(0.05, 2200, 0.2); clack(0.55, 1700, 0.3, 0.05); if (cls === 'rifle' || cls === 'smg') clack(0.85, 1100, 0.3, 0.07); else clack(0.8, 2800, 0.22);
+  }
+  function dryClick() { clack(0, 3200, 0.18, 0.02); }
   function beat() { const a = audio(); if (!a) return; const t = a.currentTime; for (const [dt, v] of [[0, 0.5], [0.16, 0.35]]) { const o = a.createOscillator(), g = a.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(70, t + dt); o.frequency.exponentialRampToValueAtTime(40, t + dt + 0.12); g.gain.setValueAtTime(v, t + dt); g.gain.exponentialRampToValueAtTime(0.001, t + dt + 0.14); o.connect(g); g.connect(bus); o.start(t + dt); o.stop(t + dt + 0.16); } }
 
   // ---------------- player weapon ----------------
@@ -108,6 +116,17 @@
     return true;
   }
 
+  // ---------------- reloads + dry fire ----------------
+  let wasReloading = false, nextClick = 0;
+  function weaponWatch() {
+    /* eslint-disable no-undef */
+    const cs = (() => { try { return combatState; } catch { return null; } })(), trying = (() => { try { return !!(firing || aimFire || mouseFire); } catch { return false; } })();
+    /* eslint-enable no-undef */
+    const p = P(); if (!p || !cs) return; const reloading = !!cs.until;
+    if (reloading && !wasReloading && !p.car) { st.reloads++; reloadSound(gun().cls); }
+    wasReloading = reloading;
+    const now = performance.now(); if (trying && !reloading && !p.car && p.ammo === 0 && now > nextClick) { st.dry++; dryClick(); nextClick = now + 380; }
+  }
   // ---------------- low health ----------------
   let nextBeat = 0;
   function hookOverlay() {
@@ -121,7 +140,7 @@
           const gr = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.25, w / 2, h / 2, Math.max(w, h) * 0.62); gr.addColorStop(0, 'rgba(190,0,16,0)'); gr.addColorStop(0.6, `rgba(190,0,16,${(a * 0.35).toFixed(3)})`); gr.addColorStop(1, `rgba(190,0,16,${a.toFixed(3)})`); ctx.save(); ctx.fillStyle = gr; ctx.fillRect(0, 0, w, h); ctx.restore();
           if (t > nextBeat) { nextBeat = t + 600 + p.hp * 14; beat(); }
         }
-        killWatch();
+        killWatch(); weaponWatch();
       } catch { /* cosmetic */ }
       return r;
     };

@@ -9,7 +9,8 @@
  * on your rear quarter (spins you out) — but only when they have a clear line; otherwise they stay on the streets and
  * never drive through buildings. They swerve around traffic. Ram a cruiser hard and it spins out; three hits wrecks it
  * (smoking wreck, a replacement is radioed in later). ★5 adds a helicopter: its searchlight keeps updating where the
- * police think you are — outrun the light or get indoors. Civilian traffic pulls over for sirens and floors it away
+ * police think you are — outrun the light or get indoors. v0.72: ★4 roadblocks lay a SPIKE STRIP in front: run it and
+ * your tyres pop (speed capped, wobble, sparks) until a garage / auto parts store fixes them (NightshiftPoliceCars.repairAll). Civilian traffic pulls over for sirens and floors it away
  * from gunfire (wraps NightshiftTrafficSafety.speed). Pure helpers in NightshiftPursuit (Node-testable).
  * API: NightshiftPoliceCars.{cars, roadblocks, stats} */
 (function (root) {
@@ -121,10 +122,19 @@
     if (n.i < 1 || n.j < 1 || n.i > M.i - 1 || n.j > M.j - 1) return;
     const horiz = Math.abs(Math.cos(a)) > Math.abs(Math.sin(a)), across = horiz ? Math.PI / 2 : 0, made = [];
     for (const off of [-26, 26]) { const car = { id: 'rb-' + Date.now().toString(36) + off, x: q.x + (horiz ? 0 : off), y: q.y + (horiz ? off : 0), angle: across + (off > 0 ? 0.25 : -0.25), model: 'SEDAN', color: '#1d2433', speed: 0, owner: false, locked: true, police: true, roadblock: true }; env.cars.push(car); made.push(car); }
-    blocks.push({ x: q.x, y: q.y, cars: made, until: now + 45000 }); st.roadblocks++;
+    const dir = horiz ? Math.sign(Math.cos(a)) : Math.sign(Math.sin(a)), strip = { x: q.x - (horiz ? dir * 80 : 0), y: q.y - (horiz ? 0 : dir * 80), angle: horiz ? Math.PI / 2 : 0, len: 70 };
+    blocks.push({ x: q.x, y: q.y, cars: made, until: now + 45000, strip }); st.roadblocks++;
     const C = root.NightshiftCrime; if (C?.officers) for (let k = 0; k < 2; k++) { const back = horiz ? { x: q.x - Math.sign(Math.cos(a)) * -40, y: q.y + (k ? 30 : -30) } : { x: q.x + (k ? 30 : -30), y: q.y - Math.sign(Math.sin(a)) * -40 }; C.officers.push({ ...back, hp: 70, maxHp: 70, role: 'officer', id: 'cop-rb-' + Math.floor(Math.random() * 1e6), nextAttack: now + 1500, color: '#7798de', angle: a + Math.PI, searchIndex: k, slot: C.officers.length, mode: 'cover', inCover: true }); }
     try { root.say?.('🚧 Roadblock ahead!'); } catch { /* n/a */ }
   }
+  // ★4 spike strips: driving over one pops your tyres; flat cars are capped and wobble until fixed at a garage
+  const flats = new Set();
+  function spikeTick(env, now) {
+    const pc = env.player.car;
+    if (pc && !pc.flat) for (const b of blocks) { if (b.strip && PU.onStrip(pc, b.strip)) { pc.flat = true; pc.flatAt = now; flats.add(pc); st.spikes = (st.spikes || 0) + 1; try { root.say?.('💥 Spike strip! Tyres blown · get them fixed at a garage or auto parts store'); root.NightshiftFx?.shake?.(0.5); root.NightshiftVehicles?.hit?.(pc); } catch { /* n/a */ } } }
+    if (pc && pc.flat) { const cap = PU.FLAT_CAP; if (Math.abs(pc.speed || 0) > cap) pc.speed = Math.sign(pc.speed) * cap; if (Math.abs(pc.speed || 0) > 1) pc.angle = (pc.angle || 0) + Math.sin(now / 90) * 0.004; }
+  }
+  function repairAll() { let n = 0; for (const c of flats) { if (c.flat) n++; c.flat = false; } flats.clear(); return n; }
   // ★5 helicopter: follows with lag; while you're in its searchlight the police know exactly where you are
   function heliTick(env, now, dt, s) {
     const p = env.player, tgt = p.car || p;
@@ -158,6 +168,7 @@
       if (chase.length < n && now > (tick.nextSpawn || 0)) { if (spawnCar(env, s >= 5 && !chase.some((c) => c.swat))) tick.nextSpawn = now + 5000; }
       for (let i = chase.length - 1; i >= 0; i--) { const c = chase[i]; if (chase.length > n && dist(c, env.player) > 800) { chase.splice(i, 1); continue; } carTick(env, c, now, dt, s); }
       roadblockTick(env, now, s);
+      spikeTick(env, now);
       for (let i = wrecks.length - 1; i >= 0; i--) if (now - wrecks[i].wreckAt > 25000 || dist(wrecks[i], env.player) > 1400) wrecks.splice(i, 1);
       heliTick(env, now, dt, s);
     } else if (env && inZone()) { chase.length = 0; heli = null; }
@@ -180,6 +191,8 @@
     const env = E(); if (!env || inZone()) return; const ctx = env.g, now = performance.now();
     for (const c of chase) { try { root.NightshiftSprites?.car?.(c); } catch { /* n/a */ } lightbar(ctx, c, now); }
     for (const b of blocks) for (const c of b.cars) lightbar(ctx, c, now);
+    for (const b of blocks) if (b.strip) { const t = b.strip; ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle); ctx.fillStyle = '#0b0d14'; ctx.fillRect(-t.len / 2 - 1, -4, t.len + 2, 8); ctx.fillStyle = '#3a3f48'; ctx.fillRect(-t.len / 2, -3, t.len, 6); ctx.fillStyle = '#c9d1d6'; for (let x = -t.len / 2 + 2; x < t.len / 2; x += 5) { ctx.beginPath(); ctx.moveTo(x, -3); ctx.lineTo(x + 2, -7); ctx.lineTo(x + 4, -3); ctx.fill(); ctx.beginPath(); ctx.moveTo(x, 3); ctx.lineTo(x + 2, 7); ctx.lineTo(x + 4, 3); ctx.fill(); } ctx.restore(); }
+    const pc = env.player.car; if (pc && pc.flat && Math.abs(pc.speed || 0) > 1) { ctx.fillStyle = '#ffd27a'; for (let i = 0; i < 4; i++) { const a = (pc.angle || 0) + Math.PI + (Math.random() - 0.5); ctx.fillRect(pc.x + Math.cos(pc.angle) * -20 + Math.cos(a) * Math.random() * 12, pc.y + Math.sin(pc.angle) * -20 + Math.sin(a) * Math.random() * 12, 2, 2); } }
     for (const w of wrecks) { try { root.NightshiftSprites?.car?.(w); } catch { /* n/a */ } ctx.save(); ctx.translate(w.x, w.y); ctx.rotate(w.angle || 0); ctx.fillStyle = 'rgba(10,8,8,0.55)'; ctx.fillRect(-26, -13, 52, 26); ctx.restore(); const k = (now / 600) % 1; for (let i = 0; i < 3; i++) { const kk = (k + i / 3) % 1; ctx.fillStyle = `rgba(60,60,64,${0.45 * (1 - kk)})`; ctx.beginPath(); ctx.arc(w.x + 4 + kk * 10, w.y - 6 - kk * 34, 6 + kk * 12, 0, Math.PI * 2); ctx.fill(); } if (now - w.wreckAt < 1500) { ctx.fillStyle = `rgba(255,140,40,${0.6 * (1 - (now - w.wreckAt) / 1500)})`; ctx.beginPath(); ctx.arc(w.x, w.y, 30, 0, Math.PI * 2); ctx.fill(); } }
     if (heli) {
       ctx.save(); ctx.globalCompositeOperation = 'lighter'; const gl = ctx.createRadialGradient(heli.lx, heli.ly, 4, heli.lx, heli.ly, 80); gl.addColorStop(0, heli.lit ? '#fff6d0aa' : '#fff6d066'); gl.addColorStop(1, '#fff6d000'); ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(heli.lx, heli.ly, 80, 0, Math.PI * 2); ctx.fill(); ctx.restore();
@@ -192,5 +205,5 @@
     }
   }
   const hook = setInterval(() => { const C = root.NightshiftCrime; if (C && typeof C.draw === 'function' && !C.__pcars) { const d0 = C.draw; C.draw = function () { try { draw(); } catch { /* cosmetic */ } return d0.apply(this, arguments); }; C.__pcars = true; clearInterval(hook); } }, 300);
-  root.NightshiftPoliceCars = Object.freeze({ cars: () => chase, roadblocks: () => blocks, wrecks: () => wrecks, heli: () => heli, stats: () => ({ ...st, cars: chase.length, blocks: blocks.length, wrecks: wrecks.length, heli: !!heli }) });
+  root.NightshiftPoliceCars = Object.freeze({ cars: () => chase, roadblocks: () => blocks, wrecks: () => wrecks, heli: () => heli, repairAll, flats: () => [...flats].filter((c) => c.flat).length, stats: () => ({ ...st, cars: chase.length, blocks: blocks.length, wrecks: wrecks.length, heli: !!heli }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
