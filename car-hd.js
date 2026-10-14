@@ -11,14 +11,14 @@
   'use strict';
   // half-width profile (fraction of half-width) from tail x=-1 to nose x=+1
   const P = {
-    hatch: [[-1, .84], [-.97, .96], [-.86, 1], [-.6, 1], [-.36, .95], [.3, .95], [.56, .99], [.8, .97], [.94, .86], [1, .68]],
+    hatch: [[-1, .84], [-.97, .96], [-.86, 1], [-.6, 1], [-.38, .92], [.3, .92], [.56, .99], [.8, .97], [.94, .84], [1, .66]],
     compact: [[-1, .84], [-.97, .96], [-.86, 1], [-.6, 1], [-.36, .95], [.3, .95], [.56, .99], [.8, .97], [.94, .86], [1, .66]],
-    sedan: [[-1, .8], [-.97, .94], [-.85, 1], [-.55, .99], [-.3, .95], [.3, .95], [.58, .99], [.84, .96], [.96, .84], [1, .62]],
-    coupe: [[-1, .74], [-.96, .93], [-.8, 1], [-.58, 1], [-.36, .91], [.16, .9], [.5, .97], [.76, .96], [.93, .8], [1, .52]],
-    gt: [[-1, .72], [-.96, .92], [-.82, 1], [-.6, 1], [-.4, .91], [.08, .89], [.48, .96], [.8, .94], [.95, .78], [1, .48]],
-    rally: [[-1, .8], [-.97, .95], [-.84, 1], [-.58, 1], [-.36, .93], [.26, .93], [.56, .99], [.82, .97], [.95, .84], [1, .62]],
+    sedan: [[-1, .8], [-.97, .94], [-.84, 1], [-.56, .99], [-.32, .92], [.3, .92], [.58, .99], [.84, .96], [.96, .82], [1, .6]],
+    coupe: [[-1, .72], [-.95, .92], [-.78, 1], [-.56, 1], [-.36, .86], [.14, .84], [.46, .95], [.72, .95], [.92, .78], [1, .5]],
+    gt: [[-1, .7], [-.95, .9], [-.8, 1], [-.58, 1], [-.4, .86], [.08, .83], [.46, .95], [.78, .93], [.95, .74], [1, .44]],
+    rally: [[-1, .8], [-.97, .95], [-.84, 1], [-.58, 1], [-.36, .89], [.26, .89], [.56, .99], [.82, .97], [.95, .82], [1, .6]],
     muscle: [[-1, .86], [-.98, .97], [-.88, 1], [-.5, 1], [-.2, .97], [.5, .97], [.86, 1], [.96, .94], [1, .8]],
-    super: [[-1, .84], [-.97, .98], [-.78, 1], [-.52, 1], [-.3, .89], [.1, .86], [.45, .9], [.7, .86], [.9, .68], [1, .4]],
+    super: [[-1, .84], [-.97, .98], [-.78, 1], [-.52, 1], [-.32, .84], [.1, .8], [.42, .88], [.68, .84], [.9, .64], [1, .36]],
     hyper: [[-1, .8], [-.96, .96], [-.75, 1], [-.5, .98], [-.25, .88], [.2, .84], [.5, .86], [.78, .75], [.94, .54], [1, .3]],
     suv: [[-1, .9], [-.985, .98], [-.93, 1], [.88, 1], [.97, .96], [1, .86]],
     pickup: [[-1, .92], [-.985, .99], [-.95, 1], [.9, 1], [.975, .96], [1, .86]],
@@ -53,7 +53,7 @@
     for (let k = 3; k >= 0; k--) { c.save(); c.translate(1.2 + k * 0.5, 1.8 + k * 0.6); c.scale(1 + k * 0.025, 1 + k * 0.05); path(pts); c.fillStyle = `rgba(0,0,0,${0.12 + (3 - k) * 0.05})`; c.fill(); c.restore(); }
     // ---- tyres (peek out under the arches) ----
     for (const s of [-1, 1]) for (const [x0, rear] of [[fx, 0], [rx, 1]]) {
-      const tw2 = tw + (wide && rear ? 1.5 : 0), th2 = th + (wide && rear ? 1.2 : 0), y0 = s * (hw - th2 * 0.42 + (sport ? 0.6 : 0.2));
+      const tw2 = tw + (wide && rear ? 1.5 : 0), th2 = th + (wide && rear ? 1.2 : 0), y0 = s * (hw - th2 * 0.38 + (sport ? 0.9 : 0.35));
       RR(c, '#07090b', x0 - tw2 / 2, y0 - th2 / 2, tw2, th2, 1.8);
       for (let k = -tw2 / 2 + 1.2; k < tw2 / 2 - 1; k += 1.6) R(c, '#1c2026', x0 + k, y0 - th2 / 2 + 0.3, 0.7, th2 - 0.6);
       R(c, rim, x0 - tw2 / 2 + 2, y0 + s * (th2 / 2 - 1.1) - 0.5, tw2 - 4, 1); R(c, '#ffffff70', x0 - tw2 / 2 + 2.5, y0 + s * (th2 / 2 - 1.1) - 0.5, tw2 * 0.3, 0.4);
@@ -65,16 +65,16 @@
     // cylinder shading across, key light top-left
     let g = c.createLinearGradient(0, -hw, 0, hw); g.addColorStop(0, 'rgba(0,0,0,0.42)'); g.addColorStop(0.07, 'rgba(255,255,255,0.08)'); g.addColorStop(0.2, 'rgba(255,255,255,0.26)'); g.addColorStop(0.36, 'rgba(255,255,255,0.07)'); g.addColorStop(0.62, 'rgba(0,0,0,0.04)'); g.addColorStop(0.86, 'rgba(0,0,0,0.22)'); g.addColorStop(1, 'rgba(0,0,0,0.55)');
     c.fillStyle = g; c.fillRect(-hl - 2, -hw - 2, L + 4, W + 4);
+    { const kg = c.createLinearGradient(0, -hw, 0, -hw * 0.3); kg.addColorStop(0, 'rgba(255,255,255,0)'); kg.addColorStop(0.45, 'rgba(255,255,255,0.32)'); kg.addColorStop(0.62, 'rgba(255,255,255,0.05)'); kg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = kg; c.fillRect(-hl * 0.9, -hw, L * 0.9, hw * 0.7); }
     g = c.createLinearGradient(-hl, 0, hl, 0); g.addColorStop(0, 'rgba(0,0,0,0.38)'); g.addColorStop(0.06, 'rgba(0,0,0,0)'); g.addColorStop(0.9, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.3)'); c.fillStyle = g; c.fillRect(-hl - 2, -hw - 2, L + 4, W + 4);
     // fender bulges over each wheel
-    for (const s of [-1, 1]) for (const x0 of [fx, rx]) { const gy = s * (hw - 2.2), r0 = tw * (sport ? 0.95 : 0.8); const fg = c.createRadialGradient(x0 - 1, gy - s * 0.6, 0.5, x0, gy, r0); fg.addColorStop(0, s < 0 ? 'rgba(255,255,255,0.32)' : 'rgba(255,255,255,0.12)'); fg.addColorStop(0.55, 'rgba(255,255,255,0.05)'); fg.addColorStop(1, 'rgba(0,0,0,0.16)'); c.fillStyle = fg; c.beginPath(); c.ellipse(x0, gy, r0, r0 * 0.62, 0, 0, Math.PI * 2); c.fill(); }
+    for (const s of [-1, 1]) for (const x0 of [fx, rx]) { const gy = s * (hw - 2.2), r0 = tw * (sport ? 0.95 : 0.8); const fg = c.createRadialGradient(x0 - 1, gy - s * 0.6, 0.5, x0, gy, r0); fg.addColorStop(0, s < 0 ? `rgba(255,255,255,${x0 < 0 ? 0.26 : 0.14})` : 'rgba(255,255,255,0.06)'); fg.addColorStop(0.55, 'rgba(255,255,255,0.05)'); fg.addColorStop(1, 'rgba(0,0,0,0.16)'); c.fillStyle = fg; c.beginPath(); c.ellipse(x0, gy, r0, r0 * 0.62, 0, 0, Math.PI * 2); c.fill(); }
     // waist shadow between arches (doors sit lower)
     for (const s of [-1, 1]) { const wg = c.createLinearGradient(0, s * hw, 0, s * (hw - 3)); wg.addColorStop(0, 'rgba(0,0,0,0.3)'); wg.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = wg; c.fillRect(rx + tw * 0.7, s > 0 ? hw - 3 : -hw, fx - rx - tw * 1.4, 3); }
     // hood creases + power bulge (sport/muscle)
     const hood0 = xf + wsh + 1.2;
     if (body !== 'hyper' && body !== 'van') {
       for (const s of [-1, 1]) { c.strokeStyle = 'rgba(0,0,0,0.2)'; c.lineWidth = 0.45; c.beginPath(); c.moveTo(hood0 + 1, s * rw * 0.62); c.quadraticCurveTo((hood0 + hl) / 2, s * rw * 0.5, hl - 3, s * rw * 0.42); c.stroke(); c.strokeStyle = 'rgba(255,255,255,0.18)'; c.beginPath(); c.moveTo(hood0 + 1, s * rw * 0.62 - 0.5); c.quadraticCurveTo((hood0 + hl) / 2, s * rw * 0.5 - 0.5, hl - 3, s * rw * 0.42 - 0.5); c.stroke(); }
-      if (sport || body === 'muscle') { const bg = c.createLinearGradient(0, -rw * 0.4, 0, rw * 0.4); bg.addColorStop(0, 'rgba(255,255,255,0.2)'); bg.addColorStop(0.5, 'rgba(255,255,255,0)'); bg.addColorStop(1, 'rgba(0,0,0,0.14)'); c.fillStyle = bg; c.beginPath(); c.ellipse((hood0 + hl - 3) / 2, 0, (hl - 3 - hood0) / 2, rw * 0.36, 0, 0, Math.PI * 2); c.fill(); }
     }
     // body-colour liveries / stripes (under the glass)
     if (body === 'muscle' && spec.stripes !== false) for (const y0 of [-4.2, 1.2]) { R(c, L0 > 0.7 ? '#1d2433' : '#f4f1ea', -hl, y0, L, 3); R(c, 'rgba(0,0,0,0.12)', -hl, y0 + 2.4, L, 0.6); }
@@ -115,10 +115,10 @@
       const gh = []; for (let x = g0; x <= g1 + 0.01; x += (g1 - g0) / 12) gh.push([x, -taper(x)]); for (let x = g1; x >= g0 - 0.01; x -= (g1 - g0) / 12) gh.push([x, taper(x)]);
       gh[0][0] += 0.8; gh[gh.length - 1][0] += 0.8; glassFill(c, gh, g0, g1);
       // roof panel
-      const rcol = body === 'classic' ? '#efe6cc' : body === 'lowrider' ? '#f0e8d8' : shade(color, 0.04), rwR = rw - 1.1;
+      const rcol = body === 'classic' ? '#efe6cc' : body === 'lowrider' ? '#f0e8d8' : shade(color, 0.04), rwR = rw - 1.5;
       RR(c, shade(rcol, -0.35), xr - 0.3, -rwR - 0.3, xf - xr + 0.6, rwR * 2 + 0.6, 2); RR(c, rcol, xr, -rwR, xf - xr, rwR * 2, 1.8);
       const rg2 = c.createLinearGradient(0, -rwR, 0, rwR); rg2.addColorStop(0, 'rgba(255,255,255,0.42)'); rg2.addColorStop(0.35, 'rgba(255,255,255,0.1)'); rg2.addColorStop(0.7, 'rgba(0,0,0,0.05)'); rg2.addColorStop(1, 'rgba(0,0,0,0.38)'); c.fillStyle = rg2; RR(c, rg2, xr, -rwR, xf - xr, rwR * 2, 1.8);
-      c.fillStyle = 'rgba(255,255,255,0.35)'; c.beginPath(); c.ellipse(xr + (xf - xr) * 0.62, -rwR * 0.45, (xf - xr) * 0.26, rwR * 0.2, -0.15, 0, Math.PI * 2); c.fill();
+      c.fillStyle = 'rgba(255,255,255,0.22)'; c.beginPath(); c.ellipse(xr + (xf - xr) * 0.6, -rwR * 0.5, (xf - xr) * 0.3, rwR * 0.16, -0.08, 0, Math.PI * 2); c.fill();
       if ((body === 'gt' || body === 'sedan') && !K.base) { RR(c, '#0c1620', xr + (xf - xr) * 0.25, -rwR * 0.55, (xf - xr) * 0.5, rwR * 1.1, 1); R(c, '#5d8fb066', xr + (xf - xr) * 0.3, -rwR * 0.45, (xf - xr) * 0.35, 0.5); }
       if (body === 'muscle' && spec.stripes !== false) for (const y0 of [-4.2, 1.2]) R(c, L0 > 0.7 ? '#1d2433' : '#f4f1ea', xr, y0, xf - xr, 3);
       if (st?.livery === 'stripes') for (const y0 of [-4.4, 1.4]) R(c, st.liveryColor, xr, y0, xf - xr, 3);
