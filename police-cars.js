@@ -130,7 +130,7 @@
     const p = env.player, tgt = p.car || p;
     if (s < 5) { if (heli) { heli.leaving = true; heli.x += 260 * dt; heli.y -= 160 * dt; if (dist(heli, p) > 1200) heli = null; } return; }
     if (!heli || heli.leaving) heli = { x: tgt.x - 700, y: tgt.y - 500, lx: tgt.x - 600, ly: tgt.y - 400, born: now };
-    const hm = PU.follow(heli, tgt, 230, dt); heli.x = hm.x; heli.y = hm.y; const lm = PU.follow({ x: heli.lx, y: heli.ly }, tgt, 200, dt); heli.lx = lm.x; heli.ly = lm.y;
+    const hm = PU.follow(heli, { x: tgt.x - 110, y: tgt.y - 130 }, 230, dt); // hovers off to the side so it never hides you heli.x = hm.x; heli.y = hm.y; const lm = PU.follow({ x: heli.lx, y: heli.ly }, tgt, 200, dt); heli.lx = lm.x; heli.ly = lm.y;
     heli.lit = Math.hypot(tgt.x - heli.lx, tgt.y - heli.ly) < 70;
     const W = root.NightshiftCrime?.wanted; if (heli.lit && W) { W.center = { x: tgt.x, y: tgt.y }; W.seenAt = now; }
   }
@@ -183,7 +183,8 @@
     for (const w of wrecks) { try { root.NightshiftSprites?.car?.(w); } catch { /* n/a */ } ctx.save(); ctx.translate(w.x, w.y); ctx.rotate(w.angle || 0); ctx.fillStyle = 'rgba(10,8,8,0.55)'; ctx.fillRect(-26, -13, 52, 26); ctx.restore(); const k = (now / 600) % 1; for (let i = 0; i < 3; i++) { const kk = (k + i / 3) % 1; ctx.fillStyle = `rgba(60,60,64,${0.45 * (1 - kk)})`; ctx.beginPath(); ctx.arc(w.x + 4 + kk * 10, w.y - 6 - kk * 34, 6 + kk * 12, 0, Math.PI * 2); ctx.fill(); } if (now - w.wreckAt < 1500) { ctx.fillStyle = `rgba(255,140,40,${0.6 * (1 - (now - w.wreckAt) / 1500)})`; ctx.beginPath(); ctx.arc(w.x, w.y, 30, 0, Math.PI * 2); ctx.fill(); } }
     if (heli) {
       ctx.save(); ctx.globalCompositeOperation = 'lighter'; const gl = ctx.createRadialGradient(heli.lx, heli.ly, 4, heli.lx, heli.ly, 80); gl.addColorStop(0, heli.lit ? '#fff6d0aa' : '#fff6d066'); gl.addColorStop(1, '#fff6d000'); ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(heli.lx, heli.ly, 80, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-      ctx.fillStyle = 'rgba(5,8,14,0.35)'; ctx.beginPath(); ctx.ellipse(heli.x + 40, heli.y + 60, 26, 10, 0.3, 0, Math.PI * 2); ctx.fill();
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = heli.lit ? '#fff6d02a' : '#fff6d018'; ctx.beginPath(); ctx.moveTo(heli.x - 4, heli.y + 6); ctx.lineTo(heli.lx - 60, heli.ly); ctx.lineTo(heli.lx + 60, heli.ly); ctx.lineTo(heli.x + 4, heli.y + 6); ctx.fill(); ctx.restore(); // beam
+      ctx.fillStyle = 'rgba(5,8,14,0.3)'; ctx.beginPath(); ctx.ellipse(heli.x + 60, heli.y + 90, 22, 8, 0.3, 0, Math.PI * 2); ctx.fill();
       ctx.save(); ctx.translate(heli.x, heli.y); ctx.rotate(Math.atan2(heli.ly - heli.y, heli.lx - heli.x));
       ctx.fillStyle = '#0b0d14'; ctx.fillRect(-30, -2.5, 26, 5); ctx.beginPath(); ctx.ellipse(0, 0, 16, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#1d2433'; ctx.beginPath(); ctx.ellipse(0, 0, 14.5, 8.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#3a6ab0'; ctx.beginPath(); ctx.ellipse(6, 0, 6, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#e8eef3'; ctx.fillRect(-26, -5, 3, 10);
       ctx.strokeStyle = 'rgba(200,210,220,0.5)'; ctx.lineWidth = 2; const ra = now / 40; for (let i = 0; i < 2; i++) { ctx.beginPath(); ctx.moveTo(Math.cos(ra + i * Math.PI / 2) * -24, Math.sin(ra + i * Math.PI / 2) * -24); ctx.lineTo(Math.cos(ra + i * Math.PI / 2) * 24, Math.sin(ra + i * Math.PI / 2) * 24); ctx.stroke(); }
