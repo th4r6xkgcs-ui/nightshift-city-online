@@ -35,6 +35,7 @@
 
   let playerO3 = false, lastPlayer = null;
   function draw(ctx, o, x, y, dir, anim, f, hold = '', isPlayer = false) {
+    if (isPlayer && root.NightshiftO3Masters?.player?.(ctx, x, y, dir, anim, hold)) { playerO3 = false; return true; } // master review pose (off by default)
     const cv = get(o, dir, anim, f, hold); if (!cv) { st.fallbacks++; return false; }
     if (isPlayer) { playerO3 = true; lastPlayer = { o, dir, anim, f, hold, cv }; }
     const prev = ctx.imageSmoothingEnabled; ctx.imageSmoothingEnabled = false;

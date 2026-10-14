@@ -95,6 +95,7 @@
     gallardo: ({ c, hl, hw, xr, rw, R }) => { for (let k = 0; k < 5; k++) R(c, '#0c0e11', xr - 6 - k * 2.2, -rw + 2, 1, rw * 2 - 4); for (const s of [-1, 1]) R(c, '#0c0e11', hl - 6, s * (hw - 3) - 0.8, 4, 1.6); },
   };
   function bake(id, color, st = null) {
+    const M0 = root.NightshiftO3Masters?.car?.(id, color, st, D.BY[id] || BASE[id]); if (M0) return M0; // Option 3 master review (off by default)
     // v0.67 image pipeline: a top-down PNG (art/top/cars/<id>.png, nose right) replaces the code-drawn car
     const IMG = root.NightshiftArt?.image?.('top/cars/' + id + '.png');
     if (IMG) {
@@ -240,7 +241,7 @@
   }
   const cache = new Map();
   const SK = () => root.NightshiftCarStyleData;
-  function sprite(id, color, st = null) { const k = id + color + (st && SK() ? '|' + SK().keyOf(st) : '') + '|a' + (root.NightshiftArt?.has?.('top/cars/' + id + '.png') ? root.NightshiftArt.version : 0); let s = cache.get(k); if (!s) { if (cache.size > 120) cache.delete(cache.keys().next().value); s = bake(id, color, st); cache.set(k, s); } return s; }
+  function sprite(id, color, st = null) { const k = id + color + (st && SK() ? '|' + SK().keyOf(st) : '') + '|a' + (root.NightshiftArt?.has?.('top/cars/' + id + '.png') ? root.NightshiftArt.version : 0) + (root.NightshiftO3Masters?.key?.(id) || ''); let s = cache.get(k); if (!s) { if (cache.size > 120) cache.delete(cache.keys().next().value); s = bake(id, color, st); cache.set(k, s); } return s; }
 
   // Live draw on the game context (car faces +x like the base game).
   const prevSpeed = new WeakMap();
