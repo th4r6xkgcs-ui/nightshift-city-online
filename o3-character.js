@@ -218,7 +218,7 @@
     ringLine(Bm, v, Wst, J.pelvis[1] + 3.5, -0.2, Math.PI + 0.2, R[1], Wst.mask);
     if (o.belt) { ringLine(Bm, v, Wst, J.pelvis[1] + 4.5, -0.2, Math.PI + 0.2, '#14161b', Wst.mask); ringLine(Bm, v, Wst, J.pelvis[1] + 3.5, -0.2, Math.PI + 0.2, '#14161b', Wst.mask); const bk = onLoft(v, Wst, Math.PI / 2, J.pelvis[1] + 4); if (bk && bk[2] > 0) { px(Bm, bk[0], bk[1], '#c9ccd2'); px(Bm, bk[0] + 1, bk[1], '#c9ccd2'); } }
     for (const l of leftRight(c)) {
-      const P = c.buf('bottom', c.passOfSide(l.side)), th = capsule(v, l.hip, l.knee, 5.8 + baggy, 5.2 + baggy), sh = capsule(v, l.knee, l.ankle.map((p, i) => i === 1 ? p - 1.5 : p), 5.0 + baggy, 4.4 + baggy * 1.15);
+      const P = c.buf('bottom', c.passOfSide(l.side)), th = capsule(v, l.hip, l.knee, 5.8 + baggy, 5.2 + baggy), sh = capsule(v, l.knee, l.ankle.map((p, i) => i === 1 ? p + 2.6 : i === 2 ? p - 0.8 : p), 5.0 + baggy, 4.2 + baggy * 0.9);
       const M = union(th.mask, sh.mask); stamp(P, M, R);
       const inner = l.side * v.rx >= 0 ? -1 : 1; line(P, ...edgeAt(th, 0.25, inner), ...edgeAt(sh, 0.8, inner), R[0], M);
       // knee crease + outseam
@@ -244,20 +244,24 @@
   function shoe(c, item, col, o) {
     const v = c.v, upper = ramp(o.upper || col), sole = ramp(o.sole || '#f4f2ec'), acc = ramp(o.accent || col);
     for (const l of leftRight(c)) {
-      const P = c.buf('shoes', c.passOfSide(l.side)), a = l.ankle, h = o.high ? 11 : 8, len = o.len || 13.5, wdt = o.wide || 3.8;
-      // foot direction = forward (+z) in local space; 2.5D tilt: parts nearer the camera sit lower on screen
-      const tilt = (p) => [p[0], p[1] - 0.45 * (v.depth(p) - v.depth(a)), p[2]];
-      const heel = tilt([a[0], a[1] - 4.5, a[2] - 3.2]), toe = tilt([a[0], a[1] - 5.2, a[2] + len - 3.2]);
-      const soleM = capsule(v, [heel[0], heel[1] - 1.6, heel[2]], [toe[0], toe[1] - 1.4, toe[2] + 0.6], wdt + 0.6, wdt + 0.4, { bias: 0.2 }); stamp(P, soleM.mask, sole);
-      const up = union(capsule(v, heel, toe, wdt, wdt - 0.4).mask, ellipsoid(v, [a[0], a[1] - 2 + (o.high ? 2 : 0), a[2] - 1], [wdt, h * 0.6, wdt * 1.1]).mask);
+      const P = c.buf('shoes', c.passOfSide(l.side)), a = l.ankle, len = o.len || 15, wdt = o.wide || 4.6, ground = a[1] - SK.ankle;
+      // 2.5D tilt: parts nearer the camera sit a little lower on screen (feet read from the front)
+      const tilt = (p) => [p[0], p[1] - 0.3 * (v.depth(p) - v.depth(a)), p[2]];
+      const mid = tilt([a[0], ground, a[2] + len * 0.5 - 4]), toeC = tilt([a[0], ground, a[2] + len - 6.5]), heelC = tilt([a[0], ground, a[2] - 2.5]);
+      // cupsole: a flat slab resting on the ground line
+      const soleM = ellipsoid(v, [mid[0], mid[1] + 1.9, mid[2]], [wdt + 0.6, 1.9, len / 2 + 0.6], { bias: 0.25 }); stamp(P, soleM.mask, sole);
+      // upper: vamp over the forefoot + heel/ankle collar (taller for boots)
+      const vamp = ellipsoid(v, [toeC[0], toeC[1] + 4.6, toeC[2]], [wdt, 3.7, 5]), heel = ellipsoid(v, [heelC[0], heelC[1] + (o.high ? 7 : 5.2), heelC[2]], [wdt * 0.95, o.high ? 6 : 3.9, 3.9]);
+      const body0 = ellipsoid(v, [mid[0], mid[1] + 4.6, mid[2] - 1], [wdt, 3.4, len / 2 - 1.2]), up = union(vamp.mask, heel.mask, body0.mask);
       stamp(P, up, upper);
-      // toe cap / heel overlays in the accent colour
-      if (o.accent) { stamp(P, intersect(capsule(v, [toe[0], toe[1], toe[2] - 3.5], toe, wdt + 0.1, wdt - 0.3).mask, up), acc); stamp(P, intersect(ellipsoid(v, [heel[0], heel[1] + 1, heel[2]], [wdt + 0.2, 3, 2.6]).mask, up), acc); }
-      // side stripe (fictional mark), laces, sole line
-      if (o.stripe) { const s0 = [heel[0], heel[1] + 0.2, heel[2] + 2], s1 = [toe[0], toe[1] + 1.8, toe[2] - 4.5]; line(P, v.px(s0), v.py(s0), v.px(s1), v.py(s1), o.stripe, up); }
-      if (c.front || c.side) { const l0 = [a[0], a[1] - 2.5, a[2] + 2], l1 = [a[0], a[1] - 4, a[2] + 6]; for (let k = 0; k < 3; k++) { const t = k / 2, x = v.px(l0) + (v.px(l1) - v.px(l0)) * t, y = v.py(l0) + (v.py(l1) - v.py(l0)) * t; px(P, x - 1, y, o.laces || '#f4f2ec', up); px(P, x + 1, y, o.laces || '#f4f2ec', up); } }
-      if (o.lug) { const p0 = [heel[0], heel[1] - 2.2, heel[2]], p1 = [toe[0], toe[1] - 2, toe[2]]; line(P, v.px(p0), v.py(p0), v.px(p1), v.py(p1), '#0c0d10', soleM.mask); }
-      else { const p0 = [heel[0], heel[1] - 1.2, heel[2]], p1 = [toe[0], toe[1] - 1, toe[2]]; line(P, v.px(p0), v.py(p0), v.px(p1), v.py(p1), o.soleLine || '#c8c4bc', soleM.mask); }
+      if (o.accent) { stamp(P, intersect(ellipsoid(v, [toeC[0], toeC[1] + 4, toeC[2] + 2.2], [wdt + 0.2, 3, 2.6]).mask, up), acc); stamp(P, intersect(ellipsoid(v, [heelC[0], heelC[1] + 4.5, heelC[2] - 1.4], [wdt + 0.2, 3.5, 2.4]).mask, up), acc); }
+      // collar opening + tongue, side stripe (fictional mark), laces, sole line
+      const top = [a[0], ground + (o.high ? 12 : 8.6), a[2] - 1.2]; px(P, v.px(top), v.py(top), '#0c0d10', up); px(P, v.px(top) + 1, v.py(top), '#0c0d10', up);
+      if (o.stripe) { const s0 = tilt([a[0], ground + 4.6, a[2] - 1]), s1 = tilt([a[0], ground + 6.2, a[2] + len * 0.45]); for (const side of [1, -1]) { const q0 = [s0[0] + side * wdt * 0.98, s0[1], s0[2]], q1 = [s1[0] + side * wdt * 0.98, s1[1], s1[2]]; if (v.depth(q0) - v.depth(a) > -1) line(P, v.px(q0), v.py(q0), v.px(q1), v.py(q1), o.stripe, up); } }
+      if (c.front || c.side) for (let k = 0; k < 3; k++) { const q = tilt([a[0], ground + 7.2 - k * 0.6, a[2] + 1 + k * 1.9]); px(P, v.px(q) - 1, v.py(q), o.laces || '#f4f2ec', up); px(P, v.px(q) + 1, v.py(q), o.laces || '#f4f2ec', up); }
+      const p0 = tilt([a[0], ground + 1.6, a[2] - 3]), p1 = tilt([a[0], ground + 1.6, a[2] + len - 4]);
+      for (const side of [1, -1]) { const q0 = [p0[0] + side * (wdt + 0.5), p0[1], p0[2]], q1 = [p1[0] + side * (wdt + 0.5), p1[1], p1[2]]; if (v.depth(q0) - v.depth(a) > -1) line(P, v.px(q0), v.py(q0), v.px(q1), v.py(q1), o.lug ? '#0c0d10' : o.soleLine || '#c8c4bc', soleM.mask); }
+      if (c.front) { const t0 = tilt([a[0], ground + 1.5, a[2] + len - 4]); line(P, v.px(t0) - wdt + 1, v.py(t0), v.px(t0) + wdt - 1, v.py(t0), o.lug ? '#0c0d10' : o.soleLine || '#c8c4bc', soleM.mask); }
     }
   }
 
@@ -331,8 +335,8 @@
     track: { slot: 'outer', draw: (c, it, col) => track(c, it, col) },
     cargo: { slot: 'bottom', draw: (c, it, col) => trousers(c, it, col, { cargo: true, baggy: 2, stack: true, belt: true, piping: '#f1efe8' }) },
     jeans: { slot: 'bottom', draw: (c, it, col) => trousers(c, it, col, { baggy: 0.4, stack: true, stitch: '#d89a4a', seam: E.mix(col, '#ffffff', 0.25) }) },
-    courts: { slot: 'shoes', draw: (c, it, col, acc) => shoe(c, it, col, { upper: '#f4f2ec', accent: acc || '#d0283a', stripe: '#16181d', sole: '#f4f2ec', soleLine: acc || '#d0283a', len: 17, wide: 5.2 }) },
-    boots: { slot: 'shoes', draw: (c, it, col) => shoe(c, it, col, { upper: col, sole: '#1a1b1f', high: true, lug: true, laces: '#c9a86a', len: 16, wide: 5 }) },
+    courts: { slot: 'shoes', draw: (c, it, col, acc) => shoe(c, it, col, { upper: '#f4f2ec', accent: acc || '#d0283a', stripe: '#16181d', sole: '#f4f2ec', soleLine: acc || '#d0283a', len: 17, wide: 5.5 }) },
+    boots: { slot: 'shoes', draw: (c, it, col) => shoe(c, it, col, { upper: col, sole: '#1a1b1f', high: true, lug: true, laces: '#c9a86a', len: 15, wide: 4.8 }) },
     cap: { slot: 'head', draw: (c, it, col) => cap(c, it, col) },
     shades: { slot: 'face', draw: (c, it, col) => shades(c, it, col) },
     chain: { slot: 'jewelry', draw: (c, it, col) => chain(c, it, col) },

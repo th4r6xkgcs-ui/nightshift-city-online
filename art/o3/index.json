@@ -1,0 +1,437 @@
+{
+ "generated_by": "tools/o3-export.cjs",
+ "atlases": [
+  {
+   "file": "char_base_a_idle",
+   "frames": 216,
+   "size": [
+    1536,
+    1792
+   ]
+  },
+  {
+   "file": "char_base_a_walk",
+   "frames": 432,
+   "size": [
+    1536,
+    3456
+   ]
+  },
+  {
+   "file": "char_base_a_run",
+   "frames": 360,
+   "size": [
+    1536,
+    2944
+   ]
+  },
+  {
+   "file": "hair_short_idle",
+   "frames": 48,
+   "size": [
+    1536,
+    384
+   ]
+  },
+  {
+   "file": "hair_short_walk",
+   "frames": 96,
+   "size": [
+    1536,
+    768
+   ]
+  },
+  {
+   "file": "hair_short_run",
+   "frames": 80,
+   "size": [
+    1536,
+    640
+   ]
+  },
+  {
+   "file": "hair_braids_idle",
+   "frames": 90,
+   "size": [
+    1536,
+    768
+   ]
+  },
+  {
+   "file": "hair_braids_walk",
+   "frames": 180,
+   "size": [
+    1536,
+    1536
+   ]
+  },
+  {
+   "file": "hair_braids_run",
+   "frames": 150,
+   "size": [
+    1536,
+    1280
+   ]
+  },
+  {
+   "file": "hair_fade_idle",
+   "frames": 48,
+   "size": [
+    1536,
+    384
+   ]
+  },
+  {
+   "file": "hair_fade_walk",
+   "frames": 96,
+   "size": [
+    1536,
+    768
+   ]
+  },
+  {
+   "file": "hair_fade_run",
+   "frames": 80,
+   "size": [
+    1536,
+    640
+   ]
+  },
+  {
+   "file": "wear_head_cap_black_idle",
+   "frames": 66,
+   "size": [
+    1536,
+    640
+   ]
+  },
+  {
+   "file": "wear_head_cap_black_walk",
+   "frames": 132,
+   "size": [
+    1536,
+    1152
+   ]
+  },
+  {
+   "file": "wear_head_cap_black_run",
+   "frames": 110,
+   "size": [
+    1536,
+    896
+   ]
+  },
+  {
+   "file": "wear_face_shades_idle",
+   "frames": 42,
+   "size": [
+    1536,
+    384
+   ]
+  },
+  {
+   "file": "wear_face_shades_walk",
+   "frames": 84,
+   "size": [
+    1536,
+    768
+   ]
+  },
+  {
+   "file": "wear_face_shades_run",
+   "frames": 70,
+   "size": [
+    1536,
+    640
+   ]
+  },
+  {
+   "file": "wear_top_tee_white_idle",
+   "frames": 132,
+   "size": [
+    1536,
+    1152
+   ]
+  },
+  {
+   "file": "wear_top_tee_white_walk",
+   "frames": 264,
+   "size": [
+    1536,
+    2176
+   ]
+  },
+  {
+   "file": "wear_top_tee_white_run",
+   "frames": 220,
+   "size": [
+    1536,
+    1792
+   ]
+  },
+  {
+   "file": "wear_outerwear_hoodie_black_idle",
+   "frames": 138,
+   "size": [
+    1536,
+    1152
+   ]
+  },
+  {
+   "file": "wear_outerwear_hoodie_black_walk",
+   "frames": 276,
+   "size": [
+    1536,
+    2304
+   ]
+  },
+  {
+   "file": "wear_outerwear_hoodie_black_run",
+   "frames": 230,
+   "size": [
+    1536,
+    1920
+   ]
+  },
+  {
+   "file": "wear_outerwear_orange_puffer_idle",
+   "frames": 138,
+   "size": [
+    1536,
+    1152
+   ]
+  },
+  {
+   "file": "wear_outerwear_orange_puffer_walk",
+   "frames": 276,
+   "size": [
+    1536,
+    2304
+   ]
+  },
+  {
+   "file": "wear_outerwear_orange_puffer_run",
+   "frames": 230,
+   "size": [
+    1536,
+    1920
+   ]
+  },
+  {
+   "file": "wear_outerwear_track_purple_idle",
+   "frames": 132,
+   "size": [
+    1536,
+    1152
+   ]
+  },
+  {
+   "file": "wear_outerwear_track_purple_walk",
+   "frames": 264,
+   "size": [
+    1536,
+    2176
+   ]
+  },
+  {
+   "file": "wear_outerwear_track_purple_run",
+   "frames": 220,
+   "size": [
+    1536,
+    1792
+   ]
+  },
+  {
+   "file": "wear_bottom_cargo_black_idle",
+   "frames": 120,
+   "size": [
+    1536,
+    1024
+   ]
+  },
+  {
+   "file": "wear_bottom_cargo_black_walk",
+   "frames": 240,
+   "size": [
+    1536,
+    1920
+   ]
+  },
+  {
+   "file": "wear_bottom_cargo_black_run",
+   "frames": 200,
+   "size": [
+    1536,
+    1664
+   ]
+  },
+  {
+   "file": "wear_bottom_jeans_blue_idle",
+   "frames": 120,
+   "size": [
+    1536,
+    1024
+   ]
+  },
+  {
+   "file": "wear_bottom_jeans_blue_walk",
+   "frames": 240,
+   "size": [
+    1536,
+    1920
+   ]
+  },
+  {
+   "file": "wear_bottom_jeans_blue_run",
+   "frames": 200,
+   "size": [
+    1536,
+    1664
+   ]
+  },
+  {
+   "file": "wear_shoes_courts_red_white_idle",
+   "frames": 84,
+   "size": [
+    1536,
+    768
+   ]
+  },
+  {
+   "file": "wear_shoes_courts_red_white_walk",
+   "frames": 168,
+   "size": [
+    1536,
+    1408
+   ]
+  },
+  {
+   "file": "wear_shoes_courts_red_white_run",
+   "frames": 140,
+   "size": [
+    1536,
+    1152
+   ]
+  },
+  {
+   "file": "wear_shoes_boots_black_idle",
+   "frames": 84,
+   "size": [
+    1536,
+    768
+   ]
+  },
+  {
+   "file": "wear_shoes_boots_black_walk",
+   "frames": 168,
+   "size": [
+    1536,
+    1408
+   ]
+  },
+  {
+   "file": "wear_shoes_boots_black_run",
+   "frames": 140,
+   "size": [
+    1536,
+    1152
+   ]
+  },
+  {
+   "file": "wear_back_backpack_black_idle",
+   "frames": 78,
+   "size": [
+    1536,
+    640
+   ]
+  },
+  {
+   "file": "wear_back_backpack_black_walk",
+   "frames": 156,
+   "size": [
+    1536,
+    1280
+   ]
+  },
+  {
+   "file": "wear_back_backpack_black_run",
+   "frames": 130,
+   "size": [
+    1536,
+    1152
+   ]
+  },
+  {
+   "file": "wear_neck_chain_gold_idle",
+   "frames": 30,
+   "size": [
+    1536,
+    256
+   ]
+  },
+  {
+   "file": "wear_neck_chain_gold_walk",
+   "frames": 60,
+   "size": [
+    1536,
+    512
+   ]
+  },
+  {
+   "file": "wear_neck_chain_gold_run",
+   "frames": 50,
+   "size": [
+    1536,
+    512
+   ]
+  },
+  {
+   "file": "wear_wrist_watch_black_idle",
+   "frames": 48,
+   "size": [
+    1536,
+    384
+   ]
+  },
+  {
+   "file": "wear_wrist_watch_black_walk",
+   "frames": 96,
+   "size": [
+    1536,
+    768
+   ]
+  },
+  {
+   "file": "wear_wrist_watch_black_run",
+   "frames": 80,
+   "size": [
+    1536,
+    640
+   ]
+  },
+  {
+   "file": "char_golden_sample_idle",
+   "frames": 48,
+   "size": [
+    1536,
+    384
+   ]
+  },
+  {
+   "file": "char_golden_sample_walk",
+   "frames": 96,
+   "size": [
+    1536,
+    768
+   ]
+  },
+  {
+   "file": "char_golden_sample_run",
+   "frames": 80,
+   "size": [
+    1536,
+    640
+   ]
+  }
+ ]
+}
