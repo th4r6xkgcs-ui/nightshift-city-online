@@ -11,6 +11,7 @@
   const KMH = 0.288, M = 0.08;
   const LANE = 44, LANES = 4, TOP = 0, BOTTOM = LANE * LANES; // eastbound lanes y in [0, 176]; shoulder 176..214
   const SHOULDER = [BOTTOM + 4, BOTTOM + 38];
+  const CAR_LEN = 110; // v0.67: side view — a car is 110 highway px long (150 screen px)
   const SEG = 18000; // px between exits (~1.4 km)
   const EXITS = [
     { id: 'west', name: 'West End', ramp: { x: 40, y: 680 }, into: { x: 110, y: 680, angle: 0 } },
@@ -85,7 +86,7 @@
   function trafficCar(rnd, d, lane) {
     const m = TRAFFIC_MODELS[Math.floor(rnd() * TRAFFIC_MODELS.length)], truck = m === 'TRUCK';
     const base = [125, 110, 95, 80][lane] + (rnd() - 0.5) * 20 - (truck ? 15 : 0);
-    return { d, y: laneY(lane), lane, v: pxs(base), model: truck ? 'VAN' : m, truck, color: TRAFFIC_COLORS[Math.floor(rnd() * TRAFFIC_COLORS.length)], len: truck ? 92 : 54, wid: truck ? 30 : 26, change: 0 };
+    return { d, y: laneY(lane), lane, v: pxs(base), model: truck ? 'VAN' : m, truck, color: TRAFFIC_COLORS[Math.floor(rnd() * TRAFFIC_COLORS.length)], len: truck ? CAR_LEN * 1.3 : CAR_LEN, wid: truck ? 30 : 26, change: 0 };
   }
   function nextExit(d) { let best = null, bd = Infinity; EXITS.forEach((e, i) => { const a = ahead(d, i * SEG); if (a > 0 && a < bd) { bd = a; best = { ...e, i, dist: a }; } }); return best; }
   const exitAt = (i) => wrap(i * SEG);
@@ -104,7 +105,7 @@
     for (const k of ['km', 'nearMiss', 'bestStreak', 'tickets', 'runs']) if (Number.isFinite(raw?.[k]) && raw[k] > 0) s[k] = Math.min(1e9, raw[k]);
     return s;
   }
-  const api = Object.freeze({ KMH, M, LANE, LANES, TOP, BOTTOM, SHOULDER, SEG, EXITS, LOOP, REST, LIMIT, CAMERAS, STREAK, RACERS, kmh, pxs, wrap, ahead, laneY, laneOf, perf, step, nearMiss, streakMult, nearMissPay, camera, units, evade, trafficCar, nextExit, exitAt, entryAt, race, run, clean });
+  const api = Object.freeze({ CAR_LEN, KMH, M, LANE, LANES, TOP, BOTTOM, SHOULDER, SEG, EXITS, LOOP, REST, LIMIT, CAMERAS, STREAK, RACERS, kmh, pxs, wrap, ahead, laneY, laneOf, perf, step, nearMiss, streakMult, nearMissPay, camera, units, evade, trafficCar, nextExit, exitAt, entryAt, race, run, clean });
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.NightshiftHighwayData = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
