@@ -634,3 +634,6 @@ Audit at iPhone landscape size (852×393, touch) from a fresh save, then fixes:
 
 ## v0.70 Option 3 (Claude)
 See HANDOFF.md CURRENT v0.70. Build order (play repo online/build-online.cjs): o3-engine.js first; o3-character.js before character-pixel.js, o3-runtime.js after; weapon-kit-data.js, weapon-kit.js before weapon-hd/weapon-art; car-views.js before carstyle.js; o3-pet.js before pets.js; LATE_SCRIPTS o3-props.js, prop-art.js. Owned by Claude: all o3-*.js, weapon-kit*.js, car-views.js, tools/o3-*, tools/validate_o3.py, art/o3/.
+
+## v0.71 (Claude)
+New files (Claude-owned): interior-kit.js, pursuit-ai.js, combat-feel.js. Build order (play online/build-online.cjs): 'interior-kit.js' before 'interiors.js'; 'pursuit-ai.js' before 'police-cars.js'; 'combat-feel.js' after 'combat-fx.js'. Edited (Claude-owned): interiors.js, police-cars.js, zones.js (fit, camBias), modern-city.js (variant brands). See HANDOFF.md CURRENT v0.71.

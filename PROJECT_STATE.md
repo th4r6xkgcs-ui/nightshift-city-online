@@ -2,6 +2,8 @@
 Saved crafting levels, upgraded apartment bench, six abstract recipes, finite-ammo transaction guards and crafting modal isolation. 34 automated suites pass. Browser/device QA pending; local single-player only.
 
 # Project state
+## v0.71 (Claude, unreleased): interiors (14 room types), pursuit AI, combat feel — branches claude/v71-world / claude/v71-play. Deployed play link: v0.70.
+
 ## Current: v0.70 Option 3 vertical slice (Claude, unreleased)
 Branches claude/option3 (core) and claude/option3-play (play build). Deployed site remains v0.69. Option 3 modules: o3-engine, o3-character, o3-runtime, o3-pet, o3-props, weapon-kit-data, weapon-kit, car-views; atlases in art/o3. 119 client suites + 113 server tests pass. See HANDOFF.md v0.70.
 
