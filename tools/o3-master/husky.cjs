@@ -6,7 +6,7 @@ const { Pix } = require('./pix.cjs');
 const W = 120, H = 96, GROUND = 88;
 const C = {
   ink: '#120f17',
-  gy: ['#c9cfdc', '#9aa2b4', '#737b8e', '#535a6b', '#363b48'],
+  gy: ['#a9b1c4', '#7a8296', '#565d70', '#3a4052', '#232734'],
   wt: ['#ffffff', '#eef0f6', '#d3d7e2', '#aab0bf', '#80869a'],
   ey: ['#c8f0ff', '#6cc8f4', '#2c86c8'],
   ns: ['#3a3640', '#1c1a22'],
