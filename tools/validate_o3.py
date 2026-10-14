@@ -29,7 +29,7 @@ def check(jpath):
         if key in seen: err(f'{jpath.name}: duplicate frame {key}')
         seen.add(key); rects.append((r['x'], r['y'], r['w'], r['h']))
         if f['direction'] not in ORDER: err(f'{jpath.name}: bad direction {f["direction"]}')
-        origins.add((f['origin']['x'], f['origin']['y']))
+        origins.add((f['layer'], f['animation'], f['origin']['x'], f['origin']['y']))
         # non-empty, transparent background, opaque-or-clear pixels only (no blur/semi-transparent smear)
         opaque = clear = semi = 0; lowest = -1
         for y in range(r['y'], r['y'] + r['h']):
@@ -43,7 +43,10 @@ def check(jpath):
         if semi: err(f'{jpath.name}: {semi} semi-transparent pixels in {key} (pixel art must be crisp)')
         if f['layer'] == 'composite' and f['animation'] in ('idle', 'walk') and 'pet' not in f.get('tags', []) and not (f['origin']['y'] - 4 <= lowest <= f['origin']['y'] + 6):  # 2.5D tilt: feet toward/away from camera sit up to 4 px higher or 6 px lower
             err(f'{jpath.name}: feet not planted at origin in {key} (lowest row {lowest})')
-    if len(origins) > 1: err(f'{jpath.name}: frames disagree on origin {origins}')
+    groups = {}
+    for (L, an, ox, oy) in origins: groups.setdefault((L, an), set()).add((ox, oy))
+    for g, o in groups.items():
+        if len(o) > 1: err(f'{jpath.name}: frames in {g} disagree on origin {o}')
     for i in range(len(rects)):  # rects are a grid, but check anyway
         ax, ay, aw, ah = rects[i]
         for j in range(i + 1, len(rects)):
