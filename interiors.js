@@ -24,18 +24,23 @@
   }
   const BRANDS = { 'GUN SHOP': ['AMMO & ARMS', 'IRON SIGHT', 'LOCK & LOAD'], TATTOO: ['INK HOUSE', 'BLACKLINE', 'NEEDLE & CO'], 'AUTO PARTS': ['PARTS+', 'TORQUE SUPPLY', 'BOOST SHOP'], GYM: ['IRON GYM', 'PUMP HOUSE', '24 FIT'], POLICE: ['POLICE', 'PRECINCT 9'], HOSPITAL: ['CITY HOSPITAL', 'MERCY MED'] };
   // v0.71 actions (pure logic in ACT so it can be tested in Node)
+  const ROB = { 'CORNER SHOP': [150, 350, 1.2], DINER: [100, 250, 1], CLOTHING: [200, 420, 1.2], 'GUN SHOP': [400, 750, 2], TATTOO: [120, 260, 1], 'AUTO PARTS': [180, 380, 1.2] }; // [min $, max $, heat]
+  const ROB_COOLDOWN = 30 * 60000, HOLD_MS = 3000;
   const ACT = {
     heal(p) { if (p.hp >= 100) return { ok: false, msg: '🩺 "You look fine. Next!"' }; const cost = p.cash >= 60 ? 60 : 0; p.cash -= cost; p.hp = 100; return { ok: true, msg: cost ? '🩺 Patched up · full health ($60)' : '🩺 No money? They patch you up anyway. Full health.' }; },
     fine(p) { const heat = p.heat || 0; if (heat < 0.1) return { ok: false, msg: '🚔 "Nothing on file. Keep it that way."' }; const cost = Math.ceil(heat * 150); if (p.cash < cost) return { ok: false, msg: `🚔 Fine is $${cost}. Come back with the cash.` }; p.cash -= cost; p.heat = 0; return { ok: true, msg: `🚔 Fine paid ($${cost}) · wanted level cleared` }; },
     tattoo(p, last, now) { if (now - last < 10 * 60000) return { ok: false, msg: '🖋️ Still healing. Give it a few minutes.' }; if (p.cash < 150) return { ok: false, msg: '🖋️ A piece is $150' }; p.cash -= 150; return { ok: true, msg: '🖋️ Fresh ink · +charisma, the block respects it' }; },
-    train(p, last, now) { if (now - last < 3 * 60000) return { ok: false, msg: '🏋️ Muscles need rest · come back in a few minutes' }; if (p.cash < 20) return { ok: false, msg: '🏋️ Day pass is $20' }; p.cash -= 20; return { ok: true, msg: '🏋️ Good session · +athletics +strength ($20)' }; },
+    /** hold-up result: payout range + heat by store type; the gun shop clerk fights back sometimes */
+    rob(type, roll, roll2) { const R = ROB[type]; if (!R) return null; if (type === 'GUN SHOP' && roll2 < 0.45) return { ok: false, resist: true, dmg: 30, heat: 1.2, msg: '💥 The clerk pulls a shotgun from under the counter!' }; const cash = Math.round(R[0] + (R[1] - R[0]) * roll); return { ok: true, cash, heat: R[2], msg: `💰 You cleaned out the register · +$${cash} · the cops are on the way` }; },
+    armed(w) { return !!w && !!w.cls && w.cls !== 'none'; },
+    train(p, last, now) { if (now - last < 3 * 60000) return { ok: false, msg: '🏋️ Muscles need rest · come back in a few minutes' }; if (p.cash < 20) return { ok: false, msg: '🏋️ Day pass is $20' }; p.cash -= 20; return { ok: true, msg: '🏋️ Good session · +athletics +toughness ($20)' }; },
   };
   root.NightshiftVariants = Object.freeze({ variant, BRANDS });
-  if (!root.document) { if (typeof module !== 'undefined') module.exports = { variant, BRANDS, ACT }; return; }
+  if (!root.document) { if (typeof module !== 'undefined') module.exports = { variant, BRANDS, ACT, ROB, ROB_COOLDOWN }; return; }
 
   const KEY = 'nightshift-interiors-v1';
-  let state = { crates: {}, mail: {} };
-  try { const r = JSON.parse(localStorage.getItem(KEY) || '{}'); if (r && typeof r === 'object') state = { crates: r.crates || {}, mail: r.mail || {} }; } catch { /* fresh */ }
+  let state = { crates: {}, mail: {}, robbed: {} };
+  try { const r = JSON.parse(localStorage.getItem(KEY) || '{}'); if (r && typeof r === 'object') state = { crates: r.crates || {}, mail: r.mail || {}, robbed: r.robbed && typeof r.robbed === 'object' ? r.robbed : {} }; } catch { /* fresh */ }
   const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode */ } };
   /* eslint-disable no-undef */
   const P = () => { try { return player; } catch { return null; } };
@@ -51,7 +56,7 @@
   // ---------------- room types ----------------
   const T = {
     'CORNER SHOP': {
-      title: 'CORNER SHOP', floor: 'tile', wall: ['tile', '#cfd8d4', '#e05a4a'], dark: 0.06, seed: 11,
+      title: 'CORNER SHOP', robAt: { x: 392, y: 336 },  floor: 'tile', wall: ['tile', '#cfd8d4', '#e05a4a'], dark: 0.06, seed: 11,
       art(c) {
         K.neon(c, 'OPEN 24/7', 140, 18, '#ff5a5a', 13); K.shelf(c, 20, 30, 250, 3, (cc, x, y, w, k) => (k % 2 ? K.boxes(cc, x, y, w, k) : K.bottles(cc, x, y, w, k)), '#8a939b');
         K.fridges(c, 300, 32, 7); K.ceilingLights(c, [100, 240, 380, 500], 0);
@@ -65,7 +70,7 @@
       targets: () => [{ x: 440, y: 336, r: 52, action: 'SHOP', label: 'Counter · food, meds, ammo', use: () => openSafe(() => root.NightshiftRecovery?.openShop?.()) }] },
 
     DINER: {
-      title: 'DINER', floor: 'check', wall: ['stripe', '#3d7f8a', '#e05a4a'], dark: 0.08, seed: 21,
+      title: 'DINER', robAt: { x: 92, y: 186 },  floor: 'check', wall: ['stripe', '#3d7f8a', '#e05a4a'], dark: 0.08, seed: 21,
       art(c) {
         K.neon(c, 'DINER', 120, 22, '#ff6b6b', 16); K.neon(c, 'OPEN', 240, 22, '#7cffb5', 11); for (let i = 0; i < 4; i++) K.poster(c, 40 + i * 52, 46, 38, 30, 31 + i, '#e3c25a');
         K.windowNight(c, 360, 20, 80, 60, 3); K.windowNight(c, 456, 20, 80, 60, 4); K.clock(c, 300, 40);
@@ -80,7 +85,7 @@
       targets: () => [{ x: 190, y: 186, r: 60, action: 'ORDER', label: 'Diner counter · meals with buffs', use: () => openSafe(() => root.NightshiftFood?.openDiner?.()) }] },
 
     CLOTHING: {
-      title: 'BOUTIQUE', floor: 'oak', wall: ['panel', '#2e2236', '#6a4a7a'], dark: 0.08, seed: 31,
+      title: 'BOUTIQUE', robAt: { x: 400, y: 364 },  floor: 'oak', wall: ['panel', '#2e2236', '#6a4a7a'], dark: 0.08, seed: 31,
       art(c) {
         K.neon(c, 'CLOTHES', 290, 18, '#ff4ad8', 15); K.shelf(c, 20, 26, 220, 3, K.shoes, '#e3c25a'); K.shelf(c, 340, 26, 200, 3, K.boxes, '#e3c25a');
         K.rug(c, 190, 200, 180, 110, '#3a2440', '#e3c25a');
@@ -169,7 +174,7 @@
 
     // ---------------- v0.71 new rooms ----------------
     'GUN SHOP': {
-      title: 'GUN SHOP', floor: 'concrete', wall: ['brick', '#4a2626', '#1d2024'], dark: 0.18, seed: 91,
+      title: 'GUN SHOP', robAt: { x: 396, y: 346 },  floor: 'concrete', wall: ['brick', '#4a2626', '#1d2024'], dark: 0.18, seed: 91,
       art(c) {
         K.neon(c, 'AMMO & ARMS', 280, 16, '#ff4a4a', 14); K.shelf(c, 24, 28, 232, 3, K.guns, '#3a2a20', 19); K.shelf(c, 304, 28, 232, 3, (cc, x, y, w, k) => (k === 2 ? K.boxes(cc, x, y, w, 4) : K.pistols(cc, x, y, w, k)), '#3a2a20', 19);
         K.displayCase(c, 40, 140, 200, (cc, x, y, w) => K.pistols(cc, x, y, w, 1)); K.displayCase(c, 320, 140, 200, (cc, x, y, w) => K.pistols(cc, x, y, w, 2));
@@ -183,7 +188,7 @@
       targets: () => [{ x: 455, y: 346, r: 60, action: 'BUY', label: 'Gun counter · weapons, mods, repairs', use: () => openSafe(() => root.NightshiftWeapons?.open?.()) }, { x: 140, y: 214, r: 50, action: 'LOOK', label: 'Display case · inspect a gun', use: () => openSafe(() => root.NightshiftWeaponArt?.inspect?.()) }] },
 
     TATTOO: {
-      title: 'TATTOO', floor: 'check', wall: ['stripe', '#2a1a2a', '#ff4ad8'], dark: 0.22, seed: 101,
+      title: 'TATTOO', robAt: { x: 176, y: 232 },  floor: 'check', wall: ['stripe', '#2a1a2a', '#ff4ad8'], dark: 0.22, seed: 101,
       art(c) {
         K.neon(c, 'TATTOO', 400, 18, '#ff4ad8', 16); K.flash(c, 24, 14, 240, 3, 7); K.mirror(c, 316, 34, 40, 54);
         K.tattooChair(c, 300, 140); K.tattooChair(c, 420, 140); K.curtain(c, 384, 110, 96, '#5a2a6a');
@@ -196,7 +201,7 @@
       targets: () => [{ x: 470, y: 250, r: 60, action: 'INK', label: 'Get a tattoo · $150 · +charisma', use: () => tattoo() }, { x: 110, y: 230, r: 54, action: 'FLASH', label: 'Flash wall · pick a design', use: () => say('🖋️ Pick a design at the chair · each piece is one of a kind') }] },
 
     'AUTO PARTS': {
-      title: 'AUTO PARTS', floor: 'tile', wall: ['block', '#3a4250', '#e05a4a'], dark: 0.08, seed: 111,
+      title: 'AUTO PARTS', robAt: { x: 392, y: 346 },  floor: 'tile', wall: ['block', '#3a4250', '#e05a4a'], dark: 0.08, seed: 111,
       art(c) {
         K.neon(c, 'PARTS', 280, 16, '#ff6b4a', 15); K.shelf(c, 24, 28, 230, 3, K.parts, '#5a606b', 19); K.shelf(c, 306, 28, 230, 3, (cc, x, y, w, k) => K.parts(cc, x, y, w, k + 1), '#5a606b', 19);
         for (const y of [140, 220]) { K.block(c, 50, y, 190, 14, 34, '#5a606b', { panels: 4 }); K.parts(c, 54, y - 10, 180, y); }
@@ -219,7 +224,7 @@
       lights: [{ x: 160, y: 220, r: 160, a: 0.45 }, { x: 420, y: 240, r: 160, a: 0.45 }],
       glow(c) { K.glow(c, 280, 16, 90, '#ff5a5a', 0.3); },
       solids: [solid(30, 104, 220, 26), solid(54, 160, 92, 36), solid(54, 250, 92, 36), solid(440, 120, 84, 84), solid(320, 186, 20, 16), solid(380, 186, 20, 16)], staff: [{ x: 250, y: 140 }], browsers: [{ x: 460, y: 160 }, { x: 110, y: 240 }],
-      targets: () => [{ x: 350, y: 260, r: 70, action: 'TRAIN', label: 'Train · stamina & strength', use: () => train() }, { x: 250, y: 160, r: 50, action: 'COACH', label: 'Coach · memberships', use: () => openSafe(() => root.NightshiftVenues?.open?.('gym', 'iron')) }] },
+      targets: () => [{ x: 350, y: 260, r: 70, action: 'TRAIN', label: 'Train · athletics & toughness', use: () => train() }, { x: 250, y: 160, r: 50, action: 'COACH', label: 'Coach · memberships', use: () => openSafe(() => root.NightshiftVenues?.open?.('gym', 'iron')) }] },
 
     HOSPITAL: {
       title: 'HOSPITAL', floor: 'lino', wall: ['tile', '#dfe9ec', '#3d99d6'], dark: 0.04, seed: 131,
@@ -277,7 +282,31 @@
   function heal() { const p = P(); if (!p) return; const r = ACT.heal(p); say(r.msg); if (r.ok) gameSave(); }
   function payFine() { const p = P(); if (!p) return; const r = ACT.fine(p); say(r.msg); if (r.ok) gameSave(); }
   function tattoo() { const p = P(); if (!p) return; const r = ACT.tattoo(p, lastInk, now0()); say(r.msg); if (r.ok) { lastInk = now0(); try { root.NightshiftSkills?.gain?.('charisma', 40, 'tattoo'); } catch { /* optional */ } gameSave(); } }
-  function train() { const p = P(); if (!p) return; const r = ACT.train(p, lastTrain, now0()); say(r.msg); if (r.ok) { lastTrain = now0(); try { root.NightshiftSkills?.gain?.('athletics', 30, 'gym'); root.NightshiftSkills?.gain?.('strength', 20, 'gym'); } catch { /* optional */ } gameSave(); } }
+  function train() { const p = P(); if (!p) return; const r = ACT.train(p, lastTrain, now0()); say(r.msg); if (r.ok) { lastTrain = now0(); try { root.NightshiftSkills?.gain?.('athletics', 30, 'gym'); root.NightshiftSkills?.gain?.('toughness', 20, 'gym'); } catch { /* optional */ } gameSave(); } }
+  // ---- hold-ups (v0.72) ----
+  let hold = null;
+  function weaponNow() { try { const W = root.NightshiftWeapons; return W?.state?.equipped ? W.current() : null; } catch { return null; } }
+  function startRob(type, key, spot, api, people) {
+    if (hold) return; const p = P(); if (!p) return;
+    if (!ACT.armed(weaponNow())) { say('🔫 You need a gun out to rob the place'); return; }
+    const last = state.robbed[key] || 0; if (Date.now() - last < ROB_COOLDOWN) { say(`🚨 They just got robbed · the register is empty for ${Math.ceil((last + ROB_COOLDOWN - Date.now()) / 60000)} min`); return; }
+    const clerk = people.filter((q) => !q.seated && q.dance === undefined).sort((a, b) => dist(a, spot) - dist(b, spot))[0] || null;
+    hold = { type, key, spot, t0: performance.now(), clerk, tick: 0 };
+    say('🔫 "Empty the register! Now!"'); api.float(spot.x, spot.y - 50, '🔫 HANDS UP!', '#ff6a6a'); if (clerk) api.float(clerk.x, clerk.y - 46, '😨🙌', '#ffe9a8');
+    try { root.NightshiftCombatVision?.engage?.(4000); } catch { /* n/a */ }
+  }
+  function holdTick(api) {
+    if (!hold) return; const p = P(), pos = api.pos; if (!p || !pos) { hold = null; return; }
+    const el = performance.now() - hold.t0;
+    if (Math.hypot(pos.x - hold.spot.x, pos.y - hold.spot.y) > 90) { p.heat = (p.heat || 0) + 0.8; say('🚨 You backed off · the clerk hit the silent alarm'); hold = null; gameSave(); return; }
+    const sec = Math.floor(el / 1000); if (sec > hold.tick && sec < 3) { hold.tick = sec; api.float(hold.spot.x, hold.spot.y - 50, String(3 - sec), '#ffe9a8'); }
+    if (el < HOLD_MS) return;
+    const r = ACT.rob(hold.type, Math.random(), Math.random()); state.robbed[hold.key] = Date.now(); persist();
+    if (r.resist) { try { root.NightshiftAuthority?.damagePlayer?.(r.dmg, 'clerk'); } catch { p.hp = Math.max(1, p.hp - r.dmg); } api.shake?.(5); api.fx?.('muzzle', hold.spot.x, hold.spot.y - 30, 200); }
+    else { p.cash += r.cash; api.float(hold.spot.x, hold.spot.y - 50, '+$' + r.cash, '#7cffb5'); try { root.NightshiftSkills?.gain?.('stealth', 20, 'robbery'); } catch { /* optional */ } }
+    const store = hold.type; p.heat = (p.heat || 0) + r.heat; say(r.msg); hold = null; gameSave();
+    try { root.dispatchEvent?.(new CustomEvent('ns:event', { detail: { type: 'store-robbed', store, ok: r.ok } })); } catch { /* n/a */ }
+  }
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   function heistAt(b) { try { const vs = root.NightshiftHeists?.state ? (root.NightshiftHeistsData?.BANKS || []) : []; for (const v of vs) { const best = B().filter((x) => x.name === 'BANK' && variant(x) === 'BANK').sort((p, q) => dist(p, v.near) - dist(q, v.near))[0]; if (best === b) return v; } } catch { /* n/a */ } return null; }
   function venueAt(b) { try { return (root.NightshiftVenues?.places?.() || []).find((v) => v.kind === 'club' && Math.abs(v.y - (b.y + b.h + 12)) < 4 && Math.abs(v.x - (b.x + b.w / 2)) < 140) || null; } catch { return null; } }
@@ -298,16 +327,16 @@
         lights: () => t.lights || [],
         solids: [solid(0, 0, W, WALL + 4), solid(0, 0, 10, H), solid(W - 10, 0, 10, H), solid(0, H - 8, W / 2 - 34, 8), solid(W / 2 + 34, H - 8, W / 2 - 34, 8), ...t.solids],
         onEnter(api, data) {
-          curB = data?.b || null; const r = rng((data?.seed || 7) >>> 0); people = [];
+          hold = null; curB = data?.b || null; const r = rng((data?.seed || 7) >>> 0); people = [];
           for (const s of t.staff || []) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-staff-' + s.x, role: s.guard ? 'security' : null });
           for (const s of t.patrons || []) if (r() < 0.8) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-pat-' + Math.floor(r() * 24), seated: true, seat: { x: s.x, y: s.y } });
           for (const s of t.browsers || []) if (r() < 0.85) people.push({ x: s.x, y: s.y, angle: -Math.PI / 2, id: type + '-b-' + Math.floor(r() * 24) });
           for (const s of t.dancers || []) people.push({ x: s.x, y: s.y, angle: r() * 6, id: type + '-d-' + Math.floor(r() * 24), dance: r() * 6 });
           api.key = data?.key || 'x';
         },
-        update(api, dt) { const now = performance.now() / 1000; for (const p of people) { if (p.dance !== undefined) { p.angle = p.dance + now * 2.2; p.moving = Math.sin(now * 5 + p.dance) > 0; p.walkTicks = (p.walkTicks || 0) + dt; } } },
+        update(api, dt) { holdTick(api); const now = performance.now() / 1000; for (const p of people) { if (p.dance !== undefined) { p.angle = p.dance + now * 2.2; p.moving = Math.sin(now * 5 + p.dance) > 0; p.walkTicks = (p.walkTicks || 0) + dt; } } },
         actors: () => people,
-        targets: (api) => [{ x: DOOR.x, y: DOOR.y - 6, r: 46, action: 'EXIT', label: 'Back to the street', use: () => root.NightshiftZones.leave() }, ...t.targets(curB || {}, api)],
+        targets: (api) => [{ x: DOOR.x, y: DOOR.y - 6, r: 46, action: 'EXIT', label: 'Back to the street', use: () => root.NightshiftZones.leave() }, ...t.targets(curB || {}, api), ...(t.robAt ? [{ x: t.robAt.x, y: t.robAt.y, r: 40, action: hold ? '…' : 'ROB', label: hold ? 'Hold it…' : 'Hold up the register (needs a gun out)', use: () => startRob(type, 'rob-' + api.key, t.robAt, api, people) }] : [])],
       });
     }
     return true;
