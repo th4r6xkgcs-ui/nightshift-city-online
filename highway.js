@@ -227,7 +227,7 @@
     if (!A) return; update(now); if (!A) return; st.frames++;
     const c = G(), Wd = SW(), Hd = SHt(), V = A.vehicle, n = night(), rn = rainAmt();
     const z = Math.min(1.15, Hd / 470) * (1 - 0.22 * Math.min(1, V.v / H.pxs(260)));
-    const px0 = Wd * 0.26, cy = A.y * 0.35 + 30, sh = A.shake;
+    const px0 = Wd * 0.26, cy = 22 + (A.y - 88) * 0.25, sh = A.shake;
     const X = (d) => px0 + rel(d, A.d) * z + (Math.random() - 0.5) * sh, Y = (y) => Hd / 2 + (y - cy) * z + (Math.random() - 0.5) * sh * 0.5;
     const span = Wd / z + 200, d0 = A.d - px0 / z - 100;
     c.save(); c.setTransform(c.getTransform());
@@ -312,7 +312,7 @@
     const V = A.vehicle, k = H.kmh(V.v), S = stars(), ex = H.nextExit(A.d);
     c.save(); c.textBaseline = 'alphabetic';
     // speedo (top centre)
-    const cx = Wd / 2, y = 34; c.fillStyle = '#0c111ed8'; c.beginPath(); c.roundRect ? c.roundRect(cx - 120, 6, 240, 62, 12) : c.rect(cx - 120, 6, 240, 62); c.fill();
+    const cx = Wd / 2, y = Hd - 46; c.fillStyle = '#0c111ed8'; c.beginPath(); c.roundRect ? c.roundRect(cx - 120, Hd - 78, 240, 70, 12) : c.rect(cx - 120, Hd - 78, 240, 70); c.fill();
     c.font = '800 30px "Chakra Petch",ui-sans-serif,sans-serif'; c.textAlign = 'right'; c.fillStyle = k > H.LIMIT + 30 ? '#ffb07a' : '#ffffff'; c.fillText(String(k), cx - 4, y + 10);
     c.font = '700 10px ui-monospace,Menlo,monospace'; c.textAlign = 'left'; c.fillStyle = '#9fb3c8'; c.fillText('KM/H', cx + 2, y + 2); c.fillStyle = '#ffd970'; c.font = '800 14px ui-monospace,Menlo,monospace'; c.fillText(`G${V.gear || 1}`, cx + 2, y + 16);
     const rf = Math.min(1, (V.rpm || 1000) / 7600); c.fillStyle = '#1a2233'; c.fillRect(cx - 110, y + 20, 220, 6); c.fillStyle = rf > 0.86 ? '#ff5a6a' : rf > 0.7 ? '#ffd970' : '#7cffb5'; c.fillRect(cx - 110, y + 20, 220 * rf, 6);
@@ -324,7 +324,7 @@
     c.textAlign = 'left'; let ly = 200;
     if (A.streak || A.cash) { c.fillStyle = '#7cffb5'; c.fillText(`NEAR MISS x${A.streak} · ${H.streakMult(A.streak).toFixed(2)}× · bank ${money(A.cash)}`, 14, ly); ly += 18; }
     if (A.run) { const left = Math.max(0, (A.run.until - now) / 1000); c.fillStyle = left < 10 ? '#ff5a6a' : '#ffd970'; c.fillText(`📦 ${A.run.name} → EXIT ${A.run.to + 1} ${H.EXITS[A.run.to].name} · ${left.toFixed(0)}s · ${money(A.run.pay)}`, 14, ly); ly += 18; }
-    if (A.race) { const R = A.race, f1 = Math.min(1, (R.mine || 0) / R.length), f2 = Math.min(1, (R.theirs || 0) / R.length); c.fillStyle = '#0c111ed8'; c.fillRect(Wd / 2 - 120, 74, 240, 26); c.fillStyle = '#ff7ad8'; c.fillRect(Wd / 2 - 116, 78, 232 * f1, 7); c.fillStyle = '#ffd970'; c.fillRect(Wd / 2 - 116, 89, 232 * f2, 7); c.font = '700 9px ui-monospace,Menlo,monospace'; c.fillStyle = '#fff'; c.fillText(`YOU vs ${A.racer?.name?.toUpperCase() || ''}`, Wd / 2 - 116, 110); }
+    if (A.race) { const R = A.race, f1 = Math.min(1, (R.mine || 0) / R.length), f2 = Math.min(1, (R.theirs || 0) / R.length); c.fillStyle = '#0c111ed8'; c.fillRect(Wd / 2 - 120, Hd - 112, 240, 30); c.fillStyle = '#ff7ad8'; c.fillRect(Wd / 2 - 116, Hd - 108, 232 * f1, 7); c.fillStyle = '#ffd970'; c.fillRect(Wd / 2 - 116, Hd - 97, 232 * f2, 7); c.font = '700 9px ui-monospace,Menlo,monospace'; c.fillStyle = '#fff'; c.fillText(`YOU (pink) vs ${A.racer?.name?.toUpperCase() || ''} (gold)`, Wd / 2 - 116, Hd - 85); }
     // pops (centre)
     c.textAlign = 'center'; for (let i = 0; i < pops.length; i++) { const p0 = pops[i], age = (now - p0.at) / 2200; if (age > 1) continue; c.globalAlpha = 1 - age * age; c.font = '800 14px "Chakra Petch",ui-sans-serif,sans-serif'; c.fillStyle = '#0c111ec0'; const w = c.measureText(p0.t).width + 16; c.fillRect(Wd / 2 - w / 2, Hd * 0.3 + i * 22 - 15, w, 20); c.fillStyle = p0.col; c.fillText(p0.t, Wd / 2, Hd * 0.3 + i * 22); } c.globalAlpha = 1;
     c.restore();
