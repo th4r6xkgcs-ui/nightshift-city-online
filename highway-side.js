@@ -102,7 +102,10 @@
     c.fillRect(0, lineY(H.BOTTOM) - 4, Wd, 2.5);
     c.fillStyle = 'rgba(232,228,220,0.35)'; const rs = 22 * kx, r0 = -((camOff % rs) + rs) % rs; for (let x = r0; x < Wd; x += rs) c.fillRect(x, lineY(H.BOTTOM) + 1, 8 * kx * 0.5, 4);
     // lamp reflections on wet road (night / rain)
-    if (n > 0.2 || k.rain > 0) { c.save(); c.globalCompositeOperation = 'lighter'; const sp = 520 * 0.55 * kx, o = -(((camOff * 0.55) % sp) + sp) % sp; for (let x = o; x < Wd + sp; x += sp) { const gr = c.createLinearGradient(0, roadTop, 0, roadBot); gr.addColorStop(0, `rgba(255,190,110,${0.22 * Math.max(n, k.rain)})`); gr.addColorStop(1, 'rgba(255,190,110,0)'); c.fillStyle = gr; c.fillRect(x - 10, roadTop, 20, roadH); } c.restore(); }
+    if (n > 0.2 || k.rain > 0) { // broken, shimmering lamp reflections on the wet road (they move with the lamps)
+      c.save(); c.globalCompositeOperation = 'lighter'; const sp = 520 * 0.55 * kx, o = -(((camOff * 0.55) % sp) + sp) % sp, a0 = 0.16 * Math.max(n, k.rain);
+      for (let x = o; x < Wd + sp; x += sp) for (let y = roadTop + 4, q = 0; y < roadBot; y += 7, q++) { const f = 1 - (y - roadTop) / roadH, wob = Math.sin(now / 260 + q * 1.7 + x) * 3; if ((q * 7 + Math.floor(x)) % 5 === 0) continue; c.fillStyle = `rgba(255,185,105,${a0 * f})`; c.fillRect(x + wob - 4 * f - 2, y, 8 * f + 4, 3); }
+      c.restore(); }
     // exit ramps / rest stop: chevrons + sign on the shoulder; gantries over the road
     for (let i = 0; i < H.EXITS.length; i++) { const xx = X(H.exitAt(i)); if (xx > -900 && xx < Wd + 300) { c.fillStyle = 'rgba(124,255,181,0.8)'; for (let q = 0; q < 6; q++) { const ax = X(H.exitAt(i) - 640 + q * 110), ay = lineY(H.SHOULDER[0] + 14); c.beginPath(); c.moveTo(ax, ay - 6); c.lineTo(ax + 14, ay); c.lineTo(ax, ay + 6); c.closePath(); c.fill(); } sign(c, xx - 30, Hd - 6, `EXIT ${i + 1} · ${H.EXITS[i].name.toUpperCase()}`, '#1f6b3f', true); }
       for (const [off, lab] of [[2400, '2 km'], [1000, '1 km']]) { const gx = X(H.exitAt(i) - off); if (gx > -300 && gx < Wd + 300) gantry(c, gx, roadTop, skyH, `EXIT ${i + 1}  ${H.EXITS[i].name.toUpperCase()}  ${lab}`, '#1f6b3f'); } }
