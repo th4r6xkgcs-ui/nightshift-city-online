@@ -284,7 +284,9 @@
   function tattoo() { const p = P(); if (!p) return; const r = ACT.tattoo(p, lastInk, now0()); say(r.msg); if (r.ok) { lastInk = now0(); try { root.NightshiftSkills?.gain?.('charisma', 40, 'tattoo'); } catch { /* optional */ } gameSave(); } }
   function train() { const p = P(); if (!p) return; const r = ACT.train(p, lastTrain, now0()); say(r.msg); if (r.ok) { lastTrain = now0(); try { root.NightshiftSkills?.gain?.('athletics', 30, 'gym'); root.NightshiftSkills?.gain?.('toughness', 20, 'gym'); } catch { /* optional */ } gameSave(); } }
   // ---- hold-ups (v0.72) ----
-  let hold = null;
+  let hold = null, alarm = null, curDoor = null;
+  function raiseAlarm(type) { if (curDoor) alarm = { x: curDoor.x, y: curDoor.y, n: type === 'GUN SHOP' ? 3 : 2, at: Date.now() }; }
+  setInterval(() => { if (!alarm || root.NightshiftZones?.active?.()) return; const a = alarm; alarm = null; if (Date.now() - a.at > 5 * 60000) return; setTimeout(() => { try { const n = root.NightshiftPolice?.respond?.(a.x, a.y + 10, a.n); if (n) say('🚓 Cops outside the store!'); } catch { /* n/a */ } }, 900); }, 500);
   function weaponNow() { try { const W = root.NightshiftWeapons; return W?.state?.equipped ? W.current() : null; } catch { return null; } }
   function startRob(type, key, spot, api, people) {
     if (hold) return; const p = P(); if (!p) return;
@@ -292,19 +294,20 @@
     const last = state.robbed[key] || 0; if (Date.now() - last < ROB_COOLDOWN) { say(`🚨 They just got robbed · the register is empty for ${Math.ceil((last + ROB_COOLDOWN - Date.now()) / 60000)} min`); return; }
     const clerk = people.filter((q) => !q.seated && q.dance === undefined).sort((a, b) => dist(a, spot) - dist(b, spot))[0] || null;
     hold = { type, key, spot, t0: performance.now(), clerk, tick: 0 };
+    for (const q of people) if (q !== clerk && !q.role) { q.flee = true; q.seated = false; q.seat = null; } // customers bolt for the door
     say('🔫 "Empty the register! Now!"'); api.float(spot.x, spot.y - 50, '🔫 HANDS UP!', '#ff6a6a'); if (clerk) api.float(clerk.x, clerk.y - 46, '😨🙌', '#ffe9a8');
     try { root.NightshiftCombatVision?.engage?.(4000); } catch { /* n/a */ }
   }
   function holdTick(api) {
     if (!hold) return; const p = P(), pos = api.pos; if (!p || !pos) { hold = null; return; }
     const el = performance.now() - hold.t0;
-    if (Math.hypot(pos.x - hold.spot.x, pos.y - hold.spot.y) > 90) { p.heat = (p.heat || 0) + 0.8; say('🚨 You backed off · the clerk hit the silent alarm'); hold = null; gameSave(); return; }
+    if (Math.hypot(pos.x - hold.spot.x, pos.y - hold.spot.y) > 90) { raiseAlarm(hold.type); p.heat = (p.heat || 0) + 0.8; say('🚨 You backed off · the clerk hit the silent alarm'); hold = null; gameSave(); return; }
     const sec = Math.floor(el / 1000); if (sec > hold.tick && sec < 3) { hold.tick = sec; api.float(hold.spot.x, hold.spot.y - 50, String(3 - sec), '#ffe9a8'); }
     if (el < HOLD_MS) return;
     const r = ACT.rob(hold.type, Math.random(), Math.random()); state.robbed[hold.key] = Date.now(); persist();
     if (r.resist) { try { root.NightshiftAuthority?.damagePlayer?.(r.dmg, 'clerk'); } catch { p.hp = Math.max(1, p.hp - r.dmg); } api.shake?.(5); api.fx?.('muzzle', hold.spot.x, hold.spot.y - 30, 200); }
     else { p.cash += r.cash; api.float(hold.spot.x, hold.spot.y - 50, '+$' + r.cash, '#7cffb5'); try { root.NightshiftSkills?.gain?.('stealth', 20, 'robbery'); } catch { /* optional */ } }
-    const store = hold.type; p.heat = (p.heat || 0) + r.heat; say(r.msg); hold = null; gameSave();
+    const store = hold.type; raiseAlarm(store); p.heat = (p.heat || 0) + r.heat; say(r.msg); hold = null; gameSave();
     try { root.dispatchEvent?.(new CustomEvent('ns:event', { detail: { type: 'store-robbed', store, ok: r.ok } })); } catch { /* n/a */ }
   }
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -328,14 +331,15 @@
         solids: [solid(0, 0, W, WALL + 4), solid(0, 0, 10, H), solid(W - 10, 0, 10, H), solid(0, H - 8, W / 2 - 34, 8), solid(W / 2 + 34, H - 8, W / 2 - 34, 8), ...t.solids],
         onEnter(api, data) {
           if (type === 'GARAGE' || type === 'AUTO PARTS') { const n = root.NightshiftPoliceCars?.repairAll?.() || 0; if (n) setTimeout(() => say('🔧 New tyres fitted on the house · drive safe'), 400); }
-          hold = null; curB = data?.b || null; const r = rng((data?.seed || 7) >>> 0); people = [];
+          hold = null; curB = data?.b || null; curDoor = curB ? { x: curB.x + curB.w / 2, y: curB.y + curB.h + 14 } : null; const r = rng((data?.seed || 7) >>> 0); people = [];
           for (const s of t.staff || []) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-staff-' + s.x, role: s.guard ? 'security' : null });
           for (const s of t.patrons || []) if (r() < 0.8) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-pat-' + Math.floor(r() * 24), seated: true, seat: { x: s.x, y: s.y } });
           for (const s of t.browsers || []) if (r() < 0.85) people.push({ x: s.x, y: s.y, angle: -Math.PI / 2, id: type + '-b-' + Math.floor(r() * 24) });
           for (const s of t.dancers || []) people.push({ x: s.x, y: s.y, angle: r() * 6, id: type + '-d-' + Math.floor(r() * 24), dance: r() * 6 });
           api.key = data?.key || 'x';
         },
-        update(dt, now0, api) { holdTick(api); const now = performance.now() / 1000; for (const p of people) { if (p.dance !== undefined) { p.angle = p.dance + now * 2.2; p.moving = Math.sin(now * 5 + p.dance) > 0; p.walkTicks = (p.walkTicks || 0) + dt; } } },
+        update(dt, now0, api) { holdTick(api);
+          for (let i = people.length - 1; i >= 0; i--) { const q = people[i]; if (!q.flee) continue; const dx = DOOR.x - q.x, dy = DOOR.y - q.y, d = Math.hypot(dx, dy); if (d < 14) { people.splice(i, 1); continue; } const v = Math.min(d, 1.9 * Math.min(2, dt || 1)); // dt is in 60 Hz frames q.x += dx / d * v; q.y += dy / d * v; q.angle = Math.atan2(dy, dx); q.moveAngle = q.angle; q.moving = true; q.walkTicks = (q.walkTicks || 0) + 1; } const now = performance.now() / 1000; for (const p of people) { if (p.dance !== undefined) { p.angle = p.dance + now * 2.2; p.moving = Math.sin(now * 5 + p.dance) > 0; p.walkTicks = (p.walkTicks || 0) + dt; } } },
         actors: () => people,
         targets: (api) => [{ x: DOOR.x, y: DOOR.y - 6, r: 46, action: 'EXIT', label: 'Back to the street', use: () => root.NightshiftZones.leave() }, ...t.targets(curB || {}, api), ...(t.robAt ? [{ x: t.robAt.x, y: t.robAt.y, r: 40, action: hold ? '…' : 'ROB', label: hold ? 'Hold it…' : 'Hold up the register (needs a gun out)', use: () => startRob(type, 'rob-' + api.key, t.robAt, api, people) }] : [])],
       });
