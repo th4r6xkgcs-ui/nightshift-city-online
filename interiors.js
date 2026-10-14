@@ -359,5 +359,5 @@
   }
   const t1 = setInterval(() => { if (register()) clearInterval(t1); }, 300);
   const t2 = setInterval(() => { if (hookDoors()) clearInterval(t2); }, 300);
-  root.NightshiftInteriors2 = Object.freeze({ enter, doors, variant, TYPES: Object.keys(T), BLURB, ACT, title: (ty) => T[ty]?.title || ty });
+  root.NightshiftInteriors2 = Object.freeze({ enter, doors, variant, TYPES: Object.keys(T), BLURB, ACT, holdup: () => (hold ? { type: hold.type, ms: Math.round(performance.now() - hold.t0) } : null), robbed: () => ({ ...state.robbed }), title: (ty) => T[ty]?.title || ty });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
