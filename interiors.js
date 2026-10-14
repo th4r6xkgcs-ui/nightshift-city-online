@@ -23,8 +23,15 @@
     return n;
   }
   const BRANDS = { 'GUN SHOP': ['AMMO & ARMS', 'IRON SIGHT', 'LOCK & LOAD'], TATTOO: ['INK HOUSE', 'BLACKLINE', 'NEEDLE & CO'], 'AUTO PARTS': ['PARTS+', 'TORQUE SUPPLY', 'BOOST SHOP'], GYM: ['IRON GYM', 'PUMP HOUSE', '24 FIT'], POLICE: ['POLICE', 'PRECINCT 9'], HOSPITAL: ['CITY HOSPITAL', 'MERCY MED'] };
+  // v0.71 actions (pure logic in ACT so it can be tested in Node)
+  const ACT = {
+    heal(p) { if (p.hp >= 100) return { ok: false, msg: '🩺 "You look fine. Next!"' }; const cost = p.cash >= 60 ? 60 : 0; p.cash -= cost; p.hp = 100; return { ok: true, msg: cost ? '🩺 Patched up · full health ($60)' : '🩺 No money? They patch you up anyway. Full health.' }; },
+    fine(p) { const heat = p.heat || 0; if (heat < 0.1) return { ok: false, msg: '🚔 "Nothing on file. Keep it that way."' }; const cost = Math.ceil(heat * 150); if (p.cash < cost) return { ok: false, msg: `🚔 Fine is $${cost}. Come back with the cash.` }; p.cash -= cost; p.heat = 0; return { ok: true, msg: `🚔 Fine paid ($${cost}) · wanted level cleared` }; },
+    tattoo(p, last, now) { if (now - last < 10 * 60000) return { ok: false, msg: '🖋️ Still healing. Give it a few minutes.' }; if (p.cash < 150) return { ok: false, msg: '🖋️ A piece is $150' }; p.cash -= 150; return { ok: true, msg: '🖋️ Fresh ink · +charisma, the block respects it' }; },
+    train(p, last, now) { if (now - last < 3 * 60000) return { ok: false, msg: '🏋️ Muscles need rest · come back in a few minutes' }; if (p.cash < 20) return { ok: false, msg: '🏋️ Day pass is $20' }; p.cash -= 20; return { ok: true, msg: '🏋️ Good session · +athletics +strength ($20)' }; },
+  };
   root.NightshiftVariants = Object.freeze({ variant, BRANDS });
-  if (!root.document) { if (typeof module !== 'undefined') module.exports = { variant, BRANDS }; return; }
+  if (!root.document) { if (typeof module !== 'undefined') module.exports = { variant, BRANDS, ACT }; return; }
 
   const KEY = 'nightshift-interiors-v1';
   let state = { crates: {}, mail: {} };
@@ -91,7 +98,7 @@
       title: 'GARAGE', floor: 'concrete', wall: ['block', '#3a3f48', '#e2c24a'], dark: 0.12, seed: 41,
       art(c) {
         K.neon(c, 'TUNE LAB', 290, 18, '#a34dff', 15); K.pegboard(c, 24, 26, 150, 50); K.shelf(c, 390, 26, 150, 3, K.parts, '#5a606b');
-        K.carLift(c, 190, 120, 170, 210, (cc, x, y) => { try { const C = root.NightshiftCars; const s = C?.sprite?.('vanta', '#8a3fd6'); if (s) { cc.save(); cc.translate(x, y); cc.rotate(-Math.PI / 2); cc.drawImage(s.cv, -s.w / 2, -s.h / 2, s.w, s.h); cc.restore(); } } catch { /* art optional */ } });
+        K.carLift(c, 190, 120, 170, 210, (cc, x, y) => { try { const C = root.NightshiftCars; const s = C?.sprite?.('vanta', '#8a3fd6'); if (s) { cc.save(); cc.translate(x, y); cc.rotate(-Math.PI / 2); cc.fillStyle = 'rgba(0,0,0,0.35)'; cc.fillRect(-s.w * 0.85 + 6, -s.h * 0.85 + 8, s.w * 1.7, s.h * 1.7); cc.drawImage(s.cv, -s.w * 0.85, -s.h * 0.85, s.w * 1.7, s.h * 1.7); cc.restore(); } } catch { /* art optional */ } });
         K.toolChest(c, 30, 110, '#c8432f'); K.toolChest(c, 30, 200, '#3d7fd0'); K.block(c, 400, 240, 130, 22, 26, '#5a606b', { panels: 3, handles: true }); R(c, '#9aa3ab', 420, 236, 30, 6); R(c, '#e05a4a', 470, 234, 12, 8);
       },
       props: [prop(470, 150, (c, x, y) => K.tires(c, x, y, 4)), prop(510, 170, (c, x, y) => K.tires(c, x, y, 3)), prop(520, 380, (c, x, y) => K.tires(c, x, y, 2))],
@@ -266,13 +273,6 @@
   function drink() { const p = P(); if (!p) return; if (p.cash < 40) { say('Needs $40'); return; } p.cash -= 40; p.hp = Math.min(100, p.hp + 10); try { root.NightshiftSkills?.gain?.('charisma', 15, 'bar'); } catch { /* optional */ } say('🥃 You buy a round · +10 health, people like you more'); gameSave(); }
   let lastDance = 0;
   function dance() { const now = Date.now(); if (now - lastDance < 60000) { say('💃 Catch your breath first'); return; } lastDance = now; const p = P(); if (p) p.heat = Math.max(0, (p.heat || 0) - 0.5); try { root.NightshiftSkills?.gain?.('athletics', 12, 'dance'); } catch { /* optional */ } say('🕺 You hit the floor · heat cools off, +athletics'); }
-  // v0.71 actions (pure logic in ACT so it can be tested in Node)
-  const ACT = {
-    heal(p) { if (p.hp >= 100) return { ok: false, msg: '🩺 "You look fine. Next!"' }; const cost = p.cash >= 60 ? 60 : 0; p.cash -= cost; p.hp = 100; return { ok: true, msg: cost ? '🩺 Patched up · full health ($60)' : '🩺 No money? They patch you up anyway. Full health.' }; },
-    fine(p) { const heat = p.heat || 0; if (heat < 0.1) return { ok: false, msg: '🚔 "Nothing on file. Keep it that way."' }; const cost = Math.ceil(heat * 150); if (p.cash < cost) return { ok: false, msg: `🚔 Fine is $${cost}. Come back with the cash.` }; p.cash -= cost; p.heat = 0; return { ok: true, msg: `🚔 Fine paid ($${cost}) · wanted level cleared` }; },
-    tattoo(p, last, now) { if (now - last < 10 * 60000) return { ok: false, msg: '🖋️ Still healing. Give it a few minutes.' }; if (p.cash < 150) return { ok: false, msg: '🖋️ A piece is $150' }; p.cash -= 150; return { ok: true, msg: '🖋️ Fresh ink · +charisma, the block respects it' }; },
-    train(p, last, now) { if (now - last < 3 * 60000) return { ok: false, msg: '🏋️ Muscles need rest · come back in a few minutes' }; if (p.cash < 20) return { ok: false, msg: '🏋️ Day pass is $20' }; p.cash -= 20; return { ok: true, msg: '🏋️ Good session · +athletics +strength ($20)' }; },
-  };
   const now0 = () => Date.now(); let lastInk = 0, lastTrain = 0;
   function heal() { const p = P(); if (!p) return; const r = ACT.heal(p); say(r.msg); if (r.ok) gameSave(); }
   function payFine() { const p = P(); if (!p) return; const r = ACT.fine(p); say(r.msg); if (r.ok) gameSave(); }
