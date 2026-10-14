@@ -1,7 +1,7 @@
 /* Codex pistol silhouettes at twice the original native density. Claude's stats, compatibility and saves stay authoritative. */
 (function(r){'use strict';const A=r.NightshiftWeaponArt,D=r.NightshiftWeaponsData;if(!A||!D)return;
 const IDS=['pistol','compact','revolver','hawk','goldhawk','machine'],done=new WeakSet(),nativeCanvases=new WeakSet();let preview=null;
-function sprite(id,skin=null,mods=[]){const sp=A.sprite(id,skin,mods);if(!IDS.includes(id)||done.has(sp)||sp.hd)return sp;
+function sprite(id,skin=null,mods=[],parts){const sp=A.sprite(id,skin,mods,parts);if(!IDS.includes(id)||done.has(sp)||sp.hd)return sp;
  const raw=A.build(id,skin,id!=='revolver'?mods.filter(m=>m!=='extmag'):mods),base=A.build(id,skin,[]),cv=sp.cv;cv.width=168;cv.height=76;const c=cv.getContext('2d');c.scale(2,2);c.imageSmoothingEnabled=false;
  const skinDef=skin&&D.SKIN?.[skin],pal=skinDef?.pal,metal=id==='goldhawk'?['#876023','#c59335','#f0c868','#fff0ba']:id==='hawk'?['#56636f','#8797a2','#c5d0d2','#e7ece5']:[pal?.st||'#263440',pal?.sl||'#485765',pal?.hi||'#81929c','#c4d1d4'],poly=pal?[A.pix.mix(pal.sl,'#000000',.5),pal.sl,A.pix.mix(pal.sl,'#ffffff',.22),pal.hi]:['#121923','#252c35','#424b54','#73808b'];
  const R=(h,x,y,w,hh)=>{c.fillStyle=h;c.fillRect(x,y,w,hh)},P=(h,p)=>{c.fillStyle=h;c.beginPath();p.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fill()};
