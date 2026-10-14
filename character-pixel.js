@@ -483,12 +483,15 @@
   const scaled = new Map();
   // Same contract as character-art frame(): a canvas of CELL*scale, anchor at CELL.ax/ay*scale.
   function frame(o, dir, anim, f, scale = 2, hold = '') {
+    const O3 = root.NightshiftO3; if (O3 && O3.wants(o)) { const cv = O3.frame(o, dir, anim, f, scale, hold); if (cv) return cv; } // v0.70 Option 3 art
     const b = base(o, dir, anim, f, hold); if (b.width === CW * scale) return b;
     const key = b.__k || (b.__k = Math.random().toString(36).slice(2)), sk = key + '@' + scale; let cv = scaled.get(sk); if (cv) return cv;
     cv = document.createElement('canvas'); cv.width = CW * scale; cv.height = CH * scale; const x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(b, 0, 0, cv.width, cv.height);
     scaled.set(sk, cv); if (scaled.size > 160) scaled.delete(scaled.keys().next().value); return cv;
   }
+  let drawingPlayer = false;
   function draw(ctx, o, x, y, dir, anim, f, scale = 2, hold = '') {
+    const O3 = root.NightshiftO3; if (O3 && O3.wants(o) && O3.draw(ctx, o, x, y, dir, anim, f, hold, drawingPlayer)) return; // v0.70 Option 3 art
     const cv = frame(o, dir, anim, f, G, hold), prev = ctx.imageSmoothingEnabled; ctx.imageSmoothingEnabled = false;
     ctx.fillStyle = '#05080f55'; ctx.beginPath(); ctx.ellipse(Math.round(x) + 1, Math.round(y) + 14.2, 8.5, 2.8, 0, 0, Math.PI * 2); ctx.fill();
     ctx.drawImage(cv, Math.round(x) - AXW, Math.round(y) - AYW, CW, CH); ctx.imageSmoothingEnabled = prev;
@@ -504,7 +507,7 @@
     const ticks = Number.isFinite(p.walkTicks) ? Math.max(0, p.walkTicks) : 0, fr = mv ? Math.floor(ticks / ((C.RATE || {})[a] || 2.5)) : Math.floor(performance.now() / (a === 'idle' ? ((C.RATE || {}).idle || 380) : 420));
     const hold = opts.hold || '', ang = hold ? p.angle : (mv && Number.isFinite(p.moveAngle) ? p.moveAngle : Number.isFinite(p.angle) ? p.angle : 0), d0 = C.dirOfAngle(ang);
     const seat = a === 'sit' && p.seat ? p.seat : null, d = seat ? 2 : hold ? d0 : (C.smoothDir ? C.smoothDir(p, d0) : d0);
-    draw(ctx, o, seat ? seat.x : p.x, seat ? seat.y : p.y, d, a, fr, 2, hold);
+    drawingPlayer = !!isPlayer; draw(ctx, o, seat ? seat.x : p.x, seat ? seat.y : p.y, d, a, fr, 2, hold); drawingPlayer = false;
     if (!isPlayer && !opts.hideHealth && Number.isFinite(p.hp) && p.hp > 0 && p.hp < (p.maxHp || 40)) { ctx.fillStyle = '#182832'; ctx.fillRect(p.x - 13, p.y - 33, 26, 4); ctx.fillStyle = '#dd9884'; ctx.fillRect(p.x - 13, p.y - 33, 26 * p.hp / (p.maxHp || 40), 3); }
     return true;
   }
