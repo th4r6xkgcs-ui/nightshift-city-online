@@ -102,6 +102,8 @@
       const c0 = cv0.getContext('2d'); c0.imageSmoothingEnabled = true; c0.drawImage(root.NightshiftArt.tinted(IMG, color, 'car:' + id), pad0 * S0, pad0 * S0, L0 * S0, W0 * S0);
       return { cv: cv0, w: L0 + pad0 * 2, h: W0 + pad0 * 2, L: L0, W: W0, image: true };
     }
+    // v0.68: sculpted HD renderer (car-hd.js); the flat legacy drawing below stays as a fallback
+    if (root.NightshiftCarHD) { try { const sp0 = D.BY[id] || BASE[id]; return root.NightshiftCarHD.bake({ id, color, st, spec: sp0, B0: BODY[sp0.body], BODY, SIG, RIMS, shade, lum, R, RR, CIR, poly, base: !!BASE[id] }); } catch (e) { console.error(e); } }
     bakeStyle = st;
     const spec = D.BY[id] || BASE[id], B0 = BODY[spec.body], L = spec.len, W = spec.wid, S = BASE[id] ? 3 : 4, pad = 6;
     const cv = document.createElement('canvas'); cv.width = (L + pad * 2) * S; cv.height = (W + pad * 2) * S;
