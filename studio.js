@@ -113,7 +113,7 @@
     const k = Math.min(1, (zoom - 1) / 1.6), focus = -6 - 11 * k, cx = w / 2, ancY = h * 0.5 - focus * sc, footY = ancY + 14 * sc;
     x.fillStyle = '#ffd9701a'; x.beginPath(); x.ellipse(cx, footY, 20 * sc, 5 * sc, 0, 0, Math.PI * 2); x.fill();
     x.fillStyle = '#00000066'; x.beginPath(); x.ellipse(cx + sc, footY + 0.5 * sc, 9 * sc, 3 * sc, 0, 0, Math.PI * 2); x.fill();
-    x.imageSmoothingEnabled = false; x.drawImage(frame, cx - C.CELL.ax * sc, ancY - C.CELL.ay * sc, C.CELL.w * sc, C.CELL.h * sc);
+    const cell = frame.cell || C.CELL; x.imageSmoothingEnabled = false; x.drawImage(frame, cx - cell.ax * sc, ancY - cell.ay * sc, cell.w * sc, cell.h * sc);
     if (compare) { x.fillStyle = '#ffd970'; x.font = `800 ${12 * dpr}px system-ui`; x.textAlign = 'center'; x.fillText('WHAT YOU\'RE WEARING', cx, 18 * dpr); }
     raf = requestAnimationFrame(loop);
   }
@@ -124,7 +124,7 @@
   const thumbs = new Map();
   function thumb(o, d = 2, scale = 2) { const k = W.keyOf(o) + d + scale; let c = thumbs.get(k); if (c) return c; const fr = root.NightshiftCharacters.frame(o, d, 'idle', 0, scale); c = fr; thumbs.set(k, c); if (thumbs.size > 300) thumbs.delete(thumbs.keys().next().value); return c; }
   // the cell has headroom for hats/guns; tiles show just the character (x 7..37, y 6..52 of 44x56)
-  const crop = (src) => { const k = src.width / 44, c = el('canvas', { width: Math.round(30 * k), height: Math.round(46 * k) }); c.getContext('2d').drawImage(src, -7 * k, -6 * k); return c; };
+  const crop = (src) => { const o3 = !!src.cell, k = src.width / (o3 ? src.cell.w : 44), cw = o3 ? 36 : 30, ch = o3 ? 58 : 46, c = el('canvas', { width: Math.round(cw * k), height: Math.round(ch * k) }), x = c.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(src, -(o3 ? 6 : 7) * k, -(o3 ? 4 : 6) * k); return c; };
   const copyCanvas = (src, w, h) => { const c = el('canvas', { width: src.width, height: src.height }); c.getContext('2d').drawImage(src, 0, 0); if (w) c.style.width = w + 'px'; if (h) c.style.height = h + 'px'; return c; };
   function tile(label, o, onClick, opts = {}) {
     const d = el('div', { className: 'it' + (opts.sel ? ' sel' : '') + (opts.wear ? ' wear' : '') + (opts.lock ? ' lock' : '') }); d.append(crop(thumb(o, opts.dir ?? 2)), el('div', {}, label));
@@ -174,7 +174,7 @@
   function closeUp(o, slot) {
     const C = root.NightshiftCharacters, src = C.frame(slot === 'top' && o.outer ? { ...o, outer: null } : o, slot === 'bag' ? 6 : dir === 6 ? 2 : dir, 'idle', 0, 6), c = el('canvas', { width: 192, height: 192 }), x = c.getContext('2d'); x.imageSmoothingEnabled = false;
     const focus = { head: -20, face: -19, hair: -19, top: -6, outer: -6, jewelry: -9, gloves: 0, bag: -6, bottom: 6, shoes: 13, body: -4 }[slot] ?? -4;
-    const s = 6, sx = (C.CELL.ax) * s - 96, sy = (C.CELL.ay + focus) * s - 96; x.fillStyle = '#1a2230'; x.fillRect(0, 0, 192, 192); x.drawImage(src, sx, sy, 192, 192, 0, 0, 192, 192); return c;
+    const cell = src.cell || C.CELL, k = src.width / cell.w, fo = src.cell ? focus * 1.3 : focus; x.fillStyle = '#1a2230'; x.fillRect(0, 0, 192, 192); x.drawImage(src, (cell.ax - 16) * k, (cell.ay + fo - 16) * k, 32 * k, 32 * k, 0, 0, 192, 192); return c;
   }
   function renderDetail() {
     det.textContent = '';

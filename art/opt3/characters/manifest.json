@@ -1,0 +1,100 @@
+{
+ "schema_version": "1.0.0",
+ "kind": "opt3-character-layers",
+ "frame": {
+  "w": 96,
+  "h": 128,
+  "origin": {
+   "x": 48,
+   "y": 120
+  },
+  "native_px_per_world_px": 2
+ },
+ "directions": [
+  "S",
+  "SW",
+  "W",
+  "NW",
+  "N",
+  "NE",
+  "E",
+  "SE"
+ ],
+ "animations": {
+  "idle": {
+   "frames": 4,
+   "ms": 220
+  },
+  "walk": {
+   "frames": 8,
+   "ms": 100
+  },
+  "run": {
+   "frames": 8,
+   "ms": 75
+  },
+  "aim": {
+   "frames": 2,
+   "ms": 300
+  },
+  "aimwalk": {
+   "frames": 8,
+   "ms": 100
+  }
+ },
+ "bands": [
+  "far",
+  "mid",
+  "near",
+  "head",
+  "over"
+ ],
+ "slot_order": [
+  "body",
+  "shoes",
+  "bottom",
+  "top",
+  "outer",
+  "jewelry",
+  "bag",
+  "watch",
+  "hair",
+  "head",
+  "face"
+ ],
+ "items": {
+  "character_base_body": {
+   "id": "character_base_body",
+   "slot": "body",
+   "atlas": "character_base_body.png",
+   "json": "character_base_body.json",
+   "w": 1024,
+   "h": 1299,
+   "frames": 920,
+   "recolor": {
+    "skin": {
+     "base": "#bf8556",
+     "kind": "skin"
+    }
+   },
+   "wardrobe": null
+  },
+  "character_cap_black": {
+   "id": "character_cap_black",
+   "slot": "head",
+   "atlas": "character_cap_black.png",
+   "json": "character_cap_black.json",
+   "w": 1024,
+   "h": 151,
+   "frames": 240,
+   "recolor": {
+    "item": {
+     "base": "#1b1d24"
+    }
+   },
+   "wardrobe": {
+    "id": "cap"
+   }
+  }
+ }
+}

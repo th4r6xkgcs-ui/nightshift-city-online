@@ -50,9 +50,11 @@
     ['puffer', 'outer', 'Puffer jacket', 'uncommon', 260, ['#1d2024', '#c84659', '#e07a3a', '#3d7fc6', '#f1efe8', '#2f8f6a'], 'Baffled down quilting, high collar.', { open: true }],
     ['varsity', 'outer', 'Varsity jacket', 'rare', 360, ['#7a2e24', '#1d2433', '#2f6b3f', '#3a2a5a'], 'Wool body, contrast sleeves, chenille letter.', { open: true }],
     ['denim', 'outer', 'Denim jacket', 'uncommon', 180, C.denim, 'Washed denim with chest pockets and copper buttons.', { open: true }],
-    ['track', 'outer', 'Track jacket', 'common', 120, C.street, 'Zip front with stripes down the sleeves.', { open: true }],
+    ['track', 'outer', 'Track jacket', 'common', 120, C.street.concat(['#8a3fd6']), 'Zip front with stripes down the sleeves.', { open: true }],
     ['vest', 'outer', 'Tactical vest', 'rare', 300, ['#2b2f33', '#4a5232', '#6a5a3a'], 'Plate carrier look with mag pouches.'],
     ['trench', 'outer', 'Long trench coat', 'epic', 700, ['#b8a07a', '#1d2024', '#5a3524', '#2a3f62'], 'Belted, knee-length, storm flap. Very film noir.', { open: true }],
+    // v0.70 Option 3 golden sample: black baffled body, accent yoke/sleeves/hood, white piping + cuff bands
+    ['puffer2', 'outer', 'Two-tone puffer', 'rare', 380, ['#16181d', '#16181d', '#16181d', '#f1efe8', '#2a2f36'], 'Baffled down body, contrast yoke and sleeves, white piping, high collar, stowable hood.', { open: true, accent: ['#f27934', '#a34dff', '#44b9c7', '#16181d', '#d0283a'] }],
     ['bomber', 'outer', 'Flight bomber', 'uncommon', 220, ['#4a5232', '#1d2024', '#7a2e24', '#2a3f62'], 'Ribbed cuffs and an orange lining.', { open: true }],
     // bottoms
     ['jeans', 'bottom', 'Straight jeans', 'common', 60, C.denim, 'Five-pocket denim with visible stitching.'],
@@ -66,6 +68,7 @@
     ['runners', 'shoes', 'Runners', 'common', 90, ['#f1efe8', '#7d8796', '#ff4ad8', '#3ad0ff', '#1d2024'], 'Mesh upper on a chunky foam sole.'],
     ['boots', 'shoes', 'Work boots', 'common', 110, ['#8a6430', '#2a1f1a', '#1d2024'], 'Steel toe, lug sole, laced to the top.'],
     ['slides', 'shoes', 'Slides + socks', 'common', 30, ['#1d2024', '#f1efe8', '#c84659'], 'Socks with slides. A statement.'],
+    ['courts', 'shoes', 'Court sneakers', 'rare', 220, ['#f4f2ec', '#f4f2ec', '#f4f2ec', '#16181d'], 'Chunky leather court shoe: toe and heel overlays, side stripe, padded collar, cupsole.', { accent: ['#d0283a', '#16181d', '#a34dff', '#f27934'] }],
     ['dress', 'shoes', 'Dress shoes', 'rare', 260, ['#2a1f1a', '#5a3524', '#1d2024'], 'Polished leather oxfords.'],
     // gloves
     ['gloves', 'gloves', 'Leather gloves', 'uncommon', 70, ['#1d2024', '#5a3524'], 'No prints left behind.'],
@@ -74,6 +77,8 @@
     ['chain', 'jewelry', 'Cuban chain', 'rare', 900, C.metal, 'Heavy links that catch the light.'],
     ['watch', 'jewelry', 'Iced watch', 'epic', 1800, C.metal, 'Bezel full of stones.'],
     ['chainwatch', 'jewelry', 'Chain + watch', 'epic', 2400, C.metal, 'The whole set.'],
+    // wrist (v0.70)
+    ['sportwatch', 'wrist', 'Black sport watch', 'uncommon', 260, ['#1b1e24', '#e3c25a', '#f1efe8'], 'Matte case, rubber strap, glowing dial.'],
     // bags
     ['backpack', 'bag', 'Backpack', 'common', 70, C.street.concat(['#1d2024']), 'Two straps, front pocket, zip pulls.'],
     ['sling', 'bag', 'Sling bag', 'common', 50, ['#1d2024', '#c84659', '#e2b75c', '#7d8796'], 'Cross-body, buckle on the chest.'],
@@ -85,9 +90,9 @@
     { id: 'body', name: 'Body', icon: '🧍' }, { id: 'hair', name: 'Hair & face', icon: '💇' }, { id: 'head', name: 'Headwear', icon: '🧢', optional: true },
     { id: 'face', name: 'Eyewear & masks', icon: '🕶️', optional: true }, { id: 'top', name: 'Tops', icon: '👕' }, { id: 'outer', name: 'Outerwear', icon: '🧥', optional: true },
     { id: 'bottom', name: 'Bottoms', icon: '👖' }, { id: 'shoes', name: 'Footwear', icon: '👟' }, { id: 'gloves', name: 'Gloves', icon: '🧤', optional: true },
-    { id: 'jewelry', name: 'Jewelry', icon: '⛓️', optional: true }, { id: 'bag', name: 'Bags', icon: '🎒', optional: true },
+    { id: 'jewelry', name: 'Jewelry', icon: '⛓️', optional: true }, { id: 'wrist', name: 'Watches', icon: '⌚', optional: true }, { id: 'bag', name: 'Bags', icon: '🎒', optional: true },
   ];
-  const SLOTS = ['head', 'face', 'top', 'outer', 'bottom', 'shoes', 'gloves', 'jewelry', 'bag'];
+  const SLOTS = ['head', 'face', 'top', 'outer', 'bottom', 'shoes', 'gloves', 'jewelry', 'wrist', 'bag'];
   const RARITY = { common: { name: 'Common', color: '#9fb3c8' }, uncommon: { name: 'Uncommon', color: '#7cdeb5' }, rare: { name: 'Rare', color: '#7cc7ff' }, epic: { name: 'Epic', color: '#c99aff' }, legendary: { name: 'Legendary', color: '#ffd970' } };
   const STARTER = ['tee', 'jeans', 'runners', 'hoodie', 'cap', 'tank', 'joggers'];
   const DEFAULT = { skin: 2, build: 'regular', hair: 'short', hairColor: 0, facial: 'none', head: null, face: null, top: { id: 'tee', color: 0 }, outer: { id: 'hoodie', color: 1, hood: false }, bottom: { id: 'jeans', color: 0 }, shoes: { id: 'runners', color: 0 }, gloves: null, jewelry: null, bag: null };
