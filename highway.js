@@ -47,8 +47,7 @@
     A = { i, d: H.entryAt(i), y: H.SHOULDER[0] + 14, v: H.pxs(70), car, perf, spec, sid: spriteId(car), traffic: [], oncoming: [], cops: [], spikes: [], blocks: [], heli: null,
       streak: 0, bestStreak: 0, cash: 0, fines: 0, t0: performance.now(), fade: 1, shake: 0, flash: 0, last: 0, lastCamD: H.entryAt(i), racer: null, race: null, run: null, msg: null, nextRacer: performance.now() + 25000 + Math.random() * 20000, spikesNext: 0, busted: 0, rest: false, smoke: [], marks: [], km0: 0 };
     A.vehicle = { v: A.v, fuel: car.fuel ?? 100, condition: car.condition ?? 100, spikes: false };
-    seedTraffic(); st.enters++;
-    try { root.releaseControls?.(); } catch { /* n/a */ }
+    seedTraffic(); st.enters++; // keep the stick held: you drive straight on
     say(`🛣️ Route 9 · ${H.EXITS[i].name} on-ramp · stick right = gas, up/down = lanes`);
     emit({ type: 'highway', on: true, from: H.EXITS[i].id });
     return true;
