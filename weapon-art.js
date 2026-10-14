@@ -195,7 +195,7 @@
   function sprite(id, skinId = null, mods = []) {
     if (!GUNS[id]) id = 'pistol';
     const art = root.NightshiftArt?.has?.('side/weapons/' + id + '.png') ? root.NightshiftArt.image('side/weapons/' + id + '.png') : null;
-    const mk = [...new Set(mods)].sort().join(','), key = id + '|' + (skinId || '') + '|' + mk + (art ? '|img' : ''); let s = cache.get(key); if (s) return s;
+    const mk = [...new Set(mods)].sort().join(','), key = id + '|' + (skinId || '') + '|' + mk + (art ? '|img' : '') + (root.NightshiftWeaponHD && hdOn() ? '|hd' : ''); let s = cache.get(key); if (s) return s;
     // v0.69: HD vector re-render of the same builders (anchors unchanged); real PNG art still wins
     if (!art && root.NightshiftWeaponHD && hdOn()) { try { const skin = skinId && skinId !== 'stock' ? (W()?.SKIN?.[skinId] || null) : null; const h = root.NightshiftWeaponHD.sprite({ id, skin, mods, GUNS, attach, Buf, MAT, INK, GW, GH }); if (h) { cache.set(key, h); if (cache.size > 240) cache.delete(cache.keys().next().value); return h; } } catch (e) { console.error(e); } }
     const { px, box, a } = build(id, skinId, mods), b = { px }, [x0, y0, x1, y1] = [box.x, box.y, box.x + box.w - 1, box.y + box.h - 1];
