@@ -5,18 +5,25 @@
  * When you're driving they chase and try to ram you (slows you down, damages your car). Roadblocks are two cars
  * parked across an intersection ahead of you with officers behind them: go around, or smash through slowly.
  * Everything clears when you drop below the star level (or leave the city view). Lightbars flash at night and day.
+ * v0.71 pursuit AI: ★1-2 a patrol car hunts you (no ramming). ★3+ cars predict where you're going and line up a PIT
+ * on your rear quarter (spins you out) — but only when they have a clear line; otherwise they stay on the streets and
+ * never drive through buildings. They swerve around traffic. Ram a cruiser hard and it spins out; three hits wrecks it
+ * (smoking wreck, a replacement is radioed in later). ★5 adds a helicopter: its searchlight keeps updating where the
+ * police think you are — outrun the light or get indoors. Civilian traffic pulls over for sirens and floors it away
+ * from gunfire (wraps NightshiftTrafficSafety.speed). Pure helpers in NightshiftPursuit (Node-testable).
  * API: NightshiftPoliceCars.{cars, roadblocks, stats} */
 (function (root) {
   'use strict';
   if (!root.document) return;
   /* eslint-disable no-undef */
-  const E = () => { try { return { player, cars, world, camera, g }; } catch { return null; } };
+  const E = () => { try { return { player, cars, world, camera, g, blocked: typeof blocked === 'function' ? blocked : null, bullets: typeof bullets !== 'undefined' ? bullets : [] }; } catch { return null; } };
   /* eslint-enable no-undef */
   const BW = 440, BH = 340, rnd = (a, b) => a + Math.random() * (b - a), dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const chase = [], blocks = [];
   const st = { spawned: 0, rams: 0, drops: 0, roadblocks: 0 };
   const stars = (env) => { try { return root.NightshiftWantedData?.stars?.(env.player.heat) ?? 0; } catch { return 0; } };
-  const want = (s) => (s >= 5 ? 3 : s >= 4 ? 2 : s >= 3 ? 1 : 0);
+  const want = (s) => (s >= 5 ? 3 : s >= 4 ? 2 : s >= 1 ? 1 : 0); // v0.71: a patrol car from ★1
+  const wrecks = []; let heli = null;
   const inZone = () => { try { return !!(root.NightshiftZones?.active?.() || root.NightshiftHome?.kind?.()); } catch { return false; } };
   const node = (x, y) => ({ i: Math.round(x / BW), j: Math.round(y / BH) });
   const nodePos = (n) => ({ x: n.i * BW, y: n.j * BH });
@@ -50,29 +57,58 @@
     }
     st.drops++;
   }
+  const PU = root.NightshiftPursuit;
+  const clearLine = (env, a, b2, r = 12) => { const N = root.NightshiftNavigation; if (!env.blocked || !N?.trace) return true; return !N.trace(a, b2, env.blocked, r); };
   function carTick(env, c, now, dt, s) {
     const p = env.player, W = root.NightshiftCrime?.wanted, seen = !!W?.seen;
     const goal = seen || !W?.center ? p : W.center;
     const pc = p.car, d = dist(c, pc || p), fast = pc ? 390 : 250;
-    // close in on a driving player: leave the grid and ram
-    if (pc && d < 170 && now > c.bumpUntil) {
-      const a = Math.atan2(pc.y - c.y, pc.x - c.x); c.angle += Math.atan2(Math.sin(a - c.angle), Math.cos(a - c.angle)) * Math.min(1, dt * 6);
-      c.x += Math.cos(c.angle) * 360 * dt; c.y += Math.sin(c.angle) * 360 * dt; c.speed = 6; c.offGrid = true;
-      if (d < 36) { c.bumpUntil = now + 4500; pc.speed = (pc.speed || 0) * 0.65; try { root.NightshiftVehicles?.hit?.(pc); } catch { /* n/a */ } c.x -= Math.cos(c.angle) * 24; c.y -= Math.sin(c.angle) * 24; st.rams++; try { root.say?.('🚓 Rammed by police!'); root.NightshiftCombatVision?.engage?.(4000); } catch { /* n/a */ } }
+    // spun out / stunned by the player's ram
+    if (now < (c.stunUntil || 0)) { c.angle += (c.spin || 0) * dt; c.x += Math.cos(c.slideA || 0) * (c.slideV || 0) * dt; c.y += Math.sin(c.slideA || 0) * (c.slideV || 0) * dt; c.slideV = Math.max(0, (c.slideV || 0) - 300 * dt); if (env.blocked?.(c.x, c.y)) { c.x -= Math.cos(c.slideA) * 6; c.y -= Math.sin(c.slideA) * 6; c.slideV = 0; } c.speed = 0; c.offGrid = true; return; }
+    // the player rams the cruiser: spin it out, three hits wreck it
+    if (pc && d < 38 && Math.abs(pc.speed || 0) > 3.5 && now > (c.hitAt || 0) + 700 && PU.playerRams(pc, c)) {
+      c.hitAt = now; c.hits = (c.hits || 0) + 1; c.stunUntil = now + 2200; c.spin = (Math.random() < 0.5 ? -1 : 1) * 7; c.slideA = pc.angle || 0; c.slideV = Math.abs(pc.speed) * 45; pc.speed = (pc.speed || 0) * 0.75;
+      try { root.NightshiftVehicles?.hit?.(pc); root.NightshiftFeedback?.burst?.(c.x, c.y); } catch { /* n/a */ }
+      if (c.hits >= 3) { c.wreck = true; c.wreckAt = now; wrecks.push(c); chase.splice(chase.indexOf(c), 1); tick.nextSpawn = now + 12000; st.wrecks = (st.wrecks || 0) + 1; try { root.say?.('💥 Cruiser wrecked!'); p.heat = (p.heat || 0) + 0.3; } catch { /* n/a */ } }
+      else try { root.say?.('💥 You rammed the cruiser!'); } catch { /* n/a */ }
       return;
     }
+    // ★3+: intercept a driving player — lead the target and go for a PIT on the rear quarter, only with a clear line
+    if (pc && s >= 3 && d < 280 && now > c.bumpUntil) {
+      const T = PU.intercept(c, pc, d);
+      if (clearLine(env, c, T)) {
+        const a = Math.atan2(T.y - c.y, T.x - c.x); c.angle += Math.atan2(Math.sin(a - c.angle), Math.cos(a - c.angle)) * Math.min(1, dt * 6);
+        const v = Math.min(420, 300 + Math.abs(pc.speed || 0) * 14) * dt, nx = c.x + Math.cos(c.angle) * v, ny = c.y + Math.sin(c.angle) * v;
+        if (!env.blocked?.(nx, ny)) { c.x = nx; c.y = ny; c.speed = v / dt / 60; c.offGrid = true; }
+        if (d < 36) {
+          c.bumpUntil = now + 4500; const pit = PU.isPit(c, pc);
+          if (pit) { pc.angle = (pc.angle || 0) + pit * 1.1; pc.speed = (pc.speed || 0) * 0.35; st.pits = (st.pits || 0) + 1; try { root.say?.('🚓 PIT maneuver! You spin out'); } catch { /* n/a */ } }
+          else { pc.speed = (pc.speed || 0) * 0.65; try { root.say?.('🚓 Rammed by police!'); } catch { /* n/a */ } }
+          try { root.NightshiftVehicles?.hit?.(pc); root.NightshiftCombatVision?.engage?.(4000); } catch { /* n/a */ }
+          c.x -= Math.cos(c.angle) * 24; c.y -= Math.sin(c.angle) * 24; st.rams++;
+        }
+        return;
+      }
+    }
     if (c.offGrid) { c.at = node(c.x, c.y); c.next = null; c.offGrid = false; }
+    // ★1-2 patrol car close behind a driving player: tail them with the siren, no contact
+    if (pc && s < 3 && d < 110) { c.speed = 0; return; }
     // on-foot player close by: pull up and drop officers
     if (!pc && d < 120 && seen && now - c.dropped > 20000) { c.dropped = now; c.speed = 0; dropOfficers(c); return; }
     if (!pc && d < 90) { c.speed = 0; return; }
     if (!c.next) { c.prev = c.at; c.next = nextNode(env, c, goal); }
     const t = nodePos(c.next), dx = t.x - c.x, dy = t.y - c.y, dd = Math.hypot(dx, dy);
-    const lane = 18, lx = Math.abs(dx) > Math.abs(dy) ? 0 : (dy > 0 ? -lane : lane), ly = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? lane : -lane) : 0;
-    const v = Math.min(fast, 120 + dd * 2) * dt;
+    let v = Math.min(fast, 120 + dd * 2) * dt;
     if (dd <= v + 1) { c.x = t.x; c.y = t.y; c.at = c.next; c.next = null; return; }
     const ta = Math.atan2(dy, dx); c.angle += Math.atan2(Math.sin(ta - c.angle), Math.cos(ta - c.angle)) * Math.min(1, dt * 8);
-    c.x += dx / dd * v + (lx - ((c.lx || 0))) * 0.0; c.y += dy / dd * v; c.lx = lx; c.ly = ly; c.speed = v / dt / 60;
-    void s;
+    // swerve around traffic and parked cars ahead (overtake on the left), easing back to the lane when clear
+    const others = (root.NightshiftTraffic?.actors || []).concat(env.cars, chase.filter((q) => q !== c));
+    const sw = PU.swerve(c, ta, others);
+    if (sw.brake) v *= 0.45;
+    const ox = -Math.sin(ta) * sw.side * 70 * dt, oy = Math.cos(ta) * sw.side * 70 * dt;
+    const nx = c.x + dx / dd * v + ox, ny = c.y + dy / dd * v + oy;
+    if (!env.blocked?.(nx, ny)) { c.x = nx; c.y = ny; } else { c.x += dx / dd * v; c.y += dy / dd * v; }
+    c.speed = v / dt / 60;
   }
   // roadblocks: two cars across an intersection ahead of a driving player
   let nextBlock = 0;
@@ -89,6 +125,31 @@
     const C = root.NightshiftCrime; if (C?.officers) for (let k = 0; k < 2; k++) { const back = horiz ? { x: q.x - Math.sign(Math.cos(a)) * -40, y: q.y + (k ? 30 : -30) } : { x: q.x + (k ? 30 : -30), y: q.y - Math.sign(Math.sin(a)) * -40 }; C.officers.push({ ...back, hp: 70, maxHp: 70, role: 'officer', id: 'cop-rb-' + Math.floor(Math.random() * 1e6), nextAttack: now + 1500, color: '#7798de', angle: a + Math.PI, searchIndex: k, slot: C.officers.length, mode: 'cover', inCover: true }); }
     try { root.say?.('🚧 Roadblock ahead!'); } catch { /* n/a */ }
   }
+  // ★5 helicopter: follows with lag; while you're in its searchlight the police know exactly where you are
+  function heliTick(env, now, dt, s) {
+    const p = env.player, tgt = p.car || p;
+    if (s < 5) { if (heli) { heli.leaving = true; heli.x += 260 * dt; heli.y -= 160 * dt; if (dist(heli, p) > 1200) heli = null; } return; }
+    if (!heli || heli.leaving) heli = { x: tgt.x - 700, y: tgt.y - 500, lx: tgt.x - 600, ly: tgt.y - 400, born: now };
+    const hm = PU.follow(heli, tgt, 230, dt); heli.x = hm.x; heli.y = hm.y; const lm = PU.follow({ x: heli.lx, y: heli.ly }, tgt, 200, dt); heli.lx = lm.x; heli.ly = lm.y;
+    heli.lit = Math.hypot(tgt.x - heli.lx, tgt.y - heli.ly) < 70;
+    const W = root.NightshiftCrime?.wanted; if (heli.lit && W) { W.center = { x: tgt.x, y: tgt.y }; W.seenAt = now; }
+  }
+  // civilian traffic: pull over for sirens, floor it away from gunfire, and treat police cars as obstacles
+  function hookTraffic() {
+    const TS = root.NightshiftTrafficSafety; if (!TS || TS.__pursuit) return !!TS?.__pursuit;
+    const s0 = TS.speed;
+    TS.speed = function (actor, objects, dt, red) {
+      const env = E(), now = performance.now(), extra = chase.concat(wrecks).map((c) => ({ x: c.x, y: c.y, angle: c.angle }));
+      if (env && PU.nearShot(actor, env.bullets)) actor.panicUntil = now + 5000;
+      const pace = actor.pace; if (now < (actor.panicUntil || 0)) actor.pace = pace * 1.7;
+      let v; try { v = s0.call(this, actor, extra.length ? objects.concat(extra) : objects, dt, red); } finally { actor.pace = pace; }
+      if (chase.some((c) => PU.yieldsTo(actor, c))) { actor.yieldUntil = now + 2500; }
+      if (now < (actor.yieldUntil || 0)) v = Math.min(v, Math.max(0, (actor.velocity || 0) - 160 * (dt || 0)));
+      return v;
+    };
+    TS.__pursuit = true; return true;
+  }
+  const th = setInterval(() => { if (hookTraffic()) clearInterval(th); }, 400);
   let last = 0;
   function tick(now) {
     const env = E(), dt = last ? Math.min(0.1, (now - last) / 1000) : 0; last = now;
@@ -97,7 +158,9 @@
       if (chase.length < n && now > (tick.nextSpawn || 0)) { if (spawnCar(env, s >= 5 && !chase.some((c) => c.swat))) tick.nextSpawn = now + 5000; }
       for (let i = chase.length - 1; i >= 0; i--) { const c = chase[i]; if (chase.length > n && dist(c, env.player) > 800) { chase.splice(i, 1); continue; } carTick(env, c, now, dt, s); }
       roadblockTick(env, now, s);
-    } else if (env && inZone()) { chase.length = 0; }
+      for (let i = wrecks.length - 1; i >= 0; i--) if (now - wrecks[i].wreckAt > 25000 || dist(wrecks[i], env.player) > 1400) wrecks.splice(i, 1);
+      heliTick(env, now, dt, s);
+    } else if (env && inZone()) { chase.length = 0; heli = null; }
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
@@ -117,7 +180,16 @@
     const env = E(); if (!env || inZone()) return; const ctx = env.g, now = performance.now();
     for (const c of chase) { try { root.NightshiftSprites?.car?.(c); } catch { /* n/a */ } lightbar(ctx, c, now); }
     for (const b of blocks) for (const c of b.cars) lightbar(ctx, c, now);
+    for (const w of wrecks) { try { root.NightshiftSprites?.car?.(w); } catch { /* n/a */ } ctx.save(); ctx.translate(w.x, w.y); ctx.rotate(w.angle || 0); ctx.fillStyle = 'rgba(10,8,8,0.55)'; ctx.fillRect(-26, -13, 52, 26); ctx.restore(); const k = (now / 600) % 1; for (let i = 0; i < 3; i++) { const kk = (k + i / 3) % 1; ctx.fillStyle = `rgba(60,60,64,${0.45 * (1 - kk)})`; ctx.beginPath(); ctx.arc(w.x + 4 + kk * 10, w.y - 6 - kk * 34, 6 + kk * 12, 0, Math.PI * 2); ctx.fill(); } if (now - w.wreckAt < 1500) { ctx.fillStyle = `rgba(255,140,40,${0.6 * (1 - (now - w.wreckAt) / 1500)})`; ctx.beginPath(); ctx.arc(w.x, w.y, 30, 0, Math.PI * 2); ctx.fill(); } }
+    if (heli) {
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; const gl = ctx.createRadialGradient(heli.lx, heli.ly, 4, heli.lx, heli.ly, 80); gl.addColorStop(0, heli.lit ? '#fff6d0aa' : '#fff6d066'); gl.addColorStop(1, '#fff6d000'); ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(heli.lx, heli.ly, 80, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      ctx.fillStyle = 'rgba(5,8,14,0.35)'; ctx.beginPath(); ctx.ellipse(heli.x + 40, heli.y + 60, 26, 10, 0.3, 0, Math.PI * 2); ctx.fill();
+      ctx.save(); ctx.translate(heli.x, heli.y); ctx.rotate(Math.atan2(heli.ly - heli.y, heli.lx - heli.x));
+      ctx.fillStyle = '#0b0d14'; ctx.fillRect(-30, -2.5, 26, 5); ctx.beginPath(); ctx.ellipse(0, 0, 16, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#1d2433'; ctx.beginPath(); ctx.ellipse(0, 0, 14.5, 8.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#3a6ab0'; ctx.beginPath(); ctx.ellipse(6, 0, 6, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#e8eef3'; ctx.fillRect(-26, -5, 3, 10);
+      ctx.strokeStyle = 'rgba(200,210,220,0.5)'; ctx.lineWidth = 2; const ra = now / 40; for (let i = 0; i < 2; i++) { ctx.beginPath(); ctx.moveTo(Math.cos(ra + i * Math.PI / 2) * -24, Math.sin(ra + i * Math.PI / 2) * -24); ctx.lineTo(Math.cos(ra + i * Math.PI / 2) * 24, Math.sin(ra + i * Math.PI / 2) * 24); ctx.stroke(); }
+      const blink = Math.floor(now / 300) % 2; ctx.fillStyle = blink ? '#ff3a4a' : '#3a7aff'; ctx.fillRect(-4, -11, 3, 3); ctx.restore();
+    }
   }
   const hook = setInterval(() => { const C = root.NightshiftCrime; if (C && typeof C.draw === 'function' && !C.__pcars) { const d0 = C.draw; C.draw = function () { try { draw(); } catch { /* cosmetic */ } return d0.apply(this, arguments); }; C.__pcars = true; clearInterval(hook); } }, 300);
-  root.NightshiftPoliceCars = Object.freeze({ cars: () => chase, roadblocks: () => blocks, stats: () => ({ ...st, cars: chase.length, blocks: blocks.length }) });
+  root.NightshiftPoliceCars = Object.freeze({ cars: () => chase, roadblocks: () => blocks, wrecks: () => wrecks, heli: () => heli, stats: () => ({ ...st, cars: chase.length, blocks: blocks.length, wrecks: wrecks.length, heli: !!heli }) });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
