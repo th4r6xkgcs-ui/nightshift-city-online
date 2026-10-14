@@ -191,10 +191,13 @@
     let x0 = GW, y0 = GH, x1 = 0, y1 = 0; for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) if (b.px[y * GW + x]) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
     return { px: b.px, box: { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 }, a, GW, GH };
   }
+  const hdOn = () => { try { return root.localStorage?.getItem('ns-weapon-hd') !== '0'; } catch { return true; } };
   function sprite(id, skinId = null, mods = []) {
     if (!GUNS[id]) id = 'pistol';
     const art = root.NightshiftArt?.has?.('side/weapons/' + id + '.png') ? root.NightshiftArt.image('side/weapons/' + id + '.png') : null;
     const mk = [...new Set(mods)].sort().join(','), key = id + '|' + (skinId || '') + '|' + mk + (art ? '|img' : ''); let s = cache.get(key); if (s) return s;
+    // v0.69: HD vector re-render of the same builders (anchors unchanged); real PNG art still wins
+    if (!art && root.NightshiftWeaponHD && hdOn()) { try { const skin = skinId && skinId !== 'stock' ? (W()?.SKIN?.[skinId] || null) : null; const h = root.NightshiftWeaponHD.sprite({ id, skin, mods, GUNS, attach, Buf, MAT, INK, GW, GH }); if (h) { cache.set(key, h); if (cache.size > 240) cache.delete(cache.keys().next().value); return h; } } catch (e) { console.error(e); } }
     const { px, box, a } = build(id, skinId, mods), b = { px }, [x0, y0, x1, y1] = [box.x, box.y, box.x + box.w - 1, box.y + box.h - 1];
     const cv = typeof document !== 'undefined' ? document.createElement('canvas') : null; if (!cv) return null;
     cv.width = GW; cv.height = GH; const c = cv.getContext('2d'), img = c.createImageData(GW, GH);
@@ -207,15 +210,17 @@
   }
   // UI icon: trimmed sprite scaled to fit (w x h) css px, crisp
   function icon(id, w = 72, h = 30, skinId = null, mods = []) {
-    const s = sprite(id, skinId, mods); if (!s) return null; const { box } = s, k = Math.max(1, Math.floor(Math.min(w / box.w, h / box.h) * (devicePixelRatio || 1)));
+    const s = sprite(id, skinId, mods); if (!s) return null; const { box } = s;
+    if (s.hd) { const f = Math.min(w / box.w, h / box.h), d = devicePixelRatio || 1, c = document.createElement('canvas'); c.width = Math.max(1, Math.round(box.w * f * d)); c.height = Math.max(1, Math.round(box.h * f * d)); const x = c.getContext('2d'); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high'; x.drawImage(s.cv, box.x, box.y, box.w, box.h, 0, 0, c.width, c.height); c.style.width = Math.round(box.w * f) + 'px'; c.style.height = Math.round(box.h * f) + 'px'; return c; }
+    const k = Math.max(1, Math.floor(Math.min(w / box.w, h / box.h) * (devicePixelRatio || 1)));
     const c = document.createElement('canvas'); c.width = box.w * k; c.height = box.h * k; const x = c.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(s.cv, box.x, box.y, box.w, box.h, 0, 0, c.width, c.height);
     const f = Math.min(w / box.w, h / box.h); c.style.width = Math.round(box.w * f) + 'px'; c.style.height = Math.round(box.h * f) + 'px'; c.style.imageRendering = 'pixelated'; return c;
   }
   // World: gun in hand at angle (a in radians), flipped when aiming left so it never draws upside-down.
   function drawHeld(ctx, id, x, y, angle, skinId, mods, opts = {}) {
-    const s = sprite(id, skinId, mods); if (!s) return; const k = 0.5, [hx, hy] = s.a.hand, flip = Math.cos(angle) < 0;
+    const s = sprite(id, skinId, mods); if (!s) return; const k = s.hd ? 0.5 / s.nativeScale : 0.5, [hx, hy] = s.a.hand, flip = Math.cos(angle) < 0;
     ctx.save(); ctx.translate(Math.round(x), Math.round(y)); ctx.rotate(angle); if (flip) ctx.scale(1, -1);
-    const dev = Math.abs(ctx.getTransform().a) || 1; ctx.imageSmoothingEnabled = dev * k < 1.6; // tiny on screen: smooth so outlines don't drop out
+    const dev = Math.abs(ctx.getTransform().a) || 1; ctx.imageSmoothingEnabled = s.hd || dev * k < 1.6; // tiny on screen: smooth so outlines don't drop out
     ctx.drawImage(s.cv, s.box.x, s.box.y, s.box.w, s.box.h, (s.box.x - hx) * k, (s.box.y - hy) * k, s.box.w * k, s.box.h * k);
     if (opts.laser && mods.includes('grip')) { const [ux, uy] = s.a.under; const lx = (ux + 4 - hx) * k, gr = ctx.createLinearGradient(lx, 0, lx + 48, 0); gr.addColorStop(0, '#ff3b3b70'); gr.addColorStop(1, '#ff3b3b00'); ctx.fillStyle = gr; ctx.fillRect(lx, (uy - hy) * k, 48, 0.6); }
     ctx.restore();
@@ -294,12 +299,12 @@
       const gs = Math.round(16 * dpr); for (let x = 0; x < w; x += gs) { c.beginPath(); c.moveTo(x + 0.5, 0); c.lineTo(x + 0.5, h); c.stroke(); } for (let y = 0; y < h; y += gs) { c.beginPath(); c.moveTo(0, y + 0.5); c.lineTo(w, y + 0.5); c.stroke(); }
       c.fillStyle = '#ffd97033'; for (let x = 0; x < w; x += gs / 2) c.fillRect(x, h - (x % gs === 0 ? 10 : 6) * dpr, 1, (x % gs === 0 ? 10 : 6) * dpr);
       const s = sprite(st.id, st.skin, st.mods); if (s) {
-        const fit = Math.min((w * 0.86) / s.box.w, (h * 0.66) / s.box.h), k = Math.max(1, Math.floor(fit * st.zoom)), dw = s.box.w * k, dh = s.box.h * k;
+        const fit = Math.min((w * 0.86) / s.box.w, (h * 0.66) / s.box.h), k = s.hd ? fit * st.zoom : Math.max(1, Math.floor(fit * st.zoom)), kp = s.hd ? k * s.nativeScale : k, dw = s.box.w * k, dh = s.box.h * k;
         const sp = c.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, Math.max(w, h) * 0.55); sp.addColorStop(0, st.night ? '#4a6cff1c' : '#fff1c826'); sp.addColorStop(1, '#0000'); c.fillStyle = sp; c.fillRect(0, 0, w, h);
-        c.fillStyle = '#00000055'; c.beginPath(); c.ellipse(w / 2 + k * 2, h / 2 + dh / 2 + k * 2, dw * 0.46, k * 2.2, 0, 0, Math.PI * 2); c.fill();
-        c.imageSmoothingEnabled = false; c.drawImage(s.cv, s.box.x, s.box.y, s.box.w, s.box.h, Math.round(w / 2 - dw / 2), Math.round(h / 2 - dh / 2), dw, dh);
+        c.fillStyle = '#00000055'; c.beginPath(); c.ellipse(w / 2 + kp * 2, h / 2 + dh / 2 + kp * 2, dw * 0.46, kp * 2.2, 0, 0, Math.PI * 2); c.fill();
+        c.imageSmoothingEnabled = !!s.hd; c.imageSmoothingQuality = 'high'; c.drawImage(s.cv, s.box.x, s.box.y, s.box.w, s.box.h, Math.round(w / 2 - dw / 2), Math.round(h / 2 - dh / 2), dw, dh);
         if (st.night) { c.globalCompositeOperation = 'source-atop'; c.fillStyle = '#2a3c7a40'; c.fillRect(0, 0, w, h); c.globalCompositeOperation = 'source-over'; }
-        if (st.mods.includes('grip')) { const [ux, uy] = s.a.under; c.fillStyle = '#ff3b3b55'; c.fillRect(Math.round(w / 2 - dw / 2) + (ux + 4 - s.box.x) * k, Math.round(h / 2 - dh / 2) + (uy - s.box.y) * k, w, Math.max(1, k / 3)); }
+        if (st.mods.includes('grip')) { const [ux, uy] = s.a.under; c.fillStyle = '#ff3b3b55'; c.fillRect(Math.round(w / 2 - dw / 2) + (ux + 4 - s.box.x) * k, Math.round(h / 2 - dh / 2) + (uy - s.box.y) * k, w, Math.max(1, kp / 3)); }
       }
       st.raf = requestAnimationFrame(loop);
     }
