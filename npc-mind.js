@@ -26,8 +26,8 @@
   const G = () => { try { return { peds, player, cars, camera, W, H }; } catch { return null; } }; /* eslint-disable-line no-undef */
   const isBlocked = (x, y) => { try { return typeof blocked === 'function' && blocked(x, y); } catch { return false; } }; /* eslint-disable-line no-undef */
   const say = (s) => { try { root.NightshiftFeedback?.toast?.(s); } catch { /* n/a */ } try { if (typeof root.say === 'function') root.say(s); else { const t = document.querySelector('#toast'); if (t) { t.textContent = s; t.style.opacity = 1; setTimeout(() => { t.style.opacity = 0; }, 2600); } } } catch { /* n/a */ } };
-  const REGION = { DOWNTOWN: 'Downtown', 'OLD TOWN': 'Old Town', 'MARKET DISTRICT': 'Market', HARBOR: 'Harbor', IRONWORKS: 'Ironworks', 'THE HEIGHTS': 'Heights', FAIRVIEW: 'Fairview', 'THE FLATS': 'The Flats' };
-  const districtAt = (x, y) => { try { return REGION[root.NightshiftWorld?.regionAt?.(x, y)?.name] || 'Downtown'; } catch { return 'Downtown'; } };
+  const REGION = { DOWNTOWN: 'Downtown', 'OLD TOWN': 'Old Town', 'MARKET DISTRICT': 'Market', HARBOR: 'Harbor', IRONWORKS: 'Ironworks', 'THE HEIGHTS': 'Heights', FAIRVIEW: 'Fairview', 'THE FLATS': 'The Flats', SOUTHSIDE: 'Southside', 'THE DOCKS': 'The Docks', MIDTOWN: 'Midtown', 'WEST END': 'West End' };
+  const districtAt = (x, y) => { try { const W0 = root.NightshiftWorld; return REGION[W0?.districtName?.(x, y) || W0?.regionAt?.(x, y)?.name] || 'Downtown'; } catch { return 'Downtown'; } };
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const armed = () => { try { const w = root.NightshiftWeapons?.current?.(); return !!(w && w.id && w.id !== 'none'); } catch { return false; } };
   const day = () => Math.floor(Date.now() / 600000); // a "day" for talk/tip limits = 10 real minutes
@@ -209,7 +209,7 @@
 
   // ---------- 🔍 tag over the nearest person ----------
   const css = document.createElement('style');
-  css.textContent = `#mindTag{position:fixed;z-index:30;transform:translate(-50%,-100%);all:unset;position:fixed;z-index:30;transform:translate(-50%,-100%);cursor:pointer;font:700 11px ui-monospace,Menlo,monospace;color:#fff;background:#0d1424e6;border:1px solid var(--c,#9fd4ff);border-radius:999px;padding:4px 9px 4px 7px;white-space:nowrap;box-shadow:0 2px 8px #0008;pointer-events:auto;touch-action:manipulation}
+  css.textContent = `#mindTag{position:fixed;z-index:30;transform:translate(-50%,-100%);all:unset;position:fixed;z-index:30;transform:translate(-50%,-100%);cursor:pointer;font:700 10px ui-monospace,Menlo,monospace;color:#fff;background:#0d1424d9;border:1px solid var(--c,#9fd4ff);border-radius:999px;padding:3px 8px 3px 6px;white-space:nowrap;box-shadow:0 2px 8px #0008;pointer-events:auto;touch-action:manipulation}
   #mindTag[hidden]{display:none}
   #mindCard{position:fixed;inset:6% 8%;z-index:47;overflow:auto;background:#0f1830f7;border:1px solid #6f8db3;border-radius:16px;padding:12px 14px;color:#e8eff7;font:12.5px ui-monospace,Menlo,monospace;display:grid;grid-template-columns:120px 1fr;gap:4px 14px}
   #mindCard[hidden]{display:none} #mindCard h2{margin:0;font-size:17px} #mindCard .sub{color:#b9c8da;font-size:11.5px;margin:2px 0 6px}
@@ -231,8 +231,8 @@
     if (!P.car && !paused() && !(root.NightshiftHome?.paused?.()) && !(root.NightshiftZones?.active?.())) for (const p of env.peds) { if (!p.mind || !(p.hp > 0) || busy.get(p)?.kind === 'dodge' || p.fleeUntil > now) continue; const d = dist(p, P); if (d < bd) { bd = d; best = p; } }
     tagged = best; if (!best) { if (!tagEl.hidden) tagEl.hidden = true; return; }
     const who = of(best), op = M.opinion(state, who.id), b = M.band(op), cam = env.camera, cv = document.querySelector('canvas'), rc = cv?.getBoundingClientRect?.() || { left: 0, top: 0, width: env.W, height: env.H }, sx = rc.width / (env.W || rc.width), sy = rc.height / (env.H || rc.height);
-    const x = rc.left + (best.x - cam.x) * cam.zoom * sx, y = rc.top + (best.y - 34 - cam.y) * cam.zoom * sy;
-    const label = `🔍 ${state.met[who.id] ? who.first : '???'}`; if (tagEl.textContent !== label) tagEl.textContent = label; tagEl.style.setProperty('--c', b.color);
+    const x = rc.left + (best.x - cam.x) * cam.zoom * sx, y = rc.top + (best.y - 40 - cam.y) * cam.zoom * sy;
+    const label = `🔍 ${state.met[who.id] ? who.first : 'Stranger'}`; if (tagEl.textContent !== label) tagEl.textContent = label; tagEl.style.setProperty('--c', b.color);
     tagEl.style.left = Math.round(x) + 'px'; tagEl.style.top = Math.round(y) + 'px'; if (tagEl.hidden) tagEl.hidden = false;
   }
 
