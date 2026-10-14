@@ -52,7 +52,11 @@
   const zoomIn = el('input', { type: 'range', min: '1', max: '3', step: '0.1', value: '1', ariaLabel: 'Zoom' }); zoomIn.oninput = () => { zoom = Number(zoomIn.value); };
   const nightB = btn('chip', '🌙 NIGHT', () => { night = !night; nightB.classList.toggle('on', night); });
   bar1.append(btn('rot', '◀', () => stepRot(-1)), dirLbl, btn('rot', '▶', () => stepRot(1)), el('span', { style: 'font-size:14px' }, '🔍'), zoomIn);
+  // v0.70 Option 3: authored garage views (front / rear / side) for the coupe family, plus the top-down turntable
+  let view = 'top'; const viewBtns = {};
+  for (const vw of ['top', 'side', 'front', 'rear']) { viewBtns[vw] = btn('chip' + (vw === 'top' ? ' on' : ''), vw.toUpperCase(), () => { view = vw; for (const k in viewBtns) viewBtns[k].classList.toggle('on', k === view); }); }
   bar2.append(spinB, nightB, btn('chip', 'COMPARE', () => {}));
+  const bar3 = el('div', { className: 'bar' }); stage.append(bar3); for (const k of ['top', 'side', 'front', 'rear']) bar3.append(viewBtns[k]);
   const cmp = bar2.lastChild; let comparing = false; cmp.onclick = null;
   cmp.addEventListener('pointerdown', (e) => { e.preventDefault(); comparing = true; cmp.classList.add('on'); });
   for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) cmp.addEventListener(ev, () => { comparing = false; cmp.classList.remove('on'); });
@@ -74,13 +78,21 @@
     const R0 = Math.min(w, h) * 0.46; c.fillStyle = night ? '#0d1117' : '#2b333d'; c.beginPath(); c.arc(w / 2, h / 2, R0, 0, Math.PI * 2); c.fill(); c.strokeStyle = night ? '#ffd97022' : '#ffd97055'; c.lineWidth = 2 * dpr; c.stroke();
     for (let k = 0; k < 24; k++) { const a = k / 24 * Math.PI * 2 + angle * 0.0; c.fillStyle = '#ffffff10'; c.fillRect(w / 2 + Math.cos(a) * (R0 - 6 * dpr) - dpr, h / 2 + Math.sin(a) * (R0 - 6 * dpr) - dpr, 2 * dpr, 2 * dpr); }
     if (!night) { const sp = c.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, R0 * 1.3); sp.addColorStop(0, '#fff3d81c'); sp.addColorStop(1, '#0000'); c.fillStyle = sp; c.fillRect(0, 0, w, h); }
+    const CV = root.NightshiftCarViews, specV = car && specOf(car);
+    if (car && view !== 'top' && CV && CV.supports(specV)) {
+      const img = CV.render(view, { color: comparing ? car.color : paint || car.color, style: comparing ? curOf(car) : preview, night, spin: spin ? now / 260 : 0 }), [vw, vh] = CV.SIZE[view];
+      const k = Math.max(1, Math.floor(Math.min((w * 0.9) / vw, (h * 0.78) / vh) * zoom)); c.imageSmoothingEnabled = false;
+      c.drawImage(img, Math.round(w / 2 - (vw * k) / 2), Math.round(h / 2 - (vh * k) / 2), vw * k, vh * k);
+      dirLbl.textContent = view.toUpperCase(); raf = requestAnimationFrame(loop); return;
+    }
+    if (car && view !== 'top') { c.fillStyle = '#9fb3c8'; c.font = `700 ${12 * dpr}px system-ui`; c.textAlign = 'center'; c.fillText('Authored side/front/rear views: coupe family (Option 3 sample) · top view below', w / 2, 24 * dpr); }
     if (car) {
       const C = root.NightshiftCars;
       const spec = specOf(car), len = (spec?.len || 56) + 14, k = (Math.min(w, h) * 0.8 / len) * zoom; // world px → device px
       c.save(); c.translate(w / 2, h / 2); c.scale(k, k);
-      if (night) { c.save(); c.rotate(angle); c.globalCompositeOperation = 'lighter'; const L = spec?.len || 56; for (const s of [-1, 1]) { const gr = c.createRadialGradient(L / 2, s * 8, 2, L / 2 + 60, s * 14, 70); const col = { stock: '#fff4c8', xenon: '#eaf6ff', amber: '#ffc46b', ice: '#9fdcff' }[(comparing ? SD.styleOf(state, car.id) : preview).lights] || '#fff4c8'; gr.addColorStop(0, col + '55'); gr.addColorStop(1, col + '00'); c.fillStyle = gr; c.beginPath(); c.moveTo(L / 2 - 2, s * 8); c.lineTo(L / 2 + 90, s * 36); c.lineTo(L / 2 + 90, s * -14); c.closePath(); c.fill(); } c.restore(); }
+      if (night) { c.save(); c.rotate(angle); c.globalCompositeOperation = 'lighter'; const L = spec?.len || 56; for (const s of [-1, 1]) { const gr = c.createRadialGradient(L / 2, s * 8, 2, L / 2 + 60, s * 14, 70); const col = { stock: '#fff4c8', xenon: '#eaf6ff', amber: '#ffc46b', ice: '#9fdcff' }[(comparing ? curOf(car) : preview).lights] || '#fff4c8'; gr.addColorStop(0, col + '55'); gr.addColorStop(1, col + '00'); c.fillStyle = gr; c.beginPath(); c.moveTo(L / 2 - 2, s * 8); c.lineTo(L / 2 + 90, s * 36); c.lineTo(L / 2 + 90, s * -14); c.closePath(); c.fill(); } c.restore(); }
       const v = { ...car, x: 0, y: 0, angle, speed: 0, color: comparing ? car.color : paint || car.color };
-      try { C.draw(v, c, { style: comparing ? SD.styleOf(state, car.id) : preview, night }); } catch (e) { console.error(e); }
+      try { C.draw(v, c, { style: comparing ? curOf(car) : preview, night }); } catch (e) { console.error(e); }
       c.restore();
     }
     dirLbl.textContent = DIRS[((Math.round(angle / (Math.PI / 4)) % 8) + 8) % 8];
@@ -88,9 +100,10 @@
   }
 
   const CATS = [['paint', '🎨 Paint'], ['finish', '✨ Finish'], ['rims', '🛞 Wheels'], ['kit', '🧱 Body kit'], ['stance', '⬇️ Stance'], ['spoiler', '🪽 Spoiler'], ['hood', '🔩 Hood'], ['livery', '🏁 Livery'], ['lights', '💡 Lights'], ['glow', '🌈 Underglow'], ['tint', '🕶️ Tint'], ['exhaust', '💨 Exhaust']];
+  function curOf(v) { if (state.cars[v.id]) return state.cars[v.id]; const sp = specOf(v); return sp?.o3 ? SD.cleanStyle(sp.o3) : SD.DEFAULT; } // factory spec counts as what's on the car
   function specOf(v) { const D = root.NightshiftCarsData; return D?.fromModel?.(v.model) || null; }
   function render() {
-    top.textContent = ''; const spec = specOf(car), cond = Math.round(car.condition ?? 100), cur = SD.styleOf(state, car.id);
+    top.textContent = ''; const spec = specOf(car), cond = Math.round(car.condition ?? 100), cur = curOf(car);
     const nm = el('div'); nm.append(el('h2', {}, `${mode === 'shop' ? '🔧 ' : ''}${spec?.name || car.model || 'Your car'}`));
     const tg = el('div', { className: 'tg' }, `${(spec?.tier || 'Street').toUpperCase()} · BODY ${cond}%${car.plate ? ' · ' + car.plate : ''} · SHOW FLAIR ${SD.flair(preview)}/30`); tg.style.color = { Exotic: '#ffd970', Classic: '#c99aff', Sport: '#7cc7ff', Muscle: '#ff9a6b' }[spec?.tier] || '#9fb3c8'; nm.append(tg);
     top.append(nm, btn('x', 'CLOSE', close));
@@ -115,17 +128,17 @@
     if (n && mode === 'shop') foot.append(btn('go', `APPLY · ${money(total)}`, applyAll));
   }
   function applyAll() {
-    const p = P(); if (!p) return; const cur = SD.styleOf(state, car.id), total = SD.cost(cur, preview) + (paint ? PAINT_PRICE : 0);
+    const p = P(); if (!p) return; const cur = curOf(car), total = SD.cost(cur, preview) + (paint ? PAINT_PRICE : 0);
     if (!(p.cash >= total)) { say(`Needs ${money(total)}`); return; }
-    if (SD.diff(cur, preview).length) { const r = SD.apply(state, p, car.id, preview); if (!r.ok) { say(r.reason); return; } }
+    if (SD.diff(cur, preview).length) { if (!state.cars[car.id] && SD.validCar(car.id)) state.cars[car.id] = { ...cur }; const r = SD.apply(state, p, car.id, preview); if (!r.ok) { say(r.reason); return; } }
     if (paint) { p.cash -= PAINT_PRICE; car.color = paint; const rec = root.NightshiftCars?.state?.owned?.find((o) => 'cx-' + o.uid === car.id); if (rec) rec.color = paint; paint = null; }
     try { root.NightshiftLedger?.tag?.('cars'); } catch { /* optional */ }
-    persist(); gameSave(); say(`🎨 Done · ${money(total)} · looks unreal`); preview = { ...SD.styleOf(state, car.id) }; render();
+    persist(); gameSave(); say(`🎨 Done · ${money(total)} · looks unreal`); preview = { ...curOf(car) }; render();
     try { root.NightshiftGoals?.bump?.('carStyled'); } catch { /* optional */ }
   }
   function open(v, m = 'view') {
     if (!v || !v.id) { say('🚗 Pick one of your cars first'); return false; }
-    car = v; mode = m === 'shop' ? 'shop' : 'view'; preview = { ...SD.styleOf(state, car.id) }; paint = null; cat = 'paint'; zoom = 1; zoomIn.value = '1'; spin = true; spinB.classList.add('on');
+    car = v; mode = m === 'shop' ? 'shop' : 'view'; preview = { ...curOf(car) }; paint = null; cat = 'paint'; zoom = 1; zoomIn.value = '1'; spin = true; spinB.classList.add('on');
     night = (root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment?.state?.minute ?? 720) || 0) > 0.35; nightB.classList.toggle('on', night);
     pnl.hidden = false; try { root.releaseControls?.(); } catch { /* n/a */ } render(); cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(loop); return true;
   }

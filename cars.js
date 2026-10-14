@@ -247,7 +247,7 @@
   const LIGHT = { stock: '#fff4c8', xenon: '#eaf6ff', amber: '#ffc46b', ice: '#9fdcff' };
   function draw(v, ctx = G(), opts = null) {
     const spec = D.fromModel(v.model) || (styleBase && typeof v.model !== 'string' || styleBase && BASE[v.model] ? BASE[v.model] || BASE.SEDAN : null); if (!spec || !ctx) return false;
-    const st = opts?.style || root.NightshiftCarStyle?.of?.(v.id) || null;
+    const st = opts?.style || root.NightshiftCarStyle?.of?.(v.id) || (spec.o3 && SK() ? SK().cleanStyle(spec.o3) : null); // v0.70: factory spec (Option 3 golden sample)
     const sp = sprite(spec.id, /^#[0-9a-f]{6}$/i.test(v.color || '') ? v.color : spec.colors[0] || '#8a9aa8', st), t = performance.now() / 1000;
     const p = P(), active = p?.car === v, ps = prevSpeed.get(v) ?? 0, sp0 = v.speed || 0; prevSpeed.set(v, sp0);
     const braking = active && Math.abs(sp0) < Math.abs(ps) - 0.04, night = opts?.night ?? (root.NightshiftEnvironment?.darkness?.(root.NightshiftEnvironment?.state?.minute ?? 720) || 0) > 0.35;
