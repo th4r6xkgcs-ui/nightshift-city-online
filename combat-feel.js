@@ -117,8 +117,8 @@
       const r = ov.apply(this, arguments);
       try {
         const p = P(), ctx = g; if (p && p.hp > 0 && p.hp < 35) { // eslint-disable-line no-undef
-          const t = performance.now(), pulse = 0.55 + 0.45 * Math.max(0, Math.sin(t / 130)), w = ctx.canvas.width / (ctx.getTransform().a || 1), h = ctx.canvas.height / (ctx.getTransform().d || 1), a = (1 - p.hp / 35) * 0.55 * pulse;
-          const gr = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.3, w / 2, h / 2, Math.max(w, h) * 0.7); gr.addColorStop(0, 'rgba(160,0,10,0)'); gr.addColorStop(1, `rgba(160,0,10,${a.toFixed(3)})`); ctx.save(); ctx.fillStyle = gr; ctx.fillRect(0, 0, w, h); ctx.restore();
+          const t = performance.now(), pulse = 0.55 + 0.45 * Math.max(0, Math.sin(t / 130)), w = ctx.canvas.width / (ctx.getTransform().a || 1), h = ctx.canvas.height / (ctx.getTransform().d || 1), a = Math.min(0.85, 0.25 + (1 - p.hp / 35) * 0.6) * pulse;
+          const gr = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.25, w / 2, h / 2, Math.max(w, h) * 0.62); gr.addColorStop(0, 'rgba(190,0,16,0)'); gr.addColorStop(0.6, `rgba(190,0,16,${(a * 0.35).toFixed(3)})`); gr.addColorStop(1, `rgba(190,0,16,${a.toFixed(3)})`); ctx.save(); ctx.fillStyle = gr; ctx.fillRect(0, 0, w, h); ctx.restore();
           if (t > nextBeat) { nextBeat = t + 600 + p.hp * 14; beat(); }
         }
         killWatch();
