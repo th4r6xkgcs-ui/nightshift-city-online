@@ -40,6 +40,9 @@
       const hit = Object.entries(r.when).every(([s, ids]) => ids.includes(cfg[s])); if (!hit) continue;
       if (r.deny) errs.push(r.msg); else if (r.mod && !mods.includes(r.mod)) errs.push(r.msg); else if (r.need && !Object.entries(r.need).every(([s, ids]) => ids.includes(cfg[s]))) errs.push(r.msg);
     }
+    // a fitted gameplay attachment must be visible: its part is required while it's fitted
+    const MODN = { suppressor: 'Suppressor', scope: 'Scope', extmag: 'Extended mag' };
+    for (const [mod, [slot, part]] of Object.entries(MOD_PART)) { if (!mods.includes(mod)) continue; const okIds = slot === 'magazine' ? ['ext', 'drum'] : [part]; if (!okIds.includes(cfg[slot])) errs.push(`${MODN[mod]} is fitted, so the ${slot} shows as the ${okIds.map((i) => NAME[slot][i]).join(' or ')}`); }
     return { ok: !errs.length, errors: errs };
   }
   /** Bring a config in line with the fitted gameplay mods (fit → show the part; removed → fall back). */
