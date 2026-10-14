@@ -25,7 +25,7 @@
   const stars = (env) => { try { return root.NightshiftWantedData?.stars?.(env.player.heat) ?? 0; } catch { return 0; } };
   const want = (s) => (s >= 5 ? 3 : s >= 4 ? 2 : s >= 1 ? 1 : 0); // v0.71: a patrol car from ★1
   const wrecks = []; let heli = null;
-  const LKEY = 'nightshift-pursuit-v1'; let life = { wrecks: 0, spikes: 0, pits: 0 }; try { const r = JSON.parse(localStorage.getItem(LKEY) || '{}'); for (const k of Object.keys(life)) if (Number.isFinite(r[k])) life[k] = r[k]; } catch { /* fresh */ }
+  const LKEY = 'nightshift-pursuit-v1'; let life = { wrecks: 0, spikes: 0, pits: 0, helis: 0 }; try { const r = JSON.parse(localStorage.getItem(LKEY) || '{}'); for (const k of Object.keys(life)) if (Number.isFinite(r[k])) life[k] = r[k]; } catch { /* fresh */ }
   const bump = (k) => { life[k]++; try { localStorage.setItem(LKEY, JSON.stringify(life)); } catch { /* full */ } };
   const inZone = () => { try { return !!(root.NightshiftZones?.active?.() || root.NightshiftHome?.kind?.()); } catch { return false; } };
   const node = (x, y) => ({ i: Math.round(x / BW), j: Math.round(y / BH) });
@@ -136,12 +136,23 @@
     if (pc && !pc.flat) for (const b of blocks) { if (b.strip && PU.onStrip(pc, b.strip)) { pc.flat = true; pc.flatAt = now; flats.add(pc); st.spikes = (st.spikes || 0) + 1; bump('spikes'); try { root.say?.('💥 Spike strip! Tyres blown · get them fixed at a garage or auto parts store'); root.NightshiftFx?.shake?.(0.5); root.NightshiftVehicles?.hit?.(pc); } catch { /* n/a */ } } }
     if (pc && pc.flat) { const cap = PU.FLAT_CAP; if (Math.abs(pc.speed || 0) > cap) pc.speed = Math.sign(pc.speed) * cap; if (Math.abs(pc.speed || 0) > 1) pc.angle = (pc.angle || 0) + Math.sin(now / 90) * 0.004; }
   }
+  // v0.77: shoot back — cruisers take 14 hits to wreck, the helicopter 12 to send it home (60 s before another)
+  let heliCooldown = 0;
+  function bulletTick(env, now) {
+    const bl = env.bullets; if (!bl || !bl.length) return;
+    for (let i = bl.length - 1; i >= 0; i--) {
+      const b = bl[i]; if (!b || b.team === 'enemy' || b.enemy) continue;
+      if (heli && !heli.leaving && Math.hypot(b.x - heli.x, b.y - heli.y) < 22) { bl.splice(i, 1); heli.hp = (heli.hp ?? 12) - 1; try { root.NightshiftFeedback?.burst?.(b.x, b.y, 'wall'); root.NightshiftFeedback?.hit?.(); } catch { /* n/a */ } if (heli.hp <= 0) { heli.leaving = true; heli.smoking = true; heliCooldown = now + 60000; bump('helis'); try { root.say?.('🚁 Chopper hit! It\'s pulling out'); } catch { /* n/a */ } } continue; }
+      for (const c of chase) { if (Math.hypot(b.x - c.x, b.y - c.y) < 24) { bl.splice(i, 1); c.hp = (c.hp ?? 14) - 1; try { root.NightshiftFeedback?.burst?.(b.x, b.y, 'wall'); root.NightshiftFeedback?.hit?.(); } catch { /* n/a */ } if (c.hp <= 0) { c.wreck = true; c.wreckAt = now; wrecks.push(c); chase.splice(chase.indexOf(c), 1); tick.nextSpawn = now + 12000; st.wrecks = (st.wrecks || 0) + 1; bump('wrecks'); try { root.say?.('💥 Cruiser shot up and wrecked!'); env.player.heat = (env.player.heat || 0) + 0.3; } catch { /* n/a */ } } break; } }
+    }
+  }
   function repairAll() { let n = 0; for (const c of flats) { if (c.flat) n++; c.flat = false; } flats.clear(); return n; }
   // ★5 helicopter: follows with lag; while you're in its searchlight the police know exactly where you are
   function heliTick(env, now, dt, s) {
     const p = env.player, tgt = p.car || p;
     if (s < 5) { if (heli) { heli.leaving = true; heli.x += 260 * dt; heli.y -= 160 * dt; if (dist(heli, p) > 1200) heli = null; } return; }
-    if (!heli || heli.leaving) heli = { x: tgt.x - 700, y: tgt.y - 500, lx: tgt.x - 600, ly: tgt.y - 400, born: now };
+    if (heli && heli.leaving) { heli.x += 260 * dt; heli.y -= 160 * dt; if (dist(heli, p) > 1200) heli = null; return; }
+    if (!heli) { if (now < heliCooldown) return; heli = { x: tgt.x - 700, y: tgt.y - 500, lx: tgt.x - 600, ly: tgt.y - 400, born: now, hp: 12 }; }
     const hm = PU.follow(heli, { x: tgt.x - 110, y: tgt.y - 130 }, 230, dt); // hovers off to the side so it never hides you heli.x = hm.x; heli.y = hm.y; const lm = PU.follow({ x: heli.lx, y: heli.ly }, tgt, 200, dt); heli.lx = lm.x; heli.ly = lm.y;
     heli.lit = Math.hypot(tgt.x - heli.lx, tgt.y - heli.ly) < 70;
     const W = root.NightshiftCrime?.wanted; if (heli.lit && W) { W.center = { x: tgt.x, y: tgt.y }; W.seenAt = now; }
@@ -171,6 +182,7 @@
       for (let i = chase.length - 1; i >= 0; i--) { const c = chase[i]; if (chase.length > n && dist(c, env.player) > 800) { chase.splice(i, 1); continue; } carTick(env, c, now, dt, s); }
       roadblockTick(env, now, s);
       spikeTick(env, now);
+      bulletTick(env, now);
       for (let i = wrecks.length - 1; i >= 0; i--) if (now - wrecks[i].wreckAt > 25000 || dist(wrecks[i], env.player) > 1400) wrecks.splice(i, 1);
       heliTick(env, now, dt, s);
     } else if (env && inZone()) { chase.length = 0; heli = null; }
@@ -204,6 +216,7 @@
       ctx.fillStyle = '#0b0d14'; ctx.fillRect(-30, -2.5, 26, 5); ctx.beginPath(); ctx.ellipse(0, 0, 16, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#1d2433'; ctx.beginPath(); ctx.ellipse(0, 0, 14.5, 8.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#3a6ab0'; ctx.beginPath(); ctx.ellipse(6, 0, 6, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#e8eef3'; ctx.fillRect(-26, -5, 3, 10);
       ctx.strokeStyle = 'rgba(200,210,220,0.5)'; ctx.lineWidth = 2; const ra = now / 40; for (let i = 0; i < 2; i++) { ctx.beginPath(); ctx.moveTo(Math.cos(ra + i * Math.PI / 2) * -24, Math.sin(ra + i * Math.PI / 2) * -24); ctx.lineTo(Math.cos(ra + i * Math.PI / 2) * 24, Math.sin(ra + i * Math.PI / 2) * 24); ctx.stroke(); }
       const blink = Math.floor(now / 300) % 2; ctx.fillStyle = blink ? '#ff3a4a' : '#3a7aff'; ctx.fillRect(-4, -11, 3, 3); ctx.restore();
+      if (heli.smoking) for (let i = 0; i < 3; i++) { const k = ((now / 500) + i / 3) % 1; ctx.fillStyle = `rgba(50,50,56,${0.5 * (1 - k)})`; ctx.beginPath(); ctx.arc(heli.x - 20 - k * 30, heli.y + 4 + k * 10, 5 + k * 10, 0, Math.PI * 2); ctx.fill(); }
     }
   }
   const hook = setInterval(() => { const C = root.NightshiftCrime; if (C && typeof C.draw === 'function' && !C.__pcars) { const d0 = C.draw; C.draw = function () { try { draw(); } catch { /* cosmetic */ } return d0.apply(this, arguments); }; C.__pcars = true; clearInterval(hook); } }, 300);
