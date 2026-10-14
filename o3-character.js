@@ -352,7 +352,7 @@
   function colorOf(piece) { const it = W?.ITEM?.[piece.id]; return it ? it.colors[piece.color] || it.colors[0] : piece.hex || '#1d2024'; }
   function accentOf(piece) { const it = W?.ITEM?.[piece.id]; return it?.opts?.accent ? it.opts.accent[piece.color] || it.opts.accent[0] : null; }
   /** Can this outfit be drawn entirely in Option 3 art? */
-  function supports(o) { if (!o || !HAIR_OK[o.hair]) return false; for (const s of SLOTS) { const p = o[s]; if (p && !ITEMS[p.id]) return false; } return !!(o.top || o.outer) && !!o.bottom && !!o.shoes; }
+  function supports(o) { if (!o || !HAIR_OK[o.hair]) return false; for (const s of SLOTS) { const p = o[s]; if (p && !ITEMS[p.id]) return false; } return !!o.bottom && !!o.shoes; } // a bare torso is fine (studio layer view)
 
   /** Render one frame. Returns { layers: Map('layer:pass' → Uint32Array), order, composite, anchors }. */
   function render(o, dir, anim = 'idle', f = 0, hold = '') {

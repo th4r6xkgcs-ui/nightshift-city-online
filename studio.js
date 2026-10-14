@@ -58,8 +58,8 @@
   document.head.append(css);
   const root0 = el('div', { id: 'csStudio', hidden: true, role: 'dialog', ariaLabel: 'Character studio' }); document.body.append(root0);
   const stage = el('div', { className: 'stage' }), cv = el('canvas'), sctx = cv.getContext('2d');
-  const bar1 = el('div', { className: 'bar' }), bar2 = el('div', { className: 'bar' });
-  stage.append(cv, bar1, bar2);
+  const bar1 = el('div', { className: 'bar' }), bar2 = el('div', { className: 'bar' }), bar3 = el('div', { className: 'bar', hidden: true });
+  stage.append(cv, bar1, bar2, bar3);
   const side = el('div', { className: 'side' }), top = el('div', { className: 'top' }), title = el('h2', {}, 'STYLE'), closeB = el('button', { className: 'x', type: 'button' }, 'CLOSE');
   top.append(title, closeB); const cats = el('div', { className: 'cats' }), scroll = el('div', { className: 'scroll' }), det = el('div', { className: 'det' }), foot = el('div', { className: 'foot' });
   side.append(top, cats, scroll, det, foot); root0.append(stage, side);
@@ -88,7 +88,13 @@
   const viewB = btn('chip', 'CLOSE-UP', () => { view = view === 'full' ? 'close' : 'full'; viewB.textContent = view === 'full' ? 'CLOSE-UP' : 'FULL BODY'; zoom = view === 'close' ? 2.6 : 1; zoomIn.value = String(zoom); });
   const cmpB = el('button', { className: 'chip', type: 'button' }, 'HOLD: COMPARE'); const cmpOn = (v) => (e) => { e.preventDefault(); compare = v; cmpB.classList.toggle('on', v); };
   cmpB.addEventListener('pointerdown', cmpOn(true)); for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) cmpB.addEventListener(ev, cmpOn(false));
-  bar2.append(viewB, cmpB); animBtns.idle.classList.add('on');
+  // v0.70: layer toggles (preview only — your saved outfit never changes) + Option 3 / classic art switch
+  const hidden = new Set(), LAYER_SLOTS = [['outer', '🧥'], ['top', '👕'], ['head', '🧢'], ['face', '🕶️'], ['jewelry', '⛓️'], ['wrist', '⌚'], ['bag', '🎒'], ['gloves', '🧤']];
+  for (const [sl, ic] of LAYER_SLOTS) { const b = btn('chip on', ic, () => { if (hidden.has(sl)) hidden.delete(sl); else hidden.add(sl); b.classList.toggle('on', !hidden.has(sl)); }); b.setAttribute('aria-label', 'Show ' + sl + ' layer'); b.title = sl; bar3.append(b); }
+  const layB = btn('chip', 'LAYERS', () => { bar3.hidden = !bar3.hidden; layB.classList.toggle('on', !bar3.hidden); });
+  const artB = btn('chip', root.NightshiftO3?.enabled === false ? 'ART: CLASSIC' : 'ART: OPTION 3', () => { const O3 = root.NightshiftO3; if (!O3) return; const on = O3.setEnabled(!O3.enabled); artB.textContent = on ? 'ART: OPTION 3' : 'ART: CLASSIC'; try { root.NightshiftCharacters?.clear?.(); } catch { /* n/a */ } thumbs.clear?.(); });
+  const showLayers = (o) => { if (!hidden.size) return o; const n = { ...o }; for (const sl of hidden) n[sl] = null; return n; };
+  bar2.append(viewB, cmpB, layB, artB); animBtns.idle.classList.add('on');
   // swipe to rotate, pinch to zoom
   const ptrs = new Map(); let swipeX = null, pinch0 = 0, zoom0 = zoom;
   cv.addEventListener('pointerdown', (e) => { cv.setPointerCapture?.(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (ptrs.size === 1) swipeX = e.clientX; if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); zoom0 = zoom; } });
@@ -107,7 +113,7 @@
     // backdrop: studio wall, floor, spotlight, turntable
     const gw = x.createLinearGradient(0, 0, 0, h); gw.addColorStop(0, '#1b2433'); gw.addColorStop(0.62, '#121a26'); gw.addColorStop(0.63, '#2a3140'); gw.addColorStop(1, '#151a22'); x.fillStyle = gw; x.fillRect(0, 0, w, h);
     const sp = x.createRadialGradient(w / 2, h * 0.45, 10, w / 2, h * 0.45, Math.max(w, h) * 0.6); sp.addColorStop(0, '#ffe9b022'); sp.addColorStop(1, '#00000000'); x.fillStyle = sp; x.fillRect(0, 0, w, h);
-    const o = compare ? state.outfit : preview, n = { idle: 4, walk: 8, run: 8 }[anim], ms = { idle: 380, walk: 110, run: 80 }[anim], f = Math.floor((now - t0) / ms) % n;
+    const o = showLayers(compare ? state.outfit : preview), n = (root.NightshiftCharacters?.ANIMS || { idle: 4, walk: 8, run: 8 })[anim], ms = { idle: 380, walk: 110, run: 80 }[anim], f = Math.floor((now - t0) / ms) % n;
     // zoom 1 = whole body fits (head top ~26 world px above the anchor, feet 14 below); zooming slides the focus up to the face
     const fit = (r.height * 0.84) / 42, sc = Math.max(1, Math.round(fit * zoom * dpr * 2) / 2), C = root.NightshiftCharacters, frame = C.frame(o, dir, anim, f, Math.max(2, Math.min(18, 2 * Math.round(sc / 2))));
     const k = Math.min(1, (zoom - 1) / 1.6), focus = -6 - 11 * k, cx = w / 2, ancY = h * 0.5 - focus * sc, footY = ancY + 14 * sc;
