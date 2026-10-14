@@ -72,7 +72,7 @@
   const BASE = { COMPACT: { id: 'COMPACT', body: 'compact', len: 50, wid: 29, colors: [] }, SEDAN: { id: 'SEDAN', body: 'sedan', len: 56, wid: 31, colors: [] }, VAN: { id: 'VAN', body: 'van', len: 56, wid: 32, colors: [] } };
   let styleBase = true;
   let bakeStyle = null; // style being baked (carstyle-data.js); read by glass() for tint
-  const RIMS = { chrome: '#eef3f7', black: '#2a2f36', gold: '#f0c85a', deep: '#f7f9fb', neon: '#7af0ff' };
+  const RIMS = { chrome: '#eef3f7', black: '#2a2f36', gold: '#f0c85a', deep: '#f7f9fb', neon: '#7af0ff', bronze: '#b8864a', turbine: '#d7dde3', white: '#f4f6f8' };
   // v0.66 signature details for the cars brought over from Nightshift Garage
   const SIG = {
     m4: ({ c, hl, hw, xf, wsh, rw, R, RR, CIR, black, shade, color }) => {
