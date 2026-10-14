@@ -65,3 +65,10 @@ console.log('PASS: screen-relative driving (stick direction = travel direction, 
   assert.equal(SD.clean({ cars: { 'car-3': { rims: 'gold' } } }).cars['car-3'].stance, 'stock');
   console.log('PASS: car style body kits + stance (prices, save cleaning, old saves)');
 }
+// three-point turn: stopped, facing right, stick held left -> ends up driving left, nose first
+{
+  const DI2 = require('../drive-input.js'); const car = { angle: 0, speed: 0 };
+  for (let i = 0; i < 400; i++) { const m = DI2.screen(car.angle, car.speed, -1, 0); car.speed = Math.max(-2.6, Math.min(7, (car.speed + m.thrust * 0.2) * 0.984)); car.angle += m.steer * 0.04 * Math.min(1, Math.abs(car.speed) / 1.2) * (car.speed >= 0 ? 1 : -1); }
+  assert.ok(Math.abs(DI2.wrap(car.angle - Math.PI)) < 0.2 && car.speed > 2, 'turned around and drives nose-first (' + car.angle.toFixed(2) + ', ' + car.speed.toFixed(2) + ')');
+  console.log('PASS: three-point turn when you pull the stick behind the car');
+}
