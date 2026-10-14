@@ -682,3 +682,22 @@ Everything below is built for a shared world. The world never pauses (no cutscen
   - `tests/highway66.cjs` added; `node tests/run.cjs` passes all 116 suites.
   - Playwright: enter via the West End ramp, accelerate, ★3 cruisers, race start vs Mika, rest-stop panel (9 rows) + run accepted, exit → Downtown drop-off on the road.
   - FPS: city 60, highway 60 headless.
+
+## v0.67 Garage-quality art: side-view Route 9 + image pipeline (owner: "the cars look terrible compared to Garage, same quality everywhere")
+- **Why the gap:** the Garage art is painted image files; City Online's art is drawn by code. The fix is images: the code art stays only as a fallback.
+- **Route 9 is now a Nightshift Garage–style side view** (`highway-side.js`; `highway.js` keeps the sim and falls back to its top-down view until the images load).
+  - **Art in `art/garage/`** (copied from the Garage repo with the owner's OK):
+    - `track.jpg`, used for the skyline/fence/barrier.
+    - The six car PNGs. Rims are spun from each car's own art; wheel circles come from the Garage WHEEL_MAP.
+    - The police Charger + Crown Vic, with live light bars.
+  - **Traffic:** re-painted from the six with a hue blend.
+  - **Road:** procedural wet asphalt + lamp reflections.
+  - **Signs:** gantries, exit/services signs, cameras.
+  - **Scale:** cars are 110 highway px long (`H.CAR_LEN`; collisions/spacing updated).
+- **Image pipeline (`art-assets.js` + generated `art-manifest.js`):**
+  - Hooks: `cars.js bake()` (`art/top/cars/<id>.png`), `modern-city.js draw()` (`art/top/buildings/<archetype>-<n>.png`), `weapon-art.js sprite()` (`art/side/weapons/<gunId>.png`).
+  - `online/build-online.cjs` copies `art/**` and writes the manifest. Exact sizes, views and a generator prompt are in the new ART_SPEC.md section "Image assets"; the reference sheet is `docs/art/garage-pack-reference.jpg`.
+  - Characters are spec'd, with no hook yet.
+  - Verified with test PNGs in a built site: the car swapped in, and models without an image kept the code art.
+- **Asking the owner:** the 25-car / 25-rim Garage pack as separate PNGs (it would go straight onto Route 9), and who generates the top-down sets (ChatGPT image gen per the spec).
+- **Checks:** `node tests/run.cjs` passes all 116 suites. Playwright: side-view race vs Mika, rest stop + run, ★2 pursuit; 60 fps on the highway.

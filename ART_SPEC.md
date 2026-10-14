@@ -165,3 +165,61 @@ Gameplay, inventory and the inspection studios all draw from the same definition
   - Studio scales are snapped to even sizes so pixels stay square.
 - **Tests:** `tests/character-pixel.cjs` covers all 44 items visible, 12 distinct haircuts, 8 distinct directions, every animation animates, both holds, and 30 random NPCs fit the cell.
 - **Sheets:** `docs/art/characters-pixel-8dir.png`, `characters-pixel-closeup.png`, `characters-pixel-hair-npcs.png`, `characters-before-after-pixel.png`.
+
+## Image assets: the drop-in pipeline (v0.67)
+The owner wants the whole game to match the Nightshift Garage art (painted pixel art, night lighting; see `docs/art/garage-pack-reference.jpg`). Code-drawn art can't get there, so every visual can now be replaced by an image file.
+
+To swap one in:
+1. Put the PNG at the path below in the `claude/rpg-core` repo.
+2. Rebuild. `online/build-online.cjs` copies `art/**` and writes `art-manifest.js`.
+
+Nothing else changes. Anything without an image keeps its code-drawn art. `art-assets.js` loads the files, and the hook for each kind is listed below.
+
+### Shared rules for every image
+- **Style:** painted pixel art in the Garage pack's style. Rich colour, crisp 1 px dark outline, soft highlights, no text or logos baked in.
+- **Background:** transparent PNG. Crop tight with about 2 px of padding.
+- **Light:** comes from the top-left (screen space) for top-down art and from the upper-left for side views.
+
+### Cars, city (top-down)
+- **Path:** `art/top/cars/<carId>.png`
+  - Car ids are in `cars-data.js`: `brick, mule, ridgeback, bulldog, kestrel, monarch, velvet, aurora, vortex, phantom, m4, civic, charger, s15, mustang, gallardo`.
+  - The base traffic cars are `SEDAN, COMPACT, VAN`.
+- **View:** straight down, with the nose pointing to the RIGHT.
+- **Size:** 4 px per world px, so canvas = `len×4` by `wid×4` (for example the M4 is 56×28, so 224×112 px).
+- **Paint:**
+  - Paint the car in a mid-saturation version of its first colour.
+  - The game recolours it with a hue blend, so glass, tyres and chrome must stay neutral grey or black.
+- **Hook:** `cars.js` `bake()`.
+
+### Buildings, city (top-down three-quarter)
+- **Path:** `art/top/buildings/<archetype>-<n>.png`
+  - Archetypes: `tower, mid, store, ind, club` (`modern-city.js` `archetype()`).
+  - `n` = 1, 2, 3… Each building picks a variant by position.
+- **Contents:** the whole footprint, with the roof on top and the front facade as the bottom band (about 35–45% of the height). Same layout as the current code art.
+- **Size:** 3× the footprint. The common footprint is 240×170 world px, so 720×510 px. It is stretched to each building's own footprint.
+- **Lighting:** night look, with lit windows. The game adds day/night tint and a shadow.
+- **Hook:** `modern-city.js` `draw()`.
+
+### Weapons (side view)
+- **Path:** `art/side/weapons/<gunId>.png` (gun ids are in `weapon-art.js` `GUNS`: `pipe, zip, sawnoff, pistol, compact, revolver, hawk, machine, pump, smg, hunting, shotgun, carbine, rifle, ar, goldhawk, whisper, dragon`, and so on).
+- **View:** pure side view with the muzzle to the RIGHT and the grip down.
+- **Size:** about 6 px per grid px. A rifle is 84 grid px long, so it is about 500 px wide.
+- **Fit:** the image is fitted into the gun's grid box, so the hand and muzzle anchors keep working.
+- **Hook:** `weapon-art.js` `sprite()`.
+
+### Characters (planned, no hook yet)
+- **Path:** `art/top/people/<look>.png`, a sheet with 8 directions × (idle 4 + walk 8 + run 8) frames.
+- **Cell:** 176×224 px (the current EPX cell). Directions follow the order E, SE, S, SW, W, NW, N, NE.
+- **Paint:** clothes in neutral greys so the outfit colours can be multiply-tinted per item.
+- **Status:** the hook goes in `character-pixel.js` `frame()` once the first sheet exists.
+
+### Route 9 highway (side view, in use)
+- **Path:** `art/garage/` (brought over from the Nightshift Garage repo).
+- **Car files:** `cars/<id>.png`, 800 px wide, facing right. Wheel centres are listed in `highway-side.js` `WHEELS`.
+- **Other files:** `police/*.png` and `track.jpg`.
+- **Adding more cars** (for example the 25-car Garage pack): add `cars/<newId>.png`, add its wheel circles to `WHEELS`, and add a `cars-data.js` entry with the same id.
+
+### Prompt template for an image generator
+> "Nightshift Garage pixel art, top-down view straight from above, [MODEL] car, nose pointing right, centred, transparent background, crisp 1px dark outline, painted pixel shading, night city lighting from top-left, glossy paint in [COLOR], neutral grey glass and black tyres, no text, no logo, 224×112 pixels"
+
+Swap the view, subject and size for buildings and weapons. Generate one item at a time, then check that the palette matches the Garage pack.
