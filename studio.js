@@ -115,8 +115,8 @@
     const sp = x.createRadialGradient(w / 2, h * 0.45, 10, w / 2, h * 0.45, Math.max(w, h) * 0.6); sp.addColorStop(0, '#ffe9b022'); sp.addColorStop(1, '#00000000'); x.fillStyle = sp; x.fillRect(0, 0, w, h);
     const o = showLayers(compare ? state.outfit : preview), n = (root.NightshiftCharacters?.ANIMS || { idle: 4, walk: 8, run: 8 })[anim], ms = { idle: 380, walk: 110, run: 80 }[anim], f = Math.floor((now - t0) / ms) % n;
     // zoom 1 = whole body fits (head top ~26 world px above the anchor, feet 14 below); zooming slides the focus up to the face
-    const fit = (r.height * 0.84) / 42, sc = Math.max(1, Math.round(fit * zoom * dpr * 2) / 2), C = root.NightshiftCharacters, frame = C.frame(o, dir, anim, f, Math.max(2, Math.min(18, 2 * Math.round(sc / 2))));
-    const k = Math.min(1, (zoom - 1) / 1.6), focus = -6 - 11 * k, cx = w / 2, ancY = h * 0.5 - focus * sc, footY = ancY + 14 * sc;
+    const tall = root.NightshiftO3?.wants?.(o) ? 55 : 42, fit = (r.height * 0.84) / tall, sc = Math.max(1, Math.round(fit * zoom * dpr * 2) / 2), C = root.NightshiftCharacters, frame = C.frame(o, dir, anim, f, Math.max(2, Math.min(18, 2 * Math.round(sc / 2))));
+    const k = Math.min(1, (zoom - 1) / 1.6), focus = (tall > 42 ? -12 : -6) - (tall > 42 ? 15 : 11) * k, cx = w / 2, ancY = h * 0.5 - focus * sc, footY = ancY + 14 * sc;
     x.fillStyle = '#ffd9701a'; x.beginPath(); x.ellipse(cx, footY, 20 * sc, 5 * sc, 0, 0, Math.PI * 2); x.fill();
     x.fillStyle = '#00000066'; x.beginPath(); x.ellipse(cx + sc, footY + 0.5 * sc, 9 * sc, 3 * sc, 0, 0, Math.PI * 2); x.fill();
     const cell = frame.cell || C.CELL; x.imageSmoothingEnabled = false; x.drawImage(frame, cx - cell.ax * sc, ancY - cell.ay * sc, cell.w * sc, cell.h * sc);
