@@ -68,7 +68,7 @@
     C.step = function (state, input, seconds) {
       const base = state && Number.isFinite(state.x) ? { ...state, x: state.x - (C.__kx || 0), y: state.y - (C.__ky || 0) } : state;
       const out = step.call(this, base, input, seconds), now = performance.now(), dt = Math.min(0.1, (now - lastT) / 1000); lastT = now;
-      const k = Math.exp(-dt * 16); kick.x *= k; kick.y *= k; C.__kx = kick.x; C.__ky = kick.y;
+      const k = Math.exp(-dt * 11); kick.x *= k; kick.y *= k; C.__kx = kick.x; C.__ky = kick.y;
       return out && Number.isFinite(out.x) ? { ...out, x: out.x + kick.x, y: out.y + kick.y } : out;
     };
     C.__feel = true; return true;
@@ -117,8 +117,8 @@
       const r = ov.apply(this, arguments);
       try {
         const p = P(), ctx = g; if (p && p.hp > 0 && p.hp < 35) { // eslint-disable-line no-undef
-          const t = performance.now(), pulse = 0.55 + 0.45 * Math.max(0, Math.sin(t / 130)), w = ctx.canvas.width / (ctx.getTransform().a || 1), h = ctx.canvas.height / (ctx.getTransform().d || 1), a = (1 - p.hp / 35) * 0.55 * pulse;
-          const gr = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.3, w / 2, h / 2, Math.max(w, h) * 0.7); gr.addColorStop(0, 'rgba(160,0,10,0)'); gr.addColorStop(1, `rgba(160,0,10,${a.toFixed(3)})`); ctx.save(); ctx.fillStyle = gr; ctx.fillRect(0, 0, w, h); ctx.restore();
+          const t = performance.now(), pulse = 0.55 + 0.45 * Math.max(0, Math.sin(t / 130)), w = ctx.canvas.width / (ctx.getTransform().a || 1), h = ctx.canvas.height / (ctx.getTransform().d || 1), a = Math.min(0.85, 0.25 + (1 - p.hp / 35) * 0.6) * pulse;
+          const gr = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.25, w / 2, h / 2, Math.max(w, h) * 0.62); gr.addColorStop(0, 'rgba(190,0,16,0)'); gr.addColorStop(0.6, `rgba(190,0,16,${(a * 0.35).toFixed(3)})`); gr.addColorStop(1, `rgba(190,0,16,${a.toFixed(3)})`); ctx.save(); ctx.fillStyle = gr; ctx.fillRect(0, 0, w, h); ctx.restore();
           if (t > nextBeat) { nextBeat = t + 600 + p.hp * 14; beat(); }
         }
         killWatch();
