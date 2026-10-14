@@ -67,6 +67,7 @@
   }
   // Same call shape as Codex: prop(ctx, kind, x, y) with (x, y) on the ground under the prop.
   function draw(c, kind, x, y) {
+    try { if (root.NightshiftO3Props?.draw?.(c, kind, x, y)) return true; } catch (e) { console.error(e); } // v0.70 Option 3 day/night props
     const s = sprite(kind); if (!s) return false; const w = s.width, h = s.height;
     c.save(); c.fillStyle = '#07152144'; c.beginPath(); c.ellipse(x + 3, y + 3, w * K * 0.5, Math.max(3, h * K * 0.12), 0, 0, Math.PI * 2); c.fill();
     const prev = c.imageSmoothingEnabled; c.imageSmoothingEnabled = false; c.drawImage(s, Math.round(x - w * K / 2), Math.round(y + 4 + 2 * K - h * K), w * K, h * K); c.imageSmoothingEnabled = prev; c.restore();

@@ -176,6 +176,7 @@
   }
   // p: { x, y, angle, moving, walk?, sit? } in world px; t seconds
   function draw(ctx, id, p, t = performance.now() / 1000, opts = {}) {
+    try { if (root.NightshiftO3Pet?.draw?.(ctx, id, p, t, opts)) return true; } catch (e) { console.error(e); } // v0.70 Option 3 directional pets
     if (!PD()?.PET?.[id] || !p || !Number.isFinite(p.x)) return false;
     const mv = !!p.moving, sitting = !mv && (opts.sitting ?? false), walkF = Math.floor(((p.walk ?? t * 9) % 4 + 4) % 4);
     const key = mv ? 'w' + walkF : (sitting ? 's' : 'i') + (Math.floor(t * (sitting ? 1.6 : 3)) % 2);
