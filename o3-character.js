@@ -28,9 +28,11 @@
     let thigh = [0, 0], bend = [0.06, 0.06], arm = [0.04, -0.04], flex = [0.18, 0.18], lean = 0, bob = 0, drop = 0, spread = anim === 'idle' ? 2.2 : 1.2;
     if (anim === 'walk') { const s = Math.sin(ph); thigh = [0.42 * s, -0.42 * s]; bend = [0.1 + 0.55 * Math.max(0, Math.cos(ph)), 0.1 + 0.55 * Math.max(0, -Math.cos(ph))]; arm = [-0.36 * s, 0.36 * s]; flex = [0.22 + 0.2 * Math.max(0, -s), 0.22 + 0.2 * Math.max(0, s)]; }
     else if (anim === 'run') { const s = Math.sin(ph); thigh = [0.78 * s, -0.78 * s]; bend = [0.3 + 1.15 * Math.max(0, Math.cos(ph)), 0.3 + 1.15 * Math.max(0, -Math.cos(ph))]; arm = [-0.72 * s, 0.72 * s]; flex = [1.35, 1.35]; lean = 0.2; bob = 1.5 * Math.abs(Math.cos(ph)); }
-    else if (anim === 'idle') { bob = [0, 0, 1, 1, 1, 0][k] * -0.6; flex = [0.2 + 0.04 * Math.sin(ph), 0.2 + 0.04 * Math.sin(ph)]; }
+    else if (anim === 'idle') { flex = [0.2 + 0.05 * Math.sin(ph), 0.2 + 0.05 * Math.sin(ph)]; }
     else if (anim === 'crouch' || anim === 'sneak') { const s = anim === 'sneak' ? Math.sin(ph) : 0; thigh = [1.1 + 0.25 * s, 1.1 - 0.25 * s]; bend = [2.1, 2.1]; lean = 0.32; arm = [0.25 - 0.2 * s, 0.25 + 0.2 * s]; flex = [0.9, 0.9]; }
     else if (anim === 'sit') { thigh = [1.45, 1.45]; bend = [1.5, 1.5]; arm = [0.35, 0.35]; flex = [1.1, 1.1]; spread = 0.12; }
+    // breathing (upper body only, feet stay planted): idle / crouch / sit
+    const breathe = anim === 'idle' ? [0, 0, 1, 1, 1, 0][k] : anim === 'crouch' || anim === 'sit' ? [0, 1, 1, 0][k] : 0;
     const J = { legs: [], arms: [], lean, build };
     // legs (side: +1 = right, -1 = left)
     const legs = [1, -1].map((side, i) => {
@@ -42,9 +44,9 @@
     const low = Math.min(...legs.map((l) => l.ankle[1])), lift = SK.ankle - low + bob;
     for (const l of legs) for (const p of [l.hip, l.knee, l.ankle]) p[1] += lift;
     J.legs = legs; drop = lift;
-    const shY = SK.shY + drop, leanZ = Math.sin(lean) * 26;
+    const shY = SK.shY + drop + breathe, leanZ = Math.sin(lean) * 26;
     J.pelvis = [0, SK.hipY + drop, 0]; J.chest = [0, shY - 6, leanZ * 0.7]; J.shoulders = [0, shY, leanZ];
-    J.neck = [0, SK.neckY + drop, leanZ * 1.05]; J.head = [0, SK.headY + drop - (anim === 'idle' ? bob * 0.5 : 0), leanZ * 1.15 + 0.5];
+    J.neck = [0, SK.neckY + drop + breathe, leanZ * 1.05]; J.head = [0, SK.headY + drop + breathe, leanZ * 1.15 + 0.5];
     // arms
     J.arms = [1, -1].map((side, i) => {
       const sh = [side * SK.shW * build, shY - 1.5, leanZ - 0.5];
