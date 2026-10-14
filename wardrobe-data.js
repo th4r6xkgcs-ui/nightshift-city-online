@@ -78,6 +78,7 @@
     ['watch', 'jewelry', 'Iced watch', 'epic', 1800, C.metal, 'Bezel full of stones.'],
     ['chainwatch', 'jewelry', 'Chain + watch', 'epic', 2400, C.metal, 'The whole set.'],
     // wrist (v0.70)
+    ['cuff', 'wrist', 'Silver cuff', 'common', 90, ['#c9d1d6', '#e3c25a'], 'Hammered metal bangle.'],
     ['sportwatch', 'wrist', 'Black sport watch', 'uncommon', 260, ['#1b1e24', '#e3c25a', '#f1efe8'], 'Matte case, rubber strap, glowing dial.'],
     // bags
     ['backpack', 'bag', 'Backpack', 'common', 70, C.street.concat(['#1d2024']), 'Two straps, front pocket, zip pulls.'],

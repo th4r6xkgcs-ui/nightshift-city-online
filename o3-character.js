@@ -315,9 +315,10 @@
     for (let i = 0; i <= 16; i++) { const q = 0.6 + (Math.PI - 1.2) * (i / 16), dip = Math.sin((i / 16) * Math.PI) * 8, p = onLoft(v, T, q, J.shoulders[1] + 1.5 - dip, 0.4); if (p && p[2] > 0.3) px(B, p[0], p[1], i % 2 ? G[3] : G[2]); }
     const pend = onLoft(v, T, Math.PI / 2, J.shoulders[1] - 8, 0.5); if (pend && pend[2] > 0.5) { px(B, pend[0], pend[1], G[4]); px(B, pend[0], pend[1] + 1, G[2]); px(B, pend[0] - 1, pend[1] + 1, G[3]); px(B, pend[0] + 1, pend[1] + 1, G[1]); px(B, pend[0], pend[1] + 2, G[1]); }
   }
-  function watch(c, item, col) {
+  function watch(c, item, col, metal) {
     const v = c.v, a = c.J.arms.find((x) => x.side === -1); if (!a) return; const B = c.buf('wrist', c.passOfSide(-1, true));
-    const w = a.wrist.map((p, i) => p + (a.elbow[i] - p) * 0.12); stamp(B, capsule(v, w, a.wrist.map((p, i) => p + (a.elbow[i] - p) * 0.02), 3.3, 3.3).mask, ramp(col === '#e3c25a' ? '#e3c25a' : '#1b1e24', col === '#e3c25a' ? 'metal' : 'cloth'));
+    const w = a.wrist.map((p, i) => p + (a.elbow[i] - p) * 0.12); stamp(B, capsule(v, w, a.wrist.map((p, i) => p + (a.elbow[i] - p) * 0.02), 3.3, 3.3).mask, metal ? ramp(item.face || '#c9d1d6', 'metal') : ramp(col === '#e3c25a' ? '#e3c25a' : '#1b1e24', col === '#e3c25a' ? 'metal' : 'cloth'));
+    if (metal) return;
     px(B, v.px(w), v.py(w), item.face || '#44b9c7');
   }
   function backpack(c, item, col) {
@@ -343,6 +344,7 @@
     shades: { slot: 'face', draw: (c, it, col) => shades(c, it, col) },
     chain: { slot: 'jewelry', draw: (c, it, col) => chain(c, it, col) },
     sportwatch: { slot: 'wrist', draw: (c, it, col) => watch(c, it, col) },
+    cuff: { slot: 'wrist', draw: (c, it, col) => watch(c, { ...it, face: col }, col === '#e3c25a' ? '#e3c25a' : '#e3c25a', true) },
     backpack: { slot: 'bag', draw: (c, it, col) => backpack(c, it, col) },
   };
   const HAIR_OK = { short: 1, braids: 1, fade: 1, buzz: 1, bald: 1 };
