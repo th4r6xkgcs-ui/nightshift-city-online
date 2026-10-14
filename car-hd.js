@@ -54,7 +54,7 @@
     // ---- tyres (peek out under the arches) ----
     for (const s of [-1, 1]) for (const [x0, rear] of [[fx, 0], [rx, 1]]) {
       const tw2 = tw + (wide && rear ? 1.5 : 0), th2 = th + (wide && rear ? 1.2 : 0), y0 = s * (hw - th2 * 0.38 + (sport ? 0.9 : 0.35));
-      RR(c, '#07090b', x0 - tw2 / 2, y0 - th2 / 2, tw2, th2, 1.8);
+      RR(c, '#040506', x0 - tw2 / 2 - 0.3, y0 - th2 / 2 - 0.3, tw2 + 0.6, th2 + 0.6, 2); RR(c, '#0b0d10', x0 - tw2 / 2, y0 - th2 / 2, tw2, th2, 1.8);
       for (let k = -tw2 / 2 + 1.2; k < tw2 / 2 - 1; k += 1.6) R(c, '#1c2026', x0 + k, y0 - th2 / 2 + 0.3, 0.7, th2 - 0.6);
       R(c, rim, x0 - tw2 / 2 + 2, y0 + s * (th2 / 2 - 1.1) - 0.5, tw2 - 4, 1); R(c, '#ffffff70', x0 - tw2 / 2 + 2.5, y0 + s * (th2 / 2 - 1.1) - 0.5, tw2 * 0.3, 0.4);
     }
@@ -92,6 +92,8 @@
       if (st.finish === 'chrome') { const cg = c.createLinearGradient(0, -hw, 0, hw); for (const [t, col] of [[0, '#ffffffb0'], [0.18, '#ffffff10'], [0.32, '#00000050'], [0.5, '#ffffff90'], [0.62, '#ffffff05'], [0.8, '#00000060'], [1, '#ffffff70']]) cg.addColorStop(t, col); c.fillStyle = cg; c.fillRect(-hl - 2, -hw - 2, L + 4, W + 4); }
     }
     if (body === 'lowrider' || body === 'hyper' || body === 'classic') { let s0 = 7; for (let k = 0; k < 110; k++) { s0 = (s0 * 1103515245 + 12345) >>> 0; const x = -hl + (s0 % 1000) / 1000 * L; s0 = (s0 * 1103515245 + 12345) >>> 0; const y = -hw + (s0 % 1000) / 1000 * W; R(c, '#ffffff38', x, y, 0.4, 0.4); } }
+    // richer paint: deepen mids, keep highlights (overlay of a mid-grey ramp)
+    { const og = c.createLinearGradient(0, -hw, 0, hw); og.addColorStop(0, 'rgba(255,255,255,0.08)'); og.addColorStop(0.5, 'rgba(60,60,70,0.16)'); og.addColorStop(1, 'rgba(0,0,0,0.12)'); c.globalCompositeOperation = 'multiply'; c.fillStyle = og; c.fillRect(-hl - 2, -hw - 2, L + 4, W + 4); c.globalCompositeOperation = 'source-over'; }
     // clear-coat reflection bands (sky)
     c.globalCompositeOperation = 'screen';
     for (const [x0, a] of [[hood0 + (hl - hood0) * 0.45, 0.2], [xr - rgl - 4, 0.14], [-hl + 6, 0.1]]) { const rg = c.createLinearGradient(x0 - 6, 0, x0 + 6, 0); rg.addColorStop(0, 'rgba(255,255,255,0)'); rg.addColorStop(0.5, `rgba(220,235,255,${a})`); rg.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = rg; c.beginPath(); c.moveTo(x0 - 2, -hw - 1); c.lineTo(x0 + 6, -hw - 1); c.lineTo(x0 - 3, hw + 1); c.lineTo(x0 - 11, hw + 1); c.closePath(); c.fill(); }
@@ -130,7 +132,7 @@
       if (st?.tint) { const tint = [0, 0.3, 0.5, 0.7][Number(st.tint) || 0]; if (tint) { c.fillStyle = `rgba(4,7,10,${tint})`; path(gh); c.fill(); } }
     }
     // ---- mirrors ----
-    for (const s of [-1, 1]) { const mx = xf + wsh * 0.2; RR(c, dark, mx - 1.3, s * (hw + 0.8) - 1.3, 2.8, 2.6, 1); RR(c, color, mx - 0.9, s * (hw + 0.8) - 0.9, 2, 1.8, 0.8); R(c, '#ffffff55', mx - 0.8, s * (hw + 0.8) - 0.8 + (s > 0 ? 1.2 : 0), 1.6, 0.4); }
+    for (const s of [-1, 1]) { const mx = xf + wsh * 0.15, my = s * (hw - 0.2); RR(c, '#0b0e12', mx - 1.4, my - 1.2, 3, 2.4, 1); RR(c, shade(color, -0.1), mx - 1, my - 0.9, 2.2, 1.8, 0.8); R(c, '#ffffff66', mx - 0.8, my - (s < 0 ? 0.8 : -0.4), 1.6, 0.35); }
     // ---- nose: grille / intakes / splitter + headlights ----
     const nx = hl;
     if (sport) { RR(c, black, nx - 2.6, -hw * 0.42, 2.2, hw * 0.84, 0.8); for (let k = -hw * 0.38; k < hw * 0.38; k += 1.3) R(c, '#2a2f36', nx - 2.4, k, 1.8, 0.5); R(c, '#05070a', nx - 0.6, -hw * 0.6, 1.2, hw * 1.2); for (const s of [-1, 1]) RR(c, black, nx - 5.5, s * hw * 0.62 - 1.2, 3.2, 2.4, 0.8); }
@@ -139,9 +141,9 @@
     else { RR(c, black, nx - 2, -hw * 0.45, 1.8, hw * 0.9, 0.7); for (let k = -hw * 0.4; k < hw * 0.4; k += 1.4) R(c, '#353b43', nx - 1.8, k, 1.4, 0.5); RR(c, '#14171b', nx - 0.8, -hw + 2.6, 1.4, W - 5.2, 0.7); }
     const hx = nx - 3.4;
     for (const s of [-1, 1]) {
-      c.save(); c.translate(hx, s * (hw - 4.2));
+      c.save(); c.translate(hx - (sport ? 1.2 : 0), s * (hw - (sport ? 5.2 : 4.4)));
       if (body === 'classic' || body === 'lowrider') { CIR(c, '#20252b', 0, 0, 2.4); CIR(c, '#fff4d0', 0, 0, 1.8); CIR(c, '#ffffff', 0.5, -s * 0.5, 0.6); }
-      else if (sport || body === 'coupe') { c.rotate(s * 0.4); RR(c, '#0e1217', -3, -1.2, 6, 2.4, 1); RR(c, '#dff2ff', -2.4, -0.55, 4.6, 1.1, 0.5); R(c, '#ffffff', 0.4, -0.3, 1.6, 0.6); }
+      else if (sport || body === 'coupe') { c.rotate(s * 0.28); RR(c, '#0e1217', -2.6, -1.1, 5, 2.2, 1); RR(c, '#dff2ff', -2, -0.45, 3.8, 0.9, 0.45); R(c, '#ffffff', 0.2, -0.25, 1.2, 0.5); }
       else if (body === 'suv' || body === 'pickup' || body === 'van') { RR(c, '#20252b', -1.6, -2.4, 3.6, 4.8, 0.9); RR(c, '#fff4d0', -1, -1.8, 2.4, 3.6, 0.7); R(c, '#ffffff', -0.3, -1.4, 0.9, 1); }
       else { RR(c, '#20252b', -2.2, -1.8, 4.4, 3.6, 1); RR(c, '#eaf6ff', -1.6, -1.2, 3.2, 2.4, 0.8); R(c, '#ffffff', 0.2, -0.8, 1, 0.9); }
       c.restore();
