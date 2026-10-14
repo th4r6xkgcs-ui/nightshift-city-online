@@ -272,7 +272,6 @@
     for (const t of A.traffic) { const xx = X(t.d); if (xx < -120 || xx > Wd + 120) continue; const id = t.model.startsWith('CX:') ? t.model.slice(3) : t.model; drawCar(c, xx, Y(t.y), id, t.color, (t.change ? Math.sign(H.laneY(t.change.to) - t.y) * 0.04 : 0), z * (t.truck ? 1.35 : 1)); if (t.change && Math.sin(now / 120) > 0) { c.fillStyle = '#ffb33a'; const sgn = Math.sign(H.laneY(t.change.to) - t.y); c.fillRect(xx + 18 * z, Y(t.y) + sgn * 11 * z - 1.5, 4 * z, 3 * z); c.fillRect(xx - 24 * z, Y(t.y) + sgn * 11 * z - 1.5, 4 * z, 3 * z); } }
     // racer
     if (A.racer) { const r = A.racer, xx = X(r.d); drawCar(c, xx, Y(r.y), r.sid, r.color, 0, z); c.font = `800 ${Math.round(10 * Math.max(0.8, z))}px ui-monospace,Menlo,monospace`; c.textAlign = 'center'; c.fillStyle = '#0c111ee0'; const w = c.measureText(r.name).width + 10; c.fillRect(xx - w / 2, Y(r.y) - 30 * z - 12, w, 14); c.fillStyle = '#ffd970'; c.fillText(r.name.toUpperCase(), xx, Y(r.y) - 30 * z - 1); }
-    try { root.NightshiftNet?.drawHighway?.(c, X, Y, z, A); } catch { /* other players */ }
     // cops
     for (const k of A.cops) { const xx = X(k.d); if (xx < -100 || xx > Wd + 100) continue; drawCar(c, xx, Y(k.y), 'SEDAN', '#f4f6f8', 0, z); lightbar(c, xx, Y(k.y), now, z); }
     // smoke (under the player)
