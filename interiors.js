@@ -1,15 +1,31 @@
-/* Walk-in interiors for every building in the city (Claude-owned). Uses the zone engine (zones.js).
- * Each building type has its own room — 2.5D furniture (top + front faces, shading, outlines), staff behind counters,
- * customers sitting or browsing, and things to DO that open the real systems:
- *   CORNER SHOP (shop counter), DINER (order food, patrons in booths), CLOTHING (boutique try-on studio),
- *   GARAGE (tuning + style studio for your car out front), BANK (teller = investments; the vault = heist planning
- *   where a heist bank exists), CLUB (bar, dance floor; the venue's own panel where one exists), WAREHOUSE (search
- *   crates for crafting materials — refills over time), APARTMENTS (lobby with mailboxes: sometimes something useful).
+/* Walk-in interiors for every building in the city (Claude-owned; v0.71 premium rebuild on interior-kit.js).
+ * Each building type has its own furnished room — tall readable back walls (shelves, neon, posters, night windows),
+ * textured floors, 2.5D furniture with contact shadows, y-sorted props you walk around (plants, lamps, mannequins,
+ * stools, punching bags), light pools and animated neon — plus staff, customers and things to DO:
+ *   CORNER SHOP (counter), DINER (order food), BOUTIQUE (try on / mirror), GARAGE (tune + style), BANK (invest, vault),
+ *   CLUB (bar, dance floor, venue), WAREHOUSE (scavenge), APARTMENT LOBBY (mail),
+ *   v0.71 new: GUN SHOP (weapons store), TATTOO (ink = charisma), AUTO PARTS (car parts/tuning), GYM (train),
+ *   HOSPITAL (heal), POLICE STATION (pay off your wanted level).
+ * New types are deterministic variants of existing city buildings (NightshiftInteriorKit-independent `variant(b)`),
+ * and the street sign (modern-city.js brand) uses the same variant so outside and inside match.
  * A 🚪 ENTER point sits at every building door (your own apartment keeps its HOME door).
- * Save: nightshift-interiors-v1 (crate / mailbox refill timers). API: NightshiftInteriors2.{enter, doors, TYPES} */
+ * Save: nightshift-interiors-v1 (crate / mailbox refill timers, unchanged). API: NightshiftInteriors2.{enter, doors, TYPES, variant, BLURB, title} */
 (function (root) {
   'use strict';
-  if (!root.document) return;
+  // ---------------- building variants (pure; also used by the street signs) ----------------
+  const hash = (b) => ((Math.imul(Math.round(b.x), 73856093) ^ Math.imul(Math.round(b.y), 19349663)) >>> 0) % 100;
+  function variant(b) {
+    if (!b) return null; const h = hash(b), n = b.name;
+    if (n === 'CORNER SHOP') return h < 16 ? 'GUN SHOP' : h < 28 ? 'TATTOO' : h < 40 ? 'AUTO PARTS' : n;
+    if (n === 'CLOTHING') return h < 22 ? 'GYM' : n;
+    if (n === 'BANK') return h < 22 ? 'POLICE' : n;
+    if (n === 'APARTMENTS') return h < 9 ? 'HOSPITAL' : n;
+    return n;
+  }
+  const BRANDS = { 'GUN SHOP': ['AMMO & ARMS', 'IRON SIGHT', 'LOCK & LOAD'], TATTOO: ['INK HOUSE', 'BLACKLINE', 'NEEDLE & CO'], 'AUTO PARTS': ['PARTS+', 'TORQUE SUPPLY', 'BOOST SHOP'], GYM: ['IRON GYM', 'PUMP HOUSE', '24 FIT'], POLICE: ['POLICE', 'PRECINCT 9'], HOSPITAL: ['CITY HOSPITAL', 'MERCY MED'] };
+  root.NightshiftVariants = Object.freeze({ variant, BRANDS });
+  if (!root.document) { if (typeof module !== 'undefined') module.exports = { variant, BRANDS }; return; }
+
   const KEY = 'nightshift-interiors-v1';
   let state = { crates: {}, mail: {} };
   try { const r = JSON.parse(localStorage.getItem(KEY) || '{}'); if (r && typeof r === 'object') state = { crates: r.crates || {}, mail: r.mail || {} }; } catch { /* fresh */ }
@@ -20,70 +36,210 @@
   /* eslint-enable no-undef */
   const say = (t) => { try { root.say?.(t); } catch { /* no toast */ } };
   const gameSave = () => { try { if (typeof save === 'function') save(); } catch { /* not ready */ } }; // eslint-disable-line no-undef
-  const W = 560, H = 400, DOOR = { x: W / 2, y: H - 14 };
-
-  // ---------------- 2.5D furniture painter ----------------
-  const shade = (h, t) => { const n = parseInt(h.slice(1), 16), f = (v) => Math.max(0, Math.min(255, Math.round(t < 0 ? v * (1 + t) : v + (255 - v) * t))); return '#' + [n >> 16 & 255, n >> 8 & 255, n & 255].map(f).map((v) => v.toString(16).padStart(2, '0')).join(''); };
-  const R = (c, col, x, y, w, h) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
-  // block: top face (x,y,w,d) + front face (height h), lit from the top-left
-  function block(c, x, y, w, d, h, col, opt = {}) {
-    R(c, '#00000055', x + 3, y + d + h - 2, w, 6); // floor shadow
-    R(c, '#0b0d14', x - 1, y - 1, w + 2, d + h + 2); // outline
-    R(c, shade(col, 0.12), x, y, w, d); R(c, shade(col, 0.32), x, y, w, 1); R(c, shade(col, 0.2), x, y, 1, d); // top
-    R(c, shade(col, -0.22), x, y + d, w, h); R(c, shade(col, -0.36), x, y + d + h - 2, w, 2); R(c, shade(col, -0.05), x, y + d, w, 1); // front
-    if (opt.panels) for (let i = 1; i < opt.panels; i++) R(c, shade(col, -0.35), x + (w * i) / opt.panels, y + d + 2, 1, h - 4);
-  }
-  function floor(c, kind) {
-    const base = { tile: '#d9d6c8', wood: '#7a5a3c', concrete: '#6f747a', carpet: '#5a2f3c', marble: '#cfd2d6', lobby: '#8a7a64', club: '#1a1626' }[kind];
-    R(c, base, 0, 0, W, H);
-    if (kind === 'tile') for (let x = 0; x < W; x += 20) for (let y = 0; y < H; y += 20) R(c, ((x + y) / 20) % 2 ? '#cfcbbb' : '#e4e1d4', x, y, 20, 20);
-    if (kind === 'wood' || kind === 'lobby') for (let y = 0; y < H; y += 12) { R(c, shade(base, -0.15), 0, y, W, 1); for (let x = (y / 12 % 2) * 40; x < W; x += 80) R(c, shade(base, -0.2), x, y, 1, 12); }
-    if (kind === 'concrete') { for (let i = 0; i < 300; i++) R(c, i % 2 ? '#666b71' : '#787d83', (i * 97) % W, (i * 53) % H, 2, 2); for (let x = 0; x < W; x += 140) R(c, '#5d6268', x, 0, 1, H); R(c, '#e2c24a', 60, H - 70, W - 120, 3); }
-    if (kind === 'carpet') for (let x = 0; x < W; x += 8) for (let y = 0; y < H; y += 8) if ((x + y) % 16 === 0) R(c, '#64343f', x, y, 4, 4);
-    if (kind === 'marble') for (let x = 0; x < W; x += 40) for (let y = 0; y < H; y += 40) { R(c, ((x + y) / 40) % 2 ? '#c4c8cd' : '#dadde1', x, y, 40, 40); R(c, '#b8bcc2', x, y, 40, 1); }
-    if (kind === 'club') for (let x = 0; x < W; x += 24) for (let y = 0; y < H; y += 24) R(c, ((x + y) / 24) % 2 ? '#201a30' : '#171322', x, y, 24, 24);
-    try { root.NightshiftHD?.floor?.(c, kind, W, H); } catch { /* optional */ }
-  }
-  function walls(c, col, trim) {
-    R(c, '#0b0d14', 0, 0, W, 64); R(c, col, 0, 0, W, 60); R(c, shade(col, 0.12), 0, 0, W, 8); R(c, shade(col, -0.25), 0, 52, W, 8); R(c, trim, 0, 58, W, 4); // back wall + baseboard
-    R(c, '#0b0d14', 0, 0, 10, H); R(c, shade(col, -0.35), 0, 0, 8, H); R(c, '#0b0d14', W - 10, 0, 10, H); R(c, shade(col, -0.35), W - 8, 0, 8, H); // side walls
-    R(c, '#0b0d14', 0, H - 8, W, 8); R(c, shade(col, -0.4), 0, H - 8, W / 2 - 34, 8); R(c, shade(col, -0.4), W / 2 + 34, H - 8, W / 2 - 34, 8); // front wall with the door gap
-    R(c, '#2a3a2a', W / 2 - 30, H - 24, 60, 16); R(c, '#3c4c3a', W / 2 - 28, H - 22, 56, 12); // door mat
-    try { root.NightshiftHD?.wall?.(c, W); } catch { /* optional */ }
-  }
-  const windowPane = (c, x, y, w, h) => { R(c, '#0b0d14', x - 1, y - 1, w + 2, h + 2); R(c, '#2a4a62', x, y, w, h); R(c, '#4f7a96', x, y, w, 3); R(c, '#ffffff33', x + 3, y + 3, 4, h - 6); };
-  const sign = (c, txt, x, y, col = '#ffd970') => { c.font = 'bold 13px monospace'; c.textAlign = 'center'; c.fillStyle = '#0b0d14'; c.fillText(txt, x + 1, y + 1); c.fillStyle = col; c.fillText(txt, x, y); };
-  const products = (c, x, y, w, rows, seed) => { const cols = ['#e05a4a', '#f2c84a', '#3d99d6', '#7cdeb5', '#ff8ad8', '#f4f1ea', '#8a6430']; for (let r = 0; r < rows; r++) for (let i = 0; i < Math.floor(w / 7); i++) { const k = (i * 7 + r * 3 + seed) % cols.length; R(c, '#0b0d14', x + i * 7 - 1, y + r * 12 - 1, 6, 10); R(c, cols[k], x + i * 7, y + r * 12, 4, 8); R(c, '#ffffff66', x + i * 7, y + r * 12, 1, 8); } };
+  const K = root.NightshiftInteriorKit; if (!K) return;
+  const { W, H, WALL, R } = K, DOOR = { x: W / 2, y: H - 14 };
+  const solid = (x, y, w, h) => ({ x, y, w, h });
+  const prop = (x, y, fn) => ({ x, y, draw: (c) => fn(c, x, y) });
 
   // ---------------- room types ----------------
-  const solid = (x, y, w, h) => ({ x, y, w, h });
   const T = {
-    'CORNER SHOP': { floor: 'tile', wall: '#8a3a3a', trim: '#f2c84a', title: 'CORNER SHOP', art(c) { for (const y of [120, 200]) { block(c, 60, y, 300, 22, 26, '#b9bec4', { panels: 6 }); products(c, 66, y + 3, 288, 2, y); } block(c, 410, 90, 110, 30, 40, '#e8eef3'); for (let i = 0; i < 3; i++) { R(c, '#9fd8f0', 416 + i * 34, 124, 28, 30); products(c, 418 + i * 34, 128, 24, 2, i); } block(c, 380, 280, 140, 30, 30, '#6a4a32', { panels: 3 }); R(c, '#1d2024', 470, 270, 30, 16); R(c, '#7cdeb5', 474, 273, 14, 6); sign(c, 'OPEN 24/7', 280, 34, '#ff6b6b'); },
-      solids: [solid(60, 120, 300, 48), solid(60, 200, 300, 48), solid(410, 90, 110, 70), solid(380, 280, 140, 60)], staff: [{ x: 450, y: 262 }],
-      targets: (b) => [{ x: 430, y: 352, r: 52, action: 'SHOP', label: 'Counter · food, meds, ammo', use: () => openSafe(() => root.NightshiftRecovery?.openShop?.()) }] },
-    DINER: { floor: 'tile', wall: '#3d7f8a', trim: '#e05a4a', title: 'DINER', art(c) { block(c, 40, 80, 300, 26, 34, '#c8432f', { panels: 5 }); R(c, '#e8e2d0', 40, 80, 300, 6); for (let i = 0; i < 6; i++) { R(c, '#0b0d14', 54 + i * 48, 120, 18, 18); R(c, '#c84659', 55 + i * 48, 121, 16, 10); R(c, '#9aa3ab', 61 + i * 48, 131, 4, 8); } for (const [x, y] of [[380, 120], [380, 220], [60, 240], [210, 240]]) { block(c, x, y, 120, 18, 10, '#c84659'); block(c, x + 16, y + 34, 88, 30, 20, '#e8e2d0'); block(c, x, y + 88, 120, 18, 10, '#c84659'); R(c, '#f2c84a', x + 40, y + 40, 10, 6); R(c, '#ffffff', x + 64, y + 42, 8, 5); } sign(c, 'EAT · DRINK · REPEAT', 280, 34, '#ffd970'); windowPane(c, 360, 12, 70, 36); windowPane(c, 450, 12, 70, 36); },
-      solids: [solid(40, 80, 300, 60), solid(396, 154, 88, 50), solid(396, 254, 88, 50), solid(76, 274, 88, 50), solid(226, 274, 88, 50)], staff: [{ x: 190, y: 66 }],
-      patrons: [{ x: 410, y: 176 }, { x: 470, y: 268 }, { x: 100, y: 326 }, { x: 250, y: 268 }],
-      targets: () => [{ x: 190, y: 160, r: 60, action: 'ORDER', label: 'Diner counter · meals with buffs', use: () => openSafe(() => root.NightshiftFood?.openDiner?.()) }] },
-    CLOTHING: { floor: 'wood', wall: '#5a3a5a', trim: '#e3c25a', title: 'BOUTIQUE', art(c) { for (const [x, y] of [[50, 110], [50, 220], [300, 110], [300, 220]]) { R(c, '#0b0d14', x, y, 170, 4); R(c, '#c9d1d6', x, y, 170, 2); for (let i = 0; i < 12; i++) { const col = ['#c84659', '#3d7fc6', '#e2b75c', '#2f8f6a', '#1d2024', '#f1efe8'][(i + x) % 6]; R(c, '#0b0d14', x + 6 + i * 13, y + 3, 12, 34); R(c, col, x + 7 + i * 13, y + 4, 10, 32); R(c, shade(col, 0.25), x + 7 + i * 13, y + 4, 2, 32); } R(c, '#2a2f36', x + 4, y, 3, 46); R(c, '#2a2f36', x + 163, y, 3, 46); } block(c, 480, 70, 50, 10, 90, '#cfd8e0'); R(c, '#9fc3d6', 484, 82, 42, 74); R(c, '#ffffff55', 488, 86, 6, 66); block(c, 220, 320, 120, 24, 26, '#2a1f1a', { panels: 2 }); sign(c, 'NEW SEASON', 280, 34, '#ff8ad8'); },
-      solids: [solid(50, 110, 170, 46), solid(50, 220, 170, 46), solid(300, 110, 170, 46), solid(300, 220, 170, 46), solid(480, 70, 50, 100), solid(220, 320, 120, 50)], staff: [{ x: 280, y: 306 }], browsers: [{ x: 130, y: 182 }, { x: 380, y: 292 }],
-      targets: () => [{ x: 280, y: 300, r: 70, action: 'TRY ON', label: 'Boutique · try on & buy', use: () => openSafe(() => root.NightshiftWardrobe?.open?.('store')) }, { x: 505, y: 186, r: 50, action: 'MIRROR', label: 'Mirror · change what you wear', use: () => openSafe(() => root.NightshiftWardrobe?.open?.('home')) }] },
-    GARAGE: { floor: 'concrete', wall: '#4a5058', trim: '#e2c24a', title: 'GARAGE', art(c) { R(c, '#2a2f36', 200, 110, 160, 180); R(c, '#e2c24a', 200, 110, 160, 4); R(c, '#e2c24a', 200, 286, 160, 4); for (let i = 0; i < 2; i++) R(c, '#9aa3ab', 210 + i * 130, 120, 10, 160); try { const C = root.NightshiftCars; if (C?.sprite) { const s = C.sprite('SEDAN', '#c84659'); c.save(); c.translate(280, 200); c.rotate(-Math.PI / 2); c.drawImage(s.cv, -s.w / 2, -s.h / 2, s.w, s.h); c.restore(); } } catch { /* art optional */ } block(c, 40, 80, 120, 20, 40, '#c84659', { panels: 4 }); for (let i = 0; i < 4; i++) R(c, '#c9d1d6', 50 + i * 28, 104, 16, 2); for (const [x, y] of [[420, 100], [450, 120], [430, 150]]) { R(c, '#0b0d14', x - 1, y - 1, 34, 18); R(c, '#1d2024', x, y, 32, 16); R(c, '#3a3f45', x + 4, y + 4, 24, 8); } block(c, 400, 260, 120, 20, 30, '#5a6168', { panels: 3 }); sign(c, 'NO WORK NO PAY', 280, 34, '#e2c24a'); },
-      solids: [solid(40, 80, 120, 60), solid(400, 260, 120, 50), solid(420, 100, 66, 70), solid(212, 130, 136, 140)], staff: [{ x: 380, y: 210 }],
-      targets: () => [{ x: 380, y: 236, r: 60, action: 'TUNE', label: 'Mechanic · tune & style your car parked outside', use: () => openSafe(() => root.NightshiftTuning?.open?.()) }, { x: 100, y: 160, r: 50, action: 'TOOLS', label: 'Tool chest · scrap metal', use: (api) => crate('garage-' + api.key, { metal: 2, spring: 1 }, 'tool chest') }] },
-    BANK: { floor: 'marble', wall: '#2f4a5a', trim: '#e3c25a', title: 'BANK', art(c) { block(c, 60, 90, 440, 26, 40, '#5a4030', { panels: 4 }); for (let i = 0; i < 4; i++) { R(c, '#0b0d14', 80 + i * 110, 70, 70, 22); R(c, '#9fc3d6', 82 + i * 110, 72, 66, 18); R(c, '#ffffff44', 84 + i * 110, 74, 10, 14); } R(c, '#0b0d14', 470, 200, 60, 60); R(c, '#8a939b', 472, 202, 56, 56); for (let a = 0; a < 8; a++) R(c, '#c9d1d6', 498 + Math.cos(a) * 18, 228 + Math.sin(a) * 18, 4, 4); R(c, '#5a6168', 494, 224, 12, 12); for (const x of [60, 160]) { block(c, x, 260, 70, 16, 8, '#2a3f62'); } R(c, '#e3c25a', 60, 196, 380, 2); sign(c, 'FIRST NIGHTSHIFT SAVINGS', 280, 34, '#e3c25a'); },
-      solids: [solid(60, 90, 440, 66), solid(470, 200, 60, 60), solid(60, 260, 70, 24), solid(160, 260, 70, 24)], staff: [{ x: 150, y: 80 }, { x: 370, y: 80 }],
-      targets: (b) => { const out = [{ x: 260, y: 186, r: 70, action: 'BANK', label: 'Teller · invest your cash', use: () => openSafe(() => root.NightshiftMarket?.open?.()) }]; const v = heistAt(b); out.push({ x: 470, y: 232, r: 54, action: v ? 'CASE IT' : 'VAULT', label: v ? 'Vault · plan the heist' : 'Vault · locked tight', use: () => (v ? (root.NightshiftZones?.leave?.(), setTimeout(() => openSafe(() => root.NightshiftHeists?.open?.(v.id)), 80)) : say('🔒 Time lock. This vault isn’t worth the trouble.')) }); return out; } },
-    CLUB: { floor: 'club', wall: '#1d1430', trim: '#ff4ad8', title: 'CLUB', dark: 0.5, art(c) { block(c, 40, 80, 180, 24, 36, '#2a1f30', { panels: 3 }); for (let i = 0; i < 9; i++) { R(c, ['#ff4ad8', '#3ad0ff', '#c9e86a'][i % 3], 50 + i * 18, 70, 6, 12); } R(c, '#0b0d14', 380, 80, 120, 50); R(c, '#2a2f36', 382, 82, 116, 46); R(c, '#3ad0ff', 400, 92, 30, 20); R(c, '#ff4ad8', 450, 92, 30, 20); for (const x of [60, 100, 140, 180]) { R(c, '#0b0d14', x, 134, 14, 14); R(c, '#c84659', x + 1, 135, 12, 8); } sign(c, 'NEON ROOM', 280, 34, '#ff4ad8'); },
-      drawGround(c, t) { for (let x = 240; x < 480; x += 30) for (let y = 180; y < 330; y += 30) { const k = (Math.floor(t * 3) + x / 30 + y / 30) % 4; c.fillStyle = ['#ff4ad855', '#3ad0ff55', '#c9e86a55', '#ffffff22'][k]; c.fillRect(x, y, 28, 28); } },
-      solids: [solid(40, 80, 180, 60), solid(380, 80, 120, 50)], staff: [{ x: 120, y: 66 }, { x: 440, y: 70 }], dancers: [{ x: 300, y: 220 }, { x: 360, y: 260 }, { x: 420, y: 210 }, { x: 330, y: 300 }, { x: 270, y: 280 }],
-      targets: (b) => { const v = venueAt(b); return [{ x: 130, y: 166, r: 60, action: v ? 'VIP' : 'BAR', label: v ? `${v.name} · the venue` : 'Bar · a round for the house ($40)', use: () => (v ? openSafe(() => root.NightshiftVenues?.open?.('club', v.id)) : drink()) }, { x: 360, y: 260, r: 80, action: 'DANCE', label: 'Dance floor · shake off some heat', use: () => dance() }]; } },
-    WAREHOUSE: { floor: 'concrete', wall: '#4a4a3a', trim: '#e2c24a', title: 'WAREHOUSE', art(c) { for (const [x, y, w, h] of [[40, 80, 140, 60], [40, 180, 100, 60], [420, 90, 100, 120], [300, 260, 90, 50]]) { block(c, x, y, w, 18, h - 18, '#a87a4a', { panels: Math.max(2, Math.round(w / 40)) }); for (let i = 0; i < w; i += 12) R(c, '#c79a62', x + i, y + 2, 1, 14); } R(c, '#0b0d14', 230, 110, 70, 40); R(c, '#e2c24a', 232, 112, 66, 36); R(c, '#1d2024', 240, 120, 20, 20); R(c, '#9aa3ab', 300, 112, 30, 4); R(c, '#9aa3ab', 300, 140, 30, 4); sign(c, 'LOADING BAY 3', 280, 34, '#e2c24a'); },
-      solids: [solid(40, 80, 140, 60), solid(40, 180, 100, 60), solid(420, 90, 100, 120), solid(300, 260, 90, 50), solid(230, 110, 100, 40)], staff: [{ x: 480, y: 300, guard: true }],
-      targets: (b, api) => [{ x: 110, y: 160, r: 50, action: 'SEARCH', label: 'Crates · scavenge parts', use: () => crate('wh1-' + api.key, { metal: 3, pipe: 1, tape: 1 }, 'crates') }, { x: 90, y: 256, r: 50, action: 'SEARCH', label: 'Crates · scavenge parts', use: () => crate('wh2-' + api.key, { spring: 2, wood: 2 }, 'crates') }, { x: 470, y: 230, r: 50, action: 'SEARCH', label: 'Pallet · hardware', use: () => crate('wh3-' + api.key, { metal: 2, tape: 1, spring: 1 }, 'pallet') }] },
-    APARTMENTS: { floor: 'lobby', wall: '#5a4a3a', trim: '#c8a050', title: 'APARTMENT LOBBY', art(c) { for (let i = 0; i < 12; i++) { const x = 60 + (i % 6) * 26, y = 76 + Math.floor(i / 6) * 22; R(c, '#0b0d14', x, y, 24, 20); R(c, '#c8a050', x + 1, y + 1, 22, 18); R(c, '#8a6a30', x + 8, y + 8, 8, 2); } R(c, '#0b0d14', 400, 66, 90, 100); R(c, '#9aa3ab', 402, 68, 86, 96); R(c, '#5a6168', 444, 68, 2, 96); R(c, '#f2c84a', 494, 110, 6, 6); block(c, 260, 250, 120, 26, 20, '#5a3a5a', { panels: 2 }); R(c, '#3d6e51', 500, 300, 20, 40); R(c, '#4f8a5f', 494, 284, 32, 22); sign(c, 'RESIDENTS ONLY', 280, 34, '#c8a050'); },
-      solids: [solid(400, 66, 90, 100), solid(260, 250, 120, 46), solid(494, 284, 32, 56)], staff: [],
-      targets: (b, api) => [{ x: 140, y: 140, r: 60, action: 'MAIL', label: 'Mailboxes · anything good?', use: () => mail('mail-' + api.key) }, { x: 445, y: 186, r: 50, action: 'ELEVATOR', label: 'Elevator · needs a key', use: () => say('🛗 Needs a resident key. Your own place is at the Midtown apartments.') }] },
+    'CORNER SHOP': {
+      title: 'CORNER SHOP', floor: 'tile', wall: ['tile', '#cfd8d4', '#e05a4a'], dark: 0.06, seed: 11,
+      art(c) {
+        K.neon(c, 'OPEN 24/7', 140, 18, '#ff5a5a', 13); K.shelf(c, 20, 30, 250, 3, (cc, x, y, w, k) => (k % 2 ? K.boxes(cc, x, y, w, k) : K.bottles(cc, x, y, w, k)), '#8a939b');
+        K.fridges(c, 300, 32, 7); K.ceilingLights(c, [100, 240, 380, 500], 0);
+        K.aisle(c, 50, 150, 190, 3); K.aisle(c, 50, 238, 190, 7);
+        K.counter(c, 370, 262, 150, 24, 30, '#5a3e2a', '#2a2d36'); K.register(c, 470, 262); R(c, '#f2c84a', 390, 266, 30, 10); K.boxes(c, 392, 252, 60, 2); K.atm(c, 20, 300);
+      },
+      props: [prop(530, 386, (c, x, y) => K.plant(c, x, y, 1))],
+      lights: [{ x: 160, y: 200, r: 160, a: 0.4 }, { x: 420, y: 160, r: 150, a: 0.4 }],
+      glow(c, t) { K.glow(c, 420, 70, 140, '#9fe6ff', 0.12 + 0.02 * Math.sin(t * 3)); K.glow(c, 140, 20, 60, '#ff5a5a', 0.25); },
+      solids: [solid(300, WALL, 240, 12), solid(50, 150, 190, 50), solid(50, 238, 190, 50), solid(370, 262, 150, 56), solid(20, 300, 34, 62)], staff: [{ x: 450, y: 246 }], browsers: [{ x: 140, y: 214 }, { x: 410, y: 140 }],
+      targets: () => [{ x: 440, y: 336, r: 52, action: 'SHOP', label: 'Counter · food, meds, ammo', use: () => openSafe(() => root.NightshiftRecovery?.openShop?.()) }] },
+
+    DINER: {
+      title: 'DINER', floor: 'check', wall: ['stripe', '#3d7f8a', '#e05a4a'], dark: 0.08, seed: 21,
+      art(c) {
+        K.neon(c, 'DINER', 120, 22, '#ff6b6b', 16); K.neon(c, 'OPEN', 240, 22, '#7cffb5', 11); for (let i = 0; i < 4; i++) K.poster(c, 40 + i * 52, 46, 38, 30, 31 + i, '#e3c25a');
+        K.windowNight(c, 360, 20, 80, 60, 3); K.windowNight(c, 456, 20, 80, 60, 4); K.clock(c, 300, 40);
+        K.counter(c, 34, 110, 290, 22, 28, '#c8432f', '#e8e2d0'); for (let i = 0; i < 5; i++) { R(c, '#f2c84a', 52 + i * 56, 114, 10, 6); R(c, '#ffffff', 66 + i * 56, 115, 8, 5); }
+        K.booth(c, 390, 116, 140, '#c84659'); K.booth(c, 390, 248, 140, '#c84659'); K.booth(c, 40, 248, 140, '#3d7fd0');
+      },
+      props: [60, 104, 148, 192, 236, 280].map((x) => prop(x, 176, (c, xx, yy) => K.stool(c, xx, yy, '#c8432f'))).concat([prop(24, 220, (c, x, y) => K.plant(c, x, y, 0.9))]),
+      lights: [{ x: 180, y: 160, r: 150, a: 0.4 }, { x: 460, y: 200, r: 150, a: 0.4 }],
+      glow(c, t) { K.glow(c, 120, 22, 70, '#ff6b6b', 0.3); K.glow(c, 240, 22, 40, '#7cffb5', 0.25 + 0.1 * (Math.sin(t * 6) > 0.6 ? 1 : 0)); },
+      solids: [solid(34, 108, 294, 54), solid(390, 116, 140, 100), solid(390, 248, 140, 100), solid(40, 248, 140, 100)], staff: [{ x: 180, y: 100 }],
+      patrons: [{ x: 410, y: 140 }, { x: 500, y: 196 }, { x: 440, y: 330 }, { x: 80, y: 272 }, { x: 140, y: 330 }],
+      targets: () => [{ x: 190, y: 186, r: 60, action: 'ORDER', label: 'Diner counter · meals with buffs', use: () => openSafe(() => root.NightshiftFood?.openDiner?.()) }] },
+
+    CLOTHING: {
+      title: 'BOUTIQUE', floor: 'oak', wall: ['panel', '#2e2236', '#6a4a7a'], dark: 0.08, seed: 31,
+      art(c) {
+        K.neon(c, 'CLOTHES', 290, 18, '#ff4ad8', 15); K.shelf(c, 20, 26, 220, 3, K.shoes, '#e3c25a'); K.shelf(c, 340, 26, 200, 3, K.boxes, '#e3c25a');
+        K.rug(c, 190, 200, 180, 110, '#3a2440', '#e3c25a');
+        K.rack(c, 40, 130, 150, 5); K.rack(c, 40, 230, 150, 9); K.rack(c, 380, 130, 150, 13);
+        K.mirror(c, 520, 120, 24, 90); K.counter(c, 380, 300, 150, 22, 28, '#2a1f1a', '#e3c25a'); K.register(c, 486, 300);
+      },
+      props: [prop(250, 176, (c, x, y) => K.mannequin(c, x, y, '#ff9a2e')), prop(320, 176, (c, x, y) => K.mannequin(c, x, y, '#3d7fd0')), prop(530, 380, (c, x, y) => K.plant(c, x, y, 1)), prop(26, 382, (c, x, y) => K.plant(c, x, y, 0.9))],
+      lights: [{ x: 290, y: 240, r: 170, a: 0.45 }],
+      glow(c) { K.glow(c, 290, 18, 90, '#ff4ad8', 0.3); },
+      solids: [solid(40, 130, 150, 48), solid(40, 230, 150, 48), solid(380, 130, 150, 48), solid(380, 300, 150, 52), solid(518, 118, 28, 94), solid(240, 160, 20, 20), solid(310, 160, 20, 20)],
+      staff: [{ x: 455, y: 286 }], browsers: [{ x: 120, y: 200 }, { x: 450, y: 196 }],
+      targets: () => [{ x: 455, y: 362, r: 60, action: 'TRY ON', label: 'Boutique · try on & buy', use: () => openSafe(() => root.NightshiftWardrobe?.open?.('store')) }, { x: 500, y: 230, r: 46, action: 'MIRROR', label: 'Mirror · change what you wear', use: () => openSafe(() => root.NightshiftWardrobe?.open?.('home')) }] },
+
+    GARAGE: {
+      title: 'GARAGE', floor: 'concrete', wall: ['block', '#3a3f48', '#e2c24a'], dark: 0.12, seed: 41,
+      art(c) {
+        K.neon(c, 'TUNE LAB', 290, 18, '#a34dff', 15); K.pegboard(c, 24, 26, 150, 50); K.shelf(c, 390, 26, 150, 3, K.parts, '#5a606b');
+        K.carLift(c, 190, 120, 170, 210, (cc, x, y) => { try { const C = root.NightshiftCars; const s = C?.sprite?.('vanta', '#8a3fd6'); if (s) { cc.save(); cc.translate(x, y); cc.rotate(-Math.PI / 2); cc.drawImage(s.cv, -s.w / 2, -s.h / 2, s.w, s.h); cc.restore(); } } catch { /* art optional */ } });
+        K.toolChest(c, 30, 110, '#c8432f'); K.toolChest(c, 30, 200, '#3d7fd0'); K.block(c, 400, 240, 130, 22, 26, '#5a606b', { panels: 3, handles: true }); R(c, '#9aa3ab', 420, 236, 30, 6); R(c, '#e05a4a', 470, 234, 12, 8);
+      },
+      props: [prop(470, 150, (c, x, y) => K.tires(c, x, y, 4)), prop(510, 170, (c, x, y) => K.tires(c, x, y, 3)), prop(520, 380, (c, x, y) => K.tires(c, x, y, 2))],
+      lights: [{ x: 275, y: 225, r: 180, a: 0.5 }],
+      glow(c) { K.glow(c, 290, 18, 90, '#a34dff', 0.32); K.glow(c, 275, 225, 120, '#e8d8ff', 0.08); },
+      solids: [solid(30, 110, 70, 64), solid(30, 200, 70, 64), solid(400, 240, 130, 48), solid(450, 120, 80, 56), solid(500, 356, 40, 30), solid(206, 135, 138, 180)],
+      staff: [{ x: 380, y: 210 }],
+      targets: () => [{ x: 380, y: 236, r: 60, action: 'TUNE', label: 'Mechanic · tune & style your car parked outside', use: () => openSafe(() => root.NightshiftTuning?.open?.()) }, { x: 120, y: 160, r: 50, action: 'TOOLS', label: 'Tool chest · scrap metal', use: (api) => crate('garage-' + api.key, { metal: 2, spring: 1 }, 'tool chest') }] },
+
+    BANK: {
+      title: 'BANK', floor: 'marble', wall: ['panel', '#22384a', '#c9a86a'], dark: 0.05, seed: 51,
+      art(c) {
+        K.neon(c, 'FIRST NIGHTSHIFT', 200, 18, '#e3c25a', 13, { board: true }); K.vault(c, 488, 52, 34); K.clock(c, 360, 36);
+        K.counter(c, 40, 118, 380, 24, 38, '#5a4030', '#2a2d36'); for (let i = 0; i < 4; i++) { R(c, K.INK, 52 + i * 94, 92, 70, 28); R(c, '#9fc3d6', 54 + i * 94, 94, 66, 24); R(c, '#ffffff55', 56 + i * 94, 96, 10, 20); R(c, '#e3c25a', 80 + i * 94, 112, 14, 3); }
+        K.rug(c, 180, 220, 200, 120, '#2a3f62', '#c9a86a'); K.waiting(c, 40, 300, 4, '#2a3f62'); K.atm(c, 480, 280); K.atm(c, 520, 280);
+      },
+      props: [prop(24, 250, (c, x, y) => K.plant(c, x, y, 1.1)), prop(440, 210, (c, x, y) => K.plant(c, x, y, 1.1))],
+      lights: [{ x: 230, y: 200, r: 200, a: 0.4 }],
+      glow(c, t) { K.glow(c, 488, 52, 60, '#e3c25a', 0.08 + 0.04 * Math.sin(t)); },
+      solids: [solid(40, 116, 380, 66), solid(450, WALL, 90, 8), solid(40, 290, 80, 26), solid(478, 278, 80, 66)], staff: [{ x: 130, y: 104 }, { x: 320, y: 104 }],
+      targets: (b) => { const out = [{ x: 230, y: 200, r: 70, action: 'BANK', label: 'Teller · invest your cash', use: () => openSafe(() => root.NightshiftMarket?.open?.()) }]; const v = heistAt(b); out.push({ x: 488, y: 120, r: 54, action: v ? 'CASE IT' : 'VAULT', label: v ? 'Vault · plan the heist' : 'Vault · locked tight', use: () => (v ? (root.NightshiftZones?.leave?.(), setTimeout(() => openSafe(() => root.NightshiftHeists?.open?.(v.id)), 80)) : say('🔒 Time lock. This vault isn’t worth the trouble.')) }); return out; } },
+
+    CLUB: {
+      title: 'CLUB', floor: 'club', wall: ['acoustic', '#1d1430', '#ff4ad8'], dark: 0.55, seed: 61,
+      art(c) {
+        K.backbar(c, 20, 200); K.neon(c, 'BAR', 120, 14, '#ff4ad8', 12); K.neon(c, 'NEON ROOM', 400, 18, '#3ad0ff', 15);
+        K.counter(c, 28, 120, 200, 22, 30, '#2a1f30', '#5a3a6a'); K.speaker(c, 252, 100); K.speaker(c, 470, 100); K.djBooth(c, 316, 104);
+        K.sofa(c, 440, 270, 96, '#5a2a6a'); K.block(c, 456, 330, 64, 20, 10, '#2a1f30'); R(c, '#ffd970', 470, 334, 6, 8); R(c, '#9fe6ff', 490, 334, 6, 8);
+        K.poolTable(c, 40, 250);
+      },
+      props: [44, 84, 124, 164, 204].map((x) => prop(x, 186, (c, xx, yy) => K.stool(c, xx, yy, '#ff4ad8'))),
+      lights: [{ x: 120, y: 150, r: 110, a: 0.6 }, { x: 330, y: 240, r: 160, a: 0.55 }, { x: 488, y: 300, r: 90, a: 0.5 }, { x: 100, y: 280, r: 90, a: 0.5 }],
+      glow(c, t) {
+        for (let x = 250; x < 430; x += 30) for (let y = 180; y < 320; y += 30) { const k = (Math.floor(t * 3) + x / 30 + y / 30) % 4; c.fillStyle = ['#ff4ad855', '#3ad0ff55', '#c9e86a55', '#ffffff1a'][k]; c.fillRect(x, y, 28, 28); }
+        K.glow(c, 400, 18, 110, '#3ad0ff', 0.3); K.glow(c, 120, 14, 60, '#ff4ad8', 0.3); K.glow(c, 340, 250, 150, ['#ff4ad8', '#3ad0ff', '#a34dff'][Math.floor(t * 1.5) % 3], 0.16);
+        c.save(); c.globalCompositeOperation = 'lighter'; for (let i = 0; i < 3; i++) { const a = t * 0.8 + i * 2.1; c.fillStyle = ['#ff4ad818', '#3ad0ff18', '#c9e86a18'][i]; c.beginPath(); c.moveTo(370, 120); c.lineTo(340 + Math.cos(a) * 140 - 24, 250 + Math.sin(a) * 60); c.lineTo(340 + Math.cos(a) * 140 + 24, 250 + Math.sin(a) * 60); c.fill(); } c.restore();
+      },
+      solids: [solid(28, 118, 204, 56), solid(252, WALL, 30, 64), solid(470, WALL, 30, 64), solid(316, 104, 110, 52), solid(434, 270, 108, 72), solid(40, 250, 120, 78)],
+      staff: [{ x: 120, y: 104 }, { x: 370, y: 100 }], dancers: [{ x: 290, y: 220 }, { x: 350, y: 260 }, { x: 410, y: 210 }, { x: 320, y: 300 }, { x: 270, y: 280 }, { x: 390, y: 290 }],
+      targets: (b) => { const v = venueAt(b); return [{ x: 130, y: 200, r: 60, action: v ? 'VIP' : 'BAR', label: v ? `${v.name} · the venue` : 'Bar · a round for the house ($40)', use: () => (v ? openSafe(() => root.NightshiftVenues?.open?.('club', v.id)) : drink()) }, { x: 340, y: 250, r: 80, action: 'DANCE', label: 'Dance floor · shake off some heat', use: () => dance() }]; } },
+
+    WAREHOUSE: {
+      title: 'WAREHOUSE', floor: 'concrete', wall: ['block', '#4a463a', '#e2c24a'], dark: 0.2, seed: 71,
+      art(c) {
+        K.neon(c, 'LOADING BAY 3', 290, 18, '#e2c24a', 12); K.shelf(c, 20, 26, 520, 3, K.boxes, '#c8432f', 20);
+        for (const [x, y, w, h] of [[40, 120, 140, 50], [40, 210, 100, 50], [400, 120, 120, 90], [300, 270, 90, 40]]) { K.block(c, x, y, w, 18, h - 18, '#a87a4a', { panels: Math.max(2, Math.round(w / 40)) }); for (let i = 0; i < w; i += 12) R(c, '#c79a62', x + i, y + 2, 1, 14); }
+        K.block(c, 230, 130, 70, 30, 14, '#8a6a3e', { panels: 3 }); R(c, '#e2c24a', 220, 330, 120, 3);
+      },
+      props: [prop(350, 230, (c, x, y) => K.tires(c, x, y, 3))],
+      lights: [{ x: 280, y: 200, r: 200, a: 0.5 }],
+      glow(c) { K.glow(c, 290, 18, 90, '#e2c24a', 0.2); },
+      solids: [solid(40, 120, 140, 50), solid(40, 210, 100, 50), solid(400, 120, 120, 90), solid(300, 270, 90, 40), solid(230, 130, 70, 44), solid(330, 214, 36, 18)], staff: [{ x: 480, y: 300, guard: true }],
+      targets: (b, api) => [{ x: 110, y: 196, r: 50, action: 'SEARCH', label: 'Crates · scavenge parts', use: () => crate('wh1-' + api.key, { metal: 3, pipe: 1, tape: 1 }, 'crates') }, { x: 90, y: 286, r: 50, action: 'SEARCH', label: 'Crates · scavenge parts', use: () => crate('wh2-' + api.key, { spring: 2, wood: 2 }, 'crates') }, { x: 460, y: 236, r: 50, action: 'SEARCH', label: 'Pallet · hardware', use: () => crate('wh3-' + api.key, { metal: 2, tape: 1, spring: 1 }, 'pallet') }] },
+
+    APARTMENTS: {
+      title: 'APARTMENT LOBBY', floor: 'lobby', wall: ['panel', '#4a3a2e', '#8a6a3e'], dark: 0.1, seed: 81,
+      art(c) {
+        for (let i = 0; i < 16; i++) { const x = 30 + (i % 8) * 24, y = 20 + Math.floor(i / 8) * 22; R(c, K.INK, x, y, 22, 20); R(c, '#c8a050', x + 1, y + 1, 20, 18); R(c, '#8a6a30', x + 7, y + 8, 8, 2); R(c, '#f4f1ea', x + 3, y + 3, 6, 3); }
+        R(c, K.INK, 400, 14, 96, 82); R(c, '#9aa3ab', 402, 16, 92, 80); R(c, '#c9d1d6', 402, 16, 92, 3); R(c, '#5a6168', 447, 16, 2, 80); R(c, '#f2c84a', 500, 50, 6, 6); K.neon(c, '▲ ▼', 448, 8, '#f2c84a', 8, { board: false });
+        K.poster(c, 260, 26, 50, 40, 5, '#c8a050'); K.windowNight(c, 324, 22, 56, 50, 7);
+        K.rug(c, 190, 220, 180, 100, '#5a2a2a', '#c8a050'); K.sofa(c, 210, 250, 140, '#3d5a6a'); K.desk(c, 40, 180, 90, '#5a3e2a', true);
+      },
+      props: [prop(520, 330, (c, x, y) => K.plant(c, x, y, 1.2)), prop(30, 330, (c, x, y) => K.lamp(c, x, y)), prop(380, 240, (c, x, y) => K.plant(c, x, y, 0.9))],
+      lights: [{ x: 280, y: 260, r: 160, a: 0.45 }, { x: 30, y: 290, r: 90, a: 0.6 }],
+      glow(c) { K.glow(c, 30, 286, 70, '#ffe9a8', 0.3); },
+      solids: [solid(400, WALL, 96, 6), solid(204, 250, 152, 50), solid(40, 180, 90, 42), solid(508, 310, 26, 24), solid(18, 310, 24, 24), solid(370, 224, 22, 20)], staff: [{ x: 84, y: 166 }],
+      targets: (b, api) => [{ x: 130, y: 120, r: 60, action: 'MAIL', label: 'Mailboxes · anything good?', use: () => mail('mail-' + api.key) }, { x: 448, y: 130, r: 50, action: 'ELEVATOR', label: 'Elevator · needs a key', use: () => say('🛗 Needs a resident key. Your own place is at the Midtown apartments.') }] },
+
+    // ---------------- v0.71 new rooms ----------------
+    'GUN SHOP': {
+      title: 'GUN SHOP', floor: 'concrete', wall: ['brick', '#4a2626', '#1d2024'], dark: 0.18, seed: 91,
+      art(c) {
+        K.neon(c, 'AMMO & ARMS', 280, 16, '#ff4a4a', 14); K.shelf(c, 24, 28, 232, 3, K.guns, '#3a2a20', 19); K.shelf(c, 304, 28, 232, 3, (cc, x, y, w, k) => (k === 2 ? K.boxes(cc, x, y, w, 4) : K.pistols(cc, x, y, w, k)), '#3a2a20', 19);
+        K.displayCase(c, 40, 140, 200, (cc, x, y, w) => K.pistols(cc, x, y, w, 1)); K.displayCase(c, 320, 140, 200, (cc, x, y, w) => K.pistols(cc, x, y, w, 2));
+        K.counter(c, 380, 280, 150, 22, 28, '#2a2d36', '#5a3e2a'); K.register(c, 480, 280); K.poster(c, 20, 240, 26, 34, 77, '#e05a4a');
+        R(c, K.INK, 30, 300, 110, 56); R(c, '#1d2024', 31, 301, 108, 54); for (let i = 0; i < 3; i++) { c.fillStyle = '#f4f1ea'; c.beginPath(); c.arc(56 + i * 30, 328, 10, 0, Math.PI * 2); c.fill(); c.fillStyle = '#e05a4a'; c.beginPath(); c.arc(56 + i * 30, 328, 6, 0, Math.PI * 2); c.fill(); c.fillStyle = '#f4f1ea'; c.beginPath(); c.arc(56 + i * 30, 328, 2.5, 0, Math.PI * 2); c.fill(); }
+      },
+      props: [prop(530, 220, (c, x, y) => K.plant(c, x, y, 0.9))],
+      lights: [{ x: 140, y: 170, r: 120, a: 0.5 }, { x: 420, y: 170, r: 120, a: 0.5 }, { x: 455, y: 300, r: 100, a: 0.5 }],
+      glow(c, t) { K.glow(c, 280, 16, 110, '#ff4a4a', 0.28 + 0.04 * Math.sin(t * 5)); K.glow(c, 140, 150, 90, '#9fe6ff', 0.1); K.glow(c, 420, 150, 90, '#9fe6ff', 0.1); },
+      solids: [solid(40, 140, 200, 46), solid(320, 140, 200, 46), solid(380, 280, 150, 52), solid(30, 300, 110, 56)], staff: [{ x: 455, y: 266 }, { x: 280, y: 120, guard: true }], browsers: [{ x: 140, y: 214 }],
+      targets: () => [{ x: 455, y: 346, r: 60, action: 'BUY', label: 'Gun counter · weapons, mods, repairs', use: () => openSafe(() => root.NightshiftWeapons?.open?.()) }, { x: 140, y: 214, r: 50, action: 'LOOK', label: 'Display case · inspect a gun', use: () => openSafe(() => root.NightshiftWeaponArt?.inspect?.()) }] },
+
+    TATTOO: {
+      title: 'TATTOO', floor: 'check', wall: ['stripe', '#2a1a2a', '#ff4ad8'], dark: 0.22, seed: 101,
+      art(c) {
+        K.neon(c, 'TATTOO', 400, 18, '#ff4ad8', 16); K.flash(c, 24, 14, 240, 3, 7); K.mirror(c, 316, 34, 40, 54);
+        K.tattooChair(c, 300, 140); K.tattooChair(c, 420, 140); K.curtain(c, 384, 110, 96, '#5a2a6a');
+        K.counter(c, 40, 160, 150, 22, 28, '#1d1430', '#ff4ad8'); K.register(c, 150, 160); K.sofa(c, 40, 290, 120, '#5a2a6a');
+      },
+      props: [prop(530, 380, (c, x, y) => K.plant(c, x, y, 1)), prop(200, 310, (c, x, y) => K.lamp(c, x, y, '#ff8ad8'))],
+      lights: [{ x: 330, y: 190, r: 110, a: 0.6 }, { x: 450, y: 190, r: 110, a: 0.6 }, { x: 110, y: 200, r: 110, a: 0.5 }, { x: 200, y: 270, r: 80, a: 0.6 }],
+      glow(c, t) { K.glow(c, 400, 18, 100, '#ff4ad8', 0.3 + 0.05 * Math.sin(t * 4)); K.glow(c, 200, 262, 60, '#ff8ad8', 0.25); },
+      solids: [solid(300, 140, 56, 84), solid(420, 140, 56, 84), solid(40, 160, 150, 52), solid(36, 290, 136, 50), solid(190, 296, 20, 16)], staff: [{ x: 360, y: 180 }, { x: 110, y: 146 }], patrons: [{ x: 316, y: 170 }],
+      targets: () => [{ x: 470, y: 250, r: 60, action: 'INK', label: 'Get a tattoo · $150 · +charisma', use: () => tattoo() }, { x: 110, y: 230, r: 54, action: 'FLASH', label: 'Flash wall · pick a design', use: () => say('🖋️ Pick a design at the chair · each piece is one of a kind') }] },
+
+    'AUTO PARTS': {
+      title: 'AUTO PARTS', floor: 'tile', wall: ['block', '#3a4250', '#e05a4a'], dark: 0.08, seed: 111,
+      art(c) {
+        K.neon(c, 'PARTS', 280, 16, '#ff6b4a', 15); K.shelf(c, 24, 28, 230, 3, K.parts, '#5a606b', 19); K.shelf(c, 306, 28, 230, 3, (cc, x, y, w, k) => K.parts(cc, x, y, w, k + 1), '#5a606b', 19);
+        for (const y of [140, 220]) { K.block(c, 50, y, 190, 14, 34, '#5a606b', { panels: 4 }); K.parts(c, 54, y - 10, 180, y); }
+        K.counter(c, 370, 280, 160, 22, 28, '#2a2d36', '#e05a4a'); K.register(c, 480, 280); R(c, '#c9d1d6', 390, 276, 26, 8);
+      },
+      props: [prop(440, 190, (c, x, y) => K.tires(c, x, y, 4)), prop(490, 200, (c, x, y) => K.tires(c, x, y, 5)), prop(520, 160, (c, x, y) => K.tires(c, x, y, 3))],
+      lights: [{ x: 150, y: 200, r: 150, a: 0.45 }, { x: 450, y: 250, r: 140, a: 0.45 }],
+      glow(c) { K.glow(c, 280, 16, 90, '#ff6b4a', 0.28); },
+      solids: [solid(50, 140, 190, 50), solid(50, 220, 190, 50), solid(370, 280, 160, 52), solid(420, 168, 120, 40)], staff: [{ x: 455, y: 266 }], browsers: [{ x: 140, y: 208 }],
+      targets: () => [{ x: 455, y: 346, r: 60, action: 'PARTS', label: 'Parts counter · tune your car outside', use: () => openSafe(() => root.NightshiftTuning?.open?.()) }, { x: 145, y: 290, r: 54, action: 'STYLE', label: 'Body kits & rims · style studio', use: () => openSafe(() => { const v = root.NightshiftCars?.live?.().find((q) => q.owned); return v ? root.NightshiftCarStyle?.open?.(v) : (say('🚗 Park a car you own outside first'), true); }) }] },
+
+    GYM: {
+      title: 'GYM', floor: 'rubber', wall: ['block', '#2a2d36', '#e05a4a'], dark: 0.12, seed: 121,
+      art(c) {
+        K.neon(c, 'IRON GYM', 280, 16, '#ff5a5a', 15); for (let i = 0; i < 4; i++) K.mirror(c, 30 + i * 130, 32, 110, 54);
+        K.dumbbells(c, 30, 104, 220); K.benchPress(c, 70, 170); K.benchPress(c, 70, 260); K.treadmill(c, 440, 120); K.treadmill(c, 490, 120);
+        K.block(c, 300, 300, 90, 30, 6, '#3d7fd0'); K.block(c, 410, 300, 90, 30, 6, '#3d7fd0');
+      },
+      props: [prop(330, 200, (c, x, y) => K.punchBag(c, x, y)), prop(390, 200, (c, x, y) => K.punchBag(c, x, y))],
+      lights: [{ x: 160, y: 220, r: 160, a: 0.45 }, { x: 420, y: 240, r: 160, a: 0.45 }],
+      glow(c) { K.glow(c, 280, 16, 90, '#ff5a5a', 0.3); },
+      solids: [solid(30, 104, 220, 26), solid(54, 160, 92, 36), solid(54, 250, 92, 36), solid(440, 120, 84, 84), solid(320, 186, 20, 16), solid(380, 186, 20, 16)], staff: [{ x: 250, y: 140 }], browsers: [{ x: 460, y: 160 }, { x: 110, y: 240 }],
+      targets: () => [{ x: 350, y: 260, r: 70, action: 'TRAIN', label: 'Train · stamina & strength', use: () => train() }, { x: 250, y: 160, r: 50, action: 'COACH', label: 'Coach · memberships', use: () => openSafe(() => root.NightshiftVenues?.open?.('gym', 'iron')) }] },
+
+    HOSPITAL: {
+      title: 'HOSPITAL', floor: 'lino', wall: ['tile', '#dfe9ec', '#3d99d6'], dark: 0.04, seed: 131,
+      art(c) {
+        K.neon(c, '✚ EMERGENCY', 160, 18, '#ff4a4a', 13); K.shelf(c, 300, 30, 230, 3, K.meds, '#c9d1d6'); K.clock(c, 270, 40);
+        K.counter(c, 40, 120, 200, 22, 30, '#e8eef3', '#3d99d6'); K.desk(c, 100, 104, 70, '#e8eef3', true);
+        K.hospitalBed(c, 320, 130); K.hospitalBed(c, 420, 130); K.curtain(c, 396, 118, 100, '#7cc4b8'); K.curtain(c, 496, 118, 100, '#7cc4b8');
+        K.waiting(c, 40, 300, 5, '#3d99d6'); K.block(c, 330, 300, 30, 16, 24, '#c9d1d6'); R(c, '#e05a4a', 334, 304, 8, 6); R(c, '#9fd8f0', 346, 304, 8, 6);
+      },
+      props: [prop(250, 330, (c, x, y) => K.plant(c, x, y, 1))],
+      lights: [{ x: 280, y: 220, r: 240, a: 0.3 }],
+      glow(c, t) { K.glow(c, 160, 18, 80, '#ff4a4a', 0.2 + 0.08 * (Math.sin(t * 3) > 0 ? 1 : 0)); },
+      solids: [solid(40, 120, 200, 52), solid(320, 128, 46, 96), solid(420, 128, 46, 96), solid(36, 290, 104, 22), solid(330, 300, 30, 40), solid(240, 316, 20, 16)], staff: [{ x: 135, y: 106 }, { x: 390, y: 260 }], patrons: [{ x: 342, y: 170 }],
+      targets: () => [{ x: 140, y: 196, r: 60, action: 'HEAL', label: 'Reception · patch you up ($60)', use: () => heal() }] },
+
+    POLICE: {
+      title: 'POLICE STATION', floor: 'tile', wall: ['block', '#2a3548', '#3d7fd0'], dark: 0.1, seed: 141,
+      art(c) {
+        K.neon(c, 'POLICE', 200, 18, '#3d99ff', 15); R(c, K.INK, 300, 20, 110, 60); R(c, '#d8cfb4', 302, 22, 106, 56); for (let i = 0; i < 6; i++) K.poster(c, 308 + (i % 3) * 34, 26 + Math.floor(i / 3) * 26, 26, 22, 200 + i, '#1d2024'); K.shelf(c, 20, 30, 150, 3, K.files, '#5a606b');
+        K.counter(c, 40, 120, 220, 22, 34, '#2a3548', '#9aa3ab'); K.desk(c, 60, 210, 80, '#5a606b', true); K.desk(c, 170, 210, 80, '#5a606b', true);
+        K.cellBars(c, 420, 110, 120, 140); K.block(c, 436, 210, 60, 14, 8, '#5a606b'); K.lockers(c, 30, 300, 5, '#3d6e8a');
+      },
+      props: [prop(380, 380, (c, x, y) => K.plant(c, x, y, 0.9))],
+      lights: [{ x: 150, y: 200, r: 170, a: 0.4 }, { x: 480, y: 180, r: 90, a: 0.3 }],
+      glow(c, t) { K.glow(c, 200, 18, 90, '#3d99ff', 0.28); const red = Math.sin(t * 5) > 0; K.glow(c, 540, 12, 40, red ? '#ff3a3a' : '#3d7fff', 0.4); },
+      solids: [solid(40, 120, 220, 58), solid(60, 196, 80, 42), solid(170, 196, 80, 42), solid(416, 108, 128, 146), solid(28, 296, 92, 66)], staff: [{ x: 150, y: 104 }, { x: 100, y: 196 }, { x: 330, y: 200, guard: true }],
+      targets: () => [{ x: 150, y: 200, r: 60, action: 'FINE', label: 'Front desk · pay off your wanted level', use: () => payFine() }, { x: 480, y: 280, r: 54, action: 'CELL', label: 'Holding cell', use: () => say('🚔 "Keep walking, unless you want the room."') }] },
   };
 
   // ---------------- actions ----------------
@@ -110,22 +266,37 @@
   function drink() { const p = P(); if (!p) return; if (p.cash < 40) { say('Needs $40'); return; } p.cash -= 40; p.hp = Math.min(100, p.hp + 10); try { root.NightshiftSkills?.gain?.('charisma', 15, 'bar'); } catch { /* optional */ } say('🥃 You buy a round · +10 health, people like you more'); gameSave(); }
   let lastDance = 0;
   function dance() { const now = Date.now(); if (now - lastDance < 60000) { say('💃 Catch your breath first'); return; } lastDance = now; const p = P(); if (p) p.heat = Math.max(0, (p.heat || 0) - 0.5); try { root.NightshiftSkills?.gain?.('athletics', 12, 'dance'); } catch { /* optional */ } say('🕺 You hit the floor · heat cools off, +athletics'); }
+  // v0.71 actions (pure logic in ACT so it can be tested in Node)
+  const ACT = {
+    heal(p) { if (p.hp >= 100) return { ok: false, msg: '🩺 "You look fine. Next!"' }; const cost = p.cash >= 60 ? 60 : 0; p.cash -= cost; p.hp = 100; return { ok: true, msg: cost ? '🩺 Patched up · full health ($60)' : '🩺 No money? They patch you up anyway. Full health.' }; },
+    fine(p) { const heat = p.heat || 0; if (heat < 0.1) return { ok: false, msg: '🚔 "Nothing on file. Keep it that way."' }; const cost = Math.ceil(heat * 150); if (p.cash < cost) return { ok: false, msg: `🚔 Fine is $${cost}. Come back with the cash.` }; p.cash -= cost; p.heat = 0; return { ok: true, msg: `🚔 Fine paid ($${cost}) · wanted level cleared` }; },
+    tattoo(p, last, now) { if (now - last < 10 * 60000) return { ok: false, msg: '🖋️ Still healing. Give it a few minutes.' }; if (p.cash < 150) return { ok: false, msg: '🖋️ A piece is $150' }; p.cash -= 150; return { ok: true, msg: '🖋️ Fresh ink · +charisma, the block respects it' }; },
+    train(p, last, now) { if (now - last < 3 * 60000) return { ok: false, msg: '🏋️ Muscles need rest · come back in a few minutes' }; if (p.cash < 20) return { ok: false, msg: '🏋️ Day pass is $20' }; p.cash -= 20; return { ok: true, msg: '🏋️ Good session · +athletics +strength ($20)' }; },
+  };
+  const now0 = () => Date.now(); let lastInk = 0, lastTrain = 0;
+  function heal() { const p = P(); if (!p) return; const r = ACT.heal(p); say(r.msg); if (r.ok) gameSave(); }
+  function payFine() { const p = P(); if (!p) return; const r = ACT.fine(p); say(r.msg); if (r.ok) gameSave(); }
+  function tattoo() { const p = P(); if (!p) return; const r = ACT.tattoo(p, lastInk, now0()); say(r.msg); if (r.ok) { lastInk = now0(); try { root.NightshiftSkills?.gain?.('charisma', 40, 'tattoo'); } catch { /* optional */ } gameSave(); } }
+  function train() { const p = P(); if (!p) return; const r = ACT.train(p, lastTrain, now0()); say(r.msg); if (r.ok) { lastTrain = now0(); try { root.NightshiftSkills?.gain?.('athletics', 30, 'gym'); root.NightshiftSkills?.gain?.('strength', 20, 'gym'); } catch { /* optional */ } gameSave(); } }
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-  function heistAt(b) { try { const vs = root.NightshiftHeists?.state ? (root.NightshiftHeistsData?.BANKS || []) : []; for (const v of vs) { const d = { x: b.x + b.w / 2 + (v.dx || 0), y: b.y + b.h + 12 }; const best = B().filter((x) => x.name === 'BANK').sort((p, q) => dist(p, v.near) - dist(q, v.near))[0]; if (best === b) return v; void d; } } catch { /* n/a */ } return null; }
+  function heistAt(b) { try { const vs = root.NightshiftHeists?.state ? (root.NightshiftHeistsData?.BANKS || []) : []; for (const v of vs) { const best = B().filter((x) => x.name === 'BANK' && variant(x) === 'BANK').sort((p, q) => dist(p, v.near) - dist(q, v.near))[0]; if (best === b) return v; } } catch { /* n/a */ } return null; }
   function venueAt(b) { try { return (root.NightshiftVenues?.places?.() || []).find((v) => v.kind === 'club' && Math.abs(v.y - (b.y + b.h + 12)) < 4 && Math.abs(v.x - (b.x + b.w / 2)) < 140) || null; } catch { return null; } }
 
-  // ---------------- zones: one per building type, the building's identity passed in on enter ----------------
+  // ---------------- zones: one per room type, the building's identity passed in on enter ----------------
   const rng = (s) => () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+  const zid = (type) => 'in-' + type.toLowerCase().replace(/\s+/g, '-');
   function register() {
     const Z = root.NightshiftZones; if (!Z?.register) return false;
     for (const [type, t] of Object.entries(T)) {
       let curB = null, people = [];
       Z.register({
-        id: 'in-' + type.toLowerCase().replace(/\s+/g, '-'), name: t.title, tagline: 'USE things to interact · 🚪 exit at the bottom', w: W, h: H, indoor: true, dark: t.dark ?? 0.08, zoom: 1.2, bg: '#07090d',
+        id: zid(type), name: t.title, tagline: 'USE things to interact · 🚪 exit at the bottom', w: W, h: H, indoor: true, dark: t.dark ?? 0.08, zoom: 1.2, bg: '#07090d',
         spawn: { x: DOOR.x, y: DOOR.y - 34, angle: -Math.PI / 2 },
-        ground(c) { floor(c, t.floor); walls(c, t.wall, t.trim); t.art(c); },
-        drawGround: t.drawGround ? (c, tt) => t.drawGround(c, tt) : undefined,
-        solids: [solid(0, 0, W, 62), solid(0, 0, 10, H), solid(W - 10, 0, 10, H), solid(0, H - 8, W / 2 - 34, 8), solid(W / 2 + 34, H - 8, W / 2 - 34, 8), ...t.solids],
+        ground(c) { K.floor(c, t.floor, t.seed); K.wall(c, t.wall[0], t.wall[1], t.wall[2], t.seed); t.art(c); },
+        drawGround: t.glow ? (c, tt) => t.glow(c, tt) : undefined,
+        props: () => t.props || [],
+        lights: () => t.lights || [],
+        solids: [solid(0, 0, W, WALL + 4), solid(0, 0, 10, H), solid(W - 10, 0, 10, H), solid(0, H - 8, W / 2 - 34, 8), solid(W / 2 + 34, H - 8, W / 2 - 34, 8), ...t.solids],
         onEnter(api, data) {
           curB = data?.b || null; const r = rng((data?.seed || 7) >>> 0); people = [];
           for (const s of t.staff || []) people.push({ x: s.x, y: s.y, angle: Math.PI / 2, id: type + '-staff-' + s.x, role: s.guard ? 'security' : null });
@@ -142,19 +313,21 @@
     return true;
   }
   // ---------------- doors in the city ----------------
-  const BLURB = { 'CORNER SHOP': 'food, meds, ammo', DINER: 'meals with buffs', CLOTHING: 'clothes & mirror', GARAGE: 'tune your car · scrap', BANK: 'invest · case the vault', CLUB: 'drinks, dancing, cools heat', WAREHOUSE: 'scavenge crafting parts', APARTMENTS: 'check the mailboxes' };
+  const BLURB = { 'CORNER SHOP': 'food, meds, ammo', DINER: 'meals with buffs', CLOTHING: 'clothes & mirror', GARAGE: 'tune your car · scrap', BANK: 'invest · case the vault', CLUB: 'drinks, dancing, cools heat', WAREHOUSE: 'scavenge crafting parts', APARTMENTS: 'lobby · mailboxes',
+    'GUN SHOP': 'weapons, mods, repairs', TATTOO: 'ink · +charisma', 'AUTO PARTS': 'car parts & kits', GYM: 'train · athletics', HOSPITAL: 'heal up', POLICE: 'pay off your wanted level' };
   const homeDoor = { x: 950, y: 735 };
   let doorList = null;
-  function doors() { if (doorList) return doorList; doorList = B().map((b, i) => ({ b, i, type: b.name, x: b.x + b.w / 2, y: b.y + b.h + 14 })).filter((d) => T[d.type] && !(d.type === 'APARTMENTS' && Math.hypot(d.x - homeDoor.x, d.y - homeDoor.y) < 120)); return doorList; }
-  function enter(d) { const Z = root.NightshiftZones; const p = P(); if (!Z || !p) return false; return Z.enter('in-' + d.type.toLowerCase().replace(/\s+/g, '-'), null, { ret: { x: d.x, y: d.y + 10 }, data: { b: d.b, key: d.i, seed: d.i * 7919 + 17 } }); }
+  function doors() { if (doorList) return doorList; doorList = B().map((b, i) => ({ b, i, type: variant(b), x: b.x + b.w / 2, y: b.y + b.h + 14 })).filter((d) => T[d.type] && !(d.b.name === 'APARTMENTS' && Math.hypot(d.x - homeDoor.x, d.y - homeDoor.y) < 120)); return doorList; }
+  function enter(d) { const Z = root.NightshiftZones; const p = P(); if (!Z || !p) return false; return Z.enter(zid(d.type), null, { ret: { x: d.x, y: d.y + 10 }, data: { b: d.b, key: d.i, seed: d.i * 7919 + 17 } }); }
+  const ICON = { 'CORNER SHOP': '🏪', DINER: '🍔', CLOTHING: '👕', GARAGE: '🔧', BANK: '🏦', CLUB: '🪩', WAREHOUSE: '📦', APARTMENTS: '🏢', 'GUN SHOP': '🔫', TATTOO: '🖋️', 'AUTO PARTS': '⚙️', GYM: '🏋️', HOSPITAL: '🏥', POLICE: '🚔' };
   function hookDoors() {
     const E = root.NightshiftEncounters; if (!E || E.__interiors) return !!E?.__interiors;
     const locs = E.locations, use = E.use;
-    E.locations = function () { const list = locs.apply(this, arguments) || []; const p = P(); if (!p || p.hp <= 0) return list; const near = doors().filter((d) => Math.abs(d.x - p.x) < 900 && Math.abs(d.y - p.y) < 700); return [...list, ...near.map((d) => ({ id: 'door-' + d.i, type: 'door', x: d.x, y: d.y, ready: true, color: '#9fd4ff', label: '🚪 ' + (T[d.type].title), action: 'ENTER', hint: 'Walk in · ' + (BLURB[d.type] || 'look around') }))]; };
+    E.locations = function () { const list = locs.apply(this, arguments) || []; const p = P(); if (!p || p.hp <= 0) return list; const near = doors().filter((d) => Math.abs(d.x - p.x) < 900 && Math.abs(d.y - p.y) < 700); return [...list, ...near.map((d) => ({ id: 'door-' + d.i, type: 'door', x: d.x, y: d.y, ready: true, color: '#9fd4ff', label: (ICON[d.type] || '🚪') + ' ' + T[d.type].title, action: 'ENTER', hint: 'Walk in · ' + (BLURB[d.type] || 'look around') }))]; };
     E.use = function (id) { if (String(id).startsWith('door-')) { const d = doors().find((q) => 'door-' + q.i === id); if (d) { enter(d); return true; } } return use.apply(this, arguments); };
     E.__interiors = true; return true;
   }
   const t1 = setInterval(() => { if (register()) clearInterval(t1); }, 300);
   const t2 = setInterval(() => { if (hookDoors()) clearInterval(t2); }, 300);
-  root.NightshiftInteriors2 = Object.freeze({ enter, doors, TYPES: Object.keys(T), BLURB, title: (ty) => T[ty]?.title || ty });
+  root.NightshiftInteriors2 = Object.freeze({ enter, doors, variant, TYPES: Object.keys(T), BLURB, ACT, title: (ty) => T[ty]?.title || ty });
 })(typeof globalThis !== 'undefined' ? globalThis : this);
